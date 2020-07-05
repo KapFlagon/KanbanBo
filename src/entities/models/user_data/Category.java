@@ -1,9 +1,11 @@
-package entities.model.user_data;
+package entities.models.user_data;
 
-import entities.model.board_data.Board;
+import entities.models.abstract_classes.DataObject;
+import entities.models.board_data.Board;
 
 import java.util.List;
 
+//public class Category extends DataObject {
 public class Category {
 
 	private String title;
@@ -21,4 +23,5 @@ public class Category {
 	public void setBoardList(List<Board> new_boardList) {
 		this.boardList = new_boardList;
 	}
+
 }

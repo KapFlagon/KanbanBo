@@ -1,7 +1,10 @@
-package entities.model.user_data;
+package entities.models.user_data;
+
+import entities.models.abstract_classes.DataObject;
 
 import java.util.List;
 
+//public class User extends DataObject {
 public class User {
 
 	private String firstName;
@@ -19,4 +22,5 @@ public class User {
 	}
 	public List<Category> getCategoryList() { return categoryList; }
 	public void setCategoryList(List<Category> categoryList) { this.categoryList = categoryList; }
+
 }

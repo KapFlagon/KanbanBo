@@ -1,4 +1,4 @@
-package entities.model.board_data;
+package entities.models.board_data;
 
 public class Board {
 
