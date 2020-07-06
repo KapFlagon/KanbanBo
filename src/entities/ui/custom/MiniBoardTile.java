@@ -1,12 +1,14 @@
 package entities.ui.custom;
 
-import javafx.scene.Node;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class MiniBoardTile{
+public class MiniBoardTile extends Group{
 
 	// Variables
 	private Label title;
@@ -15,27 +17,30 @@ public class MiniBoardTile{
 	private int listPosition;
 	private boolean favourite;
 	private StackPane stackPane;
+	private Image favourited;
+	private Image pre_favourited;
 
 
 	// Constructors
 	public MiniBoardTile() {
 		title = new Label("Dummy Mini Board");
+		StackPane.setAlignment(title, Pos.TOP_LEFT);
 		colour = new Color(0,0,0,0);
 		initializeRect(colour);
 		listPosition = 1;
-		stackPane = new StackPane();
-		stackPane.getChildren().addAll(rectangle, title);
+		favourite = false;
+		initializeView();
 	}
 
 
 	public MiniBoardTile(String newTitle, Color newColour, int newPosition, boolean newFavourite){
 		title = new Label(newTitle);
+		StackPane.setAlignment(title, Pos.TOP_LEFT);
 		colour = newColour;
 		initializeRect(colour);
 		listPosition = newPosition;
 		favourite = newFavourite;
-		stackPane = new StackPane();
-		stackPane.getChildren().addAll(rectangle, title);
+		initializeView();
 	}
 
 
@@ -61,4 +66,11 @@ public class MiniBoardTile{
 		rectangle.setHeight(100);
 		rectangle.setFill(rectColour);
 	}
+
+	private void initializeView() {
+		stackPane = new StackPane();
+		stackPane.getChildren().addAll(rectangle, title);
+		this.getChildren().add(stackPane);
+	}
+
 }

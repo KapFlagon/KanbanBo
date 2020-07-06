@@ -68,7 +68,8 @@ public class View_HomeScreen {
 				MiniBoardTile temp_miniBoardTile = new MiniBoardTile(tempTitle, tempColour, j, false);
 				temp_hBox_category.setPadding(new Insets(10,10,10,10));
 				temp_hBox_category.setSpacing(15);
-				temp_hBox_category.getChildren().add(temp_miniBoardTile.getStackPane());
+				//temp_hBox_category.getChildren().add(temp_miniBoardTile.getGroup());
+				temp_hBox_category.getChildren().add(temp_miniBoardTile);
 			}
 			tempScrollPane.setContent(temp_hBox_category);
 			vBox_center.getChildren().addAll(catLabel, tempScrollPane);
