@@ -1,6 +1,6 @@
 package entities.ui.views;
 
-import entities.ui.custom.MiniBoardTile;
+import entities.ui.custom.BoardTile;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -65,11 +65,11 @@ public class View_HomeScreen {
 				String tempTitle = "Board " + Integer.toString(temp_int);
 				Random random = new Random();
 				Color tempColour = new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1);
-				MiniBoardTile temp_miniBoardTile = new MiniBoardTile(tempTitle, tempColour, j, false);
+				BoardTile temp_BoardTile = new BoardTile(tempTitle, tempColour, j, false);
 				temp_hBox_category.setPadding(new Insets(10,10,10,10));
 				temp_hBox_category.setSpacing(15);
 				//temp_hBox_category.getChildren().add(temp_miniBoardTile.getGroup());
-				temp_hBox_category.getChildren().add(temp_miniBoardTile);
+				temp_hBox_category.getChildren().add(temp_BoardTile);
 			}
 			tempScrollPane.setContent(temp_hBox_category);
 			vBox_center.getChildren().addAll(catLabel, tempScrollPane);

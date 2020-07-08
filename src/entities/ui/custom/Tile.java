@@ -8,39 +8,33 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class MiniBoardTile extends Group{
+public abstract class Tile extends Group{
 
 	// Variables
-	private Label title;
-	private Rectangle rectangle;
-	private Color colour;
-	private int listPosition;
-	private boolean favourite;
-	private StackPane stackPane;
-	private Image favourited;
-	private Image pre_favourited;
+	protected Label title;
+	protected Rectangle rectangle;
+	protected Color colour;
+	protected int listPosition;
 
 
 	// Constructors
-	public MiniBoardTile() {
-		title = new Label("Dummy Mini Board");
+	public Tile() {
+		initializeTitle("Dummy Tile");
 		StackPane.setAlignment(title, Pos.TOP_LEFT);
-		colour = new Color(0,0,0,0);
+		colour = new Color(0,0,0,1);
 		initializeRect(colour);
 		listPosition = 1;
-		favourite = false;
-		initializeView();
+		//initializeView();
 	}
 
 
-	public MiniBoardTile(String newTitle, Color newColour, int newPosition, boolean newFavourite){
-		title = new Label(newTitle);
+	public Tile(String newTitle, Color newColour, int newPosition){
+		initializeTitle(newTitle);
 		StackPane.setAlignment(title, Pos.TOP_LEFT);
 		colour = newColour;
 		initializeRect(colour);
 		listPosition = newPosition;
-		favourite = newFavourite;
-		initializeView();
+		//initializeView();
 	}
 
 
@@ -53,24 +47,24 @@ public class MiniBoardTile extends Group{
 	public void setColour(Color colour) { this.colour = colour; }
 	public int getListPosition() { return listPosition; }
 	public void setListPosition(int listPosition) { this.listPosition = listPosition; }
-	public boolean isFavourite() { return favourite; }
-	public void setFavourite(boolean favourite) { this.favourite = favourite; }
-	public StackPane getStackPane() { return stackPane; }
-	public void setStackPane(StackPane new_stackPane) { this.stackPane = new_stackPane; }
 
 
 	// Other methods
-	private void initializeRect(Color rectColour) {
+	protected void initializeRect(Color rectColour) {
 		rectangle = new Rectangle();
 		rectangle.setWidth(200);
 		rectangle.setHeight(100);
+		rectangle.setArcWidth(20.0);
+		rectangle.setArcHeight(15.0);
 		rectangle.setFill(rectColour);
 	}
 
-	private void initializeView() {
-		stackPane = new StackPane();
-		stackPane.getChildren().addAll(rectangle, title);
-		this.getChildren().add(stackPane);
+	abstract protected void initializeView();
+
+	protected void initializeTitle(String text) {
+		title = new Label(text);
+		title.setStyle("-fx-font-weight: bold");
+		title.setTextFill(new Color(1,1,1,1));
 	}
 
 }
