@@ -1,9 +1,15 @@
-package entities.ui.custom;
+package entities.ui.custom_components.board;
 
+import entities.ui.custom_components.shared.Tile;
+
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -21,10 +27,10 @@ public class BoardTile extends Tile {
 
 	// Constructors
 	public BoardTile() {
+		stackPane = new StackPane();
+		stackPane.setPrefSize(200,100);
 		initializeTitle("Dummy Mini Board");
-		StackPane.setAlignment(title, Pos.TOP_LEFT);
-		setColour(new Color(0.5, 0, 0, 1));
-		initializeRect(colour);
+		setColour(BoardColours.getRandomColour());
 		listPosition = 1;
 		setFavourite(false);
 		initializeIcons();
@@ -33,10 +39,10 @@ public class BoardTile extends Tile {
 
 
 	public BoardTile(String newTitle, Color newColour, int newPosition, boolean newFavourite) {
+		stackPane = new StackPane();
+		stackPane.setPrefSize(200,100);
 		initializeTitle(newTitle);
-		StackPane.setAlignment(title, Pos.TOP_LEFT);
-		colour = newColour;
-		initializeRect(colour);
+		setColour(newColour);
 		listPosition = newPosition;
 		setFavourite(newFavourite);
 		initializeIcons();
@@ -61,12 +67,18 @@ public class BoardTile extends Tile {
 		this.stackPane = new_stackPane;
 	}
 
+	@Override
+	public void setColour(Color newColour) {
+		colour = newColour;
+		stackPane.setBackground(new Background(new BackgroundFill(colour, new CornerRadii(7), new Insets(1,1,1,1))));
+	}
 
 	// Other methods
 	@Override
 	protected void initializeView() {
-		stackPane = new StackPane();
-		stackPane.getChildren().addAll(rectangle, title, favouriteGroup);
+		stackPane.getChildren().clear();
+		this.getChildren().clear();
+		stackPane.getChildren().addAll(title, favouriteGroup);
 		this.getChildren().add(stackPane);
 	}
 
