@@ -23,7 +23,7 @@ public class BoardTile extends Tile {
 	public BoardTile() {
 		initializeTitle("Dummy Mini Board");
 		StackPane.setAlignment(title, Pos.TOP_LEFT);
-		colour = new Color(0.5, 0, 0, 1);
+		setColour(new Color(0.5, 0, 0, 1));
 		initializeRect(colour);
 		listPosition = 1;
 		setFavourite(false);
@@ -67,7 +67,6 @@ public class BoardTile extends Tile {
 	protected void initializeView() {
 		stackPane = new StackPane();
 		stackPane.getChildren().addAll(rectangle, title, favouriteGroup);
-		//stackPane.getChildren().addAll(rectangle, title);
 		this.getChildren().add(stackPane);
 	}
 
@@ -77,9 +76,9 @@ public class BoardTile extends Tile {
 		StackPane.setAlignment(favouriteGroup, Pos.BOTTOM_RIGHT);
 		String path;
 		if (favourite) {
-			path = "src/assets/icons/ic_star_black_24dp.png";
+			path = "src/assets/icons/ic_star_black_18dp.png";
 		} else {
-			path = "src/assets/icons/ic_star_border_black_24dp.png";
+			path = "src/assets/icons/ic_star_border_black_18dp.png";
 		}
 		try {
 			inputStream = new FileInputStream(path);
