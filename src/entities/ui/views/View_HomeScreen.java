@@ -1,6 +1,6 @@
 package entities.ui.views;
 
-import entities.ui.custom.BoardTile;
+import entities.ui.custom_components.board.BoardTile;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -31,6 +31,10 @@ public class View_HomeScreen {
 
 	// Constructors
 	public View_HomeScreen() {
+
+	}
+
+	private void dummyScreen() {
 		button_T_home = new Button ("H");
 		button_T_boardsShortcut = new Button ("B");
 		button_T_user = new Button ("User");
@@ -64,8 +68,7 @@ public class View_HomeScreen {
 				int temp_int = j + 1;
 				String tempTitle = "Board " + Integer.toString(temp_int);
 				Random random = new Random();
-				Color tempColour = new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1);
-				BoardTile temp_BoardTile = new BoardTile(tempTitle, tempColour, j, false);
+				BoardTile temp_BoardTile = new BoardTile();
 				temp_hBox_category.setPadding(new Insets(10,10,10,10));
 				temp_hBox_category.setSpacing(15);
 				//temp_hBox_category.getChildren().add(temp_miniBoardTile.getGroup());
