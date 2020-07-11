@@ -1,6 +1,7 @@
 package entities.ui.views;
 
 import entities.ui.custom_components.board.BoardTile;
+import entities.ui.custom_components.board.CategoryContainer;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class View_HomeScreen {
@@ -29,8 +31,41 @@ public class View_HomeScreen {
 	private VBox vBox_center;
 	private HBox hBox_category;
 
+	private ArrayList<CategoryContainer> categoriesList;
+	private CategoryContainer favouritesCategory;
+	private Button createCategoryButton;
+	private VBox tempVbox;
+	private HBox tempHbox;
+
 	// Constructors
 	public View_HomeScreen() {
+		tempVbox = new VBox();
+		tempHbox = new HBox();
+
+		categoriesList = new ArrayList<CategoryContainer>();
+
+		favouritesCategory = new CategoryContainer("Favourites");
+		favouritesCategory.getTitleTextField().setEditable(false);
+
+		createCategoryButton = new Button("Create Category");
+		createCategoryButton.setOnAction(event -> {
+			CategoryContainer tempC = new CategoryContainer();
+			categoriesList.add(tempC);
+			updateDisplay()
+		});
+
+		for (CategoryContainer cc : categoriesList) {
+			cc.getCreateBoardButton().setOnAction(event -> {
+
+			});
+		} = new Button("Create Board");
+		createBoard.setOnAction(event -> {
+
+		});
+
+		tempHbox.getChildren().add(createCategoryButton);
+
+		updateDisplay();
 
 	}
 
@@ -92,4 +127,12 @@ public class View_HomeScreen {
 
 	public Scene getScene() { return scene; }
 	public void setScene(Scene scene) { this.scene = scene; }
+
+	public void updateDisplay() {
+		tempVbox.getChildren().add(tempHbox);
+		tempVbox.getChildren().add(favouritesCategory);
+		for (CategoryContainer cc : categoriesList) {
+			tempVbox.getChildren().add(cc);
+		}
+	}
 }

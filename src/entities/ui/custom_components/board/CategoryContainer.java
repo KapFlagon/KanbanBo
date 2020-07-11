@@ -1,18 +1,23 @@
 package entities.ui.custom_components.board;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
-public class CategoryContainer extends HBox {
+import java.util.ArrayList;
+
+public class CategoryContainer extends HBox { // TODO May need to use a different extension here, as There will need to be a VBOX with title and button, then an HBOX with boards.
 
 	private String titleString;
 	private TextField titleTextField;
-	private Category categoryItems;
+	private Button createBoardButton;
+	private ArrayList<BoardTile> boardsArrayList;
 
 	public CategoryContainer() {
 		titleString = "Name your Category...";
 		titleTextField = new TextField(titleString);
-		categoryItems = new Category();
+		boardsArrayList = new ArrayList<BoardTile>();
+		createBoardButton = new Button("Create Board");
 	}
 
 	public CategoryContainer(String containerTitle) {
@@ -33,10 +38,10 @@ public class CategoryContainer extends HBox {
 	public TextField getTitleTextField() {
 		return titleTextField;
 	}
-	public void setCategoryItems(Category newCategoryItems) {
-		this.categoryItems = newCategoryItems;
+	public void setCreateBoardButton(Button newCreateButton) {
+		this.createBoardButton = newCreateButton;
 	}
-	public Category getCategoryItems() {
-		return categoryItems;
+	public Button getCreateBoardButton() {
+		return createBoardButton;
 	}
 }
