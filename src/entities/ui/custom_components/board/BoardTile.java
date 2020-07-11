@@ -5,6 +5,7 @@ import entities.ui.custom_components.shared.Tile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -18,6 +19,7 @@ import java.io.FileInputStream;
 public class BoardTile extends Tile {
 
 	// Variables
+	private Label titleLabel;
 	private boolean favourite;
 	private StackPane stackPane;
 	private Group favouriteGroup;
@@ -29,7 +31,7 @@ public class BoardTile extends Tile {
 	public BoardTile() {
 		stackPane = new StackPane();
 		stackPane.setPrefSize(200,100);
-		initializeTitle("Dummy Mini Board");
+		initializeTitleLabel("Dummy Mini Board");
 		setColour(BoardColours.getRandomColour());
 		listPosition = 1;
 		setFavourite(false);
@@ -41,7 +43,7 @@ public class BoardTile extends Tile {
 	public BoardTile(String newTitle, Color newColour, int newPosition, boolean newFavourite) {
 		stackPane = new StackPane();
 		stackPane.setPrefSize(200,100);
-		initializeTitle(newTitle);
+		initializeTitleLabel(newTitle);
 		setColour(newColour);
 		listPosition = newPosition;
 		setFavourite(newFavourite);
@@ -78,7 +80,7 @@ public class BoardTile extends Tile {
 	protected void initializeView() {
 		stackPane.getChildren().clear();
 		this.getChildren().clear();
-		stackPane.getChildren().addAll(title, favouriteGroup);
+		stackPane.getChildren().addAll(titleLabel, favouriteGroup);
 		this.getChildren().add(stackPane);
 	}
 
@@ -88,9 +90,9 @@ public class BoardTile extends Tile {
 		StackPane.setAlignment(favouriteGroup, Pos.BOTTOM_RIGHT);
 		String path;
 		if (favourite) {
-			path = "src/assets/icons/ic_star_black_18dp.png";
+			path = "src/assets/icons/favourite/ic_star_white_18dp.png";
 		} else {
-			path = "src/assets/icons/ic_star_border_black_18dp.png";
+			path = "src/assets/icons/favourite/ic_star_border_white_18dp.png";
 		}
 		try {
 			inputStream = new FileInputStream(path);
@@ -129,6 +131,15 @@ public class BoardTile extends Tile {
 			System.out.println("Exception: " + e.getMessage());
 		}
 
+	}
+
+	public void initializeTitleLabel(String text) {
+		setTitleText(text);
+		titleLabel = new Label(titleText);
+		StackPane.setAlignment(titleLabel, Pos.TOP_LEFT);
+		titleLabel.setStyle("-fx-font-weight: bold");
+		titleLabel.setPadding(new Insets(3,3,3,3));
+		titleLabel.setTextFill(Color.rgb(255,255,255,1.0));
 	}
 
 }

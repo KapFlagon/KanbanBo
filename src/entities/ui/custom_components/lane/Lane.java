@@ -139,7 +139,8 @@ public class Lane extends Group {
 	}
 
 	public void updateCards() {
-		cardArrayList.add(new CardTile());
+		CardTile tempCard = new CardTile();
+		cardArrayList.add(tempCard);
 		centreVbox = new VBox();
 		for (CardTile ct : cardArrayList) {
 			centreVbox.getChildren().add(ct);

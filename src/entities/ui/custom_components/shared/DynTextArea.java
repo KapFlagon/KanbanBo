@@ -1,5 +1,6 @@
 package entities.ui.custom_components.shared;
 
+import entities.ui.custom_components.utils.ColourHelper;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextArea;
@@ -36,6 +37,7 @@ public class DynTextArea extends TextArea {
 	}
 	public void setInactiveBackgroundColour(Color inactiveBackgroundColour) {
 		this.inactiveBackgroundColour = inactiveBackgroundColour;
+		System.out.println("Post set inactive colour: " + inactiveBackgroundColour.toString());
 	}
 	public CornerRadii getCornerRadii() {
 		return cornerRadii;
@@ -61,8 +63,8 @@ public class DynTextArea extends TextArea {
 		this.setWrapText(true);
 		this.setPrefRowCount(1);
 		this.setPromptText("");
-		activeBackgroundColour = Color.rgb(235, 236, 240, 1.0);
-		//inactiveBackgroundColour = Color.rgb(235, 236, 240, 0.0);
+		activeBackgroundColour = Color.rgb(255, 255, 255, 1.0);
+		inactiveBackgroundColour = Color.rgb(235, 236, 240, 1.0);
 		cornerRadii = new CornerRadii(0);
 		backgroundInsets = new Insets(0,0,0,0);
 		this.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -72,24 +74,28 @@ public class DynTextArea extends TextArea {
 
 	}
 	private void focusState(boolean value) {
+		String tempColour;
 		if (value) {
 			System.out.println("Focus Gained");
-			//this.setBackground(new Background(new BackgroundFill(activeBackgroundColour, cornerRadii, backgroundInsets)));
-			//this.setStyle("-fx-background-color: rgba(235, 236, 240, 1.0)");
+			// Sets border colour for text box.
+			this.setBackground(new Background(new BackgroundFill(activeBackgroundColour, cornerRadii, backgroundInsets)));
+
+			// Sets the colour of the actual text area of the field.
+			System.out.println("Active Background Colour: " + activeBackgroundColour.toString());
+			tempColour = ColourHelper.rgb_toHexString(activeBackgroundColour);
+			System.out.println("Active Background Colour parsed: " + tempColour);
 			Region content = (Region) this.lookup(".content");
-			content.setStyle("-fx-background-color: rgba(118,240,76,1.0)");
+			content.setStyle("-fx-background-color: " + tempColour);
 		}
 		else {
 			System.out.println("Focus Lost");
-			//this.setBackground(new Background(new BackgroundFill(inactiveBackgroundColour, cornerRadii, backgroundInsets)));
-			//this.setStyle("-fx-background-color: rgba(235, 236, 240, 0.0)");
-			//this.setStyle("-fx-background-color: rgba(138,171,240,1.0)");
-			Region content = (Region) this.lookup(".content");
-			//content.setStyle("-fx-background-color: transparent");
-			//content.setStyle("-fx-background-color: rgba(138,171,240,1.0)");
+			// Sets border colour for text box.
+			this.setBackground(new Background(new BackgroundFill(inactiveBackgroundColour, cornerRadii, backgroundInsets)));
 
-			System.out.println("-fx-background-color: rgba(" + inactiveBackgroundColour.getRed() + ", " + inactiveBackgroundColour.getGreen() + ", " + inactiveBackgroundColour.getBlue() + ", 1.0)");
-			content.setStyle("-fx-background-color: rgba(" + inactiveBackgroundColour.getRed() + ", " + inactiveBackgroundColour.getGreen() + ", " + inactiveBackgroundColour.getBlue() + ", 1.0)");
+			// Sets the colour of the actual text area of the field.
+			tempColour = ColourHelper.rgb_toHexString(inactiveBackgroundColour);
+			Region content = (Region) this.lookup(".content");
+			content.setStyle("-fx-background-color: " + tempColour);
 		}
 	}
 
