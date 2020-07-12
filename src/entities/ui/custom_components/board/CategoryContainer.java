@@ -1,6 +1,6 @@
 package entities.ui.custom_components.board;
 
-import entities.ui.custom_components.shared.DynamicUI;
+import entities.ui.custom_components.shared.I_DynamicUI;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
-public class CategoryContainer extends VBox implements DynamicUI {
+public class CategoryContainer extends VBox implements I_DynamicUI {
 
 	private String titleString;
 	private TextField titleTextField;

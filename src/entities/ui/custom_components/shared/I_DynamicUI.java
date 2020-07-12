@@ -1,6 +1,6 @@
 package entities.ui.custom_components.shared;
 
-public interface DynamicUI {
+public interface I_DynamicUI {
 
 	public boolean updateDisplay();
 }
