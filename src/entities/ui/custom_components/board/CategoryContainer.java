@@ -1,27 +1,32 @@
 package entities.ui.custom_components.board;
 
+import entities.ui.custom_components.shared.DynamicUI;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-
+import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 
-public class CategoryContainer extends HBox { // TODO May need to use a different extension here, as There will need to be a VBOX with title and button, then an HBOX with boards.
+public class CategoryContainer extends VBox implements DynamicUI {
 
 	private String titleString;
 	private TextField titleTextField;
 	private Button createBoardButton;
 	private ArrayList<BoardTile> boardsArrayList;
+	private ScrollPane listScrollPane;
+	private HBox listHbox;
+	private HBox headerHbox;
+	private int listPosition;
 
 	public CategoryContainer() {
 		titleString = "Name your Category...";
-		titleTextField = new TextField(titleString);
-		boardsArrayList = new ArrayList<BoardTile>();
-		createBoardButton = new Button("Create Board");
+		initialize();
 	}
 
 	public CategoryContainer(String containerTitle) {
-
+		titleString = containerTitle;
+		initialize();
 	}
 
 	public void setTitleString(String newTitle) {
@@ -43,5 +48,60 @@ public class CategoryContainer extends HBox { // TODO May need to use a differen
 	}
 	public Button getCreateBoardButton() {
 		return createBoardButton;
+	}
+
+	public void initialize() {
+		this.setPrefSize(600,210);
+
+		titleTextField = new TextField(titleString);
+		titleTextField.setEditable(false);
+		titleTextField.setDisable(true);
+		boardsArrayList = new ArrayList<BoardTile>();
+
+		createBoardButton = new Button("Create Board");
+		createBoardButton.setOnAction(event -> {
+			addBoard();
+		});
+
+		listScrollPane = new ScrollPane();
+		listScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		listScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		listScrollPane.setPrefViewportHeight(500);
+		listScrollPane.setPrefViewportWidth(500);
+
+		headerHbox = new HBox();
+		headerHbox.getChildren().add(titleTextField);
+		headerHbox.getChildren().add(createBoardButton);
+
+		listHbox = new HBox();
+
+		updateDisplay();
+	}
+
+	public void addBoard() {
+		BoardTile bt = new BoardTile();
+		boardsArrayList.add(bt);
+		System.out.println("Board added");
+		updateDisplay();
+	}
+
+	public boolean updateDisplay() {
+		this.getChildren().clear();
+		this.getChildren().add(headerHbox);
+
+		try {
+			listHbox.getChildren().clear();
+			for (BoardTile bt : boardsArrayList) {
+				listHbox.getChildren().add(bt);
+				System.out.println("inside boardtile loop");
+			}
+			listScrollPane.setContent(listHbox);
+			this.getChildren().add(listScrollPane);
+			System.out.println("Category container Display updated");
+			return true;
+		} catch (Exception e) {
+			System.out.println("Exception encountered: " + e.getMessage() + "; Cause: " + e.getCause());
+			return false;
+		}
 	}
 }
