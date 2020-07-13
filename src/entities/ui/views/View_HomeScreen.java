@@ -2,6 +2,7 @@ package entities.ui.views;
 
 import entities.ui.custom_components.board.BoardTile;
 import entities.ui.custom_components.board.CategoryContainer;
+import entities.ui.custom_components.board.CategoryPopUp;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -45,10 +46,18 @@ public class View_HomeScreen {
 
 		createCategoryButton = new Button("Create Category");
 		createCategoryButton.setOnAction(event -> {
-			// TODO create a pop-up here, prompting user for name data. Then push to newly created category.
-			CategoryContainer tempC = new CategoryContainer();
-			categoriesList.add(tempC);
-			updateDisplay();
+			CategoryPopUp catPop = new CategoryPopUp();
+			catPop.getConfirmButton().setOnAction(butEvent -> {
+				String tempText = catPop.getInputField().getText();
+				CategoryContainer tempC = new CategoryContainer(tempText);
+				categoriesList.add(tempC);
+				updateDisplay();
+				catPop.getPopupWindow().close();
+			});
+			catPop.getCancelButton().setOnAction(butEvent -> {
+				catPop.getPopupWindow().close();
+			});
+			catPop.getPopupWindow().showAndWait();
 		});
 
 		borderPane.setTop(createCategoryButton);
