@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-
 import javax.swing.text.html.ImageView;
 
 public class View_NewUser extends VBox {
@@ -32,49 +31,21 @@ public class View_NewUser extends VBox {
 
 
 	public View_NewUser() {
-		viewTitle = new Label("Register New User");
-
-		usernameLabel = new Label("Username: ");
-		usernameField = new TextField();
-		usernameField.setPromptText("Username");
-
-		passwordLabel = new Label("Password: ");
-		passwordField = new PasswordField();
-		passwordField.setPromptText("Password");
-
-		fNameLabel = new Label("First Name: ");
-		fNamelField = new TextField();
-		fNamelField.setPromptText("First Name");
-
-		lNameLabel = new Label("Last Name: ");
-		lNameField = new TextField();
-		lNameField.setPromptText("Last Name");
-
-		emailLabel = new Label("Email: ");
-		emailField = new TextField();
-		emailField.setPromptText("EMail address");
-
-		avatarLabel = new Label("Upload Avatar");
-
-		createUserButton = new Button("Create User");
-
-
-		fieldLayout = new GridPane();
-		fieldLayout.add(usernameLabel,0,0,1,1);
-		fieldLayout.add(usernameField,1,0,1,1);
-		fieldLayout.add(passwordLabel,0,1,1,1);
-		fieldLayout.add(passwordField,1,1,1,1);
-		fieldLayout.add(fNameLabel,0,2,1,1);
-		fieldLayout.add(fNamelField,1,2,1,1);
-		fieldLayout.add(lNameLabel,0,3,1,1);
-		fieldLayout.add(lNameField,1,3,1,1);
-		fieldLayout.add(emailLabel,0,4,1,1);
-		fieldLayout.add(emailField,1,4,1,1);
-		fieldLayout.add(avatarLabel,0,5,1,1);
-		fieldLayout.setAlignment(Pos.CENTER);
-
-		this.getChildren().addAll(viewTitle, fieldLayout, createUserButton);
-		this.setAlignment(Pos.CENTER);
+		initViewTitle();
+		initUsernameLabel();
+		initUsernameField();
+		initPasswordLabel();
+		initPasswordField();
+		initFnameLabel();
+		initFnameField();
+		initLnameLabel();
+		initLnameField();
+		initEmailLabel();
+		initEmailField();
+		initAvatarLabel();
+		initCreateUserButton();
+		initFieldLayout();
+		initView();
 	}
 
 
@@ -174,5 +145,84 @@ public class View_NewUser extends VBox {
 	}
 	public void setPasswordField(PasswordField passwordField) {
 		this.passwordField = passwordField;
+	}
+
+	private void initViewTitle() {
+		viewTitle = new Label("Register New User");
+		viewTitle.setStyle("-fx-font: 40px Verdana;");
+	}
+
+	private void initUsernameLabel() {
+		usernameLabel = new Label("Username: ");
+	}
+
+	private void initUsernameField() {
+		usernameField = new TextField();
+		usernameField.setPromptText("Username");
+	}
+
+	private void initPasswordLabel() {
+		passwordLabel = new Label("Password: ");
+	}
+
+	private void initPasswordField() {
+		passwordField = new PasswordField();
+		passwordField.setPromptText("Password");
+	}
+
+	private void initFnameLabel() {
+		fNameLabel = new Label("First Name: ");
+	}
+
+	private void initFnameField() {
+		fNamelField = new TextField();
+		fNamelField.setPromptText("First Name");
+	}
+
+	private void initLnameLabel() {
+		lNameLabel = new Label("Last Name: ");
+	}
+
+	private void initLnameField() {
+		lNameField = new TextField();
+		lNameField.setPromptText("Last Name");
+	}
+
+	private void initEmailLabel() {
+		emailLabel = new Label("Email: ");
+	}
+
+	private void initEmailField() {
+		emailField = new TextField();
+		emailField.setPromptText("EMail address");
+	}
+
+	private void initAvatarLabel() {
+		avatarLabel = new Label("Upload Avatar");
+	}
+
+	private void initCreateUserButton() {
+		createUserButton = new Button("Create User");
+	}
+
+	private void initFieldLayout() {
+		fieldLayout = new GridPane();
+		fieldLayout.add(usernameLabel,0,0,1,1);
+		fieldLayout.add(usernameField,1,0,1,1);
+		fieldLayout.add(passwordLabel,0,1,1,1);
+		fieldLayout.add(passwordField,1,1,1,1);
+		fieldLayout.add(fNameLabel,0,2,1,1);
+		fieldLayout.add(fNamelField,1,2,1,1);
+		fieldLayout.add(lNameLabel,0,3,1,1);
+		fieldLayout.add(lNameField,1,3,1,1);
+		fieldLayout.add(emailLabel,0,4,1,1);
+		fieldLayout.add(emailField,1,4,1,1);
+		fieldLayout.add(avatarLabel,0,5,1,1);
+		fieldLayout.setAlignment(Pos.CENTER);
+	}
+
+	private void initView() {
+		this.getChildren().addAll(viewTitle, fieldLayout, createUserButton);
+		this.setAlignment(Pos.CENTER);
 	}
 }
