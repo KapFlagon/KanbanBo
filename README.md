@@ -1,0 +1,1 @@
+A Kanban software implementation using Java and JavaFX, attempting to use MVC pattern.
