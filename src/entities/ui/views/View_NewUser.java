@@ -1,5 +1,6 @@
 package entities.ui.views;
 
+import entities.ui.custom_components.shared.AvatarSelector;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,7 +8,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javax.swing.text.html.ImageView;
 
 public class View_NewUser extends VBox {
@@ -25,7 +25,7 @@ public class View_NewUser extends VBox {
 	private Label emailLabel;
 	private TextField emailField;
 	private Label avatarLabel;
-	private FileChooser avatarFileChooser; // Insert a file selection dialog later
+	private AvatarSelector avatarSelector;
 	private ImageView avatarImageView;
 	private Button createUserButton;
 
@@ -43,6 +43,7 @@ public class View_NewUser extends VBox {
 		initEmailLabel();
 		initEmailField();
 		initAvatarLabel();
+		initAvatarSelector();
 		initCreateUserButton();
 		initFieldLayout();
 		initView();
@@ -116,11 +117,11 @@ public class View_NewUser extends VBox {
 	public void setAvatarLabel(Label avatarLabel) {
 		this.avatarLabel = avatarLabel;
 	}
-	public FileChooser getAvatarFileChooser() {
-		return avatarFileChooser;
+	public AvatarSelector getAvatarSelector() {
+		return avatarSelector;
 	}
-	public void setAvatarFileChooser(FileChooser avatarFileChooser) {
-		this.avatarFileChooser = avatarFileChooser;
+	public void setAvatarSelector(AvatarSelector avatarSelector) {
+		this.avatarSelector = avatarSelector;
 	}
 	public ImageView getAvatarImageView() {
 		return avatarImageView;
@@ -218,7 +219,11 @@ public class View_NewUser extends VBox {
 		fieldLayout.add(emailLabel,0,4,1,1);
 		fieldLayout.add(emailField,1,4,1,1);
 		fieldLayout.add(avatarLabel,0,5,1,1);
+		fieldLayout.add(avatarSelector,1,5,1,1);
 		fieldLayout.setAlignment(Pos.CENTER);
+	}
+	private void initAvatarSelector() {
+		avatarSelector = new AvatarSelector();
 	}
 
 	private void initView() {

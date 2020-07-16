@@ -2,13 +2,14 @@ package entities.controllers;
 
 import entities.models.Model_NewUser;
 import entities.ui.views.View_NewUser;
+import javafx.stage.Stage;
 
 public class Controller_NewUser {
 
 	private View_NewUser view;
 	private Model_NewUser model;
 
-	public Controller_NewUser(View_NewUser view, Model_NewUser model) {
+	public Controller_NewUser(View_NewUser view, Model_NewUser model, Stage primaryStage) {
 		this.view = view;
 		this.model = model;
 		initializeViewActions();
@@ -35,6 +36,9 @@ public class Controller_NewUser {
 		view.getCreateUserButton().setOnMouseClicked(event -> {
 			System.out.println("Create new user");
 		});
+		view.getAvatarSelector().setOnMouseClicked(event -> {
+			view.getAvatarSelector().showFileChooser();
+		});;
 
 	}
 }
