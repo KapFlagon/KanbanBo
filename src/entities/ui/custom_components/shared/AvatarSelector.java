@@ -12,10 +12,11 @@ import java.io.File;
 
 public class AvatarSelector extends StackPane {
 
-	private final String defaultAvatar = "src/assets/icons/user_team/ic_perm_identity_black_18dp.png";
+	private final String defaultAvatar = "src\\assets\\icons\\user_team\\ic_perm_identity_black_18dp.png";
 	private Stage owner;
 	private ImageView avatar;
 	private FileChooser fileChooser;
+	private ImageEditor imageEditor;
 
 
 	public AvatarSelector() {
@@ -49,6 +50,7 @@ public class AvatarSelector extends StackPane {
 
 	private void initImage(String imagePath) {
 		setAvatar(imagePath);
+		// TODO need to scale images and force a single size
 	}
 
 	private void initFileChooser() {
@@ -68,8 +70,23 @@ public class AvatarSelector extends StackPane {
 	public void showFileChooser() {
 		File tempFile = fileChooser.showOpenDialog(owner);
 		if (tempFile != null) {
-			initImage(tempFile.getPath());
-			initDisplay();
+			try {
+				imageEditor = new ImageEditor(ImageHelper.parseImagePath(tempFile.getPath()));
+			} catch (Exception e) {
+				System.out.println("Error using ImageHelper: "
+						+ "\nMessage: " + e.getMessage()
+						+ "\nCause: " + e.getCause()
+						+ "\nString: " + e.toString()
+						+ "\nStack: " + e.getStackTrace()
+						+ "\nLocalized: " + e.getLocalizedMessage());
+			}
+
+			imageEditor.showAndWait();
+			if (imageEditor.getCroppedImage() != null) {
+				initImage(tempFile.getPath());
+				initDisplay();
+			}
+
 		}
 	}
 
