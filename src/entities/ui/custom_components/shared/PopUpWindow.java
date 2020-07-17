@@ -15,11 +15,14 @@ public abstract class PopUpWindow {
 
 	public PopUpWindow(String title) {
 		popupWindow = new Stage();
-		popupWindow.initStyle(StageStyle.UTILITY);
-		popupWindow.initModality(Modality.APPLICATION_MODAL);
-		popupWindow.setTitle(title);
-		popupWindow.setWidth(200);
-		popupWindow.setHeight(90);
+		initWindow(title);
+		setWindowSize(200, 90);
+	}
+
+	public PopUpWindow(String title, int width, int height) {
+		popupWindow = new Stage();
+		initWindow(title);
+		setWindowSize(width, height);
 	}
 
 
@@ -41,6 +44,24 @@ public abstract class PopUpWindow {
 		popupScene = new Scene(root);
 		popupWindow.setScene(popupScene);
 		//popupWindow.showAndWait();
+	}
+
+	public void close() {
+		popupWindow.close();
+	}
+
+	public void showAndWait() {
+		popupWindow.showAndWait();
+	}
+
+	private void initWindow(String title) {
+		popupWindow.initStyle(StageStyle.UTILITY);
+		popupWindow.initModality(Modality.APPLICATION_MODAL);
+		popupWindow.setTitle(title);
+	}
+	private void setWindowSize(int width, int height) {
+		popupWindow.setWidth(width);
+		popupWindow.setHeight(height);
 	}
 
 }
