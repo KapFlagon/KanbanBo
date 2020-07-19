@@ -4,16 +4,15 @@ import entities.ui.custom_components.utils.ImageHelper;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-
+import javafx.scene.transform.Scale;
 import java.io.File;
 
 public class ImageEditor extends PopUpWindow{
@@ -21,26 +20,27 @@ public class ImageEditor extends PopUpWindow{
 	private BorderPane layout;
 	private AnchorPane anchor;
 	private ScrollPane scrollPane;
+	private Group innerGroup, outerGroup;
+	private Scale imageScaleTransform;
 	private ImageView sourceImage;
 	private ImageView croppedImage;
-	private Slider zoom;
-	private ScrollBar hScroll;
-	private ScrollBar vScroll;
+	private Slider zoomSlider;
 	private Button cropBtn;
 	private Button cancelBtn;
 	private HBox btnBox;
 	// TODO Need to implement an overlay which prompts the user on their image cropping selection
-	private final int minZoom = 0;
-	private final int maxZoom = 200;
+	private final int minZoom = 1;
+	private final int maxZoom = 41;
 
 	public ImageEditor(ImageView imageView) {
 		super("Crop image",400,400);
 		this.sourceImage = imageView;
+		initGroups();
 		initScrollPane();
 		initCropBtn();
 		initCancelBtn();
 		initBtnBox();
-		initZoom();
+		initZoomSlider();
 		initDisplays();
 		updateDisplay();
 		initScene(layout);
@@ -57,7 +57,7 @@ public class ImageEditor extends PopUpWindow{
 		initCropBtn();
 		initCancelBtn();
 		initBtnBox();
-		initZoom();
+		initZoomSlider();
 		initDisplays();
 		updateDisplay();
 		initScene(layout);
@@ -75,10 +75,25 @@ public class ImageEditor extends PopUpWindow{
 	}
 
 
-	private void initZoom() {
-		zoom = new Slider(minZoom, maxZoom, 0);
-		zoom.setOrientation(Orientation.VERTICAL);
+	private void initZoomSlider() {
+		zoomSlider = new Slider(minZoom, maxZoom, 0);
+		zoomSlider.setOrientation(Orientation.VERTICAL);
 		// TODO set behaviour of slider in relation to image zoom.
+		zoomSlider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+
+			int newScale = newvalue.intValue();
+			int oldScale = oldvalue.intValue();
+			int diff = newScale - oldScale;
+			//System.out.println("Newscale: " + newScale + " oldscale: " + oldScale + " Diff: " + diff);
+			if (newScale > oldScale) {
+				imageScaleTransform.setX(newScale);
+				imageScaleTransform.setY(newScale);
+			} else if (newScale < oldScale) {
+				imageScaleTransform.setX(newScale);
+				imageScaleTransform.setY(newScale);
+				System.out.println("Decrease scaling");
+			}
+		});
 	}
 
 	private void initScrollPane() {
@@ -89,6 +104,9 @@ public class ImageEditor extends PopUpWindow{
 		//scrollPane.fitToWidthProperty().set(true);
 		scrollPane.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
 		scrollPane.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
+		scrollPane.setOnDragDone(dragEvent -> {
+			// TODO logic here to update image scale with data about current centered position.
+		});
 	}
 
 	private void updateDisplay() {
@@ -96,16 +114,18 @@ public class ImageEditor extends PopUpWindow{
 		anchor.getChildren().clear();
 		btnBox.getChildren().clear();
 
-		scrollPane.setContent(sourceImage);
+		scrollPane.setContent(outerGroup);
+		imageScaleTransform = new Scale(1, 1, 0, 0);
+		innerGroup.getTransforms().add(imageScaleTransform);
 
 		btnBox.setSpacing(15);
 		btnBox.getChildren().addAll(cropBtn, cancelBtn);
 		BorderPane.setAlignment(btnBox, Pos.CENTER);
 		BorderPane.setMargin(btnBox, new Insets(5,5,5,5));
-		BorderPane.setAlignment(zoom, Pos.CENTER);
-		BorderPane.setMargin(zoom, new Insets(5,5,5,5));
+		BorderPane.setAlignment(zoomSlider, Pos.CENTER);
+		BorderPane.setMargin(zoomSlider, new Insets(5,5,5,5));
 		layout.setCenter(scrollPane);
-		layout.setRight(zoom);
+		layout.setRight(zoomSlider);
 		layout.setBottom(btnBox);
 		layout.setPadding(new Insets(10,10,10,10));
 
@@ -137,6 +157,13 @@ public class ImageEditor extends PopUpWindow{
 		layout = new BorderPane();
 		layout.setPrefSize(400,400);
 		anchor = new AnchorPane();
+	}
+
+	private void initGroups() {
+		outerGroup = new Group();
+		innerGroup = new Group();
+		outerGroup.getChildren().add(innerGroup);
+		innerGroup.getChildren().add(sourceImage);
 	}
 
 	public void triggerCropping() {

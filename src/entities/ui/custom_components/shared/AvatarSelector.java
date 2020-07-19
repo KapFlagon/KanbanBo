@@ -53,6 +53,10 @@ public class AvatarSelector extends StackPane {
 		// TODO need to scale images and force a single size
 	}
 
+	private void initImage(ImageView imageView) {
+		avatar = imageView;
+	}
+
 	private void initFileChooser() {
 		fileChooser = new FileChooser();
 		fileChooser.setTitle("Select Avatar file");
@@ -83,7 +87,7 @@ public class AvatarSelector extends StackPane {
 
 			imageEditor.showAndWait();
 			if (imageEditor.getCroppedImage() != null) {
-				initImage(tempFile.getPath());
+				initImage(imageEditor.getCroppedImage());
 				initDisplay();
 			}
 
