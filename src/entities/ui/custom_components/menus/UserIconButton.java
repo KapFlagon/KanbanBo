@@ -26,7 +26,7 @@ public class UserIconButton extends MenuButton {
 		initCircle();
 		initStackPane();
 		initMenuItems();
-		initDisplay();
+		updateDisplay();
 	}
 
 
@@ -58,16 +58,16 @@ public class UserIconButton extends MenuButton {
 		logoff = new MenuItem("Log Off");
 	}
 
-	private void initDisplay() {
+	public void updateDisplay() {
+		stackPane.getChildren().clear();
 		stackPane.getChildren().add(circle);
 		stackPane.getChildren().add(initialsLabel);
+		this.getItems().clear();
 		this.setGraphic(stackPane);
 		this.getItems().add(profile);
 		this.getItems().add(activityLog);
 		this.getItems().add(settings);
 		this.getItems().add(logoff);
 	}
-
-
 
 }
