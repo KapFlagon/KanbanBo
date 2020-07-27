@@ -1,13 +1,14 @@
 package entities.models.utils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import org.sqlite.SQLiteConfig;
+
+import java.sql.*;
 
 public class DB_Creator {
 
 	private static Connection connection;
+	private static final String DRIVER = "org.sqlite.JDBC";
+	private static final String DB_URL = "jdbc:sqlite:KanbanBo.db";
 
 	/*public DB_Creator() {
 
@@ -23,12 +24,15 @@ public class DB_Creator {
 
 	private boolean checkExistingDb() {
 		try {
-			Class.forName("org.sqlite.JDBC");
+			Class.forName(DRIVER);
 		} catch (Exception ex_01) {
 			System.out.println("Error in 'checkExistingDB()', section 'Class.forName(...': " + ex_01.toString());
 		}
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:KanbanBo.db");
+			// http://code-know-how.blogspot.com/2011/10/how-to-enable-foreign-keys-in-sqlite3.html
+			SQLiteConfig config = new SQLiteConfig();
+			config.enforceForeignKeys(true);
+			connection = DriverManager.getConnection(DB_URL, config.toProperties());
 		} catch (Exception ex_02) {
 			System.out.println("Error in 'checkExistingDB()', section 'connection = DriverManager.getConnection(...': " + ex_02.toString());
 		}
@@ -37,29 +41,141 @@ public class DB_Creator {
 	}
 
 	private void createDB() {
-		createTable_user();
+		//createTable__user();
 	}
 
-	private void createTable_user() {
-		Statement statement;
-		PreparedStatement preparedStatement;
-		try {
-			statement = connection.createStatement();
-		} catch (Exception ex_01) {
-			System.out.println("Error in 'createTable_user()', while creating statement. Details: " + ex_01.toString());
-		}
+	private void createTable__user() throws SQLException {
+		String sqlStatement = "CREATE TABLE user("
+				+ "user_uuid TEXT NOT NULL UNIQUE PRIMARY KEY,"
+				+ "first_name TEXT NOT NULL"
+				+ "last_name TEXT NOT NULL,"
+				+ "display_name TEXT NOT NULL);";
+		executePreparedSQL(sqlStatement);
+	}
 
-		try {
-			preparedStatement = connection.prepareStatement("CREATE TABLE user("
-				+ "user_uuid varchar(40),"
-				+ "first_name varchar(20),"
-				+ "last_name varchar(30),"
-				+ "display_name varchar(40),"
-				+ "primary key(user_uuid));");
-			preparedStatement.execute();
-		} catch (Exception ex_02) {
-			System.out.println("Error in 'createTable_user()', while creating table. Details: " + ex_02.toString());
-		}
+	private void createTable__user_password() throws SQLException {
+		String sqlStatement = "CREATE TABLE user_password("
+				+ "user_uuid TEXT,"
+				+ "hashed_password TEXT NOT NULL,"
+				+ "PRIMARY KEY (user_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
 
+	private void createTable__watch_list() throws SQLException {
+		String sqlStatement = "CREATE TABLE watch_list("
+				+ "user_uuid TEXT NOT NULL,"
+				+ "watched_item_uuid TEXT NOT NULL,"
+				+ "PRIMARY KEY (user_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
+	private void createTable__activity() throws SQLException {
+		String sqlStatement = "CREATE TABLE activity("
+				+ "user_uuid TEXT,"
+				+ "parent_item_uuid TEXT NOT NULL,"
+				+ "date TEXT NOT NULL,"
+				+ "time TEXT NOT NULL,"
+				+ "log_data TEXT NOT NULL"
+				+ "PRIMARY KEY (user_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
+	private void createTable__user_contact() throws SQLException{
+		String sqlStatement = "CREATE TABLE user_contact("
+				+ "user_uuid TEXT,"
+				+ "email TEXT,"
+				+ "PRIMARY KEY (user_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
+	private void createTable__user_setting() throws SQLException{
+
+	}
+
+	private void createTable__team_member() throws SQLException{
+
+	}
+
+	private void createTable__team() throws SQLException{
+
+	}
+
+	private void createTable__project_folder() throws SQLException{
+
+	}
+
+	private void createTable__category() throws SQLException{
+
+	}
+
+	private void createTable__board_facts() throws SQLException{
+
+	}
+
+	private void createTable__team_board_access() throws SQLException{
+
+	}
+
+	private void createTable__card_facts() throws SQLException{
+
+	}
+
+	private void createTable__card_due_date() throws SQLException{
+
+	}
+
+	private void createTable__card() throws SQLException{
+
+	}
+
+	private void createTable__card_members() throws SQLException{
+
+	}
+
+	private void createTable__card_cover() throws SQLException{
+
+	}
+
+	private void createTable__lane() throws SQLException{
+
+	}
+
+	private void createTable__board() throws SQLException{
+
+	}
+
+	private void createTable__label() throws SQLException{
+
+	}
+
+	private void createTable__card_labels() throws SQLException{
+
+	}
+
+	private void createTable__attachment() throws SQLException{
+
+	}
+
+	private void createTable__checklist_item() throws SQLException{
+
+	}
+
+	private void createTable__card_checklists() throws SQLException{
+
+	}
+
+	private void createTable__checklist() throws SQLException{
+
+	}
+
+
+	private void executePreparedSQL(String sqlStatement) throws SQLException {
+		Statement statement = connection.createStatement();
+		PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+		preparedStatement.execute();
 	}
 }
