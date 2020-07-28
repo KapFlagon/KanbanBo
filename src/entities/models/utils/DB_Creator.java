@@ -112,7 +112,12 @@ public class DB_Creator {
 	}
 
 	private void createTable__team_member() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE team_member("
+				+ "user_uuid TEXT,"
+				+ "team_uuid TEXT,"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid),"
+				+ "FOREIGN KEY (team_uuid) REFERENCES team (team_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__team() throws SQLException{
