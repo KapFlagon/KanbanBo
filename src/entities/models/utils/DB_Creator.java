@@ -102,7 +102,13 @@ public class DB_Creator {
 	}
 
 	private void createTable__user_setting() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE user_setting("
+				+ "user_uuid TEXT,"
+				+ "colourblind BOOLEAN,"
+				+ "notifications BOOLEAN,"
+				+ "PRIMARY KEY (user_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__team_member() throws SQLException{
