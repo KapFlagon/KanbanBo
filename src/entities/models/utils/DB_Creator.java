@@ -92,6 +92,15 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
+	private void createTable__salt() throws SQLException{
+		String sqlStatement = "CREATE TABLE salt("
+				+ "user_uuid TEXT,"
+				+ "salt_key TEXT,"
+				+ "PRIMARY KEY (user_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
 	private void createTable__user_setting() throws SQLException{
 
 	}
