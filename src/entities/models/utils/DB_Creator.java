@@ -134,13 +134,18 @@ public class DB_Creator {
 				+ "parent_item_uuid TEXT,"
 				+ "folder_path TEXT,"
 				+ "PRIMARY KEY (project_folder_uuid),"
-				// Need to examine structure further, to clarify the foreign key relationship
+				// TODO Need to examine structure further, to clarify the foreign key relationship
 				+ "FOREIGN KEY (parent_item_uuid) REFERENCES (...));";
 		//executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__category() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE catgory("
+				+ "category_uuid TEXT,"
+				+ "user_uuid TEXT,"
+				+ "category_title TEXT"
+				+ "PRIMARY KEY (category_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 	}
 
 	private void createTable__board_facts() throws SQLException{
