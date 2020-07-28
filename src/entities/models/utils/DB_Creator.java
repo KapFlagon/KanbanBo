@@ -129,7 +129,14 @@ public class DB_Creator {
 	}
 
 	private void createTable__project_folder() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE project_folder("
+				+ "project_folder_uuid TEXT,"
+				+ "parent_item_uuid TEXT,"
+				+ "folder_path TEXT,"
+				+ "PRIMARY KEY (project_folder_uuid),"
+				// Need to examine structure further, to clarify the foreign key relationship
+				+ "FOREIGN KEY (parent_item_uuid) REFERENCES (...));";
+		//executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__category() throws SQLException{
