@@ -121,7 +121,11 @@ public class DB_Creator {
 	}
 
 	private void createTable__team() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE user_setting("
+				+ "team_uuid TEXT,"
+				+ "team_title TEXT,"
+				+ "PRIMARY KEY (team_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__project_folder() throws SQLException{
