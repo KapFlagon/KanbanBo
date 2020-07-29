@@ -162,7 +162,12 @@ public class DB_Creator {
 	}
 
 	private void createTable__team_board_access() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE board_facts("
+				+ "board_uuid TEXT,"
+				+ "team_uuid TEXT,"
+				+ "FOREIGN KEY (board_uuid) REFERENCES board (board_uuid),"
+				+ "FOREIGN KEY (team_uuid) REFERENCES team (team_uuid));";;
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__card_facts() throws SQLException{
