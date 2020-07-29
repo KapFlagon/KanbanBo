@@ -183,7 +183,13 @@ public class DB_Creator {
 	}
 
 	private void createTable__card_due_date() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE card_due_date("
+				+ "card_uuid TEXT,"
+				+ "card_due_date TEXT,"
+				+ "card_due_time TEXT,"
+				+ "completed BOOLEAN,"
+				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__card() throws SQLException{
