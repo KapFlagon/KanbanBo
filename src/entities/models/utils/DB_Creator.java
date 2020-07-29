@@ -146,10 +146,19 @@ public class DB_Creator {
 				+ "category_title TEXT"
 				+ "PRIMARY KEY (category_uuid),"
 				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__board_facts() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE board_facts("
+				+ "board_uuid TEXT,"
+				+ "owner_uuid TEXT,"
+				+ "favourite BOOLEAN,"
+				+ "template BOOLEAN,"
+				+ "archived BOOLEAN,"
+				+ "FOREIGN KEY (board_uuid) REFERENCES board (board_uuid),"
+				+ "FOREIGN KEY (owner_uuid) REFERENCES user (user_uuid));";;
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__team_board_access() throws SQLException{
