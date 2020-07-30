@@ -207,7 +207,12 @@ public class DB_Creator {
 	}
 
 	private void createTable__card_cover() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE card_cover("
+				+ "card_uuid TEXT,"
+				+ "cover_title TEXT,"
+				+ "cover_data BLOB,"
+				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__lane() throws SQLException{
