@@ -45,6 +45,7 @@ public class DB_Creator {
 		//createTable__user();
 	}
 
+	// TODO Need to add logic to the SQL statements to mark columns as NOT NULL etc.
 	private void createTable__user() throws SQLException {
 		String sqlStatement = "CREATE TABLE user("
 				+ "user_uuid TEXT NOT NULL UNIQUE PRIMARY KEY,"
@@ -287,7 +288,7 @@ public class DB_Creator {
 				+ "checklist_uuid TEXT,"
 				+ "checklist_title TEXT,"
 				+ "checklist_position INTEGER,"
-				+ "PRIMARY KEY (checklist_item_uuid));"
+				+ "PRIMARY KEY (checklist_item_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
