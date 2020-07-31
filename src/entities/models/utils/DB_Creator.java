@@ -283,7 +283,12 @@ public class DB_Creator {
 	}
 
 	private void createTable__checklist() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE checklist("
+				+ "checklist_uuid TEXT,"
+				+ "checklist_title TEXT,"
+				+ "checklist_position INTEGER,"
+				+ "PRIMARY KEY (checklist_item_uuid));"
+		executePreparedSQL(sqlStatement);
 	}
 
 
