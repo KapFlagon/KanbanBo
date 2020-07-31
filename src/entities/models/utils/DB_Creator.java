@@ -37,6 +37,7 @@ public class DB_Creator {
 			System.out.println("Error in 'checkExistingDB()', section 'connection = DriverManager.getConnection(...': " + ex_02.toString());
 		}
 		// TODO Logic here to determine if db actually exists and return appropriate boolean.
+		// Consider using check for existing "user" table...
 		return true;
 	}
 
@@ -249,7 +250,14 @@ public class DB_Creator {
 	}
 
 	private void createTable__attachment() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE attachment("
+				+ "attachment_uuid TEXT,"
+				+ "card_uuid TEXT,"
+				+ "attachment_title TEXT,"
+				+ "attachment_data BLOB,"
+				+ "PRIMARY KEY (attachment_uuid),"
+				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__checklist_item() throws SQLException{
