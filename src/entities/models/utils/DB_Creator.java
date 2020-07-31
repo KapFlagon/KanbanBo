@@ -208,6 +208,7 @@ public class DB_Creator {
 	}
 
 	private void createTable__card_cover() throws SQLException{
+		// TODO Consider changing this so that covers can be used in both boards
 		String sqlStatement = "CREATE TABLE card_cover("
 				+ "card_uuid TEXT,"
 				+ "cover_title TEXT,"
@@ -243,7 +244,7 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE card_labels("
 				+ "label_uuid TEXT,"
 				+ "card_uuid TEXT,"
-				+ "position TEXT,"
+				+ "position INTEGER,"
 				+ "FOREIGN KEY (label_uuid) REFERENCES label (label_uuid),"
 				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
 		executePreparedSQL(sqlStatement);
@@ -261,7 +262,15 @@ public class DB_Creator {
 	}
 
 	private void createTable__checklist_item() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE checklist_item("
+				+ "checklist_item_uuid TEXT,"
+				+ "checklist_uuid TEXT,"
+				+ "item_position INTEGER,"
+				+ "item_description TEXT,"
+				+ "item_completed BOOLEAN,"
+				+ "PRIMARY KEY (checklist_item_uuid),"
+				+ "FOREIGN KEY (checklist_uuid) REFERENCES checklist (checklist_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__card_checklists() throws SQLException{
