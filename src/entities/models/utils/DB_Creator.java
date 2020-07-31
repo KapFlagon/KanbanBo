@@ -274,7 +274,12 @@ public class DB_Creator {
 	}
 
 	private void createTable__card_checklists() throws SQLException{
-
+		String sqlStatement = "CREATE TABLE card_checklists("
+				+ "card_uuid TEXT,"
+				+ "checklist_uuid TEXT,"
+				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid),"
+				+ "FOREIGN KEY (checklist_uuid) REFERENCES checklist (checklist_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__checklist() throws SQLException{
