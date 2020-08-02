@@ -194,8 +194,16 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
-	private void createTable__card() throws SQLException{
-		// TODO Need to review link between cards, template cards, users, and lanes
+	private void createTable__active_card() throws SQLException{
+		// An active card must always be linked to a lane
+		String sqlStatement = "CREATE TABLE active_card("
+				+ "active_card_uuid TEXT,"
+				+ "lane_uuid TEXT,"
+				+ "active_card_position INTEGER,"
+				+ "active_card_title TEXT,"
+				+ "Primary KEY (active_card_uuid),"
+				+ "FOREIGN KEY (lane_uuid) REFERENCES lane (lane_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__card_members() throws SQLException{
