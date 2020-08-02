@@ -176,8 +176,6 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE card_facts("
 				+ "card_uuid TEXT,"
 				+ "owner_uuid TEXT,"
-				+ "template BOOLEAN,"
-				+ "archived BOOLEAN,"
 				+ "card_description TEXT,"
 				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid),"
 				+ "FOREIGN KEY (owner_uuid) REFERENCES user (user_uuid));";;
