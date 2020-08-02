@@ -204,6 +204,8 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
+	// TODO Add template_card table and archived_card table
+
 	private void createTable__card_members() throws SQLException{
 		String sqlStatement = "CREATE TABLE card_members("
 				+ "user_uuid TEXT,"
@@ -228,14 +230,18 @@ public class DB_Creator {
 // TODO Need to review link between cards, template cards, users, and lanes
 	}
 
-	private void createTable__board() throws SQLException{
-		String sqlStatement = "CREATE TABLE card_cover("
-				+ "card_uuid TEXT,"
-				+ "cover_title TEXT,"
-				+ "cover_data BLOB,"
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+	private void createTable__active_board() throws SQLException{
+		String sqlStatement = "CREATE TABLE active_board("
+				+ "board_uuid TEXT,"
+				+ "category_uuid TEXT,"
+				+ "active_board_title TEXT,"
+				+ "active_board_position INTEGER,"
+				+ "PRIMARY KEY (board_uuid),"
+				+ "FOREIGN KEY (category_uuid) REFERENCES category (category_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
+
+	// TODO Add archived_board table and template_board table
 
 	private void createTable__label() throws SQLException{
 		String sqlStatement = "CREATE TABLE label("
