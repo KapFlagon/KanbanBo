@@ -100,10 +100,10 @@ public class DB_Creator {
 				+ "project_folder_uuid TEXT,"
 				+ "parent_item_uuid TEXT,"
 				+ "folder_path TEXT,"
-				+ "PRIMARY KEY (project_folder_uuid),"
-				// TODO Need to examine structure further, to clarify the foreign key relationship
-				+ "FOREIGN KEY (parent_item_uuid) REFERENCES (...));";
-		//executePreparedSQL(sqlStatement);
+				+ "PRIMARY KEY (project_folder_uuid));";
+				// No enforced foreign key relationship, only a soft one. Gives more flexibility for linking different sources.
+				// E.G. Board can have project folder, Lane, Card, etc.
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__category() throws SQLException{
