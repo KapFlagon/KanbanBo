@@ -66,7 +66,7 @@ public class DB_Creator {
 	private void createTable__activity() throws SQLException {
 		// parent_item_uuid can be a category, board, lane, card, image, etc.
 		String sqlStatement = "CREATE TABLE activity("
-				+ "activity TEXT,"
+				+ "activity_uuid TEXT NOT NULL,"
 				+ "parent_item_uuid TEXT NOT NULL,"
 				+ "date TEXT NOT NULL,"
 				+ "time TEXT NOT NULL,"
@@ -75,10 +75,11 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
-	private void createTable__salt() throws SQLException{
+	private void createTable__salt_and_pepper() throws SQLException{
 		String sqlStatement = "CREATE TABLE salt("
 				+ "user_uuid TEXT,"
 				+ "salt_key TEXT,"
+				+ "pepper_key TEXT,"
 				+ "PRIMARY KEY (user_uuid),"
 				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 		executePreparedSQL(sqlStatement);
