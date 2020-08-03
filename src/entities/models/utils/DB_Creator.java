@@ -64,7 +64,7 @@ public class DB_Creator {
 	}
 
 	private void createTable__activity() throws SQLException {
-		// parent_item_uuid can be a category, board, lane, card, image, etc.  
+		// parent_item_uuid can be a category, board, lane, card, image, etc.
 		String sqlStatement = "CREATE TABLE activity("
 				+ "activity TEXT,"
 				+ "parent_item_uuid TEXT NOT NULL,"
@@ -72,15 +72,6 @@ public class DB_Creator {
 				+ "time TEXT NOT NULL,"
 				+ "log_data TEXT NOT NULL"
 				+ "PRIMARY KEY (user_uuid));";
-		executePreparedSQL(sqlStatement);
-	}
-
-	private void createTable__user_contact() throws SQLException{
-		String sqlStatement = "CREATE TABLE user_contact("
-				+ "user_uuid TEXT,"
-				+ "email TEXT,"
-				+ "PRIMARY KEY (user_uuid),"
-				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
