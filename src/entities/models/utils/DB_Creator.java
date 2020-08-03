@@ -88,7 +88,8 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE user_setting("
 				+ "user_uuid TEXT,"
 				+ "colourblind BOOLEAN,"
-				+ "notifications BOOLEAN,"
+				+ "font TEXT,"
+				+ "font_size INTEGER,"
 				+ "PRIMARY KEY (user_uuid),"
 				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 		executePreparedSQL(sqlStatement);
