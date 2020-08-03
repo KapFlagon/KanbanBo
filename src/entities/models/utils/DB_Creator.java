@@ -64,6 +64,7 @@ public class DB_Creator {
 	}
 
 	private void createTable__activity() throws SQLException {
+		// parent_item_uuid can be a category, board, lane, card, image, etc.  
 		String sqlStatement = "CREATE TABLE activity("
 				+ "activity TEXT,"
 				+ "parent_item_uuid TEXT NOT NULL,"
