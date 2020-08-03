@@ -194,12 +194,19 @@ public class DB_Creator {
 				+ "active_board_title TEXT,"
 				+ "active_board_position INTEGER,"
 				+ "active_board_favourite BOOLEAN,"
-				+ "PRIMARY KEY (board_uuid),"
+				+ "PRIMARY KEY (active_board_uuid),"
 				+ "FOREIGN KEY (category_uuid) REFERENCES category (category_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
-
-	// TODO Add archived_board table and template_board table
+	
+	private void createTable__archived_board() throws SQLException{
+		String sqlStatement = "CREATE TABLE archived_board("
+				+ "archived_board_uuid TEXT,"
+				+ "user_uuid TEXT,"
+				+ "archived_board_title TEXT,"
+				+ "PRIMARY KEY (archived_board_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
 
 	private void createTable__label() throws SQLException{
 		String sqlStatement = "CREATE TABLE label("
