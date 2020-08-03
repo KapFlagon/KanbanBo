@@ -50,8 +50,7 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE user("
 				+ "user_uuid TEXT NOT NULL UNIQUE PRIMARY KEY,"
 				+ "first_name TEXT NOT NULL"
-				+ "last_name TEXT NOT NULL,"
-				+ "display_name TEXT NOT NULL);";
+				+ "last_name TEXT NOT NULL);";
 		executePreparedSQL(sqlStatement);
 	}
 
@@ -59,15 +58,6 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE user_password("
 				+ "user_uuid TEXT,"
 				+ "hashed_password TEXT NOT NULL,"
-				+ "PRIMARY KEY (user_uuid),"
-				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
-		executePreparedSQL(sqlStatement);
-	}
-
-	private void createTable__watch_list() throws SQLException {
-		String sqlStatement = "CREATE TABLE watch_list("
-				+ "user_uuid TEXT NOT NULL,"
-				+ "watched_item_uuid TEXT NOT NULL,"
 				+ "PRIMARY KEY (user_uuid),"
 				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 		executePreparedSQL(sqlStatement);
