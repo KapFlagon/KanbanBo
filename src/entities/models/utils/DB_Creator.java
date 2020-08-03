@@ -95,23 +95,6 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
-	private void createTable__team_member() throws SQLException{
-		String sqlStatement = "CREATE TABLE team_member("
-				+ "user_uuid TEXT,"
-				+ "team_uuid TEXT,"
-				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid),"
-				+ "FOREIGN KEY (team_uuid) REFERENCES team (team_uuid));";
-		executePreparedSQL(sqlStatement);
-	}
-
-	private void createTable__team() throws SQLException{
-		String sqlStatement = "CREATE TABLE user_setting("
-				+ "team_uuid TEXT,"
-				+ "team_title TEXT,"
-				+ "PRIMARY KEY (team_uuid));";
-		executePreparedSQL(sqlStatement);
-	}
-
 	private void createTable__project_folder() throws SQLException{
 		String sqlStatement = "CREATE TABLE project_folder("
 				+ "project_folder_uuid TEXT,"
