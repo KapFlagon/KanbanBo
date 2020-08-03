@@ -99,6 +99,8 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE project_folder("
 				+ "project_folder_uuid TEXT,"
 				+ "parent_item_uuid TEXT,"
+				+ "folder_title TEXT,"
+				+ "folder_description TEXT,"
 				+ "folder_path TEXT,"
 				+ "PRIMARY KEY (project_folder_uuid));";
 				// No enforced foreign key relationship, only a soft one. Gives more flexibility for linking different sources.
