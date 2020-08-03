@@ -65,13 +65,12 @@ public class DB_Creator {
 
 	private void createTable__activity() throws SQLException {
 		String sqlStatement = "CREATE TABLE activity("
-				+ "user_uuid TEXT,"
+				+ "activity TEXT,"
 				+ "parent_item_uuid TEXT NOT NULL,"
 				+ "date TEXT NOT NULL,"
 				+ "time TEXT NOT NULL,"
 				+ "log_data TEXT NOT NULL"
-				+ "PRIMARY KEY (user_uuid),"
-				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+				+ "PRIMARY KEY (user_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
