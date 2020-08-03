@@ -189,10 +189,11 @@ public class DB_Creator {
 
 	private void createTable__active_board() throws SQLException{
 		String sqlStatement = "CREATE TABLE active_board("
-				+ "board_uuid TEXT,"
+				+ "active_board_uuid TEXT,"
 				+ "category_uuid TEXT,"
 				+ "active_board_title TEXT,"
 				+ "active_board_position INTEGER,"
+				+ "active_board_favourite BOOLEAN,"
 				+ "PRIMARY KEY (board_uuid),"
 				+ "FOREIGN KEY (category_uuid) REFERENCES category (category_uuid));";
 		executePreparedSQL(sqlStatement);
