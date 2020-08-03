@@ -183,16 +183,6 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
-	private void createTable__card_members() throws SQLException{
-		String sqlStatement = "CREATE TABLE card_members("
-				+ "user_uuid TEXT,"
-				+ "card_uuid TEXT,"
-				+ "card_due_time TEXT,"
-				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid),"
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
-		executePreparedSQL(sqlStatement);
-	}
-
 	private void createTable__card_cover() throws SQLException{
 		// TODO Consider changing this so that covers can be used in both boards
 		String sqlStatement = "CREATE TABLE card_cover("
