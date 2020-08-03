@@ -198,13 +198,24 @@ public class DB_Creator {
 				+ "FOREIGN KEY (category_uuid) REFERENCES category (category_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
-	
+
 	private void createTable__archived_board() throws SQLException{
 		String sqlStatement = "CREATE TABLE archived_board("
 				+ "archived_board_uuid TEXT,"
 				+ "user_uuid TEXT,"
 				+ "archived_board_title TEXT,"
-				+ "PRIMARY KEY (archived_board_uuid));";
+				+ "PRIMARY KEY (archived_board_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
+	private void createTable__template_board() throws SQLException{
+		String sqlStatement = "CREATE TABLE template_board("
+				+ "template_board_uuid TEXT,"
+				+ "user_uuid TEXT,"
+				+ "template_board_title TEXT,"
+				+ "PRIMARY KEY (template_board_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
