@@ -118,15 +118,13 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
-	private void createTable__board_facts() throws SQLException{
+	private void createTable__board_facts() throws SQLException {
+		// No enforced foreign key relationship, only a soft one. Gives more flexibility for linking different sources.
 		String sqlStatement = "CREATE TABLE board_facts("
+				+ "board_facts_uuid TEXT,"
 				+ "board_uuid TEXT,"
 				+ "owner_uuid TEXT,"
-				+ "favourite BOOLEAN,"
-				+ "template BOOLEAN,"
-				+ "archived BOOLEAN,"
-				+ "FOREIGN KEY (board_uuid) REFERENCES board (board_uuid),"
-				+ "FOREIGN KEY (owner_uuid) REFERENCES user (user_uuid));";;
+				+ "board_description TEXT);";
 		executePreparedSQL(sqlStatement);
 	}
 
