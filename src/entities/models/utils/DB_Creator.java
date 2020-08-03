@@ -173,6 +173,16 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
+	private void createTable__archived_card() throws SQLException{
+		// An active card must always be linked to a lane
+		String sqlStatement = "CREATE TABLE archived_card("
+				+ "archived_card_uuid TEXT,"
+				+ "lane_uuid TEXT,"
+				+ "archived_card_title TEXT,"
+				+ "Primary KEY (archived_card_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
 	private void createTable__card_members() throws SQLException{
 		String sqlStatement = "CREATE TABLE card_members("
 				+ "user_uuid TEXT,"
