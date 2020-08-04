@@ -164,11 +164,10 @@ public class DB_Creator {
 		// An active card must always be linked to a lane
 		String sqlStatement = "CREATE TABLE active_card("
 				+ "active_card_uuid TEXT,"
-				+ "lane_uuid TEXT,"
+				+ "lane_uuid TEXT,"     // No foreign key, soft link
 				+ "active_card_position INTEGER,"
 				+ "active_card_title TEXT,"
-				+ "Primary KEY (active_card_uuid),"
-				+ "FOREIGN KEY (lane_uuid) REFERENCES lane (lane_uuid));";
+				+ "Primary KEY (active_card_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
