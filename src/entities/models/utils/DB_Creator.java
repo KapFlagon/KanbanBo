@@ -136,7 +136,7 @@ public class DB_Creator {
 		// No enforced foreign key relationship, only a soft one. Gives more flexibility for linking different sources.
 		String sqlStatement = "CREATE TABLE board_facts("
 				+ "board_facts_uuid TEXT,"
-				+ "board_uuid TEXT,"
+				+ "board_uuid TEXT,"    // No FK here, soft link
 				+ "board_description TEXT),"
 				+ "PRIMARY KEY (board_facts_uuid));";
 		executePreparedSQL(sqlStatement);
@@ -146,8 +146,7 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE card_facts("
 				+ "card_uuid TEXT,"  // No Foreign Key
 				+ "card_description TEXT,"
-				// TODO revise this
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+				+ "PRIMARY KEY (card_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
@@ -188,7 +187,7 @@ public class DB_Creator {
 		// An archived card should always be linked to a lane
 		String sqlStatement = "CREATE TABLE archived_card("
 				+ "archived_card_uuid TEXT,"
-				+ "lane_uuid TEXT,"  // No Foreign Key
+				+ "lane_uuid TEXT,"  // No Foreign Key, soft link
 				+ "archived_card_title TEXT,"
 				+ "Primary KEY (archived_card_uuid));";
 		executePreparedSQL(sqlStatement);
