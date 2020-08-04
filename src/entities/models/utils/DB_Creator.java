@@ -92,6 +92,7 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE user_setting("
 				+ "user_uuid TEXT,"
 				+ "colourblind BOOLEAN,"
+				+ "open_last_file BOOLEAN,"
 				+ "font TEXT,"
 				+ "font_size INTEGER,"
 				+ "PRIMARY KEY (user_uuid),"
