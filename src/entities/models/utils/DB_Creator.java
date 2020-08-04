@@ -46,6 +46,7 @@ public class DB_Creator {
 	}
 
 	// TODO Need to add logic to the SQL statements to mark columns as NOT NULL etc.
+	// TODO final pass to make sure that all 'No FK' columns no longer have foreign keys
 	private void createTable__user() throws SQLException {
 		String sqlStatement = "CREATE TABLE user("
 				+ "user_uuid TEXT NOT NULL UNIQUE PRIMARY KEY,"
@@ -54,6 +55,7 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
+	/* // May not use passwords to protect the file
 	private void createTable__user_password() throws SQLException {
 		String sqlStatement = "CREATE TABLE user_password("
 				+ "user_uuid TEXT,"
@@ -62,6 +64,7 @@ public class DB_Creator {
 				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
+	 */
 
 	private void createTable__activity() throws SQLException {
 		// parent_item_uuid can be a category, board, lane, card, image, etc.
@@ -75,6 +78,7 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
+	/* // May not use passwords to protect the file
 	private void createTable__salt_and_pepper() throws SQLException{
 		String sqlStatement = "CREATE TABLE salt("
 				+ "user_uuid TEXT,"
@@ -84,6 +88,7 @@ public class DB_Creator {
 				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
+	 */
 
 	private void createTable__user_setting() throws SQLException{
 		String sqlStatement = "CREATE TABLE user_setting("
