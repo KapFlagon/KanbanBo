@@ -195,10 +195,10 @@ public class DB_Creator {
 	private void createTable__card_cover() throws SQLException{
 		// TODO Consider changing this so that covers can be used in both boards
 		String sqlStatement = "CREATE TABLE card_cover("
-				+ "card_uuid TEXT,"
+				+ "card_uuid TEXT,"     // No Foreign Key, soft link
 				+ "cover_title TEXT,"
 				+ "cover_data BLOB,"
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+				+ "PRIMARY KEY (card_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
