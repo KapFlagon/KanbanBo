@@ -137,10 +137,8 @@ public class DB_Creator {
 	private void createTable__card_facts() throws SQLException{
 		String sqlStatement = "CREATE TABLE card_facts("
 				+ "card_uuid TEXT,"
-				+ "owner_uuid TEXT,"
 				+ "card_description TEXT,"
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid),"
-				+ "FOREIGN KEY (owner_uuid) REFERENCES user (user_uuid));";;
+				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
@@ -166,7 +164,6 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
-	// TODO Add archived_card table
 	private void createTable__template_card() throws SQLException{
 		// An active card must always be linked to a lane
 		String sqlStatement = "CREATE TABLE template_card("
@@ -179,10 +176,10 @@ public class DB_Creator {
 	}
 
 	private void createTable__archived_card() throws SQLException{
-		// An active card must always be linked to a lane
+		// An archived card should always be linked to a lane
 		String sqlStatement = "CREATE TABLE archived_card("
 				+ "archived_card_uuid TEXT,"
-				+ "lane_uuid TEXT,"
+				+ "lane_uuid TEXT,"  // No Foreign Key
 				+ "archived_card_title TEXT,"
 				+ "Primary KEY (archived_card_uuid));";
 		executePreparedSQL(sqlStatement);
