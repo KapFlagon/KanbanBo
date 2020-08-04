@@ -74,13 +74,13 @@ public class DB_Creator {
 				+ "date TEXT NOT NULL,"
 				+ "time TEXT NOT NULL,"
 				+ "log_data TEXT NOT NULL"
-				+ "PRIMARY KEY (user_uuid));";
+				+ "PRIMARY KEY (activity_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
 	/* // May not use passwords to protect the file
 	private void createTable__salt_and_pepper() throws SQLException{
-		String sqlStatement = "CREATE TABLE salt("
+		String sqlStatement = "CREATE TABLE salt_and_pepper("
 				+ "user_uuid TEXT,"
 				+ "salt_key TEXT,"
 				+ "pepper_key TEXT,"
@@ -115,7 +115,7 @@ public class DB_Creator {
 	}
 
 	private void createTable__category() throws SQLException{
-		String sqlStatement = "CREATE TABLE catgory("
+		String sqlStatement = "CREATE TABLE category("
 				+ "category_uuid TEXT,"
 				+ "user_uuid TEXT,"
 				+ "category_title TEXT"
@@ -129,8 +129,8 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE board_facts("
 				+ "board_facts_uuid TEXT,"
 				+ "board_uuid TEXT,"
-				+ "owner_uuid TEXT,"
-				+ "board_description TEXT);";
+				+ "board_description TEXT),"
+				+ "PRIMARY KEY (board_facts_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
@@ -198,8 +198,15 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
-	private void createTable__lane() throws SQLException{
+	private void createTable__active_lane() throws SQLException{
 // TODO Need to review link between cards, template cards, users, and lanes
+		String sqlStatement = "CREATE TABLE active_lane("
+				+ "active_lane_uuid TEXT,"
+				+ "board_uuid TEXT,"    // No foreign key, flexible board usage
+				+ "active_lane_title TEXT,"
+				+ "active_lane_position INTEGER,"
+				+ "PRIMARY KEY (active_lane_uuid));";
+		executePreparedSQL(sqlStatement);
 	}
 
 	private void createTable__active_board() throws SQLException{
