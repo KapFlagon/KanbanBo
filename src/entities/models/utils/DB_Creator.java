@@ -276,11 +276,10 @@ public class DB_Creator {
 	private void createTable__attachment() throws SQLException{
 		String sqlStatement = "CREATE TABLE attachment("
 				+ "attachment_uuid TEXT,"
-				+ "card_uuid TEXT,"
+				+ "card_uuid TEXT,"     // No Foreign Key, soft link
 				+ "attachment_title TEXT,"
 				+ "attachment_data BLOB,"
-				+ "PRIMARY KEY (attachment_uuid),"
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+				+ "PRIMARY KEY (attachment_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
