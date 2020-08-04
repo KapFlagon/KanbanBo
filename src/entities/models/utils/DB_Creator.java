@@ -51,20 +51,10 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE user("
 				+ "user_uuid TEXT NOT NULL UNIQUE PRIMARY KEY,"
 				+ "first_name TEXT NOT NULL"
-				+ "last_name TEXT NOT NULL);";
+				+ "last_name TEXT NOT NULL,"
+				+ "db_folder_path TEXT);";
 		executePreparedSQL(sqlStatement);
 	}
-
-	/* // May not use passwords to protect the file
-	private void createTable__user_password() throws SQLException {
-		String sqlStatement = "CREATE TABLE user_password("
-				+ "user_uuid TEXT,"
-				+ "hashed_password TEXT NOT NULL,"
-				+ "PRIMARY KEY (user_uuid),"
-				+ "FOREIGN KEY (user_uuid) REFERENCES user (user_uuid));";
-		executePreparedSQL(sqlStatement);
-	}
-	 */
 
 	private void createTable__db_version() throws SQLException {
 		// parent_item_uuid can be a category, board, lane, card, image, etc.
