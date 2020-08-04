@@ -66,6 +66,14 @@ public class DB_Creator {
 	}
 	 */
 
+	private void createTable__db_version() throws SQLException {
+		// parent_item_uuid can be a category, board, lane, card, image, etc.
+		String sqlStatement = "CREATE TABLE createTable__db_version("
+				+ "version_no TEXT NOT NULL,"
+				+ "PRIMARY KEY (version_no));";
+		executePreparedSQL(sqlStatement);
+	}
+
 	private void createTable__activity() throws SQLException {
 		// parent_item_uuid can be a category, board, lane, card, image, etc.
 		String sqlStatement = "CREATE TABLE activity("
@@ -136,8 +144,9 @@ public class DB_Creator {
 
 	private void createTable__card_facts() throws SQLException{
 		String sqlStatement = "CREATE TABLE card_facts("
-				+ "card_uuid TEXT,"
+				+ "card_uuid TEXT,"  // No Foreign Key
 				+ "card_description TEXT,"
+				// TODO revise this
 				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
