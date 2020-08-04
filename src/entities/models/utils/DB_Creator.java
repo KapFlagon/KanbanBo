@@ -56,6 +56,18 @@ public class DB_Creator {
 		executePreparedSQL(sqlStatement);
 	}
 
+	private void createTable__recent_items() throws SQLException{
+		String sqlStatement = "CREATE TABLE recent_items("
+				+ "recent_item_uuid TEXT,"
+				+ "user_uuid TEXT,"
+				+ "folder_title TEXT,"
+				+ "folder_description TEXT,"
+				+ "folder_path TEXT,"
+				+ "PRIMARY KEY (recent_item_uuid)," +
+				"FOREIGN KEY (user_uuid) REFERENCES user(user_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
 	private void createTable__db_version() throws SQLException {
 		// parent_item_uuid can be a category, board, lane, card, image, etc.
 		String sqlStatement = "CREATE TABLE createTable__db_version("
