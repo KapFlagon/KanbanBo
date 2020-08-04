@@ -199,13 +199,22 @@ public class DB_Creator {
 	}
 
 	private void createTable__active_lane() throws SQLException{
-// TODO Need to review link between cards, template cards, users, and lanes
 		String sqlStatement = "CREATE TABLE active_lane("
 				+ "active_lane_uuid TEXT,"
 				+ "board_uuid TEXT,"    // No foreign key, flexible board usage
 				+ "active_lane_title TEXT,"
 				+ "active_lane_position INTEGER,"
 				+ "PRIMARY KEY (active_lane_uuid));";
+		executePreparedSQL(sqlStatement);
+	}
+
+	private void createTable__archived_lane() throws SQLException{
+		String sqlStatement = "CREATE TABLE archived_lane("
+				+ "archived_lane_uuid TEXT,"
+				+ "board_uuid TEXT,"    // No foreign key, flexible board usage
+				+ "archived_lane_title TEXT,"
+				+ "archived_lane_position INTEGER,"
+				+ "PRIMARY KEY (archived_lane_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
