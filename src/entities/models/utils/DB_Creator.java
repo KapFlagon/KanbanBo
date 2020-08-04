@@ -267,10 +267,9 @@ public class DB_Creator {
 	private void createTable__card_labels() throws SQLException{
 		String sqlStatement = "CREATE TABLE card_labels("
 				+ "label_uuid TEXT,"
-				+ "card_uuid TEXT,"
+				+ "card_uuid TEXT,"     // No Foreign Key, soft link
 				+ "position INTEGER,"
-				+ "FOREIGN KEY (label_uuid) REFERENCES label (label_uuid),"
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+				+ "FOREIGN KEY (label_uuid) REFERENCES label (label_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
