@@ -152,11 +152,11 @@ public class DB_Creator {
 
 	private void createTable__card_due_date() throws SQLException{
 		String sqlStatement = "CREATE TABLE card_due_date("
-				+ "card_uuid TEXT,"
+				+ "card_uuid TEXT,"     // No Foreign Key, soft link
 				+ "card_due_date TEXT,"
 				+ "card_due_time TEXT,"
 				+ "completed BOOLEAN,"
-				+ "FOREIGN KEY (card_uuid) REFERENCES card (card_uuid));";
+				+ "PRIMARY KEY (card_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
