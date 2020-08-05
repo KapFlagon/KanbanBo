@@ -60,11 +60,10 @@ public class DB_Creator {
 		String sqlStatement = "CREATE TABLE recent_items("
 				+ "recent_item_uuid TEXT,"
 				+ "user_uuid TEXT,"
-				+ "folder_title TEXT,"
-				+ "folder_description TEXT,"
-				+ "folder_path TEXT,"
-				+ "PRIMARY KEY (recent_item_uuid)," +
-				"FOREIGN KEY (user_uuid) REFERENCES user(user_uuid));";
+				+ "recent_item_full_path TEXT,"
+				+ "recent_item_file_name TEXT,"
+				+ "PRIMARY KEY (recent_item_uuid),"
+				+ "FOREIGN KEY (user_uuid) REFERENCES user(user_uuid));";
 		executePreparedSQL(sqlStatement);
 	}
 
