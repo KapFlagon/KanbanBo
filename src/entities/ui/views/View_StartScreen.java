@@ -1,7 +1,9 @@
 package entities.ui.views;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -9,10 +11,12 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.ArrayList;
 
-public class View_StartScreen extends VBox {
+public class View_StartScreen extends BorderPane {
 
+	private VBox centerBox;
 	private Stage ownerStage;
 	private Label titleLabel;
+	private Label userActionLabel;
 	private Button createFileBtn;
 	private Button openFileBtn;
 	private Label recentLabel;
@@ -24,26 +28,36 @@ public class View_StartScreen extends VBox {
 		this.ownerStage = ownerStage;
 		initFileChooser();
 		initTitleLabel();
+		initUserActionLabel();
 		initCreateFileBtn();
 		initOpenFileBtn();
 		initRecentLabel();
+
+		initCenterBox();
 		updateBaseDisplay();
 		initNoRecentLabel();
-		this.getChildren().add(noRecentLabel);
+
+		centerBox.getChildren().add(noRecentLabel);
+		centerBox.setAlignment(Pos.CENTER);
 	}
 
 	public View_StartScreen(Stage ownerStage, String[] recentItemsNames) {
 		this.ownerStage = ownerStage;
 		initFileChooser();
 		initTitleLabel();
+		initUserActionLabel();
 		initCreateFileBtn();
 		initOpenFileBtn();
 		initRecentLabel();
+
+		initCenterBox();
 		updateBaseDisplay();
+
 		parseRecentItems(recentItemsNames);
 		for (Button button : recentItemButtons) {
-			this.getChildren().add(button);
+			centerBox.getChildren().add(button);
 		}
+		centerBox.setAlignment(Pos.CENTER);
 	}
 
 	public Label getTitleLabel() {
@@ -86,10 +100,18 @@ public class View_StartScreen extends VBox {
 		this.recentItemButtons = recentItemButtons;
 	}
 
+	private void initCenterBox() {
+		centerBox = new VBox();
+	}
 
 	private void initTitleLabel() {
 		titleLabel = new Label("KanbanBo");
 		titleLabel.setStyle("-fx-font: 40px Verdana;");
+		titleLabel.setAlignment(Pos.CENTER);
+	}
+
+	private void initUserActionLabel() {
+		userActionLabel = new Label("Select an action:");
 	}
 
 	private void initCreateFileBtn() {
@@ -98,7 +120,7 @@ public class View_StartScreen extends VBox {
 			File newfile = fileChooser.showSaveDialog(ownerStage);
 			// Prompt User to input their name
 			// Create empty db file with provided data.
-
+			System.out.println("Create a file");
 		});
 	}
 
@@ -109,13 +131,14 @@ public class View_StartScreen extends VBox {
 			if (file != null) {
 				// validate file
 				// Open file
+				System.out.println("Valid file");
 			}
 
 		});
 	}
 
 	private void initRecentLabel() {
-		recentLabel = new Label("Recent database files");
+		recentLabel = new Label("Recent files:");
 	}
 
 	private void initNoRecentLabel() {
@@ -123,7 +146,9 @@ public class View_StartScreen extends VBox {
 	}
 
 	private void parseRecentItems(String[] recentItemsNames) {
+		recentItemButtons = new ArrayList<Button>();
 		for (String itemName : recentItemsNames) {
+			System.out.println(itemName);
 			Button temp = new Button(itemName);
 			temp.setOnAction(event -> {
 				// Open file, search db based on file name.
@@ -139,10 +164,13 @@ public class View_StartScreen extends VBox {
 	}
 
 	public void updateBaseDisplay() {
-		this.getChildren().add(titleLabel);
-		this.getChildren().add(createFileBtn);
-		this.getChildren().add(openFileBtn);
-		this.getChildren().add(recentLabel);
+		this.setTop(titleLabel);
+		BorderPane.setAlignment(titleLabel, Pos.CENTER);
+		centerBox.getChildren().add(userActionLabel);
+		centerBox.getChildren().add(createFileBtn);
+		centerBox.getChildren().add(openFileBtn);
+		centerBox.getChildren().add(recentLabel);
+		this.setCenter(centerBox);
 	}
 
 	// TODO need a pop-up to name database file and select folder location.
