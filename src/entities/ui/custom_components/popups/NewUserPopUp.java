@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 
-public class NewUserPopUpWindow extends PopUpWindow{
+public class NewUserPopUp extends PopUpWindow{
 
 	private VBox fieldContainer;
 	private Label header;
@@ -22,7 +22,7 @@ public class NewUserPopUpWindow extends PopUpWindow{
 	private Button submitDataBtn;
 
 
-	public NewUserPopUpWindow() {
+	public NewUserPopUp() {
 		super("Specify User", 300, 300);
 		initFieldContainer();
 		initHeader();
