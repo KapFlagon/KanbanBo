@@ -1,4 +1,4 @@
-package entities.ui.custom_components.shared;
+package entities.ui.custom_components.popups;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,17 +15,16 @@ public abstract class PopUpWindow {
 
 	public PopUpWindow(String title) {
 		popupWindow = new Stage();
-		initWindow(title);
-		setWindowSize(200, 90);
+		initWindow(title, 200, 90);
 	}
 
 	public PopUpWindow(String title, int width, int height) {
 		popupWindow = new Stage();
-		initWindow(title);
-		setWindowSize(width, height);
+		initWindow(title, width, height);
 	}
 
 
+	// Getters and Setters
 	public Scene getPopupScene() {
 		return popupScene;
 	}
@@ -40,28 +39,32 @@ public abstract class PopUpWindow {
 	}
 
 
-	public void initScene(Parent root) {
+	// Initialisation methods
+	protected void initPopUpScene(Parent root) {
 		popupScene = new Scene(root);
 		popupWindow.setScene(popupScene);
-		//popupWindow.showAndWait();
 	}
 
+	private void initWindow(String title, int width, int height) {
+		popupWindow.initStyle(StageStyle.UTILITY);
+		popupWindow.initModality(Modality.APPLICATION_MODAL);
+		popupWindow.setTitle(title);
+		setWindowSize(width, height);
+	}
+
+	private void setWindowSize(int width, int height) {
+		popupWindow.setWidth(width);
+		popupWindow.setHeight(height);
+	}
+
+
+	// Other methods
 	public void close() {
 		popupWindow.close();
 	}
 
 	public void showAndWait() {
 		popupWindow.showAndWait();
-	}
-
-	private void initWindow(String title) {
-		popupWindow.initStyle(StageStyle.UTILITY);
-		popupWindow.initModality(Modality.APPLICATION_MODAL);
-		popupWindow.setTitle(title);
-	}
-	private void setWindowSize(int width, int height) {
-		popupWindow.setWidth(width);
-		popupWindow.setHeight(height);
 	}
 
 }
