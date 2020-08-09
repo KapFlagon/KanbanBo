@@ -36,7 +36,7 @@ public class NewUserPopUpWindow extends PopUpWindow{
 		updateChildrenLastNameHBox();
 		initSubmitDataBtn();
 		updateFieldContainerChildren();
-		initScene(fieldContainer);
+		initPopUpScene(fieldContainer);
 	}
 
 

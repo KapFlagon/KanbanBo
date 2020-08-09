@@ -25,7 +25,7 @@ public class CategoryPopUp extends PopUpWindow {
 		initCancelBtn();
 		updateButtonHBoxChildren();
 		updateLayoutVBoxChildren();
-		initScene(layoutVBox);
+		initPopUpScene(layoutVBox);
 	}
 
 	// Getters and Setters
