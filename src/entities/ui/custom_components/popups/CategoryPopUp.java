@@ -1,6 +1,5 @@
-package entities.ui.custom_components.board;
+package entities.ui.custom_components.popups;
 
-import entities.ui.custom_components.shared.PopUpWindow;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -10,59 +9,98 @@ import javafx.scene.layout.VBox;
 public class CategoryPopUp extends PopUpWindow {
 
 
-	private VBox vBox;
-	private HBox hBox;
+	private VBox layoutVBox;
+	private HBox buttonHBox;
 	private TextField inputField;
-	private Button confirmButton;
-	private Button cancelButton;
+	private Button confirmBtn;
+	private Button cancelBtn;
 
 
 	public CategoryPopUp() {
 		super("New Category");
-		vBox = new VBox();
-		hBox = new HBox();
-		inputField = new TextField();
-		inputField.setPromptText("Enter a category name...");
-		confirmButton = new Button("Create category");
-		cancelButton = new Button ("Cancel");
-
-		hBox.getChildren().addAll(confirmButton, cancelButton);
-		hBox.setAlignment(Pos.CENTER);
-		vBox.getChildren().addAll(inputField, hBox);
-		initScene(vBox);
-
+		initLayoutVBox();
+		initButtonHBox();
+		initInputField();
+		initConfirmBtn();
+		initCancelBtn();
+		updateButtonHBoxChildren();
+		updateLayoutVBoxChildren();
+		initScene(layoutVBox);
 	}
 
+	// Getters and Setters
+	public VBox setLayoutVBox() {
+		return layoutVBox;
+	}
 
-	public VBox getvBox() {
-		return vBox;
+	public void setLayoutVBox(VBox layoutVBox) {
+		this.layoutVBox = layoutVBox;
 	}
-	public void setvBox(VBox vBox) {
-		this.vBox = vBox;
+
+	public HBox getButtonHBox() {
+		return buttonHBox;
 	}
-	public HBox gethBox() {
-		return hBox;
+
+	public void setButtonHBox(HBox buttonHBox) {
+		this.buttonHBox = buttonHBox;
 	}
-	public void sethBox(HBox hBox) {
-		this.hBox = hBox;
-	}
+
 	public TextField getInputField() {
 		return inputField;
 	}
+
 	public void setInputField(TextField inputField) {
 		this.inputField = inputField;
 	}
-	public Button getConfirmButton() {
-		return confirmButton;
+
+	public Button getConfirmBtn() {
+		return confirmBtn;
 	}
-	public void setConfirmButton(Button confirmButton) {
-		this.confirmButton = confirmButton;
+
+	public void setConfirmBtn(Button confirmBtn) {
+		this.confirmBtn = confirmBtn;
 	}
-	public Button getCancelButton() {
-		return cancelButton;
+
+	public Button getCancelBtn() {
+		return cancelBtn;
 	}
-	public void setCancelButton(Button cancelButton) {
-		this.cancelButton = cancelButton;
+
+	public void setCancelBtn(Button cancelBtn) {
+		this.cancelBtn = cancelBtn;
+	}
+
+
+	// Initialisation methods
+	private void initLayoutVBox() {
+		layoutVBox = new VBox();
+	}
+
+	private void initButtonHBox() {
+		buttonHBox = new HBox();
+		buttonHBox.setAlignment(Pos.CENTER);
+	}
+
+	private void initInputField() {
+		inputField = new TextField();
+		inputField.setPromptText("Enter a category name...");
+	}
+
+	private void initConfirmBtn() {
+		confirmBtn = new Button("Create category");
+	}
+
+	private void initCancelBtn() {
+		cancelBtn = new Button ("Cancel");
+	}
+
+
+	// Other methods
+	private void updateButtonHBoxChildren() {
+		buttonHBox.getChildren().addAll(confirmBtn, cancelBtn);
+	}
+
+	private void updateLayoutVBoxChildren() {
+		layoutVBox.getChildren().addAll(inputField, buttonHBox);
 	}
 
 }
