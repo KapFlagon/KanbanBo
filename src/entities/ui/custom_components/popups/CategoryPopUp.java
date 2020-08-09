@@ -87,6 +87,9 @@ public class CategoryPopUp extends PopUpWindow {
 
 	private void initConfirmBtn() {
 		confirmBtn = new Button("Create category");
+		confirmBtn.setOnAction(event -> {
+			throw new RuntimeException("No action specified for \"Confirm\" button");
+		});
 	}
 
 	private void initCancelBtn() {
