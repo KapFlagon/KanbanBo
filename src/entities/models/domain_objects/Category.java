@@ -1,9 +1,5 @@
 package entities.models.domain_objects;
 
-import entities.models.domain_objects.board_data.Board;
-
-import java.util.List;
-
 //public class Category extends DataObject {
 public class Category {
 
