@@ -2,19 +2,19 @@ package entities.models.domain_objects.card_data;
 
 public class CardDueDate {
 
-	private String card_uuid;
+	private String parent_card_uuid;
 	private String target_date;
 	private String target_time;
 	private boolean isCompleted;
 
 
 	// Getters and Setters
-	public String getCard_uuid() {
-		return card_uuid;
+	public String getParent_card_uuid() {
+		return parent_card_uuid;
 	}
 
-	public void setCard_uuid(String card_uuid) {
-		this.card_uuid = card_uuid;
+	public void setParent_card_uuid(String parent_card_uuid) {
+		this.parent_card_uuid = parent_card_uuid;
 	}
 
 	public String getTarget_date() {

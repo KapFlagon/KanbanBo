@@ -3,7 +3,7 @@ package entities.models.domain_objects.card_data;
 public class ArchivedCard {
 
 	private String archived_card_uuid;
-	private String lane_uuid;
+	private String parent_lane_uuid;
 	private String archived_card_title;
 
 
@@ -16,12 +16,12 @@ public class ArchivedCard {
 		this.archived_card_uuid = archived_card_uuid;
 	}
 
-	public String getLane_uuid() {
-		return lane_uuid;
+	public String getParent_lane_uuid() {
+		return parent_lane_uuid;
 	}
 
-	public void setLane_uuid(String lane_uuid) {
-		this.lane_uuid = lane_uuid;
+	public void setParent_lane_uuid(String parent_lane_uuid) {
+		this.parent_lane_uuid = parent_lane_uuid;
 	}
 
 	public String getArchived_card_title() {
