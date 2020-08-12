@@ -1,4 +1,4 @@
-package entities.models.domain_objects;
+package entities.models.domain_objects.category;
 
 //public class Category extends DataObject {
 public class Category {

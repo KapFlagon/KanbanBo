@@ -1,4 +1,4 @@
-package entities.models.domain_objects.card_data;
+package entities.models.domain_objects.card_data.template_card;
 
 public class TemplateCard {
 

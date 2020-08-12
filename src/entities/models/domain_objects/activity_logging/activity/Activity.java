@@ -1,4 +1,4 @@
-package entities.models.domain_objects.activity_logging;
+package entities.models.domain_objects.activity_logging.activity;
 
 public class Activity {
 

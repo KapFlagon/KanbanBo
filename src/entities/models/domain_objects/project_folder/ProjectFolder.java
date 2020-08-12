@@ -1,4 +1,4 @@
-package entities.models.domain_objects;
+package entities.models.domain_objects.project_folder;
 
 public class ProjectFolder {
 

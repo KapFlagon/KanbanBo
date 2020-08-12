@@ -1,4 +1,4 @@
-package entities.models.domain_objects.board_data;
+package entities.models.domain_objects.board_data.archived_board;
 
 public class ArchivedBoard {
 

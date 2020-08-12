@@ -1,4 +1,4 @@
-package entities.models.domain_objects.card_data;
+package entities.models.domain_objects.card_data.card_checklists;
 
 public class CardChecklists {
 

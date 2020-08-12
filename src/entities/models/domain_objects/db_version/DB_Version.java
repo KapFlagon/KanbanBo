@@ -1,4 +1,4 @@
-package entities.models.domain_objects;
+package entities.models.domain_objects.db_version;
 
 public class DB_Version {
 
