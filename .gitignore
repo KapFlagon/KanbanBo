@@ -1,3 +1,6 @@
 .idea/**
 out/**
 KanbanBo.iml
+gradle/**
+.gradle/**
+build/**
