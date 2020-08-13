@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.ArrayList;
 
-public class View_StartScreen extends BorderPane {
+public class StartScreen_View extends BorderPane implements I_View{
 
 	private VBox centerBox;
 	private Stage ownerStage;
@@ -24,40 +24,20 @@ public class View_StartScreen extends BorderPane {
 	private ArrayList<Button> recentItemButtons;
 	private FileChooser fileChooser;
 
-	public View_StartScreen(Stage ownerStage) {
-		this.ownerStage = ownerStage;
-		initFileChooser();
-		initTitleLabel();
-		initUserActionLabel();
-		initCreateFileBtn();
-		initOpenFileBtn();
-		initRecentLabel();
+	public StartScreen_View(Stage ownerStage) {
+		initViewView(ownerStage);
 
-		initCenterBox();
-		updateBaseDisplay();
 		initNoRecentLabel();
-
 		centerBox.getChildren().add(noRecentLabel);
-		centerBox.setAlignment(Pos.CENTER);
 	}
 
-	public View_StartScreen(Stage ownerStage, String[] recentItemsNames) {
-		this.ownerStage = ownerStage;
-		initFileChooser();
-		initTitleLabel();
-		initUserActionLabel();
-		initCreateFileBtn();
-		initOpenFileBtn();
-		initRecentLabel();
-
-		initCenterBox();
-		updateBaseDisplay();
+	public StartScreen_View(Stage ownerStage, String[] recentItemsNames) {
+		initViewView(ownerStage);
 
 		parseRecentItems(recentItemsNames);
 		for (Button button : recentItemButtons) {
 			centerBox.getChildren().add(button);
 		}
-		centerBox.setAlignment(Pos.CENTER);
 	}
 
 	public Label getTitleLabel() {
@@ -100,8 +80,22 @@ public class View_StartScreen extends BorderPane {
 		this.recentItemButtons = recentItemButtons;
 	}
 
+	private void initViewView(Stage ownerStage) {
+		this.ownerStage = ownerStage;
+		initFileChooser();
+		initTitleLabel();
+		initUserActionLabel();
+		initCreateFileBtn();
+		initOpenFileBtn();
+		initRecentLabel();
+		initCenterBox();
+		updateBaseDisplay();
+	}
+
 	private void initCenterBox() {
 		centerBox = new VBox();
+		centerBox.setSpacing(3);
+		centerBox.setAlignment(Pos.CENTER);
 	}
 
 	private void initTitleLabel() {
@@ -118,8 +112,8 @@ public class View_StartScreen extends BorderPane {
 		createFileBtn = new Button("Create new database");
 		createFileBtn.setOnAction(event -> {
 			File newfile = fileChooser.showSaveDialog(ownerStage);
-			// Prompt User to input their name
-			// Create empty db file with provided data.
+			// TODO Create empty db file with provided data.
+			// TODO Prompt User to input their name
 			System.out.println("Create a file");
 		});
 	}
@@ -129,11 +123,9 @@ public class View_StartScreen extends BorderPane {
 		openFileBtn.setOnAction(event -> {
 			File file = fileChooser.showOpenDialog(ownerStage);
 			if (file != null) {
-				// validate file
-				// Open file
+				// TODO validate file, then open file
 				System.out.println("Valid file");
 			}
-
 		});
 	}
 
@@ -151,7 +143,8 @@ public class View_StartScreen extends BorderPane {
 			System.out.println(itemName);
 			Button temp = new Button(itemName);
 			temp.setOnAction(event -> {
-				// Open file, search db based on file name.
+				// TODO Open file, search db based on file name.
+				System.out.println("File " + itemName + " selected");
 			});
 			recentItemButtons.add(temp);
 		}
@@ -172,7 +165,5 @@ public class View_StartScreen extends BorderPane {
 		centerBox.getChildren().add(recentLabel);
 		this.setCenter(centerBox);
 	}
-
-	// TODO need a pop-up to name database file and select folder location.
 	
 }

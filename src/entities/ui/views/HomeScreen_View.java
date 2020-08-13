@@ -2,7 +2,7 @@ package entities.ui.views;
 
 import entities.ui.custom_components.board.BoardTile;
 import entities.ui.custom_components.board.CategoryContainer;
-import entities.ui.custom_components.board.CategoryPopUp;
+import entities.ui.custom_components.popups.CategoryPopUp;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class View_HomeScreen {
+public class HomeScreen_View {
 
 	// Variables
 	private Scene scene;
@@ -27,7 +27,7 @@ public class View_HomeScreen {
 	private VBox innerVbox;
 
 	// Constructors
-	public View_HomeScreen() {
+	public HomeScreen_View() {
 		borderPane = new BorderPane();
 		innerVbox = new VBox();
 		//innerVbox.setPrefSize(800, 600);
@@ -43,21 +43,23 @@ public class View_HomeScreen {
 		favouritesCategory = new CategoryContainer("Favourites");
 		favouritesCategory.getCreateBoardButton().setDisable(true);
 		favouritesCategory.getCreateBoardButton().setOpacity(0);
+		favouritesCategory.getTitleTextField().setEditable(false);
+		favouritesCategory.getTitleTextField().setDisable(true);
 
 		createCategoryButton = new Button("Create Category");
 		createCategoryButton.setOnAction(event -> {
 			CategoryPopUp catPop = new CategoryPopUp();
-			catPop.getConfirmButton().setOnAction(butEvent -> {
+			catPop.getConfirmBtn().setOnAction(butEvent -> {
 				String tempText = catPop.getInputField().getText();
 				CategoryContainer tempC = new CategoryContainer(tempText);
 				categoriesList.add(tempC);
 				updateDisplay();
-				catPop.getPopupWindow().close();
+				catPop.close();
 			});
-			catPop.getCancelButton().setOnAction(butEvent -> {
-				catPop.getPopupWindow().close();
+			catPop.getCancelBtn().setOnAction(butEvent -> {
+				catPop.close();
 			});
-			catPop.getPopupWindow().showAndWait();
+			catPop.showAndWait();
 		});
 
 		borderPane.setTop(createCategoryButton);
@@ -102,8 +104,8 @@ public class View_HomeScreen {
 		for (int i = 0; i < 10; i++) {
 			Label catLabel = new Label("Category " + Integer.toString(i + 1));
 			HBox temp_hBox_category = new HBox();
-			temp_hBox_category.setPadding(new Insets(10,10,10,10));
-			temp_hBox_category.setSpacing(15);;
+			temp_hBox_category.setPadding(new Insets(2,2,2,2));
+			temp_hBox_category.setSpacing(2);;
 			ScrollPane tempScrollPane = new ScrollPane();
 			tempScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 			tempScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -114,8 +116,8 @@ public class View_HomeScreen {
 				String tempTitle = "Board " + Integer.toString(temp_int);
 				Random random = new Random();
 				BoardTile temp_BoardTile = new BoardTile();
-				temp_hBox_category.setPadding(new Insets(10,10,10,10));
-				temp_hBox_category.setSpacing(15);
+				temp_hBox_category.setPadding(new Insets(2,2,2,2));
+				temp_hBox_category.setSpacing(2);
 				//temp_hBox_category.getChildren().add(temp_miniBoardTile.getGroup());
 				temp_hBox_category.getChildren().add(temp_BoardTile);
 			}
@@ -126,7 +128,7 @@ public class View_HomeScreen {
 		centerScrollPane.setContent(vBox_center);
 
 		borderPane = new BorderPane();
-		borderPane.setPadding(new Insets(10,10,10,10));
+		borderPane.setPadding(new Insets(2,2,2,2));
 		borderPane.setTop(hBox_Top);
 		borderPane.setLeft(vBox_left);
 		//borderPane.setCenter(vBox_center);
