@@ -37,7 +37,9 @@ public class FileAndDirectoryHelper {
 
 	public static void createDirectory(Path path) throws IOException {
 		File file = path.toFile();
-		file.mkdirs();
+		if(!file.mkdirs()) {
+			throw new IOException();
+		}
 	}
 
 }
