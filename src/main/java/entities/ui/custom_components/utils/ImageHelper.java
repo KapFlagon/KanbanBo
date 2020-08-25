@@ -2,29 +2,32 @@ package entities.ui.custom_components.utils;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import utils.FileAndDirectoryHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.Path;
 
 public class ImageHelper {
 
-	public static ImageView parseImagePath(String imagePath) throws FileNotFoundException {
-		File file = newFile(imagePath);
-		printPathData(file);
-		InputStream inputStream = newInputStream(file);
-		Image image = newImage(inputStream);
-		ImageView imageView = newImageView(image);
-		return imageView;
+	public static ImageView parseImagePathString(String imagePathString) throws FileNotFoundException {
+		File file = new File(imagePathString);
+		return fileToImageView(file);
 	}
 
 	public static ImageView parseFile(File file) throws FileNotFoundException {
-		printPathData(file);
-		InputStream inputStream = newInputStream(file);
-		Image image = newImage(inputStream);
-		ImageView imageView = newImageView(image);
-		return imageView;
+		return fileToImageView(file);
+	}
+
+	public static ImageView parsePath(Path path) throws FileNotFoundException {
+		if(FileAndDirectoryHelper.fileExists(path)) {
+			File file = path.toFile();
+			return fileToImageView(file);
+		} else {
+			throw new FileNotFoundException();
+		}
 	}
 
 
@@ -39,19 +42,10 @@ public class ImageHelper {
 		}
 	}
 
-	private static File newFile(String imagePath) {
-		return new File(imagePath);
-	}
-
-	private static InputStream newInputStream(File file) throws FileNotFoundException {
-		return new FileInputStream(file);
-	}
-
-	private static Image newImage(InputStream inputStream) {
-		return new Image(inputStream);
-	}
-
-	private static ImageView newImageView(Image image){
-		return new ImageView(image);
+	private static ImageView fileToImageView(File imageFile) throws FileNotFoundException {
+		InputStream inputStream = new FileInputStream(imageFile);
+		Image image = new Image(inputStream);
+		ImageView imageView = new ImageView(image);
+		return imageView;
 	}
 }
