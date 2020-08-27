@@ -42,4 +42,12 @@ public class FileAndDirectoryHelper {
 		}
 	}
 
+	public static String getFileName(Path path) {
+		String temp = "";
+		if (fileExists(path)) {
+
+		}
+		return temp;
+	}
+
 }
