@@ -1,17 +1,16 @@
 package entities.models.domain_objects.user_properties;
 
-import javafx.scene.text.Font;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class UserProperties {
 
 	// Variables
 	private String selectedSkin;
-	private boolean colourblindModeOn;
+	private boolean isColourblindModeOn;
 	private boolean willLoadMostRecentFile;
 	private ArrayList<Path> recentItemPaths;
 
@@ -32,12 +31,16 @@ public class UserProperties {
 		this.selectedSkin = selectedSkin;
 	}
 
-	public boolean isColourblindModeOn() {
-		return colourblindModeOn;
+	public boolean getIsColourblindModeOn() {
+		return isColourblindModeOn;
 	}
 
 	public void setColourblindModeOn(boolean colourblindModeOn) {
-		this.colourblindModeOn = colourblindModeOn;
+		this.isColourblindModeOn = colourblindModeOn;
+	}
+
+	public void setColourblindModeOn(String colourblindModeOnString) {
+		this.isColourblindModeOn = Boolean.valueOf(colourblindModeOnString);
 	}
 
 	public boolean getWillLoadMostRecentFile() {
@@ -46,6 +49,10 @@ public class UserProperties {
 
 	public void setWillLoadMostRecentFile(boolean willLoadMostRecentFile) {
 		this.willLoadMostRecentFile = willLoadMostRecentFile;
+	}
+
+	public void setWillLoadMostRecentFile(String willLoadMostRecentFileString) {
+		this.willLoadMostRecentFile = Boolean.valueOf(willLoadMostRecentFileString);
 	}
 
 	public ArrayList<Path> getRecentItemPaths() {
@@ -70,7 +77,7 @@ public class UserProperties {
 	}
 
 	private void initColourblindModeOn() {
-		colourblindModeOn = false;
+		isColourblindModeOn = false;
 	}
 
 	private void initWillLoadMostRecentFile() {
@@ -83,6 +90,11 @@ public class UserProperties {
 
 
 	// Other methods
+	public void insertRecentItemPath(String string) throws IOException {
+		Path tempPath = Paths.get(string);
+		insertRecentItemPath(tempPath);
+	}
+
 	public void insertRecentItemPath(Path newPath) throws IOException {
 		// Check for any duplicate and existing entries in the list, and remove the existing one.
 		for (Path iteratedPath : recentItemPaths) {
