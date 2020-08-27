@@ -1,6 +1,5 @@
 package utils;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,12 +8,6 @@ public class ProgramDirectoryHelper {
 
 	// https://stackoverflow.com/questions/320542/how-to-get-the-path-of-a-running-jar-file
 
-	// Variables
-
-
-	// Constructors
-
-	
 	// Other methods
 	private static Path parseProgramDirectory() throws URISyntaxException {
 		Path classFilePath = classFilePath = Paths.get(ProgramDirectoryHelper.class.getProtectionDomain().getCodeSource().getLocation().toURI());
