@@ -1,23 +1,37 @@
-package entities.models;
+package entities.models.domain_objects.user_properties;
 
 import javafx.scene.text.Font;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class UserProperties {
 
+	// Variables
+	private String selectedSkin;
 	private boolean colourblindModeOn;
-	private boolean loadMostRecentFile;
-	private ArrayList<String> recentItemPaths;
+	private boolean willLoadMostRecentFile;
+	private ArrayList<Path> recentItemPaths;
 
 
+	// Constructors
 	public void PropertiesModel() {
-		initColourblindModeOn();
-		initRecentItemPaths();
+		initAllUserPropertyAttributes();
+
 	}
 
 
 	// Getters and Setters
+	public String getSelectedSkin() {
+		return selectedSkin;
+	}
+
+	public void setSelectedSkin(String selectedSkin) {
+		this.selectedSkin = selectedSkin;
+	}
+
 	public boolean isColourblindModeOn() {
 		return colourblindModeOn;
 	}
@@ -26,33 +40,56 @@ public class UserProperties {
 		this.colourblindModeOn = colourblindModeOn;
 	}
 
-	public boolean canLoadMostRecentFile() {
-		return loadMostRecentFile;
+	public boolean getWillLoadMostRecentFile() {
+		return willLoadMostRecentFile;
 	}
 
-	public void setLoadMostRecentFile(boolean loadMostRecentFile) {
-		this.loadMostRecentFile = loadMostRecentFile;
+	public void setWillLoadMostRecentFile(boolean willLoadMostRecentFile) {
+		this.willLoadMostRecentFile = willLoadMostRecentFile;
 	}
 
-	public ArrayList<String> getRecentItemPaths() {
+	public ArrayList<Path> getRecentItemPaths() {
 		return recentItemPaths;
 	}
 
-	public void setRecentItemPaths(ArrayList<String> recentItemPaths) {
+	public void setRecentItemPaths(ArrayList<Path> recentItemPaths) {
 		this.recentItemPaths = recentItemPaths;
 	}
 
 
-	// Initialiser methods
-	public void initColourblindModeOn() {
+	// Initialisation methods
+	private void initAllUserPropertyAttributes() {
+		initSelectedSkin();
+		initColourblindModeOn();
+		initWillLoadMostRecentFile();
+		initRecentItemPaths();
+	}
+
+	private void initSelectedSkin() {
+		selectedSkin = "KanbanBo_Light";
+	}
+
+	private void initColourblindModeOn() {
 		colourblindModeOn = false;
 	}
 
-	public void initRecentItemPaths() {
-		recentItemPaths = new ArrayList<String>();
+	private void initWillLoadMostRecentFile() {
+		willLoadMostRecentFile = true;
+	}
+
+	private void initRecentItemPaths() {
+		recentItemPaths = new ArrayList<Path>(6);
 	}
 
 
 	// Other methods
-	
+	public void insertRecentItemPath(Path newPath) throws IOException {
+		// Check for any duplicate and existing entries in the list, and remove the existing one.
+		for (Path iteratedPath : recentItemPaths) {
+			if(Files.isSameFile(newPath, iteratedPath)) {
+				recentItemPaths.remove(iteratedPath);
+			}
+		}
+		recentItemPaths.add(0, newPath);
+	}
 }
