@@ -2,6 +2,7 @@ package utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.nio.file.*;
@@ -10,8 +11,9 @@ import java.util.ArrayList;
 public class SkinsHelper {
 
 	// Other methods
-	private static boolean doesSkinsFolderExist(Path skinsFolderPath) {
-		return FileAndDirectoryHelper.directoryExists(skinsFolderPath);
+	public static boolean doesSkinsFolderExist() throws URISyntaxException {
+		Path userSkinsFolderPath = ProgramDirectoryHelper.parseCssFolderPath();
+		return FileAndDirectoryHelper.directoryExists(userSkinsFolderPath);
 	}
 
 	public static void createSkinsFolder() throws IOException, URISyntaxException {
@@ -20,8 +22,8 @@ public class SkinsHelper {
 	}
 
 	public static ArrayList<Path> getCustomSkinsFilePaths() throws URISyntaxException {
-		Path cssFolderPath = ProgramDirectoryHelper.parseCssFolderPath();
-		File directoryFile = new File(cssFolderPath.toString());
+		Path userSkinsFolderPath = ProgramDirectoryHelper.parseCssFolderPath();
+		File directoryFile = new File(userSkinsFolderPath.toString());
 		File[] fileArray = directoryFile.listFiles();
 		ArrayList<Path> arrayListOfPaths = new ArrayList<Path>();
 		for (int arrayIterator = 0; arrayIterator < fileArray.length; arrayIterator++) {
@@ -42,21 +44,34 @@ public class SkinsHelper {
 		}
 	}
 
-	private static void createTemplate_LightSkinFile() {
-
-		//createTemplateSkin();
+	private static void createTemplate_LightSkinFile() throws URISyntaxException, IOException {
+		InputStream lightFileSourceInputStream = getLightSourceSkinAsInputStream();
+		Path targetPath = buildTargetTemplateFileName("KanbanBo_Light_Template");
+		createTemplateSkin(lightFileSourceInputStream, targetPath);
 	}
 
-	public static void createTemplate_DarkSkinFile() {
-
-		//createTemplateSkin();
+	public static void createTemplate_DarkSkinFile() throws URISyntaxException, IOException {
+		InputStream darkFileSourceInputStream = getDarkSourceSkinAsInputStream();
+		Path targetPath = buildTargetTemplateFileName("KanbanBo_Dark_Template");
+		createTemplateSkin(darkFileSourceInputStream, targetPath);
 	}
 
-	private static void createTemplateSkin(File originalFile) {
-		// TODO decide on name of template file
-		// TODO create a new Path, extending the stylesFolderPath value with the new file name
-		// TODO Push data into the File object, copying a standard template style file
-		// TODO Create the actual system file
+	private static void createTemplateSkin(InputStream sourceFileInputStream, Path targetFilePath) throws IOException {
+		Files.copy(sourceFileInputStream, targetFilePath, StandardCopyOption.REPLACE_EXISTING);
+	}
+
+	private static Path buildTargetTemplateFileName(String fileNameString) throws URISyntaxException {
+		Path userSkinsFolderPath = ProgramDirectoryHelper.parseCssFolderPath();
+		Path fullFilePath = Paths.get(userSkinsFolderPath.toString(), fileNameString);
+		return fullFilePath;
+	}
+
+	private static InputStream getLightSourceSkinAsInputStream() {
+		return SkinsHelper.class.getClassLoader().getResourceAsStream("default_skins/KanbanBo_Light.css");
+	}
+
+	private static InputStream getDarkSourceSkinAsInputStream() {
+		return SkinsHelper.class.getClassLoader().getResourceAsStream("default_skins/KanbanBo_Dark.css");
 	}
 
 }
