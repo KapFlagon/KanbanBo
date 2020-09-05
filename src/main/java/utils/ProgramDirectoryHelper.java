@@ -30,10 +30,16 @@ public class ProgramDirectoryHelper {
 		return cssFolderPath;
 	}
 
-	public static Path  parsePropertiesPath() throws URISyntaxException {
-		Path executedDirectoryPath =parseProgramDirectory();
+	public static Path parsePropertiesPath() throws URISyntaxException {
+		Path executedDirectoryPath = parseProgramDirectory();
 		Path propertiesFilePath = Paths.get(executedDirectoryPath.toString(), "KanbanBo.properties");
 		return propertiesFilePath;
+	}
+
+	public static Path parseUserTemplatesDbPath() throws URISyntaxException{
+		Path executedDirectoryPath = parseProgramDirectory();
+		Path userTemplatesDbFilePath = Paths.get(executedDirectoryPath.toString(), "UserTemplates.db");
+		return userTemplatesDbFilePath;
 	}
 
 	private static boolean classIsInJar(String filePath) {
