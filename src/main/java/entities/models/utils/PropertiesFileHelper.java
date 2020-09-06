@@ -34,11 +34,7 @@ public class PropertiesFileHelper {
 
 
 	// Getters and Setters
-	public String getPropertyValue(String key, String defaultValue) {
-		return propertiesObject.getProperty(key, defaultValue);
-	}
-
-	public void setAndSavePropertyValue(String key, String value) throws IOException {
+	private void setAndSavePropertyValue(String key, String value) throws IOException {
 		propertiesObject.setProperty(key, value);
 		storeProperties();
 	}
@@ -47,12 +43,26 @@ public class PropertiesFileHelper {
 		return propertiesObject.getProperty("selectedSkin");
 	}
 
+	public void setAndSaveSelectedSkinProperty(String selectedSkinValue) throws IOException {
+		setAndSavePropertyValue("selectedSkin", selectedSkinValue);
+	}
+
 	public boolean getIsColourblindModeOnProperty() {
 		return Boolean.valueOf(propertiesObject.getProperty("isColourblindMode"));
 	}
 
-	public boolean willLoadMostRecentFileProperty() {
+	public void setAndSavesColourblindModeOnProperty(boolean colourblindModeOnValue) throws IOException {
+		String stringBooleanValue = String.valueOf(colourblindModeOnValue);
+		setAndSavePropertyValue("isColourblindMode", stringBooleanValue);
+	}
+
+	public boolean getWillLoadMostRecentFileProperty() {
 		return Boolean.valueOf(propertiesObject.getProperty("willLoadMostRecentFile"));
+	}
+
+	public void setAndSaveWillLoadMostRecentFileProperty(boolean willLoadMostRecentFileValue) throws IOException {
+		String stringBooleanValue = String.valueOf(willLoadMostRecentFileValue);
+		setAndSavePropertyValue("willLoadMostRecentFile", stringBooleanValue);
 	}
 
 	public ArrayList<Path> getRecentItemPathsProperties() {
@@ -66,6 +76,15 @@ public class PropertiesFileHelper {
 			}
 		}
 		return recentFilePaths;
+	}
+
+	public void setAndSaveRecentItemPathsProperties(ArrayList<Path> recentItemPathValues) throws IOException {
+		for (int iterator = 0; iterator < recentItemPathValues.size(); iterator++) {
+			int readablePos = iterator + 1;
+			String propertyName = "recentItemPath_0" + (readablePos);
+			propertiesObject.setProperty(propertyName, recentItemPathValues.get(iterator).toString());
+		}
+		storeProperties();
 	}
 
 
