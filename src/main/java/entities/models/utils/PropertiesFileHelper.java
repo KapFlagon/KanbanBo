@@ -6,6 +6,7 @@ import utils.ProgramDirectoryHelper;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.io.FileInputStream;
@@ -42,6 +43,31 @@ public class PropertiesFileHelper {
 		storeProperties();
 	}
 
+	public String getSelectedSkinProperty() {
+		return propertiesObject.getProperty("selectedSkin");
+	}
+
+	public boolean getIsColourblindModeOnProperty() {
+		return Boolean.valueOf(propertiesObject.getProperty("isColourblindMode"));
+	}
+
+	public boolean willLoadMostRecentFileProperty() {
+		return Boolean.valueOf(propertiesObject.getProperty("willLoadMostRecentFile"));
+	}
+
+	public ArrayList<Path> getRecentItemPathsProperties() {
+		ArrayList<Path> recentFilePaths = new ArrayList<Path>();
+		for (int iterator = 5; iterator >= 1; iterator--) {
+			String propertyName = "recentItemPath_0" + (iterator);
+			String propertyValue = propertiesObject.getProperty(propertyName);
+			if(!propertyValue.equals("null")) {
+				Path tempPath = Paths.get(propertyValue);
+				recentFilePaths.add(tempPath);
+			}
+		}
+		return recentFilePaths;
+	}
+
 
 	// Initialisation methods
 	public void initDefaultPropertiesObject() {
@@ -50,11 +76,10 @@ public class PropertiesFileHelper {
 		defaultPropertiesObject.setProperty("selectedSkin", defaultUserProperties.getSelectedSkin());
 		defaultPropertiesObject.setProperty("isColourblindModeOn", String.valueOf(defaultUserProperties.getIsColourblindModeOn()));
 		defaultPropertiesObject.setProperty("willLoadMostRecentFile", String.valueOf(defaultUserProperties.getWillLoadMostRecentFile()));
-		defaultPropertiesObject.setProperty("willLoadMostRecentFile", String.valueOf(defaultUserProperties.getWillLoadMostRecentFile()));
 		ArrayList<Path> recentFilePaths = defaultUserProperties.getRecentItemPaths();
-		for (int iterator = 0; iterator < recentFilePaths.size(); iterator++) {
-			String propertyName = "recentItemPath_0" + (iterator+ 1);
-			defaultPropertiesObject.setProperty(propertyName, recentFilePaths.get(iterator).toString());
+		for (int iterator = 1; iterator <= recentFilePaths.size(); iterator++) {
+			String propertyName = "recentItemPath_0" + (iterator);
+			defaultPropertiesObject.setProperty(propertyName, "null");
 		}
 	}
 
@@ -65,8 +90,6 @@ public class PropertiesFileHelper {
 	public void initPropertiesFilePath() throws URISyntaxException {
 		propertiesFilePath = ProgramDirectoryHelper.parsePropertiesPath();
 	}
-
-
 
 	// Other methods
 	private void loadSavedProperties() throws IOException {
