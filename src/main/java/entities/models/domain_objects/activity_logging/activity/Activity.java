@@ -1,12 +1,25 @@
 package entities.models.domain_objects.activity_logging.activity;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "activity")
 public class Activity {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String activity_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String parent_item_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String activity_entry_date;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String activity_entry_time;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String activity_log_text;
+
+	public Activity() {
+		// Empty, no-args constructor required for ORMLite
+	}
 
 
 	// Getters and Setters
