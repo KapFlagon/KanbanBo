@@ -67,8 +67,9 @@ public class PropertiesFileHelper {
 
 	public ArrayList<Path> getRecentItemPathsProperties() {
 		ArrayList<Path> recentFilePaths = new ArrayList<Path>();
-		for (int iterator = 5; iterator >= 1; iterator--) {
-			String propertyName = "recentItemPath_0" + (iterator);
+		for (int iterator = 0; iterator < 5; iterator--) {
+			int pathListPosition = iterator + 1;
+			String propertyName = "recentItemPath_0" + (pathListPosition);
 			String propertyValue = propertiesObject.getProperty(propertyName);
 			if(!propertyValue.equals("null")) {
 				Path tempPath = Paths.get(propertyValue);
@@ -80,8 +81,8 @@ public class PropertiesFileHelper {
 
 	public void setAndSaveRecentItemPathsProperties(ArrayList<Path> recentItemPathValues) throws IOException {
 		for (int iterator = 0; iterator < recentItemPathValues.size(); iterator++) {
-			int readablePos = iterator + 1;
-			String propertyName = "recentItemPath_0" + (readablePos);
+			int pathListPosition = iterator + 1;
+			String propertyName = "recentItemPath_0" + (pathListPosition);
 			propertiesObject.setProperty(propertyName, recentItemPathValues.get(iterator).toString());
 		}
 		storeProperties();
@@ -136,7 +137,5 @@ public class PropertiesFileHelper {
 		OutputStream outputStream = new FileOutputStream(propertiesFilePath.toString());
 		propertiesObject.store(outputStream, null);
 	}
-
-
 
 }
