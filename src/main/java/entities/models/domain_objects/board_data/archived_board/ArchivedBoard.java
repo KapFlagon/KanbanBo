@@ -1,9 +1,16 @@
 package entities.models.domain_objects.board_data.archived_board;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "archived_board")
 public class ArchivedBoard {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String archived_board_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String archived_board_title;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private int archived_board_position;
 
 
