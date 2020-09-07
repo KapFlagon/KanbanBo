@@ -1,9 +1,17 @@
 package entities.models.domain_objects.board_data.board_facts;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "board_facts")
 public class BoardFacts {
 
+
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String board_facts_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_board_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String board_description;
 
 
