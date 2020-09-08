@@ -1,10 +1,20 @@
 package entities.models.domain_objects.card_data.active_card;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "active_card")
 public class ActiveCard {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
+	private String category_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String active_card_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_lane_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private int active_card_position;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String active_card_title;
 
 
