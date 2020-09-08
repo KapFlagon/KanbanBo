@@ -1,9 +1,16 @@
 package entities.models.domain_objects.card_data.archived_card;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "archived_card")
 public class ArchivedCard {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String archived_card_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_lane_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String archived_card_title;
 
 
