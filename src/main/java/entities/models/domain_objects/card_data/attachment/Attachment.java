@@ -1,12 +1,20 @@
 package entities.models.domain_objects.card_data.attachment;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.sql.Blob;
 
+@DatabaseTable(tableName = "attachment")
 public class Attachment {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String attachment_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_card_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String attachment_title;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private Blob attachment_data;
 
 
