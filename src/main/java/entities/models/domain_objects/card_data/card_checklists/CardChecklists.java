@@ -1,8 +1,14 @@
 package entities.models.domain_objects.card_data.card_checklists;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "card_checklists")
 public class CardChecklists {
 
+	@DatabaseField(id = true, canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_card_uuid;
+	@DatabaseField(id = true, canBeNull = false, useGetSet = true, foreign = true)
 	private String linked_checklist_uuid;
 
 
