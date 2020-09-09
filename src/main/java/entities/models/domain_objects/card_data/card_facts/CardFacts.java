@@ -1,8 +1,16 @@
 package entities.models.domain_objects.card_data.card_facts;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "card_facts")
 public class CardFacts {
 
+
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String parent_card_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String card_description;
 
 
