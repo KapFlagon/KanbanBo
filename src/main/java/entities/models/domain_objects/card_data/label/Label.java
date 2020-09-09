@@ -1,10 +1,19 @@
 package entities.models.domain_objects.card_data.label;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "label")
 public class Label {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String label_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String label_title;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String label_base_colour;   // TODO need to examine this further and reconsider how to store this data...
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String label_colourblind_texture;   // TODO need to examine this further and reconsider how to store this data...
 
 
