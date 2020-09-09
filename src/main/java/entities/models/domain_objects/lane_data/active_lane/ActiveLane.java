@@ -1,9 +1,17 @@
-package entities.models.domain_objects.lane_data;
+package entities.models.domain_objects.lane_data.active_lane;
 
+import com.j256.ormlite.table.DatabaseTable;
+import com.j256.ormlite.field.DatabaseField;
+
+
+@DatabaseTable(tableName = "active_lane")
 public class ActiveLane {
 
+	@DatabaseField(id = true, unique = true, canBeNull = false, useGetSet = true)
 	private String active_lane_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_board_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private int active_lane_position;
 
 
