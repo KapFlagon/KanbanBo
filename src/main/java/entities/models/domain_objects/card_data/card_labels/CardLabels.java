@@ -1,8 +1,15 @@
 package entities.models.domain_objects.card_data.card_labels;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "card_labels")
 public class CardLabels {
 
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String linked_label_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String linked_card_uuid;
 
 
