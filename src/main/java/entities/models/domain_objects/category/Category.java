@@ -1,10 +1,17 @@
 package entities.models.domain_objects.category;
 
-//public class Category extends DataObject {
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "category")
 public class Category {
 
+	@DatabaseField(id = true, canBeNull = false, useGetSet = true, unique = true)
 	private String category_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String category_title;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private int category_position;
 
 	// Getters and Setters
