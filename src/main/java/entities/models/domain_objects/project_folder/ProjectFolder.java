@@ -1,11 +1,21 @@
 package entities.models.domain_objects.project_folder;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "project_folder")
 public class ProjectFolder {
 
+	@DatabaseField(id = true, unique = true, canBeNull = false, useGetSet = true)
 	private String project_folder_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_item_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String folder_title;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String folder_description;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String folder_path;
 
 
