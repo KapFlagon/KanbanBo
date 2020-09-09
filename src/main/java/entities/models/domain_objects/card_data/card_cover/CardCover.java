@@ -1,11 +1,18 @@
 package entities.models.domain_objects.card_data.card_cover;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.sql.Blob;
 
+@DatabaseTable(tableName = "card_cover")
 public class CardCover {
 
+	@DatabaseField(id = true, canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_card_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String cover_title;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private Blob cover_data;
 
 
