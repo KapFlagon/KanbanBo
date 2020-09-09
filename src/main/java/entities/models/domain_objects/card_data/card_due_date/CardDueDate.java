@@ -1,10 +1,19 @@
 package entities.models.domain_objects.card_data.card_due_date;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "card_due_date")
 public class CardDueDate {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true, foreign = true)
 	private String parent_card_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String target_date;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String target_time;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private boolean isCompleted;
 
 
