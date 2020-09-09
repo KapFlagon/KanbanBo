@@ -1,7 +1,13 @@
 package entities.models.domain_objects.db_version;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "db_version")
 public class DB_Version {
 
+	@DatabaseField(id = true, unique = true, useGetSet = true, canBeNull = false)
 	private String version_no;
 
 
