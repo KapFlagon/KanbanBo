@@ -8,7 +8,7 @@ public class Activity {
 
 	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String activity_uuid;
-	@DatabaseField(canBeNull = false, useGetSet = true)
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_item_uuid;
 	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String activity_entry_date;
