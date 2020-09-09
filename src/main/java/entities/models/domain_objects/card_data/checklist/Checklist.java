@@ -1,9 +1,17 @@
 package entities.models.domain_objects.card_data.checklist;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "checklist")
 public class Checklist {
 
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true)
 	private String checklist_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private int checklist_position;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String checklist_title;
 
 
