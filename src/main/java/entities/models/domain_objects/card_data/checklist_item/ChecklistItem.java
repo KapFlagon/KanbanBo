@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "checklist_item")
 public class ChecklistItem {
 
-	@DatabaseField(canBeNull = false, unique = true, useGetSet = true, foreign = true)
+	@DatabaseField(id = true, canBeNull = false, unique = true, useGetSet = true, foreign = true)
 	private String checklist_item_uuid;
 	@DatabaseField(canBeNull = false, unique = true, useGetSet = true, foreign = true)
 	private String parent_checklist_uuid;
