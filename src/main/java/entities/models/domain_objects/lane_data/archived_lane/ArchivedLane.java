@@ -1,10 +1,19 @@
-package entities.models.domain_objects.lane_data;
+package entities.models.domain_objects.lane_data.archived_lane;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+
+@DatabaseTable(tableName = "archived_lane")
 public class ArchivedLane {
 
+	@DatabaseField(id = true, unique = true, canBeNull = false, useGetSet = true)
 	private String archived_lane_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true, foreign = true)
 	private String parent_board_uuid;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String archived_lane_title;
+	@DatabaseField(canBeNull = false, useGetSet = true)
 	private String archived_lane_position;
 
 
