@@ -1,4 +1,4 @@
-package entities.models.domain_objects.user_properties;
+package domain_objects.user_properties;
 
 import java.io.IOException;
 import java.nio.file.Files;

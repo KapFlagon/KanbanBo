@@ -1,8 +1,6 @@
-package entities.models.utils;
+package utils;
 
-import entities.models.domain_objects.user_properties.UserProperties;
-import utils.FileAndDirectoryHelper;
-import utils.ProgramDirectoryHelper;
+import domain_objects.user_properties.UserProperties;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
