@@ -11,7 +11,7 @@ public class HomeButton extends Button {
 
 	public HomeButton() {
 		try {
-			homeImage = ImageHelper.parseImagePath(iconPath);
+			homeImage = ImageHelper.parseImagePathString(iconPath);
 		} catch (Exception e) {
 			System.out.println("Error using ImageHelper, HomeButton: " + e.getStackTrace());
 		}

@@ -131,8 +131,8 @@ public class HomeScreen_View {
 		borderPane.setPadding(new Insets(2,2,2,2));
 		borderPane.setTop(hBox_Top);
 		borderPane.setLeft(vBox_left);
-		//borderPane.setCenter(vBox_center);
-		borderPane.setCenter(centerScrollPane);
+		borderPane.setCenter(vBox_center);
+		//borderPane.setCenter(centerScrollPane);
 
 		scene = new Scene(borderPane);
 	}

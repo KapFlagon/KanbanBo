@@ -1,0 +1,47 @@
+TODO Drag and Drop:
+    > Board within current category.
+    > Board between categories.
+    > Maybe Categories order?
+    > Lane within Board.
+    > Card within Lane.
+    > Card between Lanes.
+
+
+TODO Category:
+    > Container must be collapsable.
+    > Container must be scrollable (horizontal).
+
+
+TODO Home screen:
+    > Must have a "favourites" category.
+    > Must have a "template" category.
+    > Button to archive category.
+    > Button to rename category ? (Maybe use dynamic field...)
+
+
+TODO Board screen:
+    > Constant prompt to create new lane.
+
+
+TODO Lane:
+    > Constant prompt to create new card.
+
+
+TODO Credits screen:
+    > Credit stackoverflow posts.
+    > Credit google material icons.
+
+
+TODO Preferences:
+    > Need to create a preferences file in same directory as the jar.
+    > Store colourblind mode setting in preferences file.
+    > Store flag for opening most recent file automatically.
+    > Store file path for last 5 opened files.
+
+
+Design decisions:
+    > Focus only on embedded local database, not client/server
+        - Use SQLite, Database Access Object pattern, and Object Relational Mapping
+
+
+https://stackoverflow.com/questions/32342864/applying-mvc-with-javafx

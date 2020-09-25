@@ -15,7 +15,7 @@ public class CreateButton extends MenuButton {
 
 	public CreateButton() {
 		try {
-			iconImage = ImageHelper.parseImagePath(iconPath);
+			iconImage = ImageHelper.parseImagePathString(iconPath);
 		} catch (Exception e) {
 			System.out.println("Error using ImageHelper, Create: " + e.getStackTrace());
 		}

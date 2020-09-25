@@ -1,0 +1,11 @@
+package application_driver;
+
+public enum PROGRAM_STATE {
+	STARTUP,
+	START_SCREEN,
+	HOME_SCREEN,
+	BOARD_SCREEN,
+	PREFERENCES_SCREEN,
+	CREDITS_SCREEN,
+	CLOSING;
+}
