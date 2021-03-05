@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+    id 'application'
+}
+
+group 'com.kapflagon'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    version = '11.0.1'
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    //configuration = 'compileOnly'
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
+    compile group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
+
+    // Old Afterburner.fx
+    // https://mvnrepository.com/artifact/com.airhacks/afterburner.fx
+    compile group: 'com.airhacks', name: 'afterburner.fx', version: '1.7.0'
+
+    // New Afterburner.fx
+    // https://mvnrepository.com/artifact/com.dlsc.afterburner/afterburner.fx
+    //compile group: 'com.dlsc.afterburner', name: 'afterburner.fx', version: '2.1.0'
+
+    sourceSets.main.resources.srcDirs("src/main/java").includes.addAll(["**/*.fxml", "**/*.css", "**/*.properties"])
+    sourceSets.main.resources.srcDirs("src/main/resources").includes.addAll(["**/*.*"])
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'driver.Main'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+application {
+    //mainClassName = "java/driver/Main"
+    //mainModule = "KanbanBo.main"
+    mainModule.set("KanbanBo.main")
+    mainClass.set("java/driver/Main")
+}
