@@ -4,3 +4,5 @@ KanbanBo.iml
 gradle/**
 .gradle/**
 build/**
+gradlew.bat
+gradlew
