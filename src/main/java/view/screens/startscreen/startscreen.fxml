@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
    <left>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -45,8 +45,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem fx:id="newDbMenuItem" mnemonicParsing="false" onAction="#createDbFile" text="New" />
-                  <MenuItem fx:id="openDbMenuItem" mnemonicParsing="false" onAction="#openDbFile" text="Open" />
+                  <MenuItem fx:id="newDbMenuItem" mnemonicParsing="false" onAction="#createDbFile" text="New Database" />
+                  <MenuItem fx:id="openDbMenuItem" mnemonicParsing="false" onAction="#openDbFile" text="Open Database" />
               <MenuItem mnemonicParsing="false" text="Preferences" />
                   <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#exitApplication" text="Exit" />
             </items>
