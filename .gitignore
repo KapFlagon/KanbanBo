@@ -6,3 +6,5 @@ gradle/**
 build/**
 gradlew.bat
 gradlew
+src/main/resources/demos*
+src/main/java/Notes.txt
