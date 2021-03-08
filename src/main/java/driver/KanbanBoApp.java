@@ -3,11 +3,15 @@ package driver;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import utils.MainStageUtils;
-import view.screens.startscreen.StartScreenView;
+import utils.StageUtils;
+import view.screens.startscreen.ElementView;
 
 
 public class KanbanBoApp extends Application {
+
+    private int appMinHeight = 400;
+    private int appMinWidth = 600;
+    private Scene currentScene;
 
 
     public static void main(String[] args) {
@@ -17,14 +21,19 @@ public class KanbanBoApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        MainStageUtils.setMainStage(primaryStage);
-        primaryStage.setTitle("KanBanBo");
-        StartScreenView startScreen = new StartScreenView();
-        Scene startScene = new Scene(startScreen.getView());
-        primaryStage.setScene(startScene);
-        primaryStage.setWidth(600);
-        primaryStage.setHeight(400);
+        StageUtils.setMainStage(primaryStage);
+        ElementView startScreenView = new ElementView();
+        currentScene = new Scene(startScreenView.getView());
+        primaryStage.setScene(currentScene);
+        setStageSizes(primaryStage);
         primaryStage.show();
+    }
+
+    public void setStageSizes(Stage primaryStage) {
+        primaryStage.setWidth(appMinWidth);
+        primaryStage.setMinWidth(appMinWidth);
+        primaryStage.setHeight(appMinHeight);
+        primaryStage.setMinHeight(appMinHeight);
     }
 
 
