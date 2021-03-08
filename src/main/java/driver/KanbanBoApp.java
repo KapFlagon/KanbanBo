@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utils.StageUtils;
-import view.screens.startscreen.ElementView;
+import view.screens.startscreen.StartScreenView;
 
 
 public class KanbanBoApp extends Application {
@@ -22,7 +22,7 @@ public class KanbanBoApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         StageUtils.setMainStage(primaryStage);
-        ElementView startScreenView = new ElementView();
+        StartScreenView startScreenView = new StartScreenView();
         currentScene = new Scene(startScreenView.getView());
         primaryStage.setScene(currentScene);
         setStageSizes(primaryStage);
