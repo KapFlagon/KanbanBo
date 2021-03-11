@@ -2,10 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.projectsmanagerview.ProjectsManagerPresenter">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.projectsmanagerview.ProjectsManagerPresenter">
    <top>
       <Label text="Manage Projects" BorderPane.alignment="CENTER">
          <padding>
@@ -21,6 +22,11 @@
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin>
+         <tabs>
+            <Tab fx:id="completedProjectsTab" closable="false" text="Completed Projects" />
+            <Tab fx:id="archivedProjectsTab" closable="false" text="Archived Projects" />
+            <Tab fx:id="activeProjectsTab" closable="false" text="Active Projects" />
+         </tabs>
       </TabPane>
    </center>
 </BorderPane>

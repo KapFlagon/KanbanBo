@@ -1,4 +1,4 @@
-package view.screens.mainscreen.subviews.projectsmanagerview;
+package view.screens.mainscreen.subviews.manage.projectsmanagerview;
 
 import com.airhacks.afterburner.views.FXMLView;
 
