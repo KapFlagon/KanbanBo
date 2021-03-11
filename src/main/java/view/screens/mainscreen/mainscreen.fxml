@@ -2,13 +2,18 @@
 
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.MainScreenPresenter">
    <center>
-      <TabPane fx:id="mainScreenTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+      <TabPane fx:id="mainScreenTabPane" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+         <tabs>
+            <Tab fx:id="manageTab" text="Manage" />
+            <Tab fx:id="dashboardTab" text="Dashboard" />
+            <Tab fx:id="workspaceTab" text="Workspace" />
+         </tabs></TabPane>
    </center>
    <top>
       <MenuBar BorderPane.alignment="CENTER">
