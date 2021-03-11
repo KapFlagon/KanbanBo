@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane nodeOrientation="LEFT_TO_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter">
+   <top>
+      <ToolBar>
+         <items>
+            <Button fx:id="newProjectButton" mnemonicParsing="false" onAction="#createNewProject" text="New" />
+            <Button fx:id="archiveProjectButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#archiveProject" text="Archive" />
+            <Button fx:id="completeProjectButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#completeProject" text="Complete" />
+            <Button fx:id="deleteProjectButton" layoutX="30.0" layoutY="30.0" mnemonicParsing="false" onAction="#deleteProject" text="Delete" />
+         </items>
+      </ToolBar>
+   </top>
+   <center>
+      <ScrollPane BorderPane.alignment="CENTER">
+         <content>
+            <VBox fx:id="activeProjectListVBox" alignment="CENTER" spacing="5.0" />
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>
