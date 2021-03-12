@@ -16,6 +16,7 @@ import view.screens.mainscreen.MainScreenView;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class StartScreenPresenter implements Initializable {
@@ -119,12 +120,13 @@ public class StartScreenPresenter implements Initializable {
 
 
     // Other methods
-    public void createDbFile() throws IOException {
+    public void createDbFile() throws IOException, SQLException {
         System.out.println("creating");
         File newFile = FileChooserUtils.createFilePopup();
         if(newFile != null) {
             FileCreationUtils.createEmptyDatabaseFile(newFile);
             DatabaseUtils.setActiveDatabaseFile(newFile);
+            DatabaseUtils.initDatabaseTablesInFile();
             System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
             moveToMainSceneView();
         } else {
@@ -176,7 +178,7 @@ public class StartScreenPresenter implements Initializable {
         //MainScreenView mainScreenView = new MainScreenView();
         MainScreenView view = new MainScreenView();
         MainScreenPresenter presenter = (MainScreenPresenter) view.getPresenter();
-        StageUtils.changeScene("KanbanBo - Project manager", view);
+        StageUtils.changeMainScene("KanbanBo - Project manager", view);
     }
 
 }
