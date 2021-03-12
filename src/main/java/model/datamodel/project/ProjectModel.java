@@ -11,7 +11,7 @@ public class ProjectModel {
 
 
     // Variables
-    @DatabaseField(id = true, generatedId = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
+    @DatabaseField(generatedId = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
     private UUID project_uuid;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
     private String project_title;

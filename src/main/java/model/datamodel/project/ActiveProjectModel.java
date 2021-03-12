@@ -16,7 +16,7 @@ public class ActiveProjectModel extends ProjectModel{
 
 
     // Constructors
-    ActiveProjectModel() {
+    public ActiveProjectModel() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 
