@@ -18,14 +18,14 @@
       </Label>
    </top>
    <center>
-      <TabPane fx:id="projectManagementTabPane" nodeOrientation="RIGHT_TO_LEFT" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="projectManagementTabPane" nodeOrientation="LEFT_TO_RIGHT" side="TOP" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin>
          <tabs>
-            <Tab fx:id="completedProjectsTab" closable="false" text="Completed Projects" />
-            <Tab fx:id="archivedProjectsTab" closable="false" text="Archived Projects" />
             <Tab fx:id="activeProjectsTab" closable="false" text="Active Projects" />
+            <Tab fx:id="archivedProjectsTab" closable="false" text="Archived Projects" />
+            <Tab fx:id="completedProjectsTab" closable="false" text="Completed Projects" />
          </tabs>
       </TabPane>
    </center>
