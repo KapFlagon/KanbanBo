@@ -5,14 +5,21 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import model.datamodel.project.ActiveProjectModel;
-
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import utils.StageUtils;
+import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowPresenter;
+import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowView;
+import model.datamodel.project.ActiveProjectModel;
 
 public class ActiveProjectsListPresenter implements Initializable {
 
+    // TODO Update here to show a list of all projects in item entry.
+    // TODO Maybe consider observable list, or other observable to update once data has been updated in project editor.
+    // TODO Remember to pass the selected active project to the sub-window for creating/editing.
     // Injected JavaFX field variables
     @FXML
     private Button newProjectButton;
@@ -75,8 +82,9 @@ public class ActiveProjectsListPresenter implements Initializable {
     }
 
     // Other methods
-    public void createNewProject() {
+    public void createNewProject() throws SQLException, IOException {
         System.out.println("Creating a new project");
+        showCreateProjectWindow();
     }
     public void archiveProject() {
         System.out.println("Archiving a project");
@@ -87,6 +95,13 @@ public class ActiveProjectsListPresenter implements Initializable {
 
     public void deleteProject() {
         System.out.println("Deleting a project");
+    }
+
+    private void showCreateProjectWindow() {
+        ProjectDetailsWindowView projectDetailsWindowView = new ProjectDetailsWindowView();
+        ProjectDetailsWindowPresenter projectDetailsWindowPresenter = (ProjectDetailsWindowPresenter) projectDetailsWindowView.getPresenter();
+        StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView());
+        StageUtils.showSubStage();
     }
 
 }
