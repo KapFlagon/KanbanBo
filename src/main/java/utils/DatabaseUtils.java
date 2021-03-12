@@ -1,9 +1,15 @@
 package utils;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+import model.datamodel.project.ActiveProjectModel;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class DatabaseUtils {
 
@@ -45,5 +51,19 @@ public class DatabaseUtils {
     private static void buildConnectionURLstring() {
         String builtConnectionString = DatabaseUtils.jdbcSQLitePrefix + DatabaseUtils.getActiveDatabaseFile().toString();
         DatabaseUtils.setConnectionURLstring(builtConnectionString);
+    }
+
+    public static void initDatabaseTablesInFile() throws SQLException, IOException {
+        // establish connection
+        JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
+
+        // Build Data Access Objects (DAOs) for each persisted class.
+        Dao<ActiveProjectModel, UUID> activeProjectModelDao = DaoManager.createDao(connectionSource, ActiveProjectModel.class);
+
+        // Create blank tables
+        TableUtils.createTable(activeProjectModelDao);
+
+        // Close the connection for the data source.
+        connectionSource.close();
     }
 }
