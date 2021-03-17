@@ -2,25 +2,38 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 
 <BorderPane nodeOrientation="LEFT_TO_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter">
    <top>
       <ToolBar>
          <items>
             <Button fx:id="newProjectButton" mnemonicParsing="false" onAction="#createNewProject" text="New" />
+            <Button fx:id="editProjectButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editSelectedProject" text="Edit" />
             <Button fx:id="archiveProjectButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#archiveProject" text="Archive" />
             <Button fx:id="completeProjectButton" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#completeProject" text="Complete" />
+            <Button fx:id="copyProjectAsActiveProjectButton" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyProjectToActiveProject" text="Copy" />
+            <Button fx:id="copyProjectToTemplateButton" layoutX="113.0" layoutY="10.0" mnemonicParsing="false" onAction="#copyProjectToTemplate" text="Copy to Template" />
             <Button fx:id="deleteProjectButton" layoutX="30.0" layoutY="30.0" mnemonicParsing="false" onAction="#deleteProject" text="Delete" />
          </items>
       </ToolBar>
    </top>
    <center>
-      <ScrollPane BorderPane.alignment="CENTER">
+      <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
          <content>
-            <VBox fx:id="activeProjectListVBox" alignment="CENTER" spacing="5.0" />
+            <TableView fx:id="activeProjectListTableView">
+              <columns>
+                <TableColumn fx:id="projectTitleTableCol" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="Title" />
+                <TableColumn fx:id="creationDateTableCol" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="Creation Date" />
+                  <TableColumn fx:id="lastChangedDateTableCol" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="Last Changed Date" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
          </content>
       </ScrollPane>
    </center>
