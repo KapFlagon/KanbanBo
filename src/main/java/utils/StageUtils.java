@@ -65,9 +65,17 @@ public class StageUtils {
         StageUtils.getSubStages().peekLast().show();
     }
 
+    public static void showAndWaitOnSubStage() {
+        StageUtils.getSubStages().peekLast().showAndWait();
+    }
+
     public static void closeSubStage() {
         StageUtils.getSubStages().peekLast().close();
         StageUtils.removeLastSubStageFromDeque();
+    }
+
+    public static void hideSubStage() {
+        StageUtils.getSubStages().peekLast().hide();
     }
 
 }
