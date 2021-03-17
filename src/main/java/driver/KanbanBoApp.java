@@ -1,6 +1,7 @@
 package driver;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import utils.StageUtils;
@@ -21,6 +22,7 @@ public class KanbanBoApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Platform.setImplicitExit(false);
         StageUtils.setMainStage(primaryStage);
         StartScreenView startScreenView = new StartScreenView();
         currentScene = new Scene(startScreenView.getView());
