@@ -85,7 +85,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         }
         // Close the connection for the data source.
         connectionSource.close();
-        StageUtils.closeSubStage();
+        StageUtils.hideSubStage();
     }
 
     public void createProject(Dao<ActiveProjectModel, UUID> dao) throws SQLException {
