@@ -6,13 +6,27 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.MainScreenPresenter">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.MainScreenPresenter">
    <center>
       <TabPane fx:id="mainScreenTabPane" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <tabs>
-            <Tab fx:id="manageTab" text="Manage" />
-            <Tab fx:id="dashboardTab" text="Dashboard" />
-            <Tab fx:id="workspaceTab" text="Workspace" />
+            <Tab fx:id="manageTab" closable="false" text="Manage">
+               <content>
+                  <TabPane fx:id="manageSubTabPane" tabClosingPolicy="UNAVAILABLE">
+                     <tabs>
+                        <Tab fx:id="manageProjectsSubTab" closable="false" text="Projects" />
+                        <Tab fx:id="manageTemplatesSubTab" closable="false" text="Templates" />
+                     </tabs>
+                  </TabPane>
+               </content></Tab>
+            <Tab fx:id="dashboardTab" closable="false" text="Dashboard">
+               <content>
+                  <TabPane fx:id="dashboardSubTabPane" tabClosingPolicy="UNAVAILABLE" />
+               </content></Tab>
+            <Tab fx:id="workspaceTab" closable="false" text="Workspace">
+               <content>
+                  <TabPane fx:id="workspaceSubTabPane" tabClosingPolicy="UNAVAILABLE" />
+               </content></Tab>
          </tabs></TabPane>
    </center>
    <top>

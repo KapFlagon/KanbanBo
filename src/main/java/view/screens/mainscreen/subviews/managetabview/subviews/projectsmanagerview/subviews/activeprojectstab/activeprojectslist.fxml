@@ -7,7 +7,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane nodeOrientation="LEFT_TO_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter">
+<BorderPane nodeOrientation="LEFT_TO_RIGHT" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter">
    <top>
       <ToolBar>
          <items>

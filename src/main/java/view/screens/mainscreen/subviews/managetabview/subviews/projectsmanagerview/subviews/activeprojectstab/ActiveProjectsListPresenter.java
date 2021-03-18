@@ -1,4 +1,4 @@
-package view.screens.mainscreen.subviews.manage.projectsmanagerview.subviews.activeprojectstab;
+package view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.subviews.activeprojectstab;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
