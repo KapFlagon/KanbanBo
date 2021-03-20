@@ -4,7 +4,17 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import model.datamodel.project.ActiveProjectModel;
+import model.domainobjects.card.ArchivedCardModel;
+import model.domainobjects.card.ColumnCardModel;
+import model.domainobjects.card.TemplateCardModel;
+import model.domainobjects.column.ArchivedColumnModel;
+import model.domainobjects.column.ProjectColumnModel;
+import model.domainobjects.column.TemplateColumnModel;
+import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.project.ArchivedProjectModel;
+import model.domainobjects.project.CompletedProjectModel;
+import model.domainobjects.project.TemplateProjectModel;
+import model.domainobjects.subitems.LinkedItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,13 +67,56 @@ public class DatabaseUtils {
         // establish connection
         JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
 
-        // Build Data Access Objects (DAOs) for each persisted class.
-        Dao<ActiveProjectModel, UUID> activeProjectModelDao = DaoManager.createDao(connectionSource, ActiveProjectModel.class);
-
-        // Create blank tables
-        TableUtils.createTable(activeProjectModelDao);
+        // TODO need to add some sort of progress bar to indicate work is being done here. 
+        createProjectTables(connectionSource);
+        createColumnTables(connectionSource);
+        createCardTables(connectionSource);
+        createSubItemTables(connectionSource);
+        createIntermediaryTables(connectionSource);
 
         // Close the connection for the data source.
         connectionSource.close();
+    }
+
+    private static void createProjectTables(JdbcConnectionSource connectionSource) throws SQLException {
+        Dao<ActiveProjectModel, UUID> activeProjectModelDao = DaoManager.createDao(connectionSource, ActiveProjectModel.class);
+        Dao<ArchivedProjectModel, UUID> archivedProjectModelDao = DaoManager.createDao(connectionSource, ArchivedProjectModel.class);
+        Dao<CompletedProjectModel, UUID> completedProjectModelDao = DaoManager.createDao(connectionSource, CompletedProjectModel.class);
+        Dao<TemplateProjectModel, UUID> templateProjectModelDao = DaoManager.createDao(connectionSource, TemplateProjectModel.class);
+
+        TableUtils.createTable(activeProjectModelDao);
+        TableUtils.createTable(archivedProjectModelDao);
+        TableUtils.createTable(completedProjectModelDao);
+        TableUtils.createTable(templateProjectModelDao);
+    }
+
+    private static void createColumnTables(JdbcConnectionSource connectionSource) throws SQLException{
+        Dao<ProjectColumnModel, UUID> projectColumnModelDao = DaoManager.createDao(connectionSource, ProjectColumnModel.class);
+        Dao<ArchivedColumnModel, UUID> archivedColumnModelDao = DaoManager.createDao(connectionSource, ArchivedColumnModel.class);
+        Dao<TemplateColumnModel, UUID> templateColumnModelDao = DaoManager.createDao(connectionSource, TemplateColumnModel.class);
+
+        TableUtils.createTable(projectColumnModelDao);
+        TableUtils.createTable(archivedColumnModelDao);
+        TableUtils.createTable(templateColumnModelDao);
+    }
+
+    private static void createCardTables(JdbcConnectionSource connectionSource) throws SQLException{
+        Dao<ColumnCardModel, UUID> columnCardModelDao = DaoManager.createDao(connectionSource, ColumnCardModel.class);
+        Dao<ArchivedCardModel, UUID> archivedCardModelDao = DaoManager.createDao(connectionSource, ArchivedCardModel.class);
+        Dao<TemplateCardModel, UUID> templateCardModelDao = DaoManager.createDao(connectionSource, TemplateCardModel.class);
+
+        TableUtils.createTable(columnCardModelDao);
+        TableUtils.createTable(archivedCardModelDao);
+        TableUtils.createTable(templateCardModelDao);
+    }
+
+    private static void createSubItemTables(JdbcConnectionSource connectionSource) throws SQLException{
+        Dao<LinkedItem, UUID> linkedItemDao = DaoManager.createDao(connectionSource, LinkedItem.class);
+
+        TableUtils.createTable(linkedItemDao);
+    }
+
+    private static void createIntermediaryTables(JdbcConnectionSource connectionSource) throws SQLException{
+
     }
 }
