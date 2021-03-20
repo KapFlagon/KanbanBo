@@ -51,6 +51,7 @@ public class MainScreenPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         projectsManagerView = new ProjectsManagerView();
         projectsManagerPresenter = (ProjectsManagerPresenter) projectsManagerView.getPresenter();
         manageProjectsSubTab.setContent(projectsManagerView.getView());
