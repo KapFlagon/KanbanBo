@@ -1,13 +1,15 @@
-package model.datamodel.project;
+package model.domainobjects.project;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import model.domainobjects.BasicUniqueObjectModel;
+
 import java.util.Date;
 import java.util.UUID;
 
-@DatabaseTable(tableName = "projects")
-public class ProjectModel {
+@DatabaseTable(tableName = "project")
+public abstract class AbstractProjectModel {
 
 
     // Variables
@@ -20,7 +22,7 @@ public class ProjectModel {
 
 
     // Constructors
-    public ProjectModel() {
+    public AbstractProjectModel() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 

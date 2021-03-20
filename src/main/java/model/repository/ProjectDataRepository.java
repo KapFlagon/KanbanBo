@@ -13,7 +13,7 @@ import model.domainobjects.project.CompletedProjectModel;
 import model.domainobjects.project.TemplateProjectModel;
 import utils.DatabaseUtils;
 
-public class ProjectRepository implements IRepository{
+public class ProjectRepository {//implements IRepository{
 
     private JdbcConnectionSource connectionSource;
     private Dao<ActiveProjectModel, UUID> activeProjectModelDao;
@@ -81,7 +81,7 @@ public class ProjectRepository implements IRepository{
     }
 
     // Other methods
-    @Override
+    //@Override
     public ObservableList getAllInList() throws SQLException {
         connectionSource = DatabaseUtils.getConnectionSource();
         activeProjectModelDao = DaoManager.createDao(connectionSource, ActiveProjectModel.class);
@@ -94,7 +94,7 @@ public class ProjectRepository implements IRepository{
         return activeProjectsList;
     }
 
-    @Override
+    //@Override
     public ObservableList getAllChildLists() {
         return null;
     }

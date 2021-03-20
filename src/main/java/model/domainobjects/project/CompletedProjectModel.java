@@ -1,11 +1,13 @@
-package model.datamodel.project;
+package model.domainobjects.project;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-public class CompletedProjectModel extends ProjectModel{
+@DatabaseTable(tableName = "completed_project")
+public class CompletedProjectModel extends AbstractProjectModel {
 
 
     // Variables
