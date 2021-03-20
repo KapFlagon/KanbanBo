@@ -13,7 +13,7 @@ import model.domainobjects.project.CompletedProjectModel;
 import model.domainobjects.project.TemplateProjectModel;
 import utils.DatabaseUtils;
 
-public class ProjectRepository {//implements IRepository{
+public class ProjectDataRepository {//implements IRepository{
 
     private JdbcConnectionSource connectionSource;
     private Dao<ActiveProjectModel, UUID> activeProjectModelDao;
@@ -28,10 +28,10 @@ public class ProjectRepository {//implements IRepository{
 
 
     // Constructors
-    public ProjectRepository() {
+    public ProjectDataRepository() {
         initLists();
     }
-    public ProjectRepository(ObservableList<ActiveProjectModel> activeProjectsList, ObservableList<ArchivedProjectModel> archivedProjectsList, ObservableList<CompletedProjectModel> completedProjectsList, ObservableList<TemplateProjectModel> templateProjectsList) {
+    public ProjectDataRepository(ObservableList<ActiveProjectModel> activeProjectsList, ObservableList<ArchivedProjectModel> archivedProjectsList, ObservableList<CompletedProjectModel> completedProjectsList, ObservableList<TemplateProjectModel> templateProjectsList) {
         setActiveProjectsList(activeProjectsList);
         setArchivedProjectsList(archivedProjectsList);
         setCompletedProjectsList(completedProjectsList);
