@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import model.datamodel.project.ActiveProjectModel;
+import model.domainobjects.project.ActiveProjectModel;
 import utils.DatabaseUtils;
 import utils.StageUtils;
 import java.io.IOException;
