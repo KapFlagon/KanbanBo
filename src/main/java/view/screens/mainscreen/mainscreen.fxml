@@ -23,10 +23,7 @@
                <content>
                   <TabPane fx:id="dashboardSubTabPane" tabClosingPolicy="UNAVAILABLE" />
                </content></Tab>
-            <Tab fx:id="workspaceTab" closable="false" text="Workspace">
-               <content>
-                  <TabPane fx:id="workspaceSubTabPane" tabClosingPolicy="UNAVAILABLE" />
-               </content></Tab>
+            <Tab fx:id="workspaceTab" closable="false" text="Workspace" />
          </tabs></TabPane>
    </center>
    <top>

@@ -67,7 +67,7 @@ public class DatabaseUtils {
         // establish connection
         JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
 
-        // TODO need to add some sort of progress bar to indicate work is being done here. 
+        // TODO need to add some sort of progress bar to indicate work is being done here.
         createProjectTables(connectionSource);
         createColumnTables(connectionSource);
         createCardTables(connectionSource);
