@@ -4,19 +4,30 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.ProjectsManagerPresenter;
-import view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.ProjectsManagerView;
+import model.domainobjects.project.ActiveProjectModel;
+import model.repository.ProjectListRepository;
+import model.repository.ProjectRepositoryService;
+import utils.ProjectWorkspaceController;
+import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
+import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerView;
 import view.screens.mainscreen.subviews.workspace.ProjectWorkspacePresenter;
 import view.screens.mainscreen.subviews.workspace.ProjectWorkspaceView;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
 public class MainScreenPresenter implements Initializable {
 
     // JavaFx injected fields
     @FXML
+    private TabPane mainScreenTabPane;
+    @FXML
     private Tab manageProjectsSubTab;
+    @FXML
+    private Tab manageTemplatesSubTab;
     @FXML
     private Tab dashboardTab;
     @FXML
@@ -25,6 +36,8 @@ public class MainScreenPresenter implements Initializable {
     private Tab workspaceTab;
 
     // Other variables and fields
+    private ProjectRepositoryService projectRepositoryService;
+    private ProjectWorkspaceController projectWorkspaceController;
     private ProjectsManagerView projectsManagerView;
     private ProjectsManagerPresenter projectsManagerPresenter;
     private ProjectWorkspaceView projectWorkspaceView;
@@ -36,13 +49,23 @@ public class MainScreenPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            projectRepositoryService = new ProjectRepositoryService();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        projectWorkspaceController = new ProjectWorkspaceController();
 
         projectsManagerView = new ProjectsManagerView();
         projectsManagerPresenter = (ProjectsManagerPresenter) projectsManagerView.getPresenter();
+        projectsManagerPresenter.setProjectRepositoryService(projectRepositoryService);
         manageProjectsSubTab.setContent(projectsManagerView.getView());
 
         projectWorkspaceView = new ProjectWorkspaceView();
         projectWorkspacePresenter = (ProjectWorkspacePresenter) projectWorkspaceView.getPresenter();
+        projectWorkspacePresenter.setProjectRepositoryService(projectRepositoryService);
         workspaceTab.setContent(projectWorkspaceView.getView());
     }
 

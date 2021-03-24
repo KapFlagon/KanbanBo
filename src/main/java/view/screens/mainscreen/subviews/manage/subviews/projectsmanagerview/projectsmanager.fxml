@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.ProjectsManagerPresenter">
+<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter">
    <top>
       <VBox alignment="CENTER" BorderPane.alignment="CENTER">
          <BorderPane.margin>

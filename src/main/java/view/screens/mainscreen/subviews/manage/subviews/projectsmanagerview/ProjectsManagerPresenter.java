@@ -1,4 +1,4 @@
-package view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview;
+package view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,11 +8,14 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.domainobjects.project.ActiveProjectModel;
 import model.repository.ProjectListRepository;
+import model.repository.ProjectRepositoryService;
 import utils.StageUtils;
-import view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter;
-import view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListView;
+import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter;
+import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListView;
 import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowPresenter;
 import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowView;
+
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -53,6 +56,7 @@ public class ProjectsManagerPresenter implements Initializable {
     private ActiveProjectsListView activeProjectsListView;
     private ActiveProjectsListPresenter activeProjectsListPresenter;
     private ProjectListRepository<ActiveProjectModel> activeProjectsList;
+    private ProjectRepositoryService projectRepositoryService;
 
     // Constructors
 
@@ -86,17 +90,22 @@ public class ProjectsManagerPresenter implements Initializable {
         this.completeProjectsTab = completeProjectsTab;
     }
 
+    public ProjectRepositoryService getProjectRepositoryService() {
+        return projectRepositoryService;
+    }
+    public void setProjectRepositoryService(ProjectRepositoryService projectRepositoryService) {
+        this.projectRepositoryService = projectRepositoryService;
+        customInit();
+    }
+
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        activeProjectsList = new ProjectListRepository<ActiveProjectModel>(ActiveProjectModel.class);
-        try {
-            activeProjectsList.getAllItemsAsList();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+    }
+
+    public void customInit() {
+        activeProjectsList = projectRepositoryService.getActiveProjectsRepository();
         activeProjectsListView = new ActiveProjectsListView();
         activeProjectsListPresenter = (ActiveProjectsListPresenter) activeProjectsListView.getPresenter();
         activeProjectsListPresenter.setActiveProjectList(activeProjectsList.getModelList());
@@ -111,7 +120,25 @@ public class ProjectsManagerPresenter implements Initializable {
     }
 
     public void openSelectedProject() {
-
+        AvailableTabs selectedParentTab = determineSelectedTab();
+        switch (selectedParentTab) {
+            case ACTIVE:
+                System.out.println("Active project parent tab selected");
+                System.out.println("selected item: \n" + activeProjectsListPresenter.getSelectedRow().toString() + "\n" + activeProjectsListPresenter.getSelectedRow().getProject_uuid().toString() + "\t" + activeProjectsListPresenter.getSelectedRow().getProject_title());
+                break;
+            case ARCHIVED:
+                System.out.println("Archived project parent tab selected");
+                break;
+            case COMPLETED:
+                System.out.println("Completed project parent tab selected");
+                break;
+            case NONE:
+                System.out.println("No parent tab selected");
+                break;
+            default:
+                System.out.println("default");
+                break;
+        }
     }
 
     public void editProjectDetails() {
@@ -122,7 +149,15 @@ public class ProjectsManagerPresenter implements Initializable {
 
     }
 
+    public void unarchiveSelectedProject() {
+
+    }
+
     public void completeSelectedProject() {
+
+    }
+
+    public void duplicateSelectedProject() {
 
     }
 
@@ -198,6 +233,23 @@ public class ProjectsManagerPresenter implements Initializable {
     }
 
     private void showCreateProjectWindow() {
+        // TODO 24.03.2021 start here to redesign how data is moved to the project repository service
+        /*
+        User clicks button to create/edit.
+        If create:
+            New project data gathered.
+            New project data pushed to Db.
+            New project object returned to the active project repository
+                Last two steps might be together, based on the project repository coding.
+            Tables are updated based on observable list
+
+        If edit:
+            Old project data is saved in a temporary object
+            New project data is saved in a temporary object.
+            Both objects sent to the repository
+            Old object found, updates are made to DB and to object in the observable list
+            Changes are pushed outward from that observable list update.
+         */
         ProjectDetailsWindowView projectDetailsWindowView = new ProjectDetailsWindowView();
         ProjectDetailsWindowPresenter projectDetailsWindowPresenter = (ProjectDetailsWindowPresenter) projectDetailsWindowView.getPresenter();
         StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView());

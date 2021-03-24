@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER_LEFT" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.managetabview.subviews.projectsmanagerview.subviews.activeprojectlistentry.ActiveProjectListEntryPresenter">
+<VBox alignment="CENTER_LEFT" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectlistentry.ActiveProjectListEntryPresenter">
    <children>
       <Label fx:id="projectListEntryTitle" text="Project Title" />
       <GridPane VBox.vgrow="ALWAYS">
