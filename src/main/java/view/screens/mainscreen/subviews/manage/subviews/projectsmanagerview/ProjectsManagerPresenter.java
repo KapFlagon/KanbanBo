@@ -30,7 +30,11 @@ public class ProjectsManagerPresenter implements Initializable {
     @FXML
     private Button archiveProjectBtn;
     @FXML
+    private Button unarchiveProjectBtn;
+    @FXML
     private Button completeProjectBtn;
+    @FXML
+    private Button duplicateProjectBtn;
     @FXML
     private Button convertToTemplateBtn;
     @FXML
@@ -157,18 +161,36 @@ public class ProjectsManagerPresenter implements Initializable {
         switch (selectedTab) {
             case ACTIVE:
                 newProjectBtn.setDisable(false);
+                openProjectBtn.setDisable(false);
                 editProjectBtn.setDisable(false);
+                archiveProjectBtn.setDisable(false);
+                unarchiveProjectBtn.setDisable(true);
+                completeProjectBtn.setDisable(false);
+                duplicateProjectBtn.setDisable(false);
+                convertToTemplateBtn.setDisable(false);
                 deleteProjectBtn.setDisable(false);
                 break;
             case ARCHIVED:
-                newProjectBtn.setDisable(true);
+                newProjectBtn.setDisable(false);
+                openProjectBtn.setDisable(false);
                 editProjectBtn.setDisable(true);
+                archiveProjectBtn.setDisable(true);
+                unarchiveProjectBtn.setDisable(false);
+                completeProjectBtn.setDisable(false);
+                duplicateProjectBtn.setDisable(false);
+                convertToTemplateBtn.setDisable(false);
                 deleteProjectBtn.setDisable(false);
                 break;
             case COMPLETED:
-                newProjectBtn.setDisable(true);
+                newProjectBtn.setDisable(false);
+                openProjectBtn.setDisable(false);
                 editProjectBtn.setDisable(true);
-                deleteProjectBtn.setDisable(true);
+                archiveProjectBtn.setDisable(true);
+                unarchiveProjectBtn.setDisable(true);
+                completeProjectBtn.setDisable(true);
+                duplicateProjectBtn.setDisable(false);
+                convertToTemplateBtn.setDisable(false);
+                deleteProjectBtn.setDisable(false);
                 break;
             default:
                 break;

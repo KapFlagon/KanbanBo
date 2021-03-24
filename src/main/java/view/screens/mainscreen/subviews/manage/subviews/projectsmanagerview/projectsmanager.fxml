@@ -27,8 +27,9 @@
                   <Button fx:id="openProjectBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#openSelectedProject" text="Open" />
                   <Button fx:id="editProjectBtn" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#editProjectDetails" text="Edit" />
                   <Button fx:id="archiveProjectBtn" layoutX="122.0" layoutY="12.0" mnemonicParsing="false" onAction="#archiveSelectedProject" text="Archive" />
+                  <Button fx:id="unarchiveProjectBtn" layoutX="144.0" layoutY="10.0" mnemonicParsing="false" onAction="#unarchiveSelectedProject" text="Unarchive" />
                   <Button fx:id="completeProjectBtn" layoutX="178.0" layoutY="12.0" mnemonicParsing="false" onAction="#completeSelectedProject" text="Complete" />
-                  <Button layoutX="234.0" layoutY="12.0" mnemonicParsing="false" text="Duplicate" />
+                  <Button fx:id="duplicateProjectBtn" layoutX="234.0" layoutY="12.0" mnemonicParsing="false" text="Duplicate" />
                   <Button fx:id="convertToTemplateBtn" layoutX="244.0" layoutY="22.0" mnemonicParsing="false" onAction="#convertSelectedProjectToTemplate" text="Convert to Template" />
                   <Button fx:id="deleteProjectBtn" layoutX="254.0" layoutY="32.0" mnemonicParsing="false" onAction="#deleteSelectedProject" text="Delete" />
               </items>
