@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 
 @DatabaseTable(tableName = "project_column")
-public class ProjectColumnModel extends AbstractProjectColumnModel{
+public class ActiveProjectColumnModel extends AbstractProjectColumnModel{
 
 
     // Variables
@@ -14,7 +14,7 @@ public class ProjectColumnModel extends AbstractProjectColumnModel{
     private int column_position;
 
     // Constructors
-    public ProjectColumnModel() {
+    public ActiveProjectColumnModel() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 

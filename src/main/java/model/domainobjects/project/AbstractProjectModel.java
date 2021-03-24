@@ -6,6 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import model.domainobjects.BasicUniqueObjectModel;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @DatabaseTable(tableName = "project")
@@ -53,5 +54,16 @@ public abstract class AbstractProjectModel {
 
 
     // Other methods
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractProjectModel)) return false;
+        AbstractProjectModel that = (AbstractProjectModel) o;
+        return getProject_uuid().equals(that.getProject_uuid()) && getCreation_timestamp().equals(that.getCreation_timestamp());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getProject_uuid(), getCreation_timestamp());
+    }
 }
