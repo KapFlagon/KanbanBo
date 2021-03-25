@@ -3,10 +3,8 @@ package model.domainobjects.project;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import model.domainobjects.BasicUniqueObjectModel;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 @DatabaseTable(tableName = "project")
@@ -20,6 +18,8 @@ public abstract class AbstractProjectModel {
     private String project_title;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.DATE_STRING)
     private Date creation_timestamp;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.DATE_STRING)
+    private Date last_changed_timestamp;
 
 
     // Constructors
@@ -49,21 +49,15 @@ public abstract class AbstractProjectModel {
         this.creation_timestamp = creation_timestamp;
     }
 
+    public Date getLast_changed_timestamp() {
+        return last_changed_timestamp;
+    }
+    public void setLast_changed_timestamp(Date last_changed_timestamp) {
+        this.last_changed_timestamp = last_changed_timestamp;
+    }
 
-    // Initialisation methods
+// Initialisation methods
 
 
     // Other methods
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AbstractProjectModel)) return false;
-        AbstractProjectModel that = (AbstractProjectModel) o;
-        return getProject_uuid().equals(that.getProject_uuid()) && getCreation_timestamp().equals(that.getCreation_timestamp());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getProject_uuid(), getCreation_timestamp());
-    }
 }
