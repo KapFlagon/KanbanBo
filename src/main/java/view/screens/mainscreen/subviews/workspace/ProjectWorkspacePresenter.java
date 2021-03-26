@@ -3,8 +3,7 @@ package view.screens.mainscreen.subviews.workspace;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
-import model.repository.ProjectRepositoryService;
-import utils.ProjectWorkspaceController;
+import model.repositories.ProjectRepositoryService;
 
 import java.net.URL;
 import java.util.ResourceBundle;

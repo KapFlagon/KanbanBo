@@ -4,9 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import model.domainobjects.project.ActiveProjectModel;
-import model.repository.ProjectListRepository;
-import model.repository.ProjectRepositoryService;
+import model.repositories.ProjectRepositoryService;
 import utils.ProjectWorkspaceController;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerView;
@@ -17,7 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 
 public class MainScreenPresenter implements Initializable {
 
@@ -65,7 +62,7 @@ public class MainScreenPresenter implements Initializable {
 
         projectWorkspaceView = new ProjectWorkspaceView();
         projectWorkspacePresenter = (ProjectWorkspacePresenter) projectWorkspaceView.getPresenter();
-        projectWorkspacePresenter.setProjectRepositoryService(projectRepositoryService);
+        //projectWorkspacePresenter.setProjectRepositoryService(projectRepositoryService);
         workspaceTab.setContent(projectWorkspaceView.getView());
     }
 

@@ -8,7 +8,7 @@ import model.domainobjects.project.AbstractProjectModel;
 import view.screens.mainscreen.subviews.workspace.subviews.projectview.ProjectContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.projectview.ProjectContainerView;
 
-public class ProjectWorkspaceService {
+public class ProjectWorkspaceController {
 
     // JavaFX variables
     private TabPane mainScreenTabPane;
@@ -19,7 +19,7 @@ public class ProjectWorkspaceService {
 
 
     // Constructors
-    public ProjectWorkspaceService() {
+    public ProjectWorkspaceController() {
         initProjectDisplayList();
     }
 

@@ -6,19 +6,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
-import model.repository.ProjectListRepository;
-import model.repository.ProjectRepositoryService;
+import model.repositories.ActiveProjectListRepository;
+import model.repositories.ProjectRepositoryService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListView;
 import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowPresenter;
 import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowView;
 
-import javax.inject.Inject;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ProjectsManagerPresenter implements Initializable {
@@ -55,11 +53,14 @@ public class ProjectsManagerPresenter implements Initializable {
     private enum AvailableTabs {NONE, ACTIVE, ARCHIVED, COMPLETED}
     private ActiveProjectsListView activeProjectsListView;
     private ActiveProjectsListPresenter activeProjectsListPresenter;
-    private ProjectListRepository<ActiveProjectModel> activeProjectsList;
+    //private ProjectListRepository<ActiveProjectModel> activeProjectsList;
+    private ActiveProjectListRepository activeProjectListRepository;
     private ProjectRepositoryService projectRepositoryService;
 
     // Constructors
-
+    // TODO pick up here, investigate why data replication has stopped now in the active project table view.
+    // Reading is possible, but it's not pushing data into the table view.
+    // Writing also appears possible, but again it's not pushing the data into the table view.
 
     // Getters and Setters
     public TabPane getProjectManagementTabPane() {
@@ -105,10 +106,12 @@ public class ProjectsManagerPresenter implements Initializable {
     }
 
     public void customInit() {
-        activeProjectsList = projectRepositoryService.getActiveProjectsRepository();
+        //activeProjectsList = projectRepositoryService.getActiveProjectListRepository();
+        activeProjectListRepository = projectRepositoryService.getActiveProjectListRepository();
         activeProjectsListView = new ActiveProjectsListView();
         activeProjectsListPresenter = (ActiveProjectsListPresenter) activeProjectsListView.getPresenter();
-        activeProjectsListPresenter.setActiveProjectList(activeProjectsList.getModelList());
+        //activeProjectsListPresenter.setActiveProjectList(activeProjectsList.getActiveRecordObservableList());
+        activeProjectsListPresenter.setActiveProjectList(activeProjectListRepository.getActiveRecordObservableList());
         activeProjectsTab.setContent(activeProjectsListView.getView());
     }
 
@@ -124,7 +127,7 @@ public class ProjectsManagerPresenter implements Initializable {
         switch (selectedParentTab) {
             case ACTIVE:
                 System.out.println("Active project parent tab selected");
-                System.out.println("selected item: \n" + activeProjectsListPresenter.getSelectedRow().toString() + "\n" + activeProjectsListPresenter.getSelectedRow().getProject_uuid().toString() + "\t" + activeProjectsListPresenter.getSelectedRow().getProject_title());
+                System.out.println("selected item: \n" + activeProjectsListPresenter.getSelectedRow().toString() + "\n" + activeProjectsListPresenter.getSelectedRow().getProjectUUID().toString() + "\t" + activeProjectsListPresenter.getSelectedRow().getProjectTitle());
                 break;
             case ARCHIVED:
                 System.out.println("Archived project parent tab selected");
@@ -254,9 +257,15 @@ public class ProjectsManagerPresenter implements Initializable {
         ProjectDetailsWindowPresenter projectDetailsWindowPresenter = (ProjectDetailsWindowPresenter) projectDetailsWindowView.getPresenter();
         StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
-        ActiveProjectModel tempActiveProjectModel = projectDetailsWindowPresenter.getSelectedActiveProjectModel();
+        //ActiveProjectModel tempActiveProjectModel = projectDetailsWindowPresenter.getSelectedActiveProjectModel();
+        ProjectActiveRecord tempProjectActiveRecord = projectDetailsWindowPresenter.getProjectActiveRecord();
+        /*
         if (tempActiveProjectModel != null) {
-            activeProjectsList.addItem(tempActiveProjectModel);
+            activeProjectListRepository.addItem(tempActiveProjectModel);
+        }
+        */
+        if(tempProjectActiveRecord != null) {
+            activeProjectListRepository.getActiveRecordObservableList().add(tempProjectActiveRecord);
         }
         StageUtils.closeSubStage();
     }

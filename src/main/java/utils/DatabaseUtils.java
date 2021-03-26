@@ -8,7 +8,7 @@ import model.domainobjects.card.ArchivedCardModel;
 import model.domainobjects.card.ColumnCardModel;
 import model.domainobjects.card.TemplateCardModel;
 import model.domainobjects.column.ArchivedColumnModel;
-import model.domainobjects.column.ProjectColumnModel;
+import model.domainobjects.column.ActiveProjectColumnModel;
 import model.domainobjects.column.TemplateColumnModel;
 import model.domainobjects.project.ActiveProjectModel;
 import model.domainobjects.project.ArchivedProjectModel;
@@ -91,7 +91,7 @@ public class DatabaseUtils {
     }
 
     private static void createColumnTables(JdbcConnectionSource connectionSource) throws SQLException{
-        Dao<ProjectColumnModel, UUID> projectColumnModelDao = DaoManager.createDao(connectionSource, ProjectColumnModel.class);
+        Dao<ActiveProjectColumnModel, UUID> projectColumnModelDao = DaoManager.createDao(connectionSource, ActiveProjectColumnModel.class);
         Dao<ArchivedColumnModel, UUID> archivedColumnModelDao = DaoManager.createDao(connectionSource, ArchivedColumnModel.class);
         Dao<TemplateColumnModel, UUID> templateColumnModelDao = DaoManager.createDao(connectionSource, TemplateColumnModel.class);
 

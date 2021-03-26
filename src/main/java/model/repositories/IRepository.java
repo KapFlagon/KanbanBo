@@ -1,4 +1,4 @@
-package model.repository;
+package model.repositories;
 
 import java.io.IOException;
 import java.sql.SQLException;

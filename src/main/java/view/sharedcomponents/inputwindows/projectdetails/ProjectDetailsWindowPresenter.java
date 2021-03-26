@@ -2,11 +2,13 @@ package view.sharedcomponents.inputwindows.projectdetails;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.field.types.UuidType;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
 import utils.DatabaseUtils;
 import utils.StageUtils;
@@ -29,6 +31,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
 
     // Variables
     private ActiveProjectModel selectedActiveProjectModel;
+    private ProjectActiveRecord projectActiveRecord;
 
     // Constructors
 
@@ -62,6 +65,13 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         this.selectedActiveProjectModel = selectedActiveProjectModel;
     }
 
+    public ProjectActiveRecord getProjectActiveRecord() {
+        return projectActiveRecord;
+    }
+    public void setProjectActiveRecord(ProjectActiveRecord projectActiveRecord) {
+        this.projectActiveRecord = projectActiveRecord;
+    }
+
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -71,6 +81,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
 
     // Other methods
     public void saveProjectDetailsChange() throws SQLException, IOException {
+        /*
         // Establish connection
         JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
 
@@ -85,6 +96,15 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         }
         // Close the connection for the data source.
         connectionSource.close();
+
+         */
+
+        if(projectActiveRecord == null) {
+            projectActiveRecord = new ProjectActiveRecord(ActiveProjectModel.class);
+            projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
+        } else {
+            projectActiveRecord.setProjectTitle(getProjectTitleTextField().getText());
+        }
         StageUtils.hideSubStage();
     }
 
@@ -102,7 +122,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
 
     public void cancelProjectDetailsChange() {
         // Close the window, do nothing.
-        StageUtils.closeSubStage();
+        StageUtils.hideSubStage();
     }
 
 

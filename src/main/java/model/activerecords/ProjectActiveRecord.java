@@ -1,4 +1,4 @@
-package model.activerecord;
+package model.activerecords;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -21,40 +21,41 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
 
     // Variables
     protected Class<T> modelClassType;
-    protected T t;
+    protected T projectModel;
     protected Dao<T, UUID> projectDao;
+    // TODO decide whether or not to use a SimpleStringProperty to bridge the UUID.
     protected JdbcConnectionSource connectionSource;
-    protected SimpleStringProperty projectUUID;
     protected SimpleStringProperty projectTitle;
     protected SimpleStringProperty creationTimestamp;
     protected SimpleStringProperty lastChangedTimestamp;
 
 
     // Constructors
-    public void AbstractProjectBridge(Class<T> modelClassType, T t) {
+    public ProjectActiveRecord(Class<T> modelClassType) {
         this.modelClassType = modelClassType;
-        this.t = t;
-        initAllProperties(t);
+    }
+    public ProjectActiveRecord(Class<T> modelClassType, T projectModel) {
+        this.modelClassType = modelClassType;
+        this.projectModel = projectModel;
+        initAllProperties();
         setAllListeners();
     }
 
 
     // Getters and Setters
-    public T getT() {
-        return t;
+    public T getProjectModel() {
+        return projectModel;
     }
-    public void setT(T t) {
-        this.t = t;
+    public void setProjectModel(T projectModel) throws IOException, SQLException {
+        this.projectModel = projectModel;
+        initAllProperties();
+        setAllListeners();
+        createOrUpdateActiveRowInDb();
+        // TODO lazily create UUID (when table entry is made), or actively create it here when detecting a new object?
     }
 
-    public String getProjectUUID() {
-        return projectUUID.get();
-    }
-    public SimpleStringProperty projectUUIDProperty() {
-        return projectUUID;
-    }
-    public void setProjectUUID(String projectUUID) {
-        this.projectUUID.set(projectUUID);
+    public UUID getProjectUUID() {
+        return projectModel.getProject_uuid();
     }
 
     public String getProjectTitle() {
@@ -95,11 +96,11 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
         projectDao = DaoManager.createDao(connectionSource, modelClassType);
     }
 
-    private void initAllProperties(T t) {
-        this.setProjectUUID(t.getProject_uuid().toString());
-        this.setProjectTitle(t.getProject_title().toString());
-        this.setCreationTimestamp(t.getCreation_timestamp().toString());
-        this.setLastChangedTimestamp(t.getLast_changed_timestamp().toString());
+    private void initAllProperties() {
+        //this.projectUUID = new SimpleStringProperty(projectModel.getProject_uuid().toString());
+        this.projectTitle = new SimpleStringProperty(projectModel.getProject_title());
+        this.creationTimestamp = new SimpleStringProperty(projectModel.getCreation_timestamp().toString());
+        this.lastChangedTimestamp = new SimpleStringProperty(projectModel.getLast_changed_timestamp().toString());
     }
 
 
@@ -114,7 +115,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
         ChangeListener<String> changeListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                t.setProject_title(newValue);
+                projectModel.setProject_title(newValue);
                 updateLastChangedTimestamp();
             }
         };
@@ -126,9 +127,9 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Date tempDate = stringToDate(newValue);
-                t.setLast_changed_timestamp(tempDate);
+                projectModel.setLast_changed_timestamp(tempDate);
                 try {
-                    updateDbEntry();
+                    createOrUpdateActiveRowInDb();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 } catch (IOException e) {
@@ -144,6 +145,10 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
         setLastChangedTimestamp(currentTimestamp.toString());
     }
 
+    public void updateLastChangedTimestamp(Date currentTimestamp) {
+        setLastChangedTimestamp(currentTimestamp.toString());
+    }
+
     private Date stringToDate(String dateTimeValue) {
         SimpleDateFormat dateFormat = new SimpleDateFormat();
         Date tempDate = null;
@@ -156,9 +161,9 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
         return tempDate;
     }
 
-    public void updateDbEntry() throws SQLException, IOException {
+    public void createOrUpdateActiveRowInDb() throws SQLException, IOException {
         setupDbConnection();
-        projectDao.update(t);
+        projectDao.createOrUpdate(projectModel);
         teardownDbConnection();
     }
 

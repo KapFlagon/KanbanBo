@@ -1,8 +1,6 @@
-package model.repository;
+package model.repositories;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.domainobjects.project.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,19 +9,38 @@ public class ProjectRepositoryService {
 
 
     // Variables
+    private ActiveProjectListRepository activeProjectListRepository;
+    /*
     private ProjectListRepository<ActiveProjectModel> activeProjectsRepository;
     private ProjectListRepository<ArchivedProjectModel> archivedProjectsRepository;
     private ProjectListRepository<CompletedProjectModel> completedProjectsRepository;
     private ProjectListRepository<TemplateProjectModel> templateProjectsRepository;
     private ObservableList<AbstractProjectModel> openedProjects;
+     */
 
     // Constructors
     public ProjectRepositoryService() throws IOException, SQLException {
-        initAllData();
+        activeProjectListRepository = new ActiveProjectListRepository();
+        activeProjectListRepository.readFromDb();
+        //initAllData();
     }
 
 
     // Getters and Setters
+
+    public ActiveProjectListRepository getActiveProjectListRepository() {
+        return activeProjectListRepository;
+    }
+
+    public void setActiveProjectListRepository(ActiveProjectListRepository activeProjectListRepository) {
+        this.activeProjectListRepository = activeProjectListRepository;
+    }
+
+    public ObservableList getProjectList() {
+        return activeProjectListRepository.getActiveRecordObservableList();
+    }
+
+    /*
     public ProjectListRepository<ActiveProjectModel> getActiveProjectsRepository() {
         return activeProjectsRepository;
     }
@@ -43,9 +60,10 @@ public class ProjectRepositoryService {
     public ObservableList<AbstractProjectModel> getOpenedProjects() {
         return openedProjects;
     }
-
+    */
 
     // Initialisation methods
+    /*
     public void initAllData() throws IOException, SQLException {
         initActiveProjectsRepository();
         initArchivedProjectsRepository();
@@ -77,6 +95,8 @@ public class ProjectRepositoryService {
     public void initOpenedProjects() {
         openedProjects = FXCollections.observableArrayList();
     }
+
+    */
 
     // Other methods
 
