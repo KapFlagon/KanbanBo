@@ -82,6 +82,7 @@ public class ActiveProjectsListPresenter implements Initializable {
     }
     public void setActiveProjectList(ObservableList<ProjectActiveRecord> activeProjectList) {
         this.activeProjectList = activeProjectList;
+        activeProjectListTableView.setItems(activeProjectList);
     }
 
     // Initialisation methods
