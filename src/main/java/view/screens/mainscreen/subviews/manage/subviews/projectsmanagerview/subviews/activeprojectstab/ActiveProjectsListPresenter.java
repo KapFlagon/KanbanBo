@@ -7,13 +7,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Label;
-
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.scene.control.cell.PropertyValueFactory;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
+
 
 public class ActiveProjectsListPresenter implements Initializable {
 
@@ -22,19 +20,16 @@ public class ActiveProjectsListPresenter implements Initializable {
     private TableView activeProjectListTableView;
     @FXML
     private TableColumn<ProjectActiveRecord, String> projectTitleTableCol;
-    //private TableColumn<ActiveProjectModel, String> projectTitleTableCol;
     @FXML
     private TableColumn<ProjectActiveRecord, String> creationDateTableCol;
-    //private TableColumn<ActiveProjectModel, String> creationDateTableCol;
     @FXML
     private TableColumn<ProjectActiveRecord, String> lastChangedDateTableCol;
-    //private TableColumn<ActiveProjectModel, String> lastChangedDateTableCol;
+
 
     // Variables
-    //private ObservableList<ActiveProjectModel> activeProjectList;
     private ObservableList<ProjectActiveRecord> activeProjectList;
     private TableView.TableViewSelectionModel<ProjectActiveRecord> selectionModel;
-    //private TableView.TableViewSelectionModel<ActiveProjectModel> selectionModel;
+
 
     // Constructors
 
@@ -68,15 +63,6 @@ public class ActiveProjectsListPresenter implements Initializable {
         this.lastChangedDateTableCol = lastChangedDateTableCol;
     }
 
-    /*
-    public ObservableList<ActiveProjectModel> getActiveProjectList() {
-        return activeProjectList;
-    }
-    public void setActiveProjectList(ObservableList<ActiveProjectModel> activeProjectList) {
-        this.activeProjectList = activeProjectList;
-        activeProjectListTableView.setItems(activeProjectList);
-    }
-     */
     public ObservableList<ProjectActiveRecord> getActiveProjectList() {
         return activeProjectList;
     }
@@ -85,36 +71,34 @@ public class ActiveProjectsListPresenter implements Initializable {
         activeProjectListTableView.setItems(activeProjectList);
     }
 
+
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initTableView();
+        initSelectionModel();
+        initTableColumns();
+    }
+
+    public void initTableView() {
         activeProjectListTableView.setPlaceholder(new Label ("No active projects in database..."));
+    }
+
+    public void initSelectionModel() {
         selectionModel = activeProjectListTableView.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
+    }
 
-        /*
-        projectTitleTableCol.setCellValueFactory(new PropertyValueFactory<ActiveProjectModel, String>("project_title"));
-        creationDateTableCol.setCellValueFactory(new PropertyValueFactory<ActiveProjectModel, String>("creation_timestamp"));
-        lastChangedDateTableCol.setCellValueFactory(new PropertyValueFactory<ActiveProjectModel, String>("last_changed_timestamp"));
-         */
-
-        //projectTitleTableCol.setCellValueFactory(cellData -> (cellData.getValue().projectTitleProperty()));
-        projectTitleTableCol.setCellValueFactory(new PropertyValueFactory<ProjectActiveRecord, String>("projectTitle"));
+    public void initTableColumns() {
+        projectTitleTableCol.setCellValueFactory(cellData -> (cellData.getValue().projectTitleProperty()));
         creationDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().creationTimestampProperty()));
         lastChangedDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().lastChangedTimestampProperty()));
-
     }
 
     // UI Event methods
 
 
     // Other methods
-    /*
-    public ActiveProjectModel getSelectedRow() {
-        return selectionModel.getSelectedItem();
-    }
-     */
-
     public ProjectActiveRecord<ActiveProjectModel> getSelectedRow() {
         return selectionModel.getSelectedItem();
     }
