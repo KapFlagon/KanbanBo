@@ -7,7 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
-import utils.DatabaseUtils;
+import utils.database.DatabaseUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;

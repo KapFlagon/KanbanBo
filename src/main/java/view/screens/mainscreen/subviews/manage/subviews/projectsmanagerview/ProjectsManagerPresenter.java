@@ -13,8 +13,8 @@ import model.repositories.ProjectRepositoryService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListView;
-import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowPresenter;
-import view.sharedcomponents.inputwindows.projectdetails.ProjectDetailsWindowView;
+import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
+import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -58,9 +58,7 @@ public class ProjectsManagerPresenter implements Initializable {
     private ProjectRepositoryService projectRepositoryService;
 
     // Constructors
-    // TODO pick up here, investigate why data replication has stopped now in the active project table view.
-    // Reading is possible, but it's not pushing data into the table view.
-    // Writing also appears possible, but again it's not pushing the data into the table view.
+
 
     // Getters and Setters
     public TabPane getProjectManagementTabPane() {
@@ -123,6 +121,7 @@ public class ProjectsManagerPresenter implements Initializable {
     }
 
     public void openSelectedProject() {
+        /*
         AvailableTabs selectedParentTab = determineSelectedTab();
         switch (selectedParentTab) {
             case ACTIVE:
@@ -142,6 +141,10 @@ public class ProjectsManagerPresenter implements Initializable {
                 System.out.println("default");
                 break;
         }
+         */
+        System.out.println("Opening project");
+        ProjectActiveRecord par = activeProjectsListPresenter.getSelectedRow();
+        projectRepositoryService.getOpenedActiveProjects().add(par);
     }
 
     public void editProjectDetails() {

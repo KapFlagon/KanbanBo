@@ -1,4 +1,4 @@
-package view.sharedcomponents.inputwindows.projectdetails;
+package view.sharedcomponents.popups.projectdetails;
 
 import com.airhacks.afterburner.views.FXMLView;
 

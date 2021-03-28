@@ -1,9 +1,15 @@
 package view.screens.mainscreen.subviews.workspace;
 
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import model.activerecords.ProjectActiveRecord;
+import model.domainobjects.project.ActiveProjectModel;
 import model.repositories.ProjectRepositoryService;
+import view.screens.mainscreen.subviews.workspace.subviews.projectview.ProjectContainerPresenter;
+import view.screens.mainscreen.subviews.workspace.subviews.projectview.ProjectContainerView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,7 +42,23 @@ public class ProjectWorkspacePresenter implements Initializable {
     }
 
     public void customInit() {
-
+        projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ActiveProjectModel>>() {
+            @Override
+            public void onChanged(Change<? extends ProjectActiveRecord<ActiveProjectModel>> c) {
+                c.next();
+                if (c.wasAdded()) {
+                    System.out.println("Change detected");
+                    Tab tab = new Tab();
+                    ProjectContainerView pcv = new ProjectContainerView();
+                    ProjectContainerPresenter pcp = (ProjectContainerPresenter) pcv.getPresenter();
+                    for (ProjectActiveRecord par : c.getAddedSubList()) {
+                        pcp.setActiveRecord(par);
+                        tab.setContent(pcv.getView());
+                        workspaceTabPane.getTabs().add(tab);
+                    }
+                }
+            }
+        });
     }
 
     // UI event methods

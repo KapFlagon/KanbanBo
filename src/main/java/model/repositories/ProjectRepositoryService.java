@@ -1,6 +1,10 @@
 package model.repositories;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.activerecords.ProjectActiveRecord;
+import model.domainobjects.project.ActiveProjectModel;
+import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -10,6 +14,7 @@ public class ProjectRepositoryService {
 
     // Variables
     private ActiveProjectListRepository activeProjectListRepository;
+    private ObservableList<ProjectActiveRecord<ActiveProjectModel>> openedActiveProjects;
     /*
     private ProjectListRepository<ActiveProjectModel> activeProjectsRepository;
     private ProjectListRepository<ArchivedProjectModel> archivedProjectsRepository;
@@ -22,6 +27,7 @@ public class ProjectRepositoryService {
     public ProjectRepositoryService() throws IOException, SQLException {
         activeProjectListRepository = new ActiveProjectListRepository();
         activeProjectListRepository.readFromDb();
+        openedActiveProjects = FXCollections.observableArrayList();
         //initAllData();
     }
 
@@ -61,6 +67,14 @@ public class ProjectRepositoryService {
         return openedProjects;
     }
     */
+
+    public ObservableList<ProjectActiveRecord<ActiveProjectModel>> getOpenedActiveProjects() {
+        return openedActiveProjects;
+    }
+    public void setOpenedActiveProjects(ObservableList<ProjectActiveRecord<ActiveProjectModel>> openedActiveProjects) {
+        this.openedActiveProjects = openedActiveProjects;
+    }
+
 
     // Initialisation methods
     /*

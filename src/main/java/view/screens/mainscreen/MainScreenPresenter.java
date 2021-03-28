@@ -34,7 +34,6 @@ public class MainScreenPresenter implements Initializable {
 
     // Other variables and fields
     private ProjectRepositoryService projectRepositoryService;
-    private ProjectWorkspaceController projectWorkspaceController;
     private ProjectsManagerView projectsManagerView;
     private ProjectsManagerPresenter projectsManagerPresenter;
     private ProjectWorkspaceView projectWorkspaceView;
@@ -53,7 +52,6 @@ public class MainScreenPresenter implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        projectWorkspaceController = new ProjectWorkspaceController();
 
         projectsManagerView = new ProjectsManagerView();
         projectsManagerPresenter = (ProjectsManagerPresenter) projectsManagerView.getPresenter();
@@ -62,7 +60,7 @@ public class MainScreenPresenter implements Initializable {
 
         projectWorkspaceView = new ProjectWorkspaceView();
         projectWorkspacePresenter = (ProjectWorkspacePresenter) projectWorkspaceView.getPresenter();
-        //projectWorkspacePresenter.setProjectRepositoryService(projectRepositoryService);
+        projectWorkspacePresenter.setProjectRepositoryService(projectRepositoryService);
         workspaceTab.setContent(projectWorkspaceView.getView());
     }
 

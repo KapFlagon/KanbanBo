@@ -92,7 +92,7 @@ public class ProjectWorkspaceController {
     public <T extends AbstractProjectModel> void check(T t) {
         ProjectContainerView projectContainerView = new ProjectContainerView();
         ProjectContainerPresenter projectContainerPresenter = (ProjectContainerPresenter) projectContainerView.getPresenter();
-        projectContainerPresenter.setProjectModel(t);
+        //projectContainerPresenter.setProjectModel(t);
         Tab tab = new Tab();
         tab.setContent(projectContainerView.getView());
     }

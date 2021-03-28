@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import utils.DatabaseUtils;
+import utils.database.DatabaseUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;

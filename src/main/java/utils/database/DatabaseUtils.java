@@ -1,4 +1,4 @@
-package utils;
+package utils.database;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -112,7 +112,6 @@ public class DatabaseUtils {
 
     private static void createSubItemTables(JdbcConnectionSource connectionSource) throws SQLException{
         Dao<LinkedItem, UUID> linkedItemDao = DaoManager.createDao(connectionSource, LinkedItem.class);
-
         TableUtils.createTable(linkedItemDao);
     }
 

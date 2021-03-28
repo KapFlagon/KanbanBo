@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import utils.DatabaseUtils;
+import utils.database.DatabaseUtils;
 import utils.FileChooserUtils;
 import utils.FileCreationUtils;
 import utils.StageUtils;
@@ -126,7 +126,6 @@ public class StartScreenPresenter implements Initializable {
         if(newFile != null) {
             FileCreationUtils.createEmptyDatabaseFile(newFile);
             DatabaseUtils.setActiveDatabaseFile(newFile);
-            DatabaseUtils.initDatabaseTablesInFile();
             System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
             moveToMainSceneView();
         } else {

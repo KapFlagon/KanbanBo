@@ -1,16 +1,12 @@
-package view.sharedcomponents.inputwindows.projectdetails;
+package view.sharedcomponents.popups.projectdetails;
 
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.field.types.UuidType;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
-import utils.DatabaseUtils;
 import utils.StageUtils;
 import java.io.IOException;
 import java.net.URL;

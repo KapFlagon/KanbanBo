@@ -7,8 +7,6 @@ import javafx.stage.Stage;
 import utils.StageUtils;
 import view.screens.startscreen.StartScreenView;
 
-import java.util.UUID;
-
 
 public class KanbanBoApp extends Application {
 

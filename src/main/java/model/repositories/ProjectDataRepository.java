@@ -11,7 +11,7 @@ import model.domainobjects.project.ActiveProjectModel;
 import model.domainobjects.project.ArchivedProjectModel;
 import model.domainobjects.project.CompletedProjectModel;
 import model.domainobjects.project.TemplateProjectModel;
-import utils.DatabaseUtils;
+import utils.database.DatabaseUtils;
 
 public class ProjectDataRepository {//implements IRepository{
 

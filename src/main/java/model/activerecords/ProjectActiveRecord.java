@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import model.domainobjects.project.AbstractProjectModel;
-import utils.DatabaseUtils;
+import utils.database.DatabaseUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
