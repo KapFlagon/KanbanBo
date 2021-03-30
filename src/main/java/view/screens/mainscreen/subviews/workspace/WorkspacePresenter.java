@@ -55,6 +55,8 @@ public class ProjectWorkspacePresenter implements Initializable {
                         pcp.setActiveRecord(par);
                         tab.setContent(pcv.getView());
                         workspaceTabPane.getTabs().add(tab);
+                        tab.setText("Project '" + par.getProjectTitle() + "'");
+                        tab.setClosable(true);
                     }
                 }
             }

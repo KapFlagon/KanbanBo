@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <HBox>
+               <children>
+                  <Label text="Project: " />
+                  <Label fx:id="projectNameLbl" layoutX="10.0" layoutY="10.0" text="Label" />
+               </children>
+            </HBox>
+            <ToolBar>
+              <items>
+                <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createCol" text="Create Column" />
+              </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </top>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+   <center>
+      <ScrollPane BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
