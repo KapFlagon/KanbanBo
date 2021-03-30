@@ -5,11 +5,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.repositories.ProjectRepositoryService;
-import utils.ProjectWorkspaceController;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerView;
-import view.screens.mainscreen.subviews.workspace.ProjectWorkspacePresenter;
-import view.screens.mainscreen.subviews.workspace.ProjectWorkspaceView;
+import view.screens.mainscreen.subviews.workspace.WorkspacePresenter;
+import view.screens.mainscreen.subviews.workspace.WorkspaceView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,8 +35,8 @@ public class MainScreenPresenter implements Initializable {
     private ProjectRepositoryService projectRepositoryService;
     private ProjectsManagerView projectsManagerView;
     private ProjectsManagerPresenter projectsManagerPresenter;
-    private ProjectWorkspaceView projectWorkspaceView;
-    private ProjectWorkspacePresenter projectWorkspacePresenter;
+    private WorkspaceView workspaceView;
+    private WorkspacePresenter workspacePresenter;
 
     // Constructors
 
@@ -58,10 +57,10 @@ public class MainScreenPresenter implements Initializable {
         projectsManagerPresenter.setProjectRepositoryService(projectRepositoryService);
         manageProjectsSubTab.setContent(projectsManagerView.getView());
 
-        projectWorkspaceView = new ProjectWorkspaceView();
-        projectWorkspacePresenter = (ProjectWorkspacePresenter) projectWorkspaceView.getPresenter();
-        projectWorkspacePresenter.setProjectRepositoryService(projectRepositoryService);
-        workspaceTab.setContent(projectWorkspaceView.getView());
+        workspaceView = new WorkspaceView();
+        workspacePresenter = (WorkspacePresenter) workspaceView.getPresenter();
+        workspacePresenter.setProjectRepositoryService(projectRepositoryService);
+        workspaceTab.setContent(workspaceView.getView());
     }
 
 
