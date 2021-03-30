@@ -9,20 +9,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
             <HBox>
                <children>
                   <Label text="Project: " />
-                  <Label fx:id="projectNameLbl" layoutX="10.0" layoutY="10.0" text="Label" />
+                  <Label fx:id="projectTitleLbl" layoutX="10.0" layoutY="10.0" text="Label" />
                </children>
             </HBox>
             <ToolBar>
               <items>
-                <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createCol" text="Create Column" />
+                <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn" text="Create Column" />
               </items>
             </ToolBar>
          </children>

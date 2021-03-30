@@ -1,11 +1,10 @@
-package view.screens.mainscreen.subviews.workspace.subviews.projectview;
+package view.screens.mainscreen.subviews.workspace.subviews.projectcontainer;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import model.activerecords.ProjectActiveRecord;
-import model.domainobjects.project.AbstractProjectModel;
 import model.domainobjects.project.ActiveProjectModel;
 
 import java.net.URL;
@@ -15,11 +14,9 @@ public class ProjectContainerPresenter implements Initializable {
 
     // JavaFX injected node variables
     @FXML
-    private Label titleText;
+    private Label projectTitleLbl;
     @FXML
-    private Label createDate;
-    @FXML
-    private Label lastChanged;
+    private Button createColumnBtn;
 
     // Other variables
     //private AbstractProjectModel projectModel;
@@ -53,12 +50,13 @@ public class ProjectContainerPresenter implements Initializable {
     }
 
     public void customInit() {
-        titleText.setText(activeRecord.getProjectTitle());
-        createDate.setText(activeRecord.getCreationTimestamp());
-        lastChanged.setText(activeRecord.getLastChangedTimestamp());
+        projectTitleLbl.setText(activeRecord.getProjectTitle());
     }
 
     // UI event methods
+    public void createColumn() {
+        System.out.println("Create Column...");
+    }
 
     // Other methods
     private void doTheThings() {
