@@ -8,13 +8,13 @@ import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
 import model.repositories.ProjectRepositoryService;
-import view.screens.mainscreen.subviews.workspace.subviews.projectview.ProjectContainerPresenter;
-import view.screens.mainscreen.subviews.workspace.subviews.projectview.ProjectContainerView;
+import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
+import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ProjectWorkspacePresenter implements Initializable {
+public class WorkspacePresenter implements Initializable {
 
     // JavaFX injected node variables
     @FXML
