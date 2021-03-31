@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="700.0" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter">
     <center>
-        <ScrollPane maxHeight="600.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+        <ScrollPane maxHeight="600.0" BorderPane.alignment="CENTER">
             <content>
                 <VBox fx:id="cardVBox" alignment="TOP_CENTER" spacing="10.0">
                     <padding>
@@ -38,7 +38,7 @@
                     </children>
                 </HBox>
                 <Separator />
-                <ToolBar prefWidth="200.0">
+                <ToolBar prefWidth="150.0">
                     <items>
                         <Button fx:id="addCardBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#addCard" text="Add Card" />
                         <Button mnemonicParsing="false" text="Rename Column" />
