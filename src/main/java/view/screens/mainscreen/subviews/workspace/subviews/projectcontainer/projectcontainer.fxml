@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -31,6 +31,9 @@
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
    <center>
-      <ScrollPane BorderPane.alignment="CENTER" />
+      <ScrollPane prefHeight="300.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <content>
+            <HBox fx:id="columnHBox" alignment="CENTER_LEFT" />
+         </content></ScrollPane>
    </center>
 </BorderPane>
