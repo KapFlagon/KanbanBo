@@ -3,6 +3,7 @@ package view.screens.mainscreen.subviews.workspace;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
@@ -19,6 +20,8 @@ public class WorkspacePresenter implements Initializable {
     // JavaFX injected node variables
     @FXML
     private TabPane workspaceTabPane;
+    @FXML
+    private Label emptyWorkspaceLbl;
 
     // Other variables
     private enum ProjectType {ACTIVE, ARCHIVED, COMPLETED, TEMPLATE}
