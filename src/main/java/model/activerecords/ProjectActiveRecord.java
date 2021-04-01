@@ -155,6 +155,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
         this.teardownDbConnection();
     }
 
+    // TODO make new project building the responsibility of this class
 
 
 
