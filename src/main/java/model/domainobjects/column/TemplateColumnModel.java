@@ -2,7 +2,7 @@ package model.domainobjects.column;
 
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "template_column")
+@DatabaseTable(tableName = "template_project_column")
 public class TemplateColumnModel extends AbstractColumnModel{
 
 
