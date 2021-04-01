@@ -4,8 +4,8 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "column_card")
-public class ColumnCardModel extends AbstractColumnCardModel{
+@DatabaseTable(tableName = "active_column_card")
+public class ActiveColumnCardModel extends AbstractColumnCardModel{
 
 
     // Variables
