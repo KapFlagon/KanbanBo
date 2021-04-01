@@ -6,14 +6,14 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.UUID;
 
-@DatabaseTable(tableName = "column")
+@DatabaseTable(tableName = "abstract_column")
 public abstract class AbstractColumnModel {
 
 
     // Variables
     @DatabaseField(generatedId = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
     private UUID column_uuid;
-    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.STRING)
     private String column_title;
 
     // Constructors
