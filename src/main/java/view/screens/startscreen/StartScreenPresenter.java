@@ -126,6 +126,7 @@ public class StartScreenPresenter implements Initializable {
         if(newFile != null) {
             FileCreationUtils.createEmptyDatabaseFile(newFile);
             DatabaseUtils.setActiveDatabaseFile(newFile);
+            DatabaseUtils.initDatabaseTablesInFile();
             System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
             moveToMainSceneView();
         } else {

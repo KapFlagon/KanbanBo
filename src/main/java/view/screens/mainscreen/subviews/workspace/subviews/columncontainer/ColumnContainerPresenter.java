@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.activerecords.ProjectColumnActiveRecord;
+import model.domainobjects.column.ActiveProjectColumnModel;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,16 +27,28 @@ public class ColumnContainerPresenter implements Initializable {
 
 
     // Other variables
+    private ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord;
     private ObservableList cards;
 
     // Constructors
 
     // Getters & Setters
 
+    public ProjectColumnActiveRecord<ActiveProjectColumnModel> getProjectColumnActiveRecord() {
+        return projectColumnActiveRecord;
+    }
+    public void setProjectColumnActiveRecord(ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord) {
+        this.projectColumnActiveRecord = projectColumnActiveRecord;
+    }
+
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public void customInit() {
+        columnTitleLbl.setText(projectColumnActiveRecord.getColumnTitle());
     }
 
     // UI event methods

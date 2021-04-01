@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.Date;
 import java.util.UUID;
 
-@DatabaseTable(tableName = "project")
+@DatabaseTable(tableName = "abstract_project")
 public abstract class AbstractProjectModel {
 
 

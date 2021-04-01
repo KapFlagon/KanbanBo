@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import model.domainobjects.card.ArchivedCardModel;
-import model.domainobjects.card.ColumnCardModel;
+import model.domainobjects.card.ActiveColumnCardModel;
 import model.domainobjects.card.TemplateCardModel;
 import model.domainobjects.column.ArchivedColumnModel;
 import model.domainobjects.column.ActiveProjectColumnModel;
@@ -101,7 +101,7 @@ public class DatabaseUtils {
     }
 
     private static void createCardTables(JdbcConnectionSource connectionSource) throws SQLException{
-        Dao<ColumnCardModel, UUID> columnCardModelDao = DaoManager.createDao(connectionSource, ColumnCardModel.class);
+        Dao<ActiveColumnCardModel, UUID> columnCardModelDao = DaoManager.createDao(connectionSource, ActiveColumnCardModel.class);
         Dao<ArchivedCardModel, UUID> archivedCardModelDao = DaoManager.createDao(connectionSource, ArchivedCardModel.class);
         Dao<TemplateCardModel, UUID> templateCardModelDao = DaoManager.createDao(connectionSource, TemplateCardModel.class);
 

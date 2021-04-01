@@ -55,7 +55,7 @@ public class WorkspacePresenter implements Initializable {
                     ProjectContainerView pcv = new ProjectContainerView();
                     ProjectContainerPresenter pcp = (ProjectContainerPresenter) pcv.getPresenter();
                     for (ProjectActiveRecord par : c.getAddedSubList()) {
-                        pcp.setActiveRecord(par);
+                        pcp.setProjectActiveRecord(par);
                         tab.setContent(pcv.getView());
                         workspaceTabPane.getTabs().add(tab);
                         tab.setText("Project '" + par.getProjectTitle() + "'");
