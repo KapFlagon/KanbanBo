@@ -2,12 +2,10 @@ package model.activerecords;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import model.domainobjects.project.AbstractProjectModel;
-import utils.database.DatabaseUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -16,15 +14,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class ProjectActiveRecord<T extends AbstractProjectModel> {
+
+public class ProjectActiveRecord<T extends AbstractProjectModel> extends AbstractActiveRecord{
 
 
-    // Variables
-    protected Class<T> modelClassType;
+    // Variables for model objects and DAOs
     protected T projectModel;
     protected Dao<T, UUID> projectDao;
-    // TODO decide whether or not to use a SimpleStringProperty to bridge the UUID.
-    protected JdbcConnectionSource connectionSource;
+    // Variables to act as property containers for the model data
     protected SimpleStringProperty projectTitle;
     protected SimpleStringProperty creationTimestamp;
     protected SimpleStringProperty lastChangedTimestamp;
@@ -32,13 +29,13 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
 
     // Constructors
     public ProjectActiveRecord(Class<T> modelClassType) {
-        this.modelClassType = modelClassType;
+        super(modelClassType);
     }
     public ProjectActiveRecord(Class<T> modelClassType, T projectModel) {
-        this.modelClassType = modelClassType;
+        super(modelClassType);
         this.projectModel = projectModel;
-        initAllProperties();
-        setAllListeners();
+        this.initAllProperties();
+        this.setAllListeners();
     }
 
 
@@ -48,8 +45,8 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
     }
     public void setProjectModel(T projectModel) throws IOException, SQLException {
         this.projectModel = projectModel;
-        initAllProperties();
-        setAllListeners();
+        this.initAllProperties();
+        this.setAllListeners();
         createOrUpdateActiveRowInDb();
         // TODO lazily create UUID (when table entry is made), or actively create it here when detecting a new object?
     }
@@ -88,16 +85,13 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
         this.lastChangedTimestamp.set(lastChangedTimestamp);
     }
 
+
     // Initialisation methods
-    private void initConnectionSource() throws SQLException {
-        connectionSource = DatabaseUtils.getConnectionSource();
-    }
-    private void initDao() throws SQLException {
+    protected void initDao() throws SQLException {
         projectDao = DaoManager.createDao(connectionSource, modelClassType);
     }
 
-    private void initAllProperties() {
-        //this.projectUUID = new SimpleStringProperty(projectModel.getProject_uuid().toString());
+    protected void initAllProperties() {
         this.projectTitle = new SimpleStringProperty(projectModel.getProject_title());
         this.creationTimestamp = new SimpleStringProperty(projectModel.getCreation_timestamp().toString());
         this.lastChangedTimestamp = new SimpleStringProperty(projectModel.getLast_changed_timestamp().toString());
@@ -106,7 +100,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
 
 
     // Other methods
-    private void setAllListeners() {
+    protected void setAllListeners() {
         setProjectTitleListener();
         setLastChangedTimestampListener();
     }
@@ -162,19 +156,12 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> {
     }
 
     public void createOrUpdateActiveRowInDb() throws SQLException, IOException {
-        setupDbConnection();
+        this.setupDbConnection();
         projectDao.createOrUpdate(projectModel);
-        teardownDbConnection();
+        this.teardownDbConnection();
     }
 
-    private void setupDbConnection() throws SQLException {
-        initConnectionSource();
-        initDao();
-    }
 
-    private void teardownDbConnection() throws IOException {
-        connectionSource.close();
-    }
 
 
 
