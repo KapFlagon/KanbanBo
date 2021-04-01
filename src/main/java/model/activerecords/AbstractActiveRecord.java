@@ -1,6 +1,7 @@
 package model.activerecords;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import utils.database.DatabaseUtils;
 import java.io.IOException;
@@ -13,12 +14,12 @@ public abstract class AbstractActiveRecord<T> {
 
     // Variables
     protected JdbcConnectionSource connectionSource;
-    protected Class<T> modelClassType;
+    protected Class<T> domainModelClassType;
     protected Dao<T, UUID> dao;
 
     // Constructors
-    protected AbstractActiveRecord(Class<T> modelClassType) {
-        this.modelClassType = modelClassType;
+    protected AbstractActiveRecord(Class<T> domainModelClassType) {
+        this.domainModelClassType = domainModelClassType;
     }
 
     // Getters and Setters
@@ -29,7 +30,9 @@ public abstract class AbstractActiveRecord<T> {
         connectionSource = DatabaseUtils.getConnectionSource();
     }
 
-    protected abstract void initDao() throws SQLException;
+    protected void initDao() throws SQLException {
+        dao = DaoManager.createDao(connectionSource, domainModelClassType);
+    }
 
     protected abstract void initAllProperties();
 
