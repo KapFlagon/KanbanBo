@@ -1,7 +1,5 @@
 package model.activerecords;
 
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,7 +18,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
 
     // Variables for model objects and DAOs
     protected T projectModel;
-    protected Dao<T, UUID> projectDao;
+    //protected Dao<T, UUID> projectDao;
     // Variables to act as property containers for the model data
     protected SimpleStringProperty projectTitle;
     protected SimpleStringProperty creationTimestamp;
@@ -87,10 +85,6 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
 
 
     // Initialisation methods
-    protected void initDao() throws SQLException {
-        projectDao = DaoManager.createDao(connectionSource, modelClassType);
-    }
-
     protected void initAllProperties() {
         this.projectTitle = new SimpleStringProperty(projectModel.getProject_title());
         this.creationTimestamp = new SimpleStringProperty(projectModel.getCreation_timestamp().toString());
@@ -157,7 +151,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
 
     public void createOrUpdateActiveRowInDb() throws SQLException, IOException {
         this.setupDbConnection();
-        projectDao.createOrUpdate(projectModel);
+        dao.createOrUpdate(projectModel);
         this.teardownDbConnection();
     }
 
