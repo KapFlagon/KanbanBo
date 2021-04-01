@@ -97,6 +97,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
 
         if(projectActiveRecord == null) {
             projectActiveRecord = new ProjectActiveRecord(ActiveProjectModel.class);
+            // TODO make new project building the responsibility of class ProjectActiveRecord
             projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
         } else {
             projectActiveRecord.setProjectTitle(getProjectTitleTextField().getText());
