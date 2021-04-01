@@ -5,7 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 
-@DatabaseTable(tableName = "project_column")
+@DatabaseTable(tableName = "active_project_column")
 public class ActiveProjectColumnModel extends AbstractProjectColumnModel{
 
 
