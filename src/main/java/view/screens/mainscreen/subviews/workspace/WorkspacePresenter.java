@@ -1,6 +1,8 @@
 package view.screens.mainscreen.subviews.workspace;
 
 import javafx.collections.ListChangeListener;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -9,11 +11,13 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
-import model.repositories.ProjectRepositoryService;
+import model.repositories.services.ProjectRepositoryService;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class WorkspacePresenter implements Initializable {
@@ -57,11 +61,25 @@ public class WorkspacePresenter implements Initializable {
                     ProjectContainerView pcv = new ProjectContainerView();
                     ProjectContainerPresenter pcp = (ProjectContainerPresenter) pcv.getPresenter();
                     for (ProjectActiveRecord par : c.getAddedSubList()) {
-                        pcp.setProjectActiveRecord(par);
+                        try {
+                            pcp.setProjectActiveRecord(par);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
                         tab.setContent(pcv.getView());
                         workspaceTabPane.getTabs().add(tab);
                         tab.setText("Project '" + par.getProjectTitle() + "'");
                         tab.setClosable(true);
+                        tab.setOnClosed(new EventHandler<Event>() {
+                            @Override
+                            public void handle(Event event) {
+                                // TODO remove entry from the displayed projects list, need to examine this for bugs
+                                System.out.println("workspace project tab is being closed");
+                                projectRepositoryService.getOpenedActiveProjects().remove(c);
+                            }
+                        });
                         tabPaneSelectionModel.select(tab);
                     }
                 }
