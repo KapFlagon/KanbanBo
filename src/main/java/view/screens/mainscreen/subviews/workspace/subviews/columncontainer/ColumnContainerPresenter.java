@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ActiveProjectColumnModel;
+import model.repositories.services.ProjectColumnRepositoryService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
