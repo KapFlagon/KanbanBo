@@ -7,13 +7,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
-import model.repositories.ProjectRepositoryService;
+import model.repositories.services.ProjectRepositoryService;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerView;
 import view.screens.mainscreen.subviews.workspace.WorkspacePresenter;
 import view.screens.mainscreen.subviews.workspace.WorkspaceView;
-import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
-import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
 
 import java.io.IOException;
 import java.net.URL;
