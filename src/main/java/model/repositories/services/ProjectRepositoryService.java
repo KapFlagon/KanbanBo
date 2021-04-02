@@ -1,9 +1,10 @@
-package model.repositories;
+package model.repositories.services;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
+import model.repositories.ActiveProjectListRepository;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter;
 
 import java.io.IOException;
