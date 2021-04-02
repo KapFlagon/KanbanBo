@@ -142,9 +142,27 @@ public class ProjectsManagerPresenter implements Initializable {
                 break;
         }
          */
-        System.out.println("Opening project");
-        ProjectActiveRecord par = activeProjectsListPresenter.getSelectedRow();
-        projectRepositoryService.getOpenedActiveProjects().add(par);
+        System.out.println("Trying to open project in workspace");
+        ProjectActiveRecord activeRecord = activeProjectsListPresenter.getSelectedRow();
+        if (activeRecord != null) {
+            System.out.println("Project selected is not null");
+            // TODO check if the project is already open in the tab list.
+            if (projectRepositoryService.getOpenedActiveProjects().size() == 0) {
+                System.out.println("No projects opened yet in workspace");
+                projectRepositoryService.getOpenedActiveProjects().add(activeRecord);
+            } else {
+                for (ProjectActiveRecord innerActiveRecord: projectRepositoryService.getOpenedActiveProjects()) {
+                    if (activeRecord.getProjectUUID() != innerActiveRecord.getProjectUUID()) {
+                        projectRepositoryService.getOpenedActiveProjects().add(activeRecord);
+                        System.out.println("Project opened");
+                    } else {
+                        // TODO Logging here
+                        System.out.println("Project already open");
+                    }
+                }
+            }
+
+        }
     }
 
     public void editProjectDetails() {
