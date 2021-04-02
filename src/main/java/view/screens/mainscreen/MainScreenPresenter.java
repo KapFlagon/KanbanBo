@@ -1,14 +1,19 @@
 package view.screens.mainscreen;
 
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import model.activerecords.ProjectActiveRecord;
+import model.domainobjects.project.ActiveProjectModel;
 import model.repositories.ProjectRepositoryService;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerView;
 import view.screens.mainscreen.subviews.workspace.WorkspacePresenter;
 import view.screens.mainscreen.subviews.workspace.WorkspaceView;
+import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
+import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,6 +51,16 @@ public class MainScreenPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             projectRepositoryService = new ProjectRepositoryService();
+            projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ActiveProjectModel>>() {
+                @Override
+                public void onChanged(Change<? extends ProjectActiveRecord<ActiveProjectModel>> c) {
+                    c.next();
+                    if (c.wasAdded()) {
+                        System.out.println("Change detected in main screen");
+                        mainScreenTabPane.getSelectionModel().select(workspaceTab);
+                    }
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException throwables) {

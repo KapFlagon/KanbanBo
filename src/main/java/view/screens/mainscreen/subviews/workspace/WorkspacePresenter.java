@@ -4,6 +4,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
@@ -26,6 +27,7 @@ public class WorkspacePresenter implements Initializable {
     // Other variables
     private enum ProjectType {ACTIVE, ARCHIVED, COMPLETED, TEMPLATE}
     private ProjectRepositoryService projectRepositoryService;
+    private SelectionModel tabPaneSelectionModel;
 
     // Constructors
 
@@ -41,7 +43,7 @@ public class WorkspacePresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        tabPaneSelectionModel = workspaceTabPane.getSelectionModel();
     }
 
     public void customInit() {
@@ -50,7 +52,7 @@ public class WorkspacePresenter implements Initializable {
             public void onChanged(Change<? extends ProjectActiveRecord<ActiveProjectModel>> c) {
                 c.next();
                 if (c.wasAdded()) {
-                    System.out.println("Change detected");
+                    System.out.println("Change detected, new project opened");
                     Tab tab = new Tab();
                     ProjectContainerView pcv = new ProjectContainerView();
                     ProjectContainerPresenter pcp = (ProjectContainerPresenter) pcv.getPresenter();
@@ -60,6 +62,7 @@ public class WorkspacePresenter implements Initializable {
                         workspaceTabPane.getTabs().add(tab);
                         tab.setText("Project '" + par.getProjectTitle() + "'");
                         tab.setClosable(true);
+                        tabPaneSelectionModel.select(tab);
                     }
                 }
             }
