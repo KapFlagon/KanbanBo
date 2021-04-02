@@ -11,6 +11,8 @@ import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ActiveProjectColumnModel;
 import model.domainobjects.project.ActiveProjectModel;
+import model.repositories.ActiveColumnListRepository;
+import model.repositories.services.ProjectColumnRepositoryService;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerView;
 
@@ -32,6 +34,8 @@ public class ProjectContainerPresenter implements Initializable {
     // Other variables
     //private AbstractProjectModel projectModel;
     private ProjectActiveRecord<ActiveProjectModel> projectActiveRecord;
+    private ProjectColumnRepositoryService projectColumnRepositoryService;
+    private ActiveColumnListRepository activeColumnListRepository;
     private ObservableList<ProjectColumnActiveRecord> projectColumnsList;
 
 
@@ -50,7 +54,7 @@ public class ProjectContainerPresenter implements Initializable {
     public ProjectActiveRecord<ActiveProjectModel> getProjectActiveRecord() {
         return projectActiveRecord;
     }
-    public void setProjectActiveRecord(ProjectActiveRecord<ActiveProjectModel> projectActiveRecord) {
+    public void setProjectActiveRecord(ProjectActiveRecord<ActiveProjectModel> projectActiveRecord) throws IOException, SQLException {
         this.projectActiveRecord = projectActiveRecord;
         customInit();
     }
@@ -69,8 +73,17 @@ public class ProjectContainerPresenter implements Initializable {
         projectColumnsList = FXCollections.observableArrayList();
     }
 
-    public void customInit() {
+    public void customInit() throws IOException, SQLException {
         projectTitleLbl.setText(projectActiveRecord.getProjectTitle());
+        projectColumnRepositoryService = new ProjectColumnRepositoryService(projectActiveRecord);
+        projectColumnsList = projectColumnRepositoryService.getColumnsList();
+        for (ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord : projectColumnsList) {
+            ColumnContainerView ccv = new ColumnContainerView();
+            ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
+            ccp.setProjectColumnActiveRecord(projectColumnActiveRecord);
+            columnHBox.getChildren().add(ccv.getView());
+        }
+        activeColumnListRepository = projectColumnRepositoryService.getActiveColumnListRepository();
         // TODO get all column records linked to the project, populate the data.
     }
 
