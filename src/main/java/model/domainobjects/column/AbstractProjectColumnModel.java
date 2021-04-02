@@ -9,9 +9,11 @@ import java.util.UUID;
 @DatabaseTable(tableName = "abstract_project_column")
 public abstract class AbstractProjectColumnModel extends AbstractColumnModel{
 
+    // Constant for query building using database fields
+    public static final String FOREIGN_KEY_NAME = "parent_project_uuid";
 
     // Variables
-    @DatabaseField(canBeNull = false, dataType = DataType.UUID, useGetSet = true)
+    @DatabaseField(canBeNull = false, dataType = DataType.UUID, useGetSet = true, columnName = FOREIGN_KEY_NAME)
     private UUID parent_project_uuid;
 
     // Constructors
