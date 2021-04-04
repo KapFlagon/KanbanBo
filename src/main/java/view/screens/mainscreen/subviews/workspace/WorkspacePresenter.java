@@ -60,9 +60,9 @@ public class WorkspacePresenter implements Initializable {
                     Tab tab = new Tab();
                     ProjectContainerView pcv = new ProjectContainerView();
                     ProjectContainerPresenter pcp = (ProjectContainerPresenter) pcv.getPresenter();
-                    for (ProjectActiveRecord par : c.getAddedSubList()) {
+                    for (ProjectActiveRecord par1 : c.getAddedSubList()) {
                         try {
-                            pcp.setProjectActiveRecord(par);
+                            pcp.setProjectActiveRecord(par1);
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (SQLException throwables) {
@@ -70,14 +70,24 @@ public class WorkspacePresenter implements Initializable {
                         }
                         tab.setContent(pcv.getView());
                         workspaceTabPane.getTabs().add(tab);
-                        tab.setText("Project '" + par.getProjectTitle() + "'");
+                        tab.setText("Project '" + par1.getProjectTitle() + "'");
                         tab.setClosable(true);
+                        // TODO refactor this into another method or something. 
                         tab.setOnClosed(new EventHandler<Event>() {
                             @Override
                             public void handle(Event event) {
-                                // TODO remove entry from the displayed projects list, need to examine this for bugs
                                 System.out.println("workspace project tab is being closed");
-                                projectRepositoryService.getOpenedActiveProjects().remove(c);
+                                int index = -1;
+                                for (int innerIterator = 0; innerIterator < (c.getAddedSubList().size()); innerIterator++) {
+                                    ProjectActiveRecord par2 = c.getAddedSubList().get(innerIterator);
+                                    if (par1.getProjectUUID().equals(par2.getProjectUUID())) {
+                                        index = innerIterator;
+                                    }
+                                }
+                                if (index != -1) {
+                                    projectRepositoryService.getOpenedActiveProjects().remove(index);
+                                    System.out.println("workspace project tab is finally closed");
+                                }
                             }
                         });
                         tabPaneSelectionModel.select(tab);
