@@ -114,8 +114,6 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
         ChangeListener<String> changeListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Date tempDate = stringToDate(newValue);
-                projectModel.setLast_changed_timestamp(tempDate);
                 try {
                     createOrUpdateActiveRowInDb();
                 } catch (SQLException throwables) {
@@ -125,15 +123,17 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
                 }
             }
         };
-        creationTimestamp.addListener(changeListener);
+        lastChangedTimestamp.addListener(changeListener);
     }
 
     public void updateLastChangedTimestamp() {
         Date currentTimestamp = new Date();
+        projectModel.setLast_changed_timestamp(currentTimestamp);
         setLastChangedTimestamp(currentTimestamp.toString());
     }
 
     public void updateLastChangedTimestamp(Date currentTimestamp) {
+        projectModel.setLast_changed_timestamp(currentTimestamp);
         setLastChangedTimestamp(currentTimestamp.toString());
     }
 
