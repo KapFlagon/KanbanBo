@@ -41,7 +41,7 @@
                 <ToolBar prefWidth="150.0">
                     <items>
                         <Button fx:id="addCardBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#addCard" text="Add Card" />
-                        <Button mnemonicParsing="false" text="Rename Column" />
+                        <Button fx:id="renameColumn" mnemonicParsing="false" onAction="#renameColumn" text="Rename Column" />
                         <Button layoutX="10.0" layoutY="12.0" mnemonicParsing="false" text="Move Column" />
                         <Button layoutX="66.0" layoutY="12.0" mnemonicParsing="false" text="Copy Column" />
                         <Button layoutX="96.0" layoutY="42.0" mnemonicParsing="false" text="Save as Template" />
