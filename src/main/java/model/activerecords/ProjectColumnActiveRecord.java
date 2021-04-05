@@ -38,8 +38,10 @@ public class ProjectColumnActiveRecord<T extends AbstractProjectColumnModel> ext
     public ProjectActiveRecord getParentProjectActiveRecord() {
         return parentProjectActiveRecord;
     }
-    public void setParentProjectActiveRecord(ProjectActiveRecord parentProjectActiveRecord) {
+    public void setParentProjectActiveRecord(ProjectActiveRecord parentProjectActiveRecord) throws IOException, SQLException {
         this.parentProjectActiveRecord = parentProjectActiveRecord;
+        this.projectColumnModel.setParent_project_uuid(parentProjectActiveRecord.getProjectUUID());
+        createOrUpdateActiveRowInDb();
     }
 
     public T getProjectColumnModel() {
@@ -80,6 +82,13 @@ public class ProjectColumnActiveRecord<T extends AbstractProjectColumnModel> ext
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 projectColumnModel.setColumn_title(newValue);
+                try {
+                    createOrUpdateActiveRowInDb();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 parentProjectActiveRecord.updateLastChangedTimestamp();
             }
         };
