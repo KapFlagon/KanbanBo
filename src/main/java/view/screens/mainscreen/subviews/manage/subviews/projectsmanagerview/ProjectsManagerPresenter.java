@@ -55,6 +55,8 @@ public class ProjectsManagerPresenter implements Initializable {
     //private ProjectListRepository<ActiveProjectModel> activeProjectsList;
     private ActiveProjectListRepository activeProjectListRepository;
     private ProjectRepositoryService projectRepositoryService;
+    private ProjectDetailsWindowView projectDetailsWindowView;
+    private ProjectDetailsWindowPresenter projectDetailsWindowPresenter;
 
     // Constructors
 
@@ -112,10 +114,16 @@ public class ProjectsManagerPresenter implements Initializable {
         activeProjectsTab.setContent(activeProjectsListView.getView());
     }
 
+    private void initProjectDetailsUI() {
+        projectDetailsWindowView = new ProjectDetailsWindowView();
+        projectDetailsWindowPresenter = (ProjectDetailsWindowPresenter) projectDetailsWindowView.getPresenter();
+    }
+
 
     // UI Events
     public void createNewProject() {
         System.out.println("Creating a new project");
+        initProjectDetailsUI();
         showProjectDetailsWindow();
     }
 
@@ -165,7 +173,16 @@ public class ProjectsManagerPresenter implements Initializable {
     }
 
     public void editProjectDetails() {
-
+        System.out.println("Trying to open project in manager for editing.");
+        ProjectActiveRecord activeRecord = activeProjectsListPresenter.getSelectedRow();
+        if (activeRecord != null) {
+            System.out.println("Project selected is not null");
+            initProjectDetailsUI();
+            projectDetailsWindowPresenter.setProjectActiveRecord(activeRecord);
+            showProjectDetailsWindow();
+        } else {
+            System.out.println("selected project was found to be null");
+        }
     }
 
     public void archiveSelectedProject() {
@@ -273,8 +290,6 @@ public class ProjectsManagerPresenter implements Initializable {
             Old object found, updates are made to DB and to object in the observable list
             Changes are pushed outward from that observable list update.
          */
-        ProjectDetailsWindowView projectDetailsWindowView = new ProjectDetailsWindowView();
-        ProjectDetailsWindowPresenter projectDetailsWindowPresenter = (ProjectDetailsWindowPresenter) projectDetailsWindowView.getPresenter();
         StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
         //ActiveProjectModel tempActiveProjectModel = projectDetailsWindowPresenter.getSelectedActiveProjectModel();
@@ -285,7 +300,15 @@ public class ProjectsManagerPresenter implements Initializable {
         }
         */
         if(tempProjectActiveRecord != null) {
-            activeProjectListRepository.getActiveRecordObservableList().add(tempProjectActiveRecord);
+            boolean toBeCreated = true;
+            for (ProjectActiveRecord par : activeProjectListRepository.getActiveRecordObservableList()) {
+                if (par.getProjectUUID().equals(tempProjectActiveRecord.getProjectUUID())) {
+                    toBeCreated = false;
+                }
+            }
+            if (toBeCreated) {
+                activeProjectListRepository.getActiveRecordObservableList().add(tempProjectActiveRecord);
+            }
         }
         StageUtils.closeSubStage();
     }
