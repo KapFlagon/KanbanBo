@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter">
+    <content>
+      <VBox spacing="10.0">
+         <children>
+                <Label text="Enter Column Details">
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+            </Label>
+            <Separator layoutX="10.0" layoutY="98.0" prefWidth="200.0" />
+                  <Label text="Mandatory data" />
+                  <Label alignment="CENTER" text="Column Title:" />
+                  <TextField fx:id="titleTextField" alignment="CENTER" />
+                  <Separator prefWidth="200.0" />
+                  <Label text="Optional data" />
+            <Separator layoutX="10.0" layoutY="101.0" prefWidth="200.0" />
+                <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                    <children>
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveDetailsChange" text="Save" />
+                        <Button fx:id="cancelButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#cancelDetailsChange" text="Cancel" />
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </HBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+    </content>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</ScrollPane>
