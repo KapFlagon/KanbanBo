@@ -116,7 +116,7 @@ public class ProjectsManagerPresenter implements Initializable {
     // UI Events
     public void createNewProject() {
         System.out.println("Creating a new project");
-        showCreateProjectWindow();
+        showProjectDetailsWindow();
     }
 
     public void openSelectedProject() {
@@ -255,7 +255,7 @@ public class ProjectsManagerPresenter implements Initializable {
         }
     }
 
-    private void showCreateProjectWindow() {
+    private void showProjectDetailsWindow() {
         // TODO 24.03.2021 start here to redesign how data is moved to the project repository service
         /*
         User clicks button to create/edit.
