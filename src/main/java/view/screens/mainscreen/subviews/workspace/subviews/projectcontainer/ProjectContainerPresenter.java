@@ -13,8 +13,11 @@ import model.domainobjects.column.ActiveProjectColumnModel;
 import model.domainobjects.project.ActiveProjectModel;
 import model.repositories.ActiveColumnListRepository;
 import model.repositories.services.ProjectColumnRepositoryService;
+import utils.StageUtils;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerView;
+import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
+import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,6 +40,8 @@ public class ProjectContainerPresenter implements Initializable {
     private ProjectColumnRepositoryService projectColumnRepositoryService;
     private ActiveColumnListRepository activeColumnListRepository;
     private ObservableList<ProjectColumnActiveRecord> projectColumnsList;
+    private ColumnDetailsWindowView columnDetailsWindowView;
+    private ColumnDetailsWindowPresenter columnDetailsWindowPresenter;
 
 
     // Constructors
@@ -87,18 +92,25 @@ public class ProjectContainerPresenter implements Initializable {
         // TODO get all column records linked to the project, populate the data.
     }
 
+    private void initColumnDetailsWindow() {
+        columnDetailsWindowView = new ColumnDetailsWindowView();
+        columnDetailsWindowPresenter = (ColumnDetailsWindowPresenter) columnDetailsWindowView.getPresenter();
+        columnDetailsWindowPresenter.setParentProject(projectActiveRecord);
+    }
+
     // UI event methods
     public void createColumn() throws IOException, SQLException {
         System.out.println("Create Column...");
+        initColumnDetailsWindow();
+        StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
+        StageUtils.showAndWaitOnSubStage();
+        ProjectColumnActiveRecord<ActiveProjectColumnModel> pcar = columnDetailsWindowPresenter.getProjectColumnActiveRecord();
+        pcar.setParentProjectActiveRecord(projectActiveRecord);
+        pcar.getProjectColumnModel().setColumn_position(projectColumnsList.size() + 1);
+        //pcar.createOrUpdateActiveRowInDb();
         ColumnContainerView ccv = new ColumnContainerView();
         ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
         // use ccp to set data in the column data.
-        ProjectColumnActiveRecord<ActiveProjectColumnModel> pcar = new ProjectColumnActiveRecord<ActiveProjectColumnModel>(ActiveProjectColumnModel.class);
-        ActiveProjectColumnModel apcm = new ActiveProjectColumnModel();
-        apcm.setParent_project_uuid(projectActiveRecord.getProjectUUID());
-        apcm.setColumn_position(projectColumnsList.size() + 1);
-        pcar.setProjectColumnModel(apcm);
-        pcar.createOrUpdateActiveRowInDb();
         ccp.setProjectColumnActiveRecord(pcar);
         columnHBox.getChildren().add(ccv.getView());
     }
