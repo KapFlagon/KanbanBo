@@ -66,6 +66,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     }
     public void setProjectActiveRecord(ProjectActiveRecord projectActiveRecord) {
         this.projectActiveRecord = projectActiveRecord;
+        projectTitleTextField.setText(projectActiveRecord.getProjectTitle());
     }
 
     // Initialisation methods
@@ -77,24 +78,6 @@ public class ProjectDetailsWindowPresenter implements Initializable {
 
     // Other methods
     public void saveProjectDetailsChange() throws SQLException, IOException {
-        /*
-        // Establish connection
-        JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
-
-        // Build Data Access Objects (DAOs) for the persisted class.
-        Dao<ActiveProjectModel, UUID> activeProjectModelDao = DaoManager.createDao(connectionSource, ActiveProjectModel.class);
-
-        // Check if current active project instance is blank/new/null.
-        if (getSelectedActiveProjectModel() == null) {
-            createProject(activeProjectModelDao);
-        } else {
-            updateProject(activeProjectModelDao);
-        }
-        // Close the connection for the data source.
-        connectionSource.close();
-
-         */
-
         if(projectActiveRecord == null) {
             projectActiveRecord = new ProjectActiveRecord(ActiveProjectModel.class);
             // TODO make new project building the responsibility of class ProjectActiveRecord
@@ -105,6 +88,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         StageUtils.hideSubStage();
     }
 
+    /*
     public void createProject(Dao<ActiveProjectModel, UUID> dao) throws SQLException {
         selectedActiveProjectModel = buildNewProjectModelInstance();
         // Use the DAO to create the table entry.
@@ -115,7 +99,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         updateSelectedActiveProjectModel();
         dao.update(selectedActiveProjectModel);
     }
-
+*/
 
     public void cancelProjectDetailsChange() {
         // Close the window, do nothing.
@@ -132,9 +116,10 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         return newActiveProjectModel;
     }
 
+    /*
     private void updateSelectedActiveProjectModel() {
         selectedActiveProjectModel.setProject_title(getProjectTitleTextField().getText());
         selectedActiveProjectModel.setLast_changed_timestamp(new Date());
     }
-
+*/
 }
