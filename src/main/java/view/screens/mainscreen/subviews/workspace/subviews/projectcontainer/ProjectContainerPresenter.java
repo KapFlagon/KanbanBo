@@ -105,14 +105,16 @@ public class ProjectContainerPresenter implements Initializable {
         StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
         ProjectColumnActiveRecord<ActiveProjectColumnModel> pcar = columnDetailsWindowPresenter.getProjectColumnActiveRecord();
-        pcar.setParentProjectActiveRecord(projectActiveRecord);
-        pcar.getProjectColumnModel().setColumn_position(projectColumnsList.size() + 1);
-        //pcar.createOrUpdateActiveRowInDb();
-        ColumnContainerView ccv = new ColumnContainerView();
-        ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
-        // use ccp to set data in the column data.
-        ccp.setProjectColumnActiveRecord(pcar);
-        columnHBox.getChildren().add(ccv.getView());
+        if(pcar != null) {
+            pcar.setParentProjectActiveRecord(projectActiveRecord);
+            pcar.getProjectColumnModel().setColumn_position(projectColumnsList.size() + 1);
+            //pcar.createOrUpdateActiveRowInDb();
+            ColumnContainerView ccv = new ColumnContainerView();
+            ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
+            // use ccp to set data in the column data.
+            ccp.setProjectColumnActiveRecord(pcar);
+            columnHBox.getChildren().add(ccv.getView());
+        }
     }
 
     // Other methods
