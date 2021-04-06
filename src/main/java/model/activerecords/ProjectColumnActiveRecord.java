@@ -1,6 +1,5 @@
 package model.activerecords;
 
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,7 +15,6 @@ public class ProjectColumnActiveRecord<T extends AbstractProjectColumnModel> ext
     // Variables for model objects and DAOs
     protected ProjectActiveRecord parentProjectActiveRecord;
     protected T projectColumnModel;
-    protected JdbcConnectionSource connectionSource;
 
     // Variables to act as property containers for the model data
     protected SimpleStringProperty columnTitle;
