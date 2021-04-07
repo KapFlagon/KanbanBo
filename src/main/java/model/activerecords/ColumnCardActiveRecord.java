@@ -4,7 +4,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import model.domainobjects.card.AbstractColumnCardModel;
-import model.domainobjects.column.AbstractProjectColumnModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,8 +16,8 @@ public class ColumnCardActiveRecord <T extends AbstractColumnCardModel> extends 
 
 
     // Variables to act as property containers for the model data
-    protected SimpleStringProperty columnTitle;
-    protected SimpleStringProperty columnDescription;
+    protected SimpleStringProperty cardTitle;
+    protected SimpleStringProperty cardDescription;
 
 
     // Constructors
@@ -36,32 +35,39 @@ public class ColumnCardActiveRecord <T extends AbstractColumnCardModel> extends 
 
 
     // Getters and Setters
-    public String getColumnTitle() {
-        return columnTitle.get();
+    public T getColumnCardModel() {
+        return columnCardModel;
     }
-    public SimpleStringProperty columnTitleProperty() {
-        return columnTitle;
-    }
-    public void setColumnTitle(String columnTitle) {
-        this.columnTitle.set(columnTitle);
+    public void setColumnCardModel(T columnCardModel) {
+        this.columnCardModel = columnCardModel;
     }
 
-    public String getColumnDescription() {
-        return columnDescription.get();
+    public String getCardTitle() {
+        return cardTitle.get();
     }
-    public SimpleStringProperty columnDescriptionProperty() {
-        return columnDescription;
+    public SimpleStringProperty cardTitleProperty() {
+        return cardTitle;
     }
-    public void setColumnDescription(String columnDescription) {
-        this.columnDescription.set(columnDescription);
+    public void setCardTitle(String cardTitle) {
+        this.cardTitle.set(cardTitle);
     }
 
-    
+    public String getCardDescription() {
+        return cardDescription.get();
+    }
+    public SimpleStringProperty cardDescriptionProperty() {
+        return cardDescription;
+    }
+    public void setCardDescription(String cardDescription) {
+        this.cardDescription.set(cardDescription);
+    }
+
+
     // Initialisation methods
     @Override
     protected void initAllProperties() {
-        this.columnTitle = new SimpleStringProperty(columnCardModel.getCard_title());
-        this.columnDescription = new SimpleStringProperty(columnCardModel.getCard_description_text());
+        this.cardTitle = new SimpleStringProperty(columnCardModel.getCard_title());
+        this.cardDescription = new SimpleStringProperty(columnCardModel.getCard_description_text());
     }
 
 
@@ -87,7 +93,7 @@ public class ColumnCardActiveRecord <T extends AbstractColumnCardModel> extends 
                 parentColumnActiveRecord.getParentProjectActiveRecord().updateLastChangedTimestamp();
             }
         };
-        columnTitle.addListener(changeListener);
+        cardTitle.addListener(changeListener);
     }
 
     private void setCardDescriptionListener() {
@@ -105,7 +111,7 @@ public class ColumnCardActiveRecord <T extends AbstractColumnCardModel> extends 
                 parentColumnActiveRecord.getParentProjectActiveRecord().updateLastChangedTimestamp();
             }
         };
-        columnDescription.addListener(changeListener);
+        cardDescription.addListener(changeListener);
     }
 
     @Override

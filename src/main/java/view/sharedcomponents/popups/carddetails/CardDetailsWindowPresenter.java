@@ -6,6 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.activerecords.ColumnCardActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
+import model.domainobjects.card.ActiveColumnCardModel;
 import model.domainobjects.column.ActiveProjectColumnModel;
 import utils.StageUtils;
 
@@ -23,8 +24,8 @@ public class CardDetailsWindowPresenter implements Initializable {
     private TextArea descriptionText;
 
     // Other variables
-    private ProjectColumnActiveRecord parentColumnActiveRecord;
-    private ColumnCardActiveRecord columnCardActiveRecord;
+    private ProjectColumnActiveRecord<ActiveProjectColumnModel> parentColumnActiveRecord;
+    private ColumnCardActiveRecord<ActiveColumnCardModel> columnCardActiveRecord;
 
     // Constructors
 
@@ -41,7 +42,8 @@ public class CardDetailsWindowPresenter implements Initializable {
     }
     public void setColumnCardActiveRecord(ColumnCardActiveRecord columnCardActiveRecord) {
         this.columnCardActiveRecord = columnCardActiveRecord;
-
+        this.titleTextField.setText(columnCardActiveRecord.getCardTitle());
+        this.descriptionText.setText(columnCardActiveRecord.getCardDescription());
     }
 
     // Initialization methods
@@ -52,16 +54,15 @@ public class CardDetailsWindowPresenter implements Initializable {
 
     // UI event methods
     public void saveDetailsChange() throws IOException, SQLException {
-        /*
-        if(projectColumnActiveRecord == null) {
-            projectColumnActiveRecord = new ProjectColumnActiveRecord(ActiveProjectColumnModel.class);
+        if(columnCardActiveRecord == null) {
+            columnCardActiveRecord = new ColumnCardActiveRecord<>(ActiveColumnCardModel.class);
             // TODO make new project building the responsibility of class ProjectActiveRecord
-            projectColumnActiveRecord.setProjectColumnModel(buildNewColumnModelInstance());
+            columnCardActiveRecord.setColumnCardModel(buildNewCardModelInstance());
         } else {
-            projectColumnActiveRecord.setColumnTitle(titleTextField.getText());
+            columnCardActiveRecord.setCardTitle(titleTextField.getText());
+            columnCardActiveRecord.setCardDescription(descriptionText.getText());
         }
         StageUtils.hideSubStage();
-         */
     }
 
 
@@ -71,14 +72,13 @@ public class CardDetailsWindowPresenter implements Initializable {
     }
 
     // Other methods
-    /*
-    private ActiveProjectColumnModel buildNewColumnModelInstance() {
+    private ActiveColumnCardModel buildNewCardModelInstance() {
         // Create blank column instance, and populate with data.
-        ActiveProjectColumnModel activeProjectColumnModel = new ActiveProjectColumnModel();
-        activeProjectColumnModel.setColumn_title(titleTextField.getText());
-        activeProjectColumnModel.setParent_project_uuid(parentProject.getProjectUUID());
-        return activeProjectColumnModel;
+        ActiveColumnCardModel activeColumnCardModel = new ActiveColumnCardModel();
+        activeColumnCardModel.setCard_title(titleTextField.getText());
+        activeColumnCardModel.setCard_description_text(descriptionText.getText());
+        activeColumnCardModel.setParent_column(parentColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
+        return activeColumnCardModel;
     }
-     */
 
 }

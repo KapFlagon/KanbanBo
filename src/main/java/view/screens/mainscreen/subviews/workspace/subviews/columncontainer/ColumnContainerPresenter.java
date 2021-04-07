@@ -1,5 +1,6 @@
 package view.screens.mainscreen.subviews.workspace.subviews.columncontainer;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,11 +8,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.activerecords.ColumnCardActiveRecord;
 import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
+import model.domainobjects.card.ActiveColumnCardModel;
 import model.domainobjects.column.ActiveProjectColumnModel;
 import model.repositories.services.ProjectColumnRepositoryService;
 import utils.StageUtils;
+import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter;
+import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerView;
+import view.sharedcomponents.popups.carddetails.CardDetailsWindowPresenter;
+import view.sharedcomponents.popups.carddetails.CardDetailsWindowView;
 import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowView;
 
@@ -33,9 +40,11 @@ public class ColumnContainerPresenter implements Initializable {
 
     // Other variables
     private ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord;
-    private ObservableList cards;
+    private ObservableList cardsList;
     private ColumnDetailsWindowView columnDetailsWindowView;
     private ColumnDetailsWindowPresenter columnDetailsWindowPresenter;
+    private CardDetailsWindowView cardDetailsWindowView;
+    private CardDetailsWindowPresenter cardDetailsWindowPresenter;
 
     // Constructors
 
@@ -53,7 +62,7 @@ public class ColumnContainerPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        cardsList = FXCollections.observableArrayList();
     }
 
     public void customInit() {
@@ -66,10 +75,29 @@ public class ColumnContainerPresenter implements Initializable {
         columnDetailsWindowPresenter.setProjectColumnActiveRecord(projectColumnActiveRecord);
     }
 
+    private void initCardDetailsWindow() {
+        cardDetailsWindowView = new CardDetailsWindowView();
+        cardDetailsWindowPresenter = (CardDetailsWindowPresenter) cardDetailsWindowView.getPresenter();
+        cardDetailsWindowPresenter.setParentColumnActiveRecord(projectColumnActiveRecord);
+    }
+
 
     // UI event methods
     public void addCard() {
         System.out.println("Adding card");
+        initCardDetailsWindow();
+        StageUtils.createChildStage("Enter Card Details", cardDetailsWindowView.getView());
+        StageUtils.showAndWaitOnSubStage();
+        ColumnCardActiveRecord<ActiveColumnCardModel> ccar = cardDetailsWindowPresenter.getColumnCardActiveRecord();
+        if(ccar != null) {
+            ccar.getColumnCardModel().setParent_column(projectColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
+            ccar.getColumnCardModel().setCard_position(cardsList.size() + 1);
+            CardContainerView ccv = new CardContainerView();
+            CardContainerPresenter ccp = (CardContainerPresenter) ccv.getPresenter();
+            // use ccp to set data in the column data.
+            ccp.setColumnCardActiveRecord(ccar);
+            cardVBox.getChildren().add(ccv.getView());
+        }
     }
 
     public void renameColumn() {
