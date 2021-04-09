@@ -7,6 +7,7 @@ module KanbanBo.main {
     requires ormlite.core;
     requires ormlite.jdbc;
     requires java.sql;
+    requires java.prefs;
 
     opens driver to javafx.fxml;
 
