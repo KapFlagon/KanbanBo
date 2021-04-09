@@ -40,6 +40,8 @@ public class ColumnCardActiveRecord <T extends AbstractColumnCardModel> extends 
     }
     public void setColumnCardModel(T columnCardModel) {
         this.columnCardModel = columnCardModel;
+        initAllProperties();
+        setAllListeners();
     }
 
     public String getCardTitle() {
