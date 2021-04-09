@@ -4,20 +4,27 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import user.preferences.UserPreferences;
 import utils.database.DatabaseUtils;
 import utils.FileChooserUtils;
 import utils.FileCreationUtils;
 import utils.StageUtils;
 import view.screens.mainscreen.MainScreenPresenter;
 import view.screens.mainscreen.MainScreenView;
+import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
+import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter;
+import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListView;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.prefs.BackingStoreException;
 
 public class StartScreenPresenter implements Initializable {
 
@@ -27,11 +34,15 @@ public class StartScreenPresenter implements Initializable {
     @FXML
     private Button newDbButton;
     @FXML
-    private Button openDbButton;
+    private Button browseForDbButton;
+    @FXML
+    private CheckBox autoLoadCheckBox;
     @FXML
     private MenuItem newDbMenuItem;
     @FXML
-    private MenuItem openDbMenuItem;
+    private MenuItem browseForDbMenuItem;
+    @FXML
+    private CheckMenuItem autoLoadCheckMenuItem;
     @FXML
     private MenuItem exitMenuItem;
     @FXML
@@ -40,6 +51,7 @@ public class StartScreenPresenter implements Initializable {
     private MenuItem repoMenuItem;
 
     // Other variables
+
 
 
     // Constructors
@@ -62,12 +74,12 @@ public class StartScreenPresenter implements Initializable {
         this.newDbButton = newDbButton;
     }
 
-    public Button getOpenDbButton() {
-        return openDbButton;
+    public Button getBrowseForDbButton() {
+        return browseForDbButton;
     }
 
-    public void setOpenDbButton(Button openDbButton) {
-        this.openDbButton = openDbButton;
+    public void setBrowseForDbButton(Button browseForDbButton) {
+        this.browseForDbButton = browseForDbButton;
     }
 
     public MenuItem getNewDbMenuItem() {
@@ -78,12 +90,12 @@ public class StartScreenPresenter implements Initializable {
         this.newDbMenuItem = newDbMenuItem;
     }
 
-    public MenuItem getOpenDbMenuItem() {
-        return openDbMenuItem;
+    public MenuItem getBrowseForDbMenuItem() {
+        return browseForDbMenuItem;
     }
 
-    public void setOpenDbMenuItem(MenuItem openDbMenuItem) {
-        this.openDbMenuItem = openDbMenuItem;
+    public void setBrowseForDbMenuItem(MenuItem browseForDbMenuItem) {
+        this.browseForDbMenuItem = browseForDbMenuItem;
     }
 
     public MenuItem getExitMenuItem() {
@@ -116,11 +128,17 @@ public class StartScreenPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         StageUtils.getMainStage().setTitle("KanbanBo - Database file selection");
         System.out.println("Start screen loaded");
+        autoLoadCheckBox.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
+        autoLoadCheckMenuItem.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
+        RecentFilesListView rflv = new RecentFilesListView();
+        RecentFilesListPresenter rflp = (RecentFilesListPresenter) rflv.getPresenter();
+        rflp.setRecentFilePathList(UserPreferences.getSingletonInstance().getRecentFilePaths());
+        borderPane.setCenter(rflv.getView());
     }
 
 
     // Other methods
-    public void createDbFile() throws IOException, SQLException {
+    public void createDbFile() throws IOException, SQLException, BackingStoreException {
         System.out.println("creating");
         File newFile = FileChooserUtils.createFilePopup();
         if(newFile != null) {
@@ -128,6 +146,7 @@ public class StartScreenPresenter implements Initializable {
             DatabaseUtils.setActiveDatabaseFile(newFile);
             DatabaseUtils.initDatabaseTablesInFile();
             System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
+            UserPreferences.getSingletonInstance().addRecentFilePath(newFile.toPath());
             moveToMainSceneView();
         } else {
             // Accounting for scenario where user cancels file creation.
@@ -137,13 +156,14 @@ public class StartScreenPresenter implements Initializable {
     }
 
 
-    public void openDbFile() {
-        System.out.println("opening");
+    public void browseForDbFile() throws BackingStoreException {
+        System.out.println("browsing for database file");
         File selectedFile = FileChooserUtils.openFilePopup();
         if (selectedFile != null) {
             // Accounting for scenario where user cancels opening file.
             DatabaseUtils.setActiveDatabaseFile(selectedFile);
             System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
+            UserPreferences.getSingletonInstance().addRecentFilePath(selectedFile.toPath());
             moveToMainSceneView();
         } else {
             System.out.println("File opening cancelled");
@@ -179,6 +199,21 @@ public class StartScreenPresenter implements Initializable {
         MainScreenView view = new MainScreenView();
         MainScreenPresenter presenter = (MainScreenPresenter) view.getPresenter();
         StageUtils.changeMainScene("KanbanBo - Project manager", view);
+    }
+
+    public void autoLoadCheckMenuItemClicked() throws BackingStoreException {
+        updateAutoLoad(autoLoadCheckMenuItem.isSelected());
+        autoLoadCheckBox.setSelected(autoLoadCheckMenuItem.isSelected());
+    }
+
+    public void autoLoadCheckBoxClicked() throws BackingStoreException {
+        updateAutoLoad(autoLoadCheckBox.isSelected());
+        autoLoadCheckMenuItem.setSelected(autoLoadCheckBox.isSelected());
+    }
+
+    public void updateAutoLoad(boolean value) throws BackingStoreException {
+        UserPreferences.getSingletonInstance().setOpeningMostRecentAutomatically(value);
+        System.out.println("autoload value: " + value);
     }
 
 }
