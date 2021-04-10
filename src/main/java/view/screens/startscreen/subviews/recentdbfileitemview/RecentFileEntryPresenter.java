@@ -51,4 +51,7 @@ public class RecentFileEntryPresenter implements Initializable {
         return fileNamePath.substring(0, charIndex);
     }
 
+    // TODO Handle scenario if file does not actually exist.
+    // TODO Give user a chance to remove an entry from the list (and the preferences, etc.).
+
 }
