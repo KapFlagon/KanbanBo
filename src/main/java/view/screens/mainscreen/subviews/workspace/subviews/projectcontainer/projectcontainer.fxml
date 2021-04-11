@@ -33,7 +33,10 @@
    <center>
       <ScrollPane prefHeight="300.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <content>
-            <HBox fx:id="columnHBox" alignment="CENTER_LEFT" />
+            <HBox fx:id="columnHBox" alignment="CENTER_LEFT" spacing="5.0">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding></HBox>
          </content></ScrollPane>
    </center>
 </BorderPane>
