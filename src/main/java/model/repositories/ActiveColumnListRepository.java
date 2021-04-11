@@ -38,8 +38,6 @@ public class ActiveColumnListRepository {
     }
 
     // Getters and Setters
-
-
     public ObservableList<ProjectColumnActiveRecord> getActiveRecordObservableList() {
         return activeRecordObservableList;
     }
