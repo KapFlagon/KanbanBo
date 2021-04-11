@@ -7,6 +7,7 @@ import model.domainobjects.column.AbstractProjectColumnModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 
 public class ProjectColumnActiveRecord<T extends AbstractProjectColumnModel> extends AbstractActiveRecord{
@@ -59,6 +60,10 @@ public class ProjectColumnActiveRecord<T extends AbstractProjectColumnModel> ext
     }
     public void setColumnTitle(String columnTitle) {
         this.columnTitle.set(columnTitle);
+    }
+
+    public UUID getColumnUUID() {
+        return projectColumnModel.getColumn_uuid();
     }
 
 
