@@ -29,7 +29,6 @@ public class ProjectColumnRepositoryService {
     public ActiveColumnListRepository getActiveColumnListRepository() {
         return activeColumnListRepository;
     }
-
     public void setActiveColumnListRepository(ActiveColumnListRepository activeColumnListRepository) {
         this.activeColumnListRepository = activeColumnListRepository;
     }
