@@ -108,7 +108,7 @@ public class ProjectContainerPresenter implements Initializable {
         if(pcar != null) {
             pcar.setParentProjectActiveRecord(projectActiveRecord);
             pcar.getProjectColumnModel().setColumn_position(projectColumnsList.size() + 1);
-            //pcar.createOrUpdateActiveRowInDb();
+            projectColumnsList.add(pcar);
             ColumnContainerView ccv = new ColumnContainerView();
             ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
             // use ccp to set data in the column data.
