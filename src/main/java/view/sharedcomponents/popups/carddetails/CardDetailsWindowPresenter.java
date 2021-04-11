@@ -77,7 +77,7 @@ public class CardDetailsWindowPresenter implements Initializable {
         ActiveColumnCardModel activeColumnCardModel = new ActiveColumnCardModel();
         activeColumnCardModel.setCard_title(titleTextField.getText());
         activeColumnCardModel.setCard_description_text(descriptionText.getText());
-        activeColumnCardModel.setParent_column(parentColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
+        activeColumnCardModel.setParent_column_uuid(parentColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
         return activeColumnCardModel;
     }
 
