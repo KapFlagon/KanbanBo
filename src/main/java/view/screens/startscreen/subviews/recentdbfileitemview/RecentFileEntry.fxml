@@ -2,37 +2,64 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#itemSelected" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter">
-   <children>
-      <VBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-         <children>
-            <Label fx:id="titleLabel" text="Title" wrapText="true">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Label>
-            <Label fx:id="pathLabel" text="Path" wrapText="true">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </Label>
-         </children>
-      </VBox>
-   </children>
+<VBox onMouseClicked="#itemSelected" spacing="5.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter">
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
-</AnchorPane>
+   <children>
+      <HBox>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+         <children>
+            <Label fx:id="titleLabel" text="Title" wrapText="true">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+            <Label text="Status:">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="35.0" right="5.0" top="5.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="35.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="pathStatusLbl" layoutX="57.0" layoutY="15.0" text="Label">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox>
+         <VBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+         <children>
+            <Label fx:id="pathLabel" text="Path" wrapText="true">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <MenuButton alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT">
+              <items>
+                <MenuItem fx:id="openItemMenuItem" mnemonicParsing="false" onAction="#openItem" text="Open" />
+                <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="Remove from List" />
+              </items>
+            </MenuButton>
+         </children>
+      </HBox>
+   </children>
+</VBox>
