@@ -42,11 +42,6 @@
                     <items>
                         <Button fx:id="addCardBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#addCard" text="Add Card" />
                         <Button fx:id="renameColumn" mnemonicParsing="false" onAction="#renameColumn" text="Rename Column" />
-                        <Button layoutX="10.0" layoutY="12.0" mnemonicParsing="false" text="Move Column" />
-                        <Button layoutX="66.0" layoutY="12.0" mnemonicParsing="false" text="Copy Column" />
-                        <Button layoutX="96.0" layoutY="42.0" mnemonicParsing="false" text="Save as Template" />
-                        <Button layoutX="86.0" layoutY="32.0" mnemonicParsing="false" text="Archive Column" />
-                        <Button layoutX="76.0" layoutY="22.0" mnemonicParsing="false" text="Delete Column" />
                     </items>
                 </ToolBar>
             </children>
