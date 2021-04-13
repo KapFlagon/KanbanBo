@@ -3,7 +3,9 @@ package view.screens.startscreen.subviews.recentdbfileitemview;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
@@ -15,9 +17,16 @@ public class RecentFileEntryPresenter implements Initializable {
     private Label titleLabel;
     @FXML
     private Label pathLabel;
+    @FXML
+    private Label pathStatusLbl;
+    @FXML
+    private MenuItem openItemMenuItem;
+    @FXML
+    private MenuItem removeItemMenuItem;
 
     // Other variables
     private Path itemPath;
+    private boolean fileExists ;
 
     // Constructors
 
@@ -27,6 +36,14 @@ public class RecentFileEntryPresenter implements Initializable {
     }
     public void setItemPath(Path itemPath) {
         this.itemPath = itemPath;
+        validatePathAsFile();
+        if (fileExists) {
+            pathStatusLbl.setText("File exists");
+        } else {
+            pathStatusLbl.setText("File does not exist!");
+            openItemMenuItem.setVisible(false);
+            openItemMenuItem.setDisable(true);
+        }
         this.pathLabel.setText(itemPath.toString());
         this.titleLabel.setText(getFileNameWithoutExtension());
     }
@@ -40,11 +57,34 @@ public class RecentFileEntryPresenter implements Initializable {
 
     // UI event methods
     public void itemSelected() {
-        System.out.println("Item Selected: " + titleLabel.getText());
+        String validationState;
+        if(fileExists) {
+            validationState = "and file exists";
+        } else {
+            validationState = "and file doesn't exist";
+        }
+        System.out.println("Item Selected: " + titleLabel.getText() + " , " + validationState);
         // TODO push this upwards and change the scene/window
     }
 
+    public void openItem() {
+        System.out.println("Opening the selected item");
+    }
+
+    public void removeItem() {
+        System.out.println("Removing the selected item from the list");
+    }
+
     // Other methods
+    private void validatePathAsFile(){
+        File tempFile = itemPath.toFile();
+        if(tempFile.exists()) {
+            fileExists = true;
+        } else {
+            fileExists = false;
+        }
+    }
+
     private String getFileNameWithoutExtension() {
         String fileNamePath = itemPath.getFileName().toString();
         int charIndex = fileNamePath.indexOf('.');
