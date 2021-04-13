@@ -57,4 +57,6 @@ public class RecentFilesListPresenter implements Initializable {
         }
     }
 
+    // TODO if item is removed, push change to the UI
+
 }
