@@ -1,5 +1,8 @@
 package user.preferences;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ public class UserPreferences {
     private final String KEY_recentFilePaths = "recent_item_";
     private Preferences preferences;
     private boolean openingMostRecentAutomatically;
-    private List<Path> recentFilePaths;
+    private ObservableList<Path> recentFilePaths;
 
 
     // Constructors
@@ -25,7 +28,7 @@ public class UserPreferences {
         Preferences root = Preferences.userRoot();
         preferences = root.node("KanbanBo");
         openingMostRecentAutomatically = false;
-        recentFilePaths = new ArrayList<Path>();
+        recentFilePaths = FXCollections.observableArrayList();
         loadAllPreferences();
     }
 
@@ -44,7 +47,7 @@ public class UserPreferences {
         saveAutoLoadValue();
     }
 
-    public List<Path> getRecentFilePaths() {
+    public ObservableList<Path> getRecentFilePaths() {
         return recentFilePaths;
     }
     public Path getMostRecentPath() {
