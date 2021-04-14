@@ -1,5 +1,6 @@
 package view.screens.startscreen.subviews.recentdbfileitemview;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -27,6 +28,7 @@ public class RecentFileEntryPresenter implements Initializable {
     // Other variables
     private Path itemPath;
     private boolean fileExists ;
+    private SimpleBooleanProperty beingDeleted;
 
     // Constructors
 
@@ -48,11 +50,20 @@ public class RecentFileEntryPresenter implements Initializable {
         this.titleLabel.setText(getFileNameWithoutExtension());
     }
 
+    public boolean isBeingDeleted() {
+        return beingDeleted.get();
+    }
+    public SimpleBooleanProperty beingDeletedProperty() {
+        return beingDeleted;
+    }
+    public void setBeingDeleted(boolean beingDeleted) {
+        this.beingDeleted.set(beingDeleted);
+    }
 
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        beingDeleted = new SimpleBooleanProperty(false);
     }
 
     // UI event methods
@@ -73,6 +84,7 @@ public class RecentFileEntryPresenter implements Initializable {
 
     public void removeItem() {
         System.out.println("Removing the selected item from the list");
+        setBeingDeleted(true);
     }
 
     // Other methods
