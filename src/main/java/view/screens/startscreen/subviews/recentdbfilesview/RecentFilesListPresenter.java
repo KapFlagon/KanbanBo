@@ -1,5 +1,8 @@
 package view.screens.startscreen.subviews.recentdbfilesview;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -20,7 +23,7 @@ public class RecentFilesListPresenter implements Initializable {
     private VBox recentFilesVBox;
 
     // Other variables
-    private List<Path> recentFilePathList;
+    private ObservableList<Path> recentFilePathList;
 
     // Constructors
 
@@ -28,7 +31,7 @@ public class RecentFilesListPresenter implements Initializable {
     public List<Path> getRecentFilePathList() {
         return recentFilePathList;
     }
-    public void setRecentFilePathList(List<Path> recentFilePathList) {
+    public void setRecentFilePathList(ObservableList<Path> recentFilePathList) {
         this.recentFilePathList = recentFilePathList;
         createFileEntriesInView();
     }
@@ -49,6 +52,19 @@ public class RecentFilesListPresenter implements Initializable {
                 RecentFileEntryView view = new RecentFileEntryView();
                 RecentFileEntryPresenter presenter = (RecentFileEntryPresenter) view.getPresenter();
                 presenter.setItemPath(pathEntry);
+                presenter.beingDeletedProperty().addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        System.out.println("change detected in boolean");
+                        if (newValue) {
+                            System.out.println("if passed");
+                            UserPreferences.getSingletonInstance().removeRecentFilePath(presenter.getItemPath());
+                            recentFilePathList.remove(presenter.getItemPath());
+                            recentFilesVBox.getChildren().clear();
+                            createFileEntriesInView();
+                        }
+                    }
+                });
                 recentFilesVBox.getChildren().add(view.getView());
             }
         } else {
