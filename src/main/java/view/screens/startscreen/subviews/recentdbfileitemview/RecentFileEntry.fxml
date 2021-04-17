@@ -12,7 +12,7 @@
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
    <children>
-      <HBox>
+      <HBox spacing="5.0">
          <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
@@ -42,8 +42,11 @@
                </HBox.margin>
             </Label>
          </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
       </HBox>
-      <HBox>
+      <HBox spacing="5.0">
          <VBox.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
@@ -52,14 +55,23 @@
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
             </Label>
             <MenuButton alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT">
               <items>
                 <MenuItem fx:id="openItemMenuItem" mnemonicParsing="false" onAction="#openItem" text="Open" />
                 <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="Remove from List" />
               </items>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
             </MenuButton>
          </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
       </HBox>
    </children>
 </VBox>

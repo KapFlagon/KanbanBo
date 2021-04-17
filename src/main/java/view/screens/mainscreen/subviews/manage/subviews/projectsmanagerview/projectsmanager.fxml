@@ -16,10 +16,13 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin>
          <children>
-            <Label text="Manage Projects">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Manage Projects" VBox.vgrow="ALWAYS">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </Label>
             <ToolBar>
               <items>
@@ -40,7 +43,7 @@
    <center>
       <TabPane fx:id="projectManagementTabPane" nodeOrientation="LEFT_TO_RIGHT" side="TOP" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets />
          </BorderPane.margin>
          <tabs>
             <Tab fx:id="activeProjectsTab" closable="false" onSelectionChanged="#tabSelectionChanged" text="Active Projects" />

@@ -4,13 +4,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter">
    <content>
-      <TableView fx:id="activeProjectListTableView">
+      <TableView fx:id="activeProjectListTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
         <columns>
-          <TableColumn fx:id="projectTitleTableCol" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="Title" />
-          <TableColumn fx:id="creationDateTableCol" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="Creation Date" />
-            <TableColumn fx:id="lastChangedDateTableCol" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="Last Changed Date" />
+          <TableColumn fx:id="projectTitleTableCol" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="-1.0" text="Title" />
+          <TableColumn fx:id="creationDateTableCol" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="-1.0" text="Creation Date" />
+            <TableColumn fx:id="lastChangedDateTableCol" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="-1.0" text="Last Changed Date" />
         </columns>
       </TableView>
    </content>
