@@ -5,11 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import user.preferences.UserPreferences;
+import utils.database.DatabaseUtils;
 
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
+import java.util.prefs.BackingStoreException;
 
 public class RecentFileEntryPresenter implements Initializable {
 
@@ -29,6 +32,7 @@ public class RecentFileEntryPresenter implements Initializable {
     private Path itemPath;
     private boolean fileExists ;
     private SimpleBooleanProperty beingDeleted;
+    private SimpleBooleanProperty beingSelected;
 
     // Constructors
 
@@ -60,17 +64,29 @@ public class RecentFileEntryPresenter implements Initializable {
         this.beingDeleted.set(beingDeleted);
     }
 
+    public boolean isBeingSelected() {
+        return beingSelected.get();
+    }
+    public SimpleBooleanProperty beingSelectedProperty() {
+        return beingSelected;
+    }
+    public void setBeingSelected(boolean beingSelected) {
+        this.beingSelected.set(beingSelected);
+    }
+
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         beingDeleted = new SimpleBooleanProperty(false);
+        beingSelected = new SimpleBooleanProperty(false);
     }
 
     // UI event methods
-    public void itemSelected() {
+    public void itemSelected() throws BackingStoreException {
         String validationState;
         if(fileExists) {
             validationState = "and file exists";
+            setBeingSelected(true);
         } else {
             validationState = "and file doesn't exist";
         }

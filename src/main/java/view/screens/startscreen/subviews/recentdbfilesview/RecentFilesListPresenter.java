@@ -1,5 +1,6 @@
 package view.screens.startscreen.subviews.recentdbfilesview;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -8,9 +9,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import user.preferences.UserPreferences;
+import utils.database.DatabaseUtils;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryView;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
@@ -24,6 +27,8 @@ public class RecentFilesListPresenter implements Initializable {
 
     // Other variables
     private ObservableList<Path> recentFilePathList;
+    private Path selectedPath;
+    private SimpleBooleanProperty itemBeingOpened;
 
     // Constructors
 
@@ -36,11 +41,27 @@ public class RecentFilesListPresenter implements Initializable {
         createFileEntriesInView();
     }
 
+    public Path getSelectedPath() {
+        return selectedPath;
+    }
+    public void setSelectedPath(Path selectedPath) {
+        this.selectedPath = selectedPath;
+    }
+
+    public boolean isItemBeingOpened() {
+        return itemBeingOpened.get();
+    }
+    public SimpleBooleanProperty itemBeingOpenedProperty() {
+        return itemBeingOpened;
+    }
+    public void setItemBeingOpened(boolean itemBeingOpened) {
+        this.itemBeingOpened.set(itemBeingOpened);
+    }
 
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        itemBeingOpened = new SimpleBooleanProperty(false);
     }
 
     // UI event methods
@@ -65,6 +86,15 @@ public class RecentFilesListPresenter implements Initializable {
                         }
                     }
                 });
+                presenter.beingSelectedProperty().addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        if (newValue) {
+                            selectedPath = presenter.getItemPath();
+                            setItemBeingOpened(true);
+                        }
+                    }
+                });
                 recentFilesVBox.getChildren().add(view.getView());
             }
         } else {
@@ -72,7 +102,5 @@ public class RecentFilesListPresenter implements Initializable {
             recentFilesVBox.getChildren().add(label);
         }
     }
-
-    // TODO if item is removed, push change to the UI
 
 }

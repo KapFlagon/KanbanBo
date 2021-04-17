@@ -1,6 +1,8 @@
 package view.screens.startscreen;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -132,6 +134,22 @@ public class StartScreenPresenter implements Initializable {
         autoLoadCheckMenuItem.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
         RecentFilesListView rflv = new RecentFilesListView();
         RecentFilesListPresenter rflp = (RecentFilesListPresenter) rflv.getPresenter();
+        rflp.itemBeingOpenedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    File selectedRecentFile = rflp.getSelectedPath().toFile();
+                    DatabaseUtils.setActiveDatabaseFile(selectedRecentFile);
+                    System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
+                    try {
+                        UserPreferences.getSingletonInstance().addRecentFilePath(selectedRecentFile.toPath());
+                    } catch (BackingStoreException e) {
+                        e.printStackTrace();
+                    }
+                    moveToMainSceneView();
+                }
+            }
+        });
         rflp.setRecentFilePathList(UserPreferences.getSingletonInstance().getRecentFilePaths());
         borderPane.setCenter(rflv.getView());
     }
