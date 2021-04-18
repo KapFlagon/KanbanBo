@@ -1,6 +1,7 @@
 package utils;
 
 import com.airhacks.afterburner.views.FXMLView;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -19,6 +20,10 @@ public class StageUtils {
         return mainStage;
     }
     public static void setMainStage(Stage newMainStage) {
+        newMainStage.setOnCloseRequest(event -> {
+            System.out.println("Exiting program...");
+            Platform.exit();
+        });
         StageUtils.mainStage = newMainStage;
     }
 
