@@ -1,5 +1,6 @@
 package view.screens.mainscreen;
 
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,10 +9,12 @@ import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ActiveProjectModel;
 import model.repositories.services.ProjectRepositoryService;
+import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerView;
 import view.screens.mainscreen.subviews.workspace.WorkspacePresenter;
 import view.screens.mainscreen.subviews.workspace.WorkspaceView;
+import view.screens.startscreen.StartScreenView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -74,6 +77,18 @@ public class MainScreenPresenter implements Initializable {
         workspacePresenter = (WorkspacePresenter) workspaceView.getPresenter();
         workspacePresenter.setProjectRepositoryService(projectRepositoryService);
         workspaceTab.setContent(workspaceView.getView());
+    }
+
+
+    // UI events
+    public void closeDb() {
+        StageUtils.changeMainScene("KanbanBo - Database file selection", new StartScreenView());
+    }
+
+    public void exitProgram() {
+        System.out.println("Exiting program...");
+        Platform.exit();
+        System.exit(0);
     }
 
 

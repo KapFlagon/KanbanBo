@@ -23,6 +23,7 @@ public class StageUtils {
         newMainStage.setOnCloseRequest(event -> {
             System.out.println("Exiting program...");
             Platform.exit();
+            System.exit(0);
         });
         StageUtils.mainStage = newMainStage;
     }

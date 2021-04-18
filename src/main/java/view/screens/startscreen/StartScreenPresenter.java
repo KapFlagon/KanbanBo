@@ -215,7 +215,6 @@ public class StartScreenPresenter implements Initializable {
     private void moveToMainSceneView() {
         //MainScreenView mainScreenView = new MainScreenView();
         MainScreenView view = new MainScreenView();
-        MainScreenPresenter presenter = (MainScreenPresenter) view.getPresenter();
         StageUtils.changeMainScene("KanbanBo - Project manager", view);
     }
 

@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -30,7 +31,11 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="File" />
+          <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#closeDb" text="Close Database" />
+                  <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="Exit" />
+               </items></Menu>
           <Menu mnemonicParsing="false" text="Edit" />
           <Menu mnemonicParsing="false" text="Help" />
         </menus>
