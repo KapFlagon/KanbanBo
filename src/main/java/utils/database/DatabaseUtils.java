@@ -14,7 +14,7 @@ import model.domainobjects.project.ActiveProjectModel;
 import model.domainobjects.project.ArchivedProjectModel;
 import model.domainobjects.project.CompletedProjectModel;
 import model.domainobjects.project.TemplateProjectModel;
-import model.domainobjects.subitems.LinkedItem;
+import model.domainobjects.subitems.ResourceItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,7 +111,7 @@ public class DatabaseUtils {
     }
 
     private static void createSubItemTables(JdbcConnectionSource connectionSource) throws SQLException{
-        Dao<LinkedItem, UUID> linkedItemDao = DaoManager.createDao(connectionSource, LinkedItem.class);
+        Dao<ResourceItem, UUID> linkedItemDao = DaoManager.createDao(connectionSource, ResourceItem.class);
         TableUtils.createTable(linkedItemDao);
     }
 
