@@ -31,9 +31,17 @@ public class StageUtils {
 
     // Other methods
     public static void changeMainScene(String newTitle, FXMLView newView) {
+        generateNewStage();
         Scene newViewScene = new Scene(newView.getView());
         StageUtils.getMainStage().setTitle(newTitle);
         StageUtils.getMainStage().setScene(newViewScene);
+        StageUtils.getMainStage().show();
+    }
+
+    private static void generateNewStage() {
+        getMainStage().hide();
+        Stage newStage = new Stage();
+        setMainStage(newStage);
     }
 
     public static void addSubStageToDeque(Stage subStage) {
