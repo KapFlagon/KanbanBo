@@ -4,9 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ActiveProjectColumnModel;
@@ -18,6 +23,8 @@ import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.Colum
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerView;
 import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowView;
+import view.sharedcomponents.popups.projectnotesinput.ProjectNotesInputPresenter;
+import view.sharedcomponents.popups.projectnotesinput.ProjectNotesInputView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,6 +40,10 @@ public class ProjectContainerPresenter implements Initializable {
     private Button createColumnBtn;
     @FXML
     private HBox columnHBox;
+    @FXML
+    private TextArea projectNotesTextArea;
+    @FXML
+    private VBox resourcesVBox;
 
     // Other variables
     //private AbstractProjectModel projectModel;
@@ -99,6 +110,21 @@ public class ProjectContainerPresenter implements Initializable {
     }
 
     // UI event methods
+    public void editProjectNotes() {
+        System.out.println("Edit project notes");
+        ProjectNotesInputView view = new ProjectNotesInputView();
+        ProjectNotesInputPresenter presenter = (ProjectNotesInputPresenter) view.getPresenter();
+        presenter.setProjectNotesContent(projectNotesTextArea.getText());
+        StageUtils.createChildStage("Enter Project Notes", view.getView());
+        StageUtils.getSubStages().peekLast().initStyle(StageStyle.UNDECORATED);
+        StageUtils.showAndWaitOnSubStage();
+        projectNotesTextArea.setText(presenter.getProjectNotesContent());
+    }
+
+    public void addProjectResource() {
+        System.out.println("Adding project resource");
+    }
+
     public void createColumn() throws IOException, SQLException {
         System.out.println("Create Column...");
         initColumnDetailsWindow();
