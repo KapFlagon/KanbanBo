@@ -8,11 +8,9 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.activerecords.ColumnCardActiveRecord;
-import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.card.ActiveColumnCardModel;
 import model.domainobjects.column.ActiveProjectColumnModel;
-import model.domainobjects.project.ActiveProjectModel;
 import utils.database.DatabaseUtils;
 
 import java.io.IOException;

@@ -16,6 +16,8 @@ public abstract class AbstractProjectModel {
     private UUID project_uuid;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
     private String project_title;
+    @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.STRING)
+    private String project_description;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.DATE_STRING)
     private Date creation_timestamp;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.DATE_STRING)
@@ -40,6 +42,13 @@ public abstract class AbstractProjectModel {
     }
     public void setProject_title(String project_title) {
         this.project_title = project_title;
+    }
+
+    public String getProject_description() {
+        return project_description;
+    }
+    public void setProject_description(String project_description) {
+        this.project_description = project_description;
     }
 
     public Date getCreation_timestamp() {

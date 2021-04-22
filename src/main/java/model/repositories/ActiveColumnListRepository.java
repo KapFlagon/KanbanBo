@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ActiveProjectColumnModel;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.project.ProjectModel;
 import utils.database.DatabaseUtils;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class ActiveColumnListRepository {
     // Variables
     protected JdbcConnectionSource connectionSource;
     protected Dao<ActiveProjectColumnModel, UUID> modelDao;
-    protected ProjectActiveRecord<ActiveProjectModel> projectActiveRecord;
+    protected ProjectActiveRecord<ProjectModel> projectActiveRecord;
     protected ObservableList<ProjectColumnActiveRecord> activeRecordObservableList;
 
 
@@ -32,7 +32,7 @@ public class ActiveColumnListRepository {
     public ActiveColumnListRepository() {
         initActiveRecordObservableList();
     }
-    public ActiveColumnListRepository(ProjectActiveRecord<ActiveProjectModel> projectActiveRecord) {
+    public ActiveColumnListRepository(ProjectActiveRecord<ProjectModel> projectActiveRecord) {
         initActiveRecordObservableList();
         this.projectActiveRecord = projectActiveRecord;
     }

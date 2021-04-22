@@ -7,21 +7,17 @@ import java.sql.SQLException;
 import java.util.UUID;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.domainobjects.project.ActiveProjectModel;
-import model.domainobjects.project.ArchivedProjectModel;
-import model.domainobjects.project.CompletedProjectModel;
+import model.domainobjects.project.ProjectModel;
 import model.domainobjects.project.TemplateProjectModel;
 import utils.database.DatabaseUtils;
 
 public class ProjectDataRepository {//implements IRepository{
 
     private JdbcConnectionSource connectionSource;
-    private Dao<ActiveProjectModel, UUID> activeProjectModelDao;
-    private Dao<ArchivedProjectModel, UUID> archivedProjectModelDao;
-    private Dao<CompletedProjectModel, UUID> completedProjectModelDao;
-    private ObservableList<ActiveProjectModel> activeProjectsList;
-    private ObservableList<ArchivedProjectModel> archivedProjectsList;
-    private ObservableList<CompletedProjectModel> completedProjectsList;
+    private Dao<ProjectModel, UUID> activeProjectModelDao;
+    private ObservableList<ProjectModel> activeProjectsList;
+    private ObservableList<ProjectModel> archivedProjectsList;
+    private ObservableList<ProjectModel> completedProjectsList;
     private ObservableList<TemplateProjectModel> templateProjectsList;
 
     // Variables
@@ -31,7 +27,7 @@ public class ProjectDataRepository {//implements IRepository{
     public ProjectDataRepository() {
         initLists();
     }
-    public ProjectDataRepository(ObservableList<ActiveProjectModel> activeProjectsList, ObservableList<ArchivedProjectModel> archivedProjectsList, ObservableList<CompletedProjectModel> completedProjectsList, ObservableList<TemplateProjectModel> templateProjectsList) {
+    public ProjectDataRepository(ObservableList<ProjectModel> activeProjectsList, ObservableList<ProjectModel> archivedProjectsList, ObservableList<ProjectModel> completedProjectsList, ObservableList<TemplateProjectModel> templateProjectsList) {
         setActiveProjectsList(activeProjectsList);
         setArchivedProjectsList(archivedProjectsList);
         setCompletedProjectsList(completedProjectsList);
@@ -40,24 +36,24 @@ public class ProjectDataRepository {//implements IRepository{
 
 
     // Getters and Setters
-    public ObservableList<ActiveProjectModel> getActiveProjectsList() {
+    public ObservableList<ProjectModel> getActiveProjectsList() {
         return activeProjectsList;
     }
-    public void setActiveProjectsList(ObservableList<ActiveProjectModel> activeProjectsList) {
+    public void setActiveProjectsList(ObservableList<ProjectModel> activeProjectsList) {
         this.activeProjectsList = activeProjectsList;
     }
 
-    public ObservableList<ArchivedProjectModel> getArchivedProjectsList() {
+    public ObservableList<ProjectModel> getArchivedProjectsList() {
         return archivedProjectsList;
     }
-    public void setArchivedProjectsList(ObservableList<ArchivedProjectModel> archivedProjectsList) {
+    public void setArchivedProjectsList(ObservableList<ProjectModel> archivedProjectsList) {
         this.archivedProjectsList = archivedProjectsList;
     }
 
-    public ObservableList<CompletedProjectModel> getCompletedProjectsList() {
+    public ObservableList<ProjectModel> getCompletedProjectsList() {
         return completedProjectsList;
     }
-    public void setCompletedProjectsList(ObservableList<CompletedProjectModel> completedProjectsList) {
+    public void setCompletedProjectsList(ObservableList<ProjectModel> completedProjectsList) {
         this.completedProjectsList = completedProjectsList;
     }
 
@@ -84,11 +80,11 @@ public class ProjectDataRepository {//implements IRepository{
     //@Override
     public ObservableList getAllInList() throws SQLException {
         connectionSource = DatabaseUtils.getConnectionSource();
-        activeProjectModelDao = DaoManager.createDao(connectionSource, ActiveProjectModel.class);
+        activeProjectModelDao = DaoManager.createDao(connectionSource, ProjectModel.class);
         long rowCount = activeProjectModelDao.countOf();
         if (rowCount > 0) {
-            for (ActiveProjectModel activeProjectModel : activeProjectModelDao) {
-                activeProjectsList.add(activeProjectModel);
+            for (ProjectModel projectModel : activeProjectModelDao) {
+                activeProjectsList.add(projectModel);
             }
         }
         return activeProjectsList;

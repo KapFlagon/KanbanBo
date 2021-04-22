@@ -1,12 +1,10 @@
 package model.repositories.services;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.project.ProjectModel;
 import model.repositories.ActiveColumnListRepository;
-import model.repositories.ActiveProjectListRepository;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,7 +16,7 @@ public class ProjectColumnRepositoryService {
     private ActiveColumnListRepository activeColumnListRepository;
 
     // Constructors
-    public ProjectColumnRepositoryService(ProjectActiveRecord<ActiveProjectModel> projectActiveRecord) throws IOException, SQLException {
+    public ProjectColumnRepositoryService(ProjectActiveRecord<ProjectModel> projectActiveRecord) throws IOException, SQLException {
         activeColumnListRepository = new ActiveColumnListRepository(projectActiveRecord);
         activeColumnListRepository.readFromDb();
         //initAllData();
