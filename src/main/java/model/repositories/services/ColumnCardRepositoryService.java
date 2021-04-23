@@ -3,7 +3,7 @@ package model.repositories.services;
 import javafx.collections.ObservableList;
 import model.activerecords.ColumnCardActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.column.ActiveProjectColumnModel;
+import model.domainobjects.column.ColumnModel;
 import model.repositories.ActiveCardListRepository;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class ColumnCardRepositoryService {
 
 
     // Constructors
-    public ColumnCardRepositoryService(ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord) throws IOException, SQLException {
+    public ColumnCardRepositoryService(ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord) throws IOException, SQLException {
         activeCardListRepository = new ActiveCardListRepository(projectColumnActiveRecord);
         activeCardListRepository.readFromDb();
         //initAllData();

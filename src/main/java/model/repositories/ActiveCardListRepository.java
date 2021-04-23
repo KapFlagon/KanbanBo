@@ -9,8 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.activerecords.ColumnCardActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.card.ActiveColumnCardModel;
-import model.domainobjects.column.ActiveProjectColumnModel;
+import model.domainobjects.card.CardModel;
+import model.domainobjects.column.ColumnModel;
 import utils.database.DatabaseUtils;
 
 import java.io.IOException;
@@ -23,15 +23,15 @@ public class ActiveCardListRepository {
 
     // Variables
     protected JdbcConnectionSource connectionSource;
-    protected Dao<ActiveColumnCardModel, UUID> modelDao;
-    protected ProjectColumnActiveRecord<ActiveProjectColumnModel> columnActiveRecord;
+    protected Dao<CardModel, UUID> modelDao;
+    protected ProjectColumnActiveRecord<ColumnModel> columnActiveRecord;
     protected ObservableList<ColumnCardActiveRecord> activeRecordObservableList;
 
     // Constructors
     public ActiveCardListRepository() {
         initActiveRecordObservableList();
     }
-    public ActiveCardListRepository(ProjectColumnActiveRecord<ActiveProjectColumnModel> columnActiveRecord) {
+    public ActiveCardListRepository(ProjectColumnActiveRecord<ColumnModel> columnActiveRecord) {
         initActiveRecordObservableList();
         this.columnActiveRecord = columnActiveRecord;
     }
@@ -46,7 +46,7 @@ public class ActiveCardListRepository {
         connectionSource = DatabaseUtils.getConnectionSource();
     }
     protected void initProjectDao() throws SQLException {
-        modelDao = DaoManager.createDao(connectionSource, ActiveColumnCardModel.class);
+        modelDao = DaoManager.createDao(connectionSource, CardModel.class);
     }
     protected void initActiveRecordObservableList() {
         activeRecordObservableList = FXCollections.observableArrayList();
@@ -64,13 +64,13 @@ public class ActiveCardListRepository {
 
     public void readFromDb() throws IOException, SQLException {
         setupDbAccess();
-        QueryBuilder<ActiveColumnCardModel, UUID> queryBuilder = modelDao.queryBuilder();
-        queryBuilder.where().eq(ActiveColumnCardModel.FOREIGN_KEY_NAME, columnActiveRecord.getColumnUUID());
-        PreparedQuery<ActiveColumnCardModel> preparedQuery = queryBuilder.prepare();
-        List<ActiveColumnCardModel> queryResultList = modelDao.query(preparedQuery);
+        QueryBuilder<CardModel, UUID> queryBuilder = modelDao.queryBuilder();
+        queryBuilder.where().eq(CardModel.FOREIGN_KEY_NAME, columnActiveRecord.getColumnUUID());
+        PreparedQuery<CardModel> preparedQuery = queryBuilder.prepare();
+        List<CardModel> queryResultList = modelDao.query(preparedQuery);
         if ((queryResultList != null) && (queryResultList.size() != 0)) {
-            for (ActiveColumnCardModel tempActiveColumnCardModel : queryResultList) {
-                ColumnCardActiveRecord<ActiveColumnCardModel> columnCardActiveRecord = new ColumnCardActiveRecord<ActiveColumnCardModel>(ActiveColumnCardModel.class, tempActiveColumnCardModel, columnActiveRecord);
+            for (CardModel tempCardModel : queryResultList) {
+                ColumnCardActiveRecord<CardModel> columnCardActiveRecord = new ColumnCardActiveRecord<CardModel>(CardModel.class, tempCardModel, columnActiveRecord);
                 activeRecordObservableList.add(columnCardActiveRecord);
             }
         }

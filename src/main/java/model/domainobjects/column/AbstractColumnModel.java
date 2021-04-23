@@ -9,6 +9,8 @@ import java.util.UUID;
 @DatabaseTable(tableName = "abstract_column")
 public abstract class AbstractColumnModel {
 
+    // Constant for query building using database fields
+    public static final String FOREIGN_KEY_NAME = "parent_project_uuid";
 
     // Variables
     @DatabaseField(generatedId = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
@@ -36,6 +38,14 @@ public abstract class AbstractColumnModel {
     public void setColumn_title(String column_title) {
         this.column_title = column_title;
     }
+
+    // Establishing contract for extending classes so that they have some sort of access for a parent UUID and position.
+    // This will allow for behaviour differences in each extending class.
+    public abstract UUID getParent_project_uuid();
+    public abstract void setParent_project_uuid(UUID parent_project_uuid);
+
+    public abstract int getColumn_position();
+    public abstract void setColumn_position(int column_position);
 
 
     // Initialisation methods

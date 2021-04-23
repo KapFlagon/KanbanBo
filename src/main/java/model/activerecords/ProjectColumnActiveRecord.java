@@ -3,14 +3,14 @@ package model.activerecords;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import model.domainobjects.column.AbstractProjectColumnModel;
+import model.domainobjects.column.AbstractColumnModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
 
 
-public class ProjectColumnActiveRecord<T extends AbstractProjectColumnModel> extends AbstractActiveRecord{
+public class ProjectColumnActiveRecord<T extends AbstractColumnModel> extends AbstractActiveRecord{
 
 
     // Variables for model objects and DAOs

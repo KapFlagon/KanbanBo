@@ -4,18 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.column.ActiveProjectColumnModel;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.column.ColumnModel;
+import model.domainobjects.project.ProjectModel;
 import model.repositories.ActiveColumnListRepository;
 import model.repositories.services.ProjectColumnRepositoryService;
 import utils.StageUtils;
@@ -47,7 +45,7 @@ public class ProjectContainerPresenter implements Initializable {
 
     // Other variables
     //private AbstractProjectModel projectModel;
-    private ProjectActiveRecord<ActiveProjectModel> projectActiveRecord;
+    private ProjectActiveRecord<ProjectModel> projectActiveRecord;
     private ProjectColumnRepositoryService projectColumnRepositoryService;
     private ActiveColumnListRepository activeColumnListRepository;
     private ObservableList<ProjectColumnActiveRecord> projectColumnsList;
@@ -67,10 +65,10 @@ public class ProjectContainerPresenter implements Initializable {
     }
      */
 
-    public ProjectActiveRecord<ActiveProjectModel> getProjectActiveRecord() {
+    public ProjectActiveRecord<ProjectModel> getProjectActiveRecord() {
         return projectActiveRecord;
     }
-    public void setProjectActiveRecord(ProjectActiveRecord<ActiveProjectModel> projectActiveRecord) throws IOException, SQLException {
+    public void setProjectActiveRecord(ProjectActiveRecord<ProjectModel> projectActiveRecord) throws IOException, SQLException {
         this.projectActiveRecord = projectActiveRecord;
         customInit();
     }
@@ -93,7 +91,7 @@ public class ProjectContainerPresenter implements Initializable {
         projectTitleLbl.setText(projectActiveRecord.getProjectTitle());
         projectColumnRepositoryService = new ProjectColumnRepositoryService(projectActiveRecord);
         projectColumnsList = projectColumnRepositoryService.getColumnsList();
-        for (ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord : projectColumnsList) {
+        for (ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord : projectColumnsList) {
             ColumnContainerView ccv = new ColumnContainerView();
             ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
             ccp.setProjectColumnActiveRecord(projectColumnActiveRecord);
@@ -130,7 +128,7 @@ public class ProjectContainerPresenter implements Initializable {
         initColumnDetailsWindow();
         StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
-        ProjectColumnActiveRecord<ActiveProjectColumnModel> pcar = columnDetailsWindowPresenter.getProjectColumnActiveRecord();
+        ProjectColumnActiveRecord<ColumnModel> pcar = columnDetailsWindowPresenter.getProjectColumnActiveRecord();
         if(pcar != null) {
             pcar.setParentProjectActiveRecord(projectActiveRecord);
             pcar.getProjectColumnModel().setColumn_position(projectColumnsList.size() + 1);

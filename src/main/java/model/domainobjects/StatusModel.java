@@ -1,12 +1,12 @@
-package model.domainobjects.project;
+package model.domainobjects;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 
-@DatabaseTable(tableName = "project_statuses")
-public class ProjectStatuses {
+@DatabaseTable(tableName = "status")
+public class StatusModel {
 
     // TODO need to push data to DB during file creation, as well as create the table
 
@@ -17,7 +17,7 @@ public class ProjectStatuses {
     private String status_text;
 
     // Constructors
-    public ProjectStatuses() {
+    public StatusModel() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 

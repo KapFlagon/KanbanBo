@@ -10,7 +10,7 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.project.ProjectModel;
 import model.repositories.services.ProjectRepositoryService;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
@@ -51,9 +51,9 @@ public class WorkspacePresenter implements Initializable {
     }
 
     public void customInit() {
-        projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ActiveProjectModel>>() {
+        projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ProjectModel>>() {
             @Override
-            public void onChanged(Change<? extends ProjectActiveRecord<ActiveProjectModel>> c) {
+            public void onChanged(Change<? extends ProjectActiveRecord<ProjectModel>> c) {
                 c.next();
                 if (c.wasAdded()) {
                     System.out.println("Change detected, new project opened");

@@ -7,7 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.activerecords.ProjectActiveRecord;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.project.ProjectModel;
 import model.repositories.services.ProjectRepositoryService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
@@ -52,9 +52,9 @@ public class MainScreenPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             projectRepositoryService = new ProjectRepositoryService();
-            projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ActiveProjectModel>>() {
+            projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ProjectModel>>() {
                 @Override
-                public void onChanged(Change<? extends ProjectActiveRecord<ActiveProjectModel>> c) {
+                public void onChanged(Change<? extends ProjectActiveRecord<ProjectModel>> c) {
                     c.next();
                     if (c.wasAdded()) {
                         System.out.println("Change detected in main screen");

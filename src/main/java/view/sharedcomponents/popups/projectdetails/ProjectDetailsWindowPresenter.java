@@ -1,19 +1,17 @@
 package view.sharedcomponents.popups.projectdetails;
 
-import com.j256.ormlite.dao.Dao;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import model.activerecords.ProjectActiveRecord;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.project.ProjectModel;
 import utils.StageUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 public class ProjectDetailsWindowPresenter implements Initializable {
 
@@ -26,7 +24,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     private Button cancelButton;
 
     // Variables
-    private ActiveProjectModel selectedActiveProjectModel;
+    private ProjectModel selectedProjectModel;
     private ProjectActiveRecord projectActiveRecord;
 
     // Constructors
@@ -54,11 +52,11 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         this.cancelButton = cancelButton;
     }
 
-    public ActiveProjectModel getSelectedActiveProjectModel() {
-        return selectedActiveProjectModel;
+    public ProjectModel getSelectedActiveProjectModel() {
+        return selectedProjectModel;
     }
-    public void setSelectedActiveProjectModel(ActiveProjectModel selectedActiveProjectModel) {
-        this.selectedActiveProjectModel = selectedActiveProjectModel;
+    public void setSelectedActiveProjectModel(ProjectModel selectedProjectModel) {
+        this.selectedProjectModel = selectedProjectModel;
     }
 
     public ProjectActiveRecord getProjectActiveRecord() {
@@ -79,7 +77,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     // Other methods
     public void saveProjectDetailsChange() throws SQLException, IOException {
         if(projectActiveRecord == null) {
-            projectActiveRecord = new ProjectActiveRecord(ActiveProjectModel.class);
+            projectActiveRecord = new ProjectActiveRecord(ProjectModel.class);
             // TODO make new project building the responsibility of class ProjectActiveRecord
             projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
         } else {
@@ -107,13 +105,13 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     }
 
 
-    private ActiveProjectModel buildNewProjectModelInstance() {
+    private ProjectModel buildNewProjectModelInstance() {
         // Create blank project instance, and populate with data.
-        ActiveProjectModel newActiveProjectModel = new ActiveProjectModel();
-        newActiveProjectModel.setProject_title(getProjectTitleTextField().getText());
-        newActiveProjectModel.setCreation_timestamp(new Date());
-        newActiveProjectModel.setLast_changed_timestamp(new Date());
-        return newActiveProjectModel;
+        ProjectModel newProjectModel = new ProjectModel();
+        newProjectModel.setProject_title(getProjectTitleTextField().getText());
+        newProjectModel.setCreation_timestamp(new Date());
+        newProjectModel.setLast_changed_timestamp(new Date());
+        return newProjectModel;
     }
 
     /*

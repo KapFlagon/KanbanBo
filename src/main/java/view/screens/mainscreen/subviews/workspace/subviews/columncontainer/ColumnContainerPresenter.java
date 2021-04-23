@@ -9,13 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.activerecords.ColumnCardActiveRecord;
-import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.card.ActiveColumnCardModel;
-import model.domainobjects.column.ActiveProjectColumnModel;
+import model.domainobjects.card.CardModel;
+import model.domainobjects.column.ColumnModel;
 import model.repositories.ActiveCardListRepository;
 import model.repositories.services.ColumnCardRepositoryService;
-import model.repositories.services.ProjectColumnRepositoryService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerView;
@@ -43,7 +41,7 @@ public class ColumnContainerPresenter implements Initializable {
 
 
     // Other variables
-    private ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord;
+    private ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord;
     private ObservableList<ColumnCardActiveRecord> cardsList;
     private ColumnDetailsWindowView columnDetailsWindowView;
     private ColumnDetailsWindowPresenter columnDetailsWindowPresenter;
@@ -56,10 +54,10 @@ public class ColumnContainerPresenter implements Initializable {
 
     // Getters & Setters
 
-    public ProjectColumnActiveRecord<ActiveProjectColumnModel> getProjectColumnActiveRecord() {
+    public ProjectColumnActiveRecord<ColumnModel> getProjectColumnActiveRecord() {
         return projectColumnActiveRecord;
     }
-    public void setProjectColumnActiveRecord(ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord) throws IOException, SQLException {
+    public void setProjectColumnActiveRecord(ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord) throws IOException, SQLException {
         this.projectColumnActiveRecord = projectColumnActiveRecord;
         this.columnTitleLbl.setText(projectColumnActiveRecord.getColumnTitle());
         //this.columnTitleLbl.textProperty().bind(projectColumnActiveRecord.columnTitleProperty());
@@ -76,7 +74,7 @@ public class ColumnContainerPresenter implements Initializable {
         columnTitleLbl.setText(projectColumnActiveRecord.getColumnTitle());
         columnCardRepositoryService = new ColumnCardRepositoryService(projectColumnActiveRecord);
         cardsList = columnCardRepositoryService.getCardsList();
-        for (ColumnCardActiveRecord<ActiveColumnCardModel> columnCardActiveRecord : cardsList) {
+        for (ColumnCardActiveRecord<CardModel> columnCardActiveRecord : cardsList) {
             CardContainerView ccv = new CardContainerView();
             CardContainerPresenter ccp = (CardContainerPresenter) ccv.getPresenter();
             ccp.setColumnCardActiveRecord(columnCardActiveRecord);
@@ -104,7 +102,7 @@ public class ColumnContainerPresenter implements Initializable {
         initCardDetailsWindow();
         StageUtils.createChildStage("Enter Card Details", cardDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
-        ColumnCardActiveRecord<ActiveColumnCardModel> ccar = cardDetailsWindowPresenter.getColumnCardActiveRecord();
+        ColumnCardActiveRecord<CardModel> ccar = cardDetailsWindowPresenter.getColumnCardActiveRecord();
         if(ccar != null) {
             ccar.setParentColumnActiveRecord(projectColumnActiveRecord);
             //ccar.getColumnCardModel().setParent_column(projectColumnActiveRecord.getProjectColumnModel().getColumn_uuid());

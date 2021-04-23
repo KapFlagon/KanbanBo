@@ -5,14 +5,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import model.domainobjects.card.AbstractColumnCardModel;
-import model.domainobjects.card.ActiveColumnCardModel;
-import model.domainobjects.column.ActiveProjectColumnModel;
+import model.domainobjects.card.CardModel;
+import model.domainobjects.column.ColumnModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class ColumnCardActiveRecord <T extends ActiveColumnCardModel> extends AbstractActiveRecord{
+public class ColumnCardActiveRecord <T extends CardModel> extends AbstractActiveRecord{
 
     // Variables for model objects and DAOs
     protected ProjectColumnActiveRecord parentColumnActiveRecord;
@@ -43,7 +42,7 @@ public class ColumnCardActiveRecord <T extends ActiveColumnCardModel> extends Ab
     public ProjectColumnActiveRecord getParentColumnActiveRecord() {
         return parentColumnActiveRecord;
     }
-    public void setParentColumnActiveRecord(ProjectColumnActiveRecord<ActiveProjectColumnModel> parentColumnActiveRecord) throws IOException, SQLException {
+    public void setParentColumnActiveRecord(ProjectColumnActiveRecord<ColumnModel> parentColumnActiveRecord) throws IOException, SQLException {
         this.parentColumnActiveRecord = parentColumnActiveRecord;
         this.columnCardModel.setParent_column_uuid(parentColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
         createOrUpdateActiveRowInDb();

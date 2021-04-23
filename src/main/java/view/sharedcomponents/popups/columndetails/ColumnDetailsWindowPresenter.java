@@ -1,22 +1,19 @@
 package view.sharedcomponents.popups.columndetails;
 
-import com.j256.ormlite.dao.Dao;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import model.activerecords.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.column.ActiveProjectColumnModel;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.column.ColumnModel;
+import model.domainobjects.project.ProjectModel;
 import utils.StageUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.UUID;
 
 public class ColumnDetailsWindowPresenter implements Initializable {
 
@@ -29,8 +26,8 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     private Button cancelButton;
 
     // Variables
-    private ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord;
-    private ProjectActiveRecord<ActiveProjectModel> parentProject;
+    private ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord;
+    private ProjectActiveRecord<ProjectModel> parentProject;
 
     // Constructors
 
@@ -43,18 +40,18 @@ public class ColumnDetailsWindowPresenter implements Initializable {
         this.titleTextField = titleTextField;
     }
 
-    public ProjectColumnActiveRecord<ActiveProjectColumnModel> getProjectColumnActiveRecord() {
+    public ProjectColumnActiveRecord<ColumnModel> getProjectColumnActiveRecord() {
         return projectColumnActiveRecord;
     }
-    public void setProjectColumnActiveRecord(ProjectColumnActiveRecord<ActiveProjectColumnModel> projectColumnActiveRecord) {
+    public void setProjectColumnActiveRecord(ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord) {
         this.projectColumnActiveRecord = projectColumnActiveRecord;
         titleTextField.setText(projectColumnActiveRecord.getColumnTitle());
     }
 
-    public ProjectActiveRecord<ActiveProjectModel> getParentProject() {
+    public ProjectActiveRecord<ProjectModel> getParentProject() {
         return parentProject;
     }
-    public void setParentProject(ProjectActiveRecord<ActiveProjectModel> parentProject) {
+    public void setParentProject(ProjectActiveRecord<ProjectModel> parentProject) {
         this.parentProject = parentProject;
     }
 
@@ -68,7 +65,7 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     // UI event methods
     public void saveDetailsChange() throws IOException, SQLException {
         if(projectColumnActiveRecord == null) {
-            projectColumnActiveRecord = new ProjectColumnActiveRecord(ActiveProjectColumnModel.class);
+            projectColumnActiveRecord = new ProjectColumnActiveRecord(ColumnModel.class);
             // TODO make new project building the responsibility of class ProjectActiveRecord
             projectColumnActiveRecord.setProjectColumnModel(buildNewColumnModelInstance());
         } else {
@@ -85,12 +82,12 @@ public class ColumnDetailsWindowPresenter implements Initializable {
 
 
     // Other methods
-    private ActiveProjectColumnModel buildNewColumnModelInstance() {
+    private ColumnModel buildNewColumnModelInstance() {
         // Create blank column instance, and populate with data.
-        ActiveProjectColumnModel activeProjectColumnModel = new ActiveProjectColumnModel();
-        activeProjectColumnModel.setColumn_title(titleTextField.getText());
-        activeProjectColumnModel.setParent_project_uuid(parentProject.getProjectUUID());
-        return activeProjectColumnModel;
+        ColumnModel columnModel = new ColumnModel();
+        columnModel.setColumn_title(titleTextField.getText());
+        columnModel.setParent_project_uuid(parentProject.getProjectUUID());
+        return columnModel;
     }
 
 }

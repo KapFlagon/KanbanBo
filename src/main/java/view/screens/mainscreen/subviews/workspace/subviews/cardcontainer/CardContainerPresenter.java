@@ -5,7 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import model.activerecords.ColumnCardActiveRecord;
-import model.domainobjects.card.ActiveColumnCardModel;
+import model.domainobjects.card.CardModel;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,7 +19,7 @@ public class CardContainerPresenter implements Initializable {
     private TextArea cardDescription;
 
     // Other variables
-    private ColumnCardActiveRecord<ActiveColumnCardModel> columnCardActiveRecord;
+    private ColumnCardActiveRecord<CardModel> columnCardActiveRecord;
 
     // Constructors
 
@@ -38,10 +38,10 @@ public class CardContainerPresenter implements Initializable {
         this.cardDescription = cardDescription;
     }
 
-    public ColumnCardActiveRecord<ActiveColumnCardModel> getColumnCardActiveRecord() {
+    public ColumnCardActiveRecord<CardModel> getColumnCardActiveRecord() {
         return columnCardActiveRecord;
     }
-    public void setColumnCardActiveRecord(ColumnCardActiveRecord<ActiveColumnCardModel> columnCardActiveRecord) {
+    public void setColumnCardActiveRecord(ColumnCardActiveRecord<CardModel> columnCardActiveRecord) {
         this.columnCardActiveRecord = columnCardActiveRecord;
         this.cardTitle.setText(columnCardActiveRecord.getCardTitle());
         this.cardDescription.setText(columnCardActiveRecord.getCardDescription());

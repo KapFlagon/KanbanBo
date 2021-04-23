@@ -6,8 +6,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.activerecords.ColumnCardActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.card.ActiveColumnCardModel;
-import model.domainobjects.column.ActiveProjectColumnModel;
+import model.domainobjects.card.CardModel;
+import model.domainobjects.column.ColumnModel;
 import utils.StageUtils;
 
 import java.io.IOException;
@@ -24,8 +24,8 @@ public class CardDetailsWindowPresenter implements Initializable {
     private TextArea descriptionText;
 
     // Other variables
-    private ProjectColumnActiveRecord<ActiveProjectColumnModel> parentColumnActiveRecord;
-    private ColumnCardActiveRecord<ActiveColumnCardModel> columnCardActiveRecord;
+    private ProjectColumnActiveRecord<ColumnModel> parentColumnActiveRecord;
+    private ColumnCardActiveRecord<CardModel> columnCardActiveRecord;
 
     // Constructors
 
@@ -55,7 +55,7 @@ public class CardDetailsWindowPresenter implements Initializable {
     // UI event methods
     public void saveDetailsChange() throws IOException, SQLException {
         if(columnCardActiveRecord == null) {
-            columnCardActiveRecord = new ColumnCardActiveRecord<>(ActiveColumnCardModel.class);
+            columnCardActiveRecord = new ColumnCardActiveRecord<>(CardModel.class);
             // TODO make new project building the responsibility of class ProjectActiveRecord
             columnCardActiveRecord.setColumnCardModel(buildNewCardModelInstance());
         } else {
@@ -72,13 +72,13 @@ public class CardDetailsWindowPresenter implements Initializable {
     }
 
     // Other methods
-    private ActiveColumnCardModel buildNewCardModelInstance() {
+    private CardModel buildNewCardModelInstance() {
         // Create blank column instance, and populate with data.
-        ActiveColumnCardModel activeColumnCardModel = new ActiveColumnCardModel();
-        activeColumnCardModel.setCard_title(titleTextField.getText());
-        activeColumnCardModel.setCard_description_text(descriptionText.getText());
-        activeColumnCardModel.setParent_column_uuid(parentColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
-        return activeColumnCardModel;
+        CardModel cardModel = new CardModel();
+        cardModel.setCard_title(titleTextField.getText());
+        cardModel.setCard_description_text(descriptionText.getText());
+        cardModel.setParent_column_uuid(parentColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
+        return cardModel;
     }
 
 }

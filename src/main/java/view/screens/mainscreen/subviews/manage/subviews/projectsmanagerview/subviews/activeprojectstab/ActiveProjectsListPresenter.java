@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 import model.activerecords.ProjectActiveRecord;
-import model.domainobjects.project.ActiveProjectModel;
+import model.domainobjects.project.ProjectModel;
 
 
 public class ActiveProjectsListPresenter implements Initializable {
@@ -99,7 +99,7 @@ public class ActiveProjectsListPresenter implements Initializable {
 
 
     // Other methods
-    public ProjectActiveRecord<ActiveProjectModel> getSelectedRow() {
+    public ProjectActiveRecord<ProjectModel> getSelectedRow() {
         return selectionModel.getSelectedItem();
     }
 

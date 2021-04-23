@@ -6,22 +6,25 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.UUID;
 
-@DatabaseTable(tableName = "template_column")
-public class TemplateColumnModel extends AbstractColumnModel{
+
+@DatabaseTable(tableName = "column")
+public class ColumnModel extends AbstractColumnModel{
 
 
     // Variables
-    // Same fields as Column Model, but can be null in database.
-    @DatabaseField(canBeNull = true, dataType = DataType.UUID, useGetSet = true, columnName = FOREIGN_KEY_NAME)
+    // Same fields as Column Model, but cannot be null in database.
+    @DatabaseField(canBeNull = false, dataType = DataType.UUID, useGetSet = true, columnName = FOREIGN_KEY_NAME)
     private UUID parent_project_uuid;
-    @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.INTEGER)
+    @DatabaseField(canBeNull = false, dataType = DataType.INTEGER, useGetSet = true)
+    private int column_status;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.INTEGER)
     private int column_position;
 
-
     // Constructors
-    public TemplateColumnModel() {
+    public ColumnModel() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
+
 
     // Getters and Setters
     public UUID getParent_project_uuid() {
@@ -29,6 +32,13 @@ public class TemplateColumnModel extends AbstractColumnModel{
     }
     public void setParent_project_uuid(UUID parent_project_uuid) {
         this.parent_project_uuid = parent_project_uuid;
+    }
+
+    public int getColumn_status() {
+        return column_status;
+    }
+    public void setColumn_status(int column_status) {
+        this.column_status = column_status;
     }
 
     public int getColumn_position() {
