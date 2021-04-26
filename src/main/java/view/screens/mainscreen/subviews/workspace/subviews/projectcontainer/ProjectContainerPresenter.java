@@ -21,6 +21,8 @@ import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.Colum
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerView;
 import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowView;
+import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
+import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowView;
 import view.sharedcomponents.popups.projectnotesinput.ProjectNotesInputPresenter;
 import view.sharedcomponents.popups.projectnotesinput.ProjectNotesInputView;
 
@@ -39,7 +41,7 @@ public class ProjectContainerPresenter implements Initializable {
     @FXML
     private HBox columnHBox;
     @FXML
-    private TextArea projectNotesTextArea;
+    private TextArea projectDescriptionTextArea;
     @FXML
     private VBox resourcesVBox;
 
@@ -89,6 +91,7 @@ public class ProjectContainerPresenter implements Initializable {
 
     public void customInit() throws IOException, SQLException {
         projectTitleLbl.setText(projectActiveRecord.getProjectTitle());
+        projectDescriptionTextArea.setText(projectActiveRecord.getProjectDescription());
         projectColumnRepositoryService = new ProjectColumnRepositoryService(projectActiveRecord);
         projectColumnsList = projectColumnRepositoryService.getColumnsList();
         for (ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord : projectColumnsList) {
@@ -108,15 +111,16 @@ public class ProjectContainerPresenter implements Initializable {
     }
 
     // UI event methods
-    public void editProjectNotes() {
-        System.out.println("Edit project notes");
-        ProjectNotesInputView view = new ProjectNotesInputView();
-        ProjectNotesInputPresenter presenter = (ProjectNotesInputPresenter) view.getPresenter();
-        presenter.setProjectNotesContent(projectNotesTextArea.getText());
-        StageUtils.createChildStage("Enter Project Notes", view.getView());
+    public void editProjectDetails() {
+        System.out.println("Edit project details");
+        ProjectDetailsWindowView view = new ProjectDetailsWindowView();
+        ProjectDetailsWindowPresenter presenter = (ProjectDetailsWindowPresenter) view.getPresenter();
+        presenter.setProjectActiveRecord(projectActiveRecord);
+        StageUtils.createChildStage("Enter Project Details", view.getView());
         StageUtils.getSubStages().peekLast().initStyle(StageStyle.UNDECORATED);
         StageUtils.showAndWaitOnSubStage();
-        projectNotesTextArea.setText(presenter.getProjectNotesContent());
+        projectTitleLbl.setText(presenter.getProjectTitleTextField().getText());
+        projectDescriptionTextArea.setText(presenter.getProjectDescriptionTextArea().getText());
     }
 
     public void addProjectResource() {

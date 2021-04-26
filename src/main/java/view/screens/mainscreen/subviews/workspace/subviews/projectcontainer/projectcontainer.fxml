@@ -24,14 +24,14 @@
             </HBox>
             <Accordion>
               <panes>
-                <TitledPane animated="false" text="Notes">
+                <TitledPane animated="false" text="Project Description">
                      <content>
                         <BorderPane>
                            <center>
-                              <TextArea fx:id="projectNotesTextArea" editable="false" wrapText="true" />
+                              <TextArea fx:id="projectDescriptionTextArea" editable="false" wrapText="true" />
                            </center>
                            <top>
-                              <Button mnemonicParsing="false" onAction="#editProjectNotes" text="Edit Project Notes" BorderPane.alignment="TOP_LEFT">
+                              <Button mnemonicParsing="false" onAction="#editProjectDetails" text="Edit Project Details" BorderPane.alignment="TOP_LEFT">
                                  <BorderPane.margin>
                                     <Insets bottom="5.0" />
                                  </BorderPane.margin>

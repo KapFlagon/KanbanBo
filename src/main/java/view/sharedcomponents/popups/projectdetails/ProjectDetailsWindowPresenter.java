@@ -3,6 +3,7 @@ package view.sharedcomponents.popups.projectdetails;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
@@ -18,6 +19,8 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     // JavaFX injected field variables
     @FXML
     private TextField projectTitleTextField;
+    @FXML
+    private TextArea projectDescriptionTextArea;
     @FXML
     private Button saveButton;
     @FXML
@@ -36,6 +39,13 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     }
     public void setProjectTitleTextField(TextField projectTitleTextField) {
         this.projectTitleTextField = projectTitleTextField;
+    }
+
+    public TextArea getProjectDescriptionTextArea() {
+        return projectDescriptionTextArea;
+    }
+    public void setProjectDescriptionTextArea(TextArea projectDescriptionTextArea) {
+        this.projectDescriptionTextArea = projectDescriptionTextArea;
     }
 
     public Button getSaveButton() {
@@ -65,6 +75,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     public void setProjectActiveRecord(ProjectActiveRecord projectActiveRecord) {
         this.projectActiveRecord = projectActiveRecord;
         projectTitleTextField.setText(projectActiveRecord.getProjectTitle());
+        projectDescriptionTextArea.setText(projectActiveRecord.getProjectDescription());
     }
 
     // Initialisation methods
@@ -82,6 +93,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
             projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
         } else {
             projectActiveRecord.setProjectTitle(getProjectTitleTextField().getText());
+            projectActiveRecord.setProjectDescription(getProjectDescriptionTextArea().getText());
         }
         StageUtils.hideSubStage();
     }
@@ -109,6 +121,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         // Create blank project instance, and populate with data.
         ProjectModel newProjectModel = new ProjectModel();
         newProjectModel.setProject_title(getProjectTitleTextField().getText());
+        newProjectModel.setProject_description(getProjectDescriptionTextArea().getText());
         newProjectModel.setCreation_timestamp(new Date());
         newProjectModel.setLast_changed_timestamp(new Date());
         return newProjectModel;
