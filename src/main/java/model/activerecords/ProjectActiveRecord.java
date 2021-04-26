@@ -21,6 +21,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
     //protected Dao<T, UUID> projectDao;
     // Variables to act as property containers for the model data
     protected SimpleStringProperty projectTitle;
+    protected SimpleStringProperty projectDescription;
     protected SimpleStringProperty creationTimestamp;
     protected SimpleStringProperty lastChangedTimestamp;
 
@@ -63,6 +64,16 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
         this.projectTitle.set(projectTitle);
     }
 
+    public String getProjectDescription() {
+        return projectDescription.get();
+    }
+    public SimpleStringProperty projectDescriptionProperty() {
+        return projectDescription;
+    }
+    public void setProjectDescription(String projectDescription) {
+        this.projectDescription.set(projectDescription);
+    }
+
     public String getCreationTimestamp() {
         return creationTimestamp.get();
     }
@@ -87,6 +98,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
     // Initialisation methods
     protected void initAllProperties() {
         this.projectTitle = new SimpleStringProperty(projectModel.getProject_title());
+        this.projectDescription = new SimpleStringProperty(projectModel.getProject_description());
         this.creationTimestamp = new SimpleStringProperty(projectModel.getCreation_timestamp().toString());
         this.lastChangedTimestamp = new SimpleStringProperty(projectModel.getLast_changed_timestamp().toString());
     }
@@ -96,6 +108,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
     // Other methods
     protected void setAllListeners() {
         setProjectTitleListener();
+        setProjectDescriptionListener();
         setLastChangedTimestampListener();
     }
 
@@ -108,6 +121,17 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
             }
         };
         projectTitle.addListener(changeListener);
+    }
+
+    private void setProjectDescriptionListener() {
+        ChangeListener<String> changeListener = new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                projectModel.setProject_description(newValue);
+                updateLastChangedTimestamp();
+            }
+        };
+        projectDescription.addListener(changeListener);
     }
 
     private void setLastChangedTimestampListener() {
