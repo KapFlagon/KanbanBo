@@ -47,6 +47,7 @@ public class WorkspacePresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        emptyWorkspaceLbl.setText("No Projects opened in workspace...");
         tabPaneSelectionModel = workspaceTabPane.getSelectionModel();
     }
 
@@ -72,6 +73,7 @@ public class WorkspacePresenter implements Initializable {
                         workspaceTabPane.getTabs().add(tab);
                         tab.setText("Project '" + par1.getProjectTitle() + "'");
                         tab.setClosable(true);
+                        updatePlaceholderLabel();
                         // TODO refactor this into another method or something. 
                         tab.setOnClosed(new EventHandler<Event>() {
                             @Override
@@ -87,6 +89,7 @@ public class WorkspacePresenter implements Initializable {
                                 if (index != -1) {
                                     projectRepositoryService.getOpenedActiveProjects().remove(index);
                                     System.out.println("workspace project tab is finally closed");
+                                    updatePlaceholderLabel();
                                 }
                             }
                         });
@@ -95,12 +98,20 @@ public class WorkspacePresenter implements Initializable {
                 }
             }
         });
+        updatePlaceholderLabel();
     }
 
     // UI event methods
 
 
     // Other methods
+    private void updatePlaceholderLabel() {
 
+        if (projectRepositoryService.getOpenedActiveProjects().size() < 1) {
+            emptyWorkspaceLbl.setVisible(true);
+        } else {
+            emptyWorkspaceLbl.setVisible(false);
+        }
+    }
 
 }
