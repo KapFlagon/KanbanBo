@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
@@ -152,6 +153,7 @@ public class StartScreenPresenter implements Initializable {
         });
         rflp.setRecentFilePathList(UserPreferences.getSingletonInstance().getRecentFilePaths());
         borderPane.setCenter(rflv.getView());
+        BorderPane.setMargin(rflv.getView(), new Insets(5,5,5,5));
     }
 
 
