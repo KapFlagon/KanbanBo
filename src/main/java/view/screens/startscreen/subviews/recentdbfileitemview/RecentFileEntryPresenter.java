@@ -91,11 +91,11 @@ public class RecentFileEntryPresenter implements Initializable {
             validationState = "and file doesn't exist";
         }
         System.out.println("Item Selected: " + titleLabel.getText() + " , " + validationState);
-        // TODO push this upwards and change the scene/window
     }
 
-    public void openItem() {
+    public void openItem() throws BackingStoreException {
         System.out.println("Opening the selected item");
+        itemSelected();
     }
 
     public void removeItem() {
@@ -118,8 +118,5 @@ public class RecentFileEntryPresenter implements Initializable {
         int charIndex = fileNamePath.indexOf('.');
         return fileNamePath.substring(0, charIndex);
     }
-
-    // TODO Handle scenario if file does not actually exist.
-    // TODO Give user a chance to remove an entry from the list (and the preferences, etc.).
 
 }
