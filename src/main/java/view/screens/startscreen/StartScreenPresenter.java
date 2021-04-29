@@ -21,6 +21,8 @@ import view.screens.mainscreen.MainScreenView;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListView;
+import view.sharedcomponents.popups.info.DatabaseCreationProgressPresenter;
+import view.sharedcomponents.popups.info.DatabaseCreationProgressView;
 
 import java.io.File;
 import java.io.IOException;
@@ -164,7 +166,11 @@ public class StartScreenPresenter implements Initializable {
         if(newFile != null) {
             FileCreationUtils.createEmptyDatabaseFile(newFile);
             DatabaseUtils.setActiveDatabaseFile(newFile);
-            DatabaseUtils.initDatabaseTablesInFile();
+            //DatabaseUtils.initDatabaseTablesInFile();
+            DatabaseCreationProgressView progressView= new DatabaseCreationProgressView();
+            DatabaseCreationProgressPresenter progressPresenter = (DatabaseCreationProgressPresenter) progressView.getPresenter();
+            StageUtils.createChildStage("Database creation", progressView.getView());
+            StageUtils.showAndWaitOnSubStage();
             System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
             UserPreferences.getSingletonInstance().addRecentFilePath(newFile.toPath());
             moveToMainSceneView();

@@ -28,6 +28,7 @@ public class DatabaseUtils {
     // Static variables
     private static File activeDatabaseFile;
     private static String connectionURLstring;
+    public static final int MAX_TABLES = 9;
 
     // Constructors
 
@@ -65,52 +66,57 @@ public class DatabaseUtils {
         JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
 
         // TODO need to add some sort of progress bar to indicate work is being done here.
-        createProjectTables(connectionSource);
-        createColumnTables(connectionSource);
-        createCardTables(connectionSource);
-        createSubItemTables(connectionSource);
-        createIntermediaryTables(connectionSource);
+        //createProjectTables(connectionSource);
+        //createColumnTables(connectionSource);
+        //createCardTables(connectionSource);
+        //createSubItemTables(connectionSource);
+        //createIntermediaryTables(connectionSource);
 
         // Close the connection for the data source.
         connectionSource.close();
     }
 
-    private static void createProjectTables(JdbcConnectionSource connectionSource) throws SQLException {
+    public static void createProjectTable(JdbcConnectionSource connectionSource) throws SQLException {
         Dao<ProjectModel, UUID> projectModelDao = DaoManager.createDao(connectionSource, ProjectModel.class);
-        Dao<TemplateProjectModel, UUID> templateProjectModelDao = DaoManager.createDao(connectionSource, TemplateProjectModel.class);
-        Dao<StatusModel, Integer> projectStatusesModelDao = DaoManager.createDao(connectionSource, StatusModel.class);
-
         TableUtils.createTable(projectModelDao);
+    }
+
+    public static void createProjectTemplateTable(JdbcConnectionSource connectionSource) throws SQLException {
+        Dao<TemplateProjectModel, UUID> templateProjectModelDao = DaoManager.createDao(connectionSource, TemplateProjectModel.class);
         TableUtils.createTable(templateProjectModelDao);
+    }
+
+    public static void createProjectStatusesTable(JdbcConnectionSource connectionSource) throws SQLException {
+        Dao<StatusModel, Integer> projectStatusesModelDao = DaoManager.createDao(connectionSource, StatusModel.class);
         TableUtils.createTable(projectStatusesModelDao);
     }
 
-    private static void createColumnTables(JdbcConnectionSource connectionSource) throws SQLException{
+    public static void createColumnTable(JdbcConnectionSource connectionSource) throws SQLException{
         Dao<ColumnModel, UUID> projectColumnModelDao = DaoManager.createDao(connectionSource, ColumnModel.class);
-        Dao<ArchivedColumnModel, UUID> archivedColumnModelDao = DaoManager.createDao(connectionSource, ArchivedColumnModel.class);
-        Dao<TemplateColumnModel, UUID> templateColumnModelDao = DaoManager.createDao(connectionSource, TemplateColumnModel.class);
-
         TableUtils.createTable(projectColumnModelDao);
-        TableUtils.createTable(archivedColumnModelDao);
+    }
+
+    public static void createTemplateColumnTable(JdbcConnectionSource connectionSource) throws SQLException{
+        Dao<TemplateColumnModel, UUID> templateColumnModelDao = DaoManager.createDao(connectionSource, TemplateColumnModel.class);
         TableUtils.createTable(templateColumnModelDao);
     }
 
-    private static void createCardTables(JdbcConnectionSource connectionSource) throws SQLException{
+    public static void createCardTable(JdbcConnectionSource connectionSource) throws SQLException{
         Dao<CardModel, UUID> columnCardModelDao = DaoManager.createDao(connectionSource, CardModel.class);
-        Dao<ArchivedCardModel, UUID> archivedCardModelDao = DaoManager.createDao(connectionSource, ArchivedCardModel.class);
-        Dao<TemplateCardModel, UUID> templateCardModelDao = DaoManager.createDao(connectionSource, TemplateCardModel.class);
-
         TableUtils.createTable(columnCardModelDao);
-        TableUtils.createTable(archivedCardModelDao);
+    }
+
+    public static void createTemplateCardTable(JdbcConnectionSource connectionSource) throws SQLException{
+        Dao<TemplateCardModel, UUID> templateCardModelDao = DaoManager.createDao(connectionSource, TemplateCardModel.class);
         TableUtils.createTable(templateCardModelDao);
     }
 
-    private static void createSubItemTables(JdbcConnectionSource connectionSource) throws SQLException{
+    public static void createResourceItemTable(JdbcConnectionSource connectionSource) throws SQLException{
         Dao<ResourceItem, UUID> linkedItemDao = DaoManager.createDao(connectionSource, ResourceItem.class);
         TableUtils.createTable(linkedItemDao);
     }
 
-    private static void createIntermediaryTables(JdbcConnectionSource connectionSource) throws SQLException{
+    public static void createIntermediaryTables(JdbcConnectionSource connectionSource) throws SQLException{
 
     }
 }
