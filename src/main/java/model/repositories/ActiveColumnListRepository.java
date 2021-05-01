@@ -7,7 +7,7 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ColumnModel;
 import model.domainobjects.project.ProjectModel;

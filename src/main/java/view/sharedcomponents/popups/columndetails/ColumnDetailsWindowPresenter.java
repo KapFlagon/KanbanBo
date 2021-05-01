@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ColumnModel;
 import model.domainobjects.project.ProjectModel;

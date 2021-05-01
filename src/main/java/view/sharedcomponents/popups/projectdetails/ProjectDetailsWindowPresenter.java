@@ -5,7 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
 import utils.StageUtils;
 import java.io.IOException;
@@ -124,6 +124,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         newProjectModel.setProject_description(getProjectDescriptionTextArea().getText());
         newProjectModel.setCreation_timestamp(new Date());
         newProjectModel.setLast_changed_timestamp(new Date());
+        newProjectModel.setProject_status(1);
         return newProjectModel;
     }
 

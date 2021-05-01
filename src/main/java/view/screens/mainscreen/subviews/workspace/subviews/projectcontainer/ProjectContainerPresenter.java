@@ -10,7 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ColumnModel;
 import model.domainobjects.project.ProjectModel;
@@ -23,8 +23,6 @@ import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowView;
 import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
 import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowView;
-import view.sharedcomponents.popups.projectnotesinput.ProjectNotesInputPresenter;
-import view.sharedcomponents.popups.projectnotesinput.ProjectNotesInputView;
 
 import java.io.IOException;
 import java.net.URL;

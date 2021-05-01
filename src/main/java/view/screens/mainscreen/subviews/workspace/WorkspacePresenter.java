@@ -1,6 +1,5 @@
 package view.screens.mainscreen.subviews.workspace;
 
-import com.j256.ormlite.stmt.query.In;
 import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -12,7 +11,7 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
 import model.repositories.services.ProjectRepositoryService;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;

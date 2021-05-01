@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.repositories.ActiveProjectListRepository;
 import model.repositories.services.ProjectRepositoryService;
 import utils.StageUtils;

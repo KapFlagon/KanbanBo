@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
 import utils.database.DatabaseUtils;
 

@@ -1,8 +1,9 @@
-package model.activerecords;
+package model.activerecords.project;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import model.activerecords.AbstractActiveRecord;
 import model.domainobjects.project.AbstractProjectModel;
 
 import java.io.IOException;
@@ -12,14 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+public abstract class AbstractProjectActiveRecord<T extends AbstractProjectModel> extends AbstractActiveRecord {
 
-public class ProjectActiveRecord<T extends AbstractProjectModel> extends AbstractActiveRecord{
 
-
-    // Variables for model objects and DAOs
-    protected T projectModel;
-    //protected Dao<T, UUID> projectDao;
-    // Variables to act as property containers for the model data
+    // Variables
+    protected T abstractProjectModel;
     protected SimpleStringProperty projectTitle;
     protected SimpleStringProperty projectDescription;
     protected SimpleStringProperty creationTimestamp;
@@ -27,31 +25,23 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
 
 
     // Constructors
-    public ProjectActiveRecord(Class<T> modelClassType) {
-        super(modelClassType);
+    protected AbstractProjectActiveRecord(Class domainModelClassType) {
+        super(domainModelClassType);
     }
-    public ProjectActiveRecord(Class<T> modelClassType, T projectModel) {
-        super(modelClassType);
-        this.projectModel = projectModel;
-        this.initAllProperties();
-        this.setAllListeners();
-    }
-
 
     // Getters and Setters
-    public T getProjectModel() {
-        return projectModel;
+    public T getAbstractProjectModel() {
+        return abstractProjectModel;
     }
-    public void setProjectModel(T projectModel) throws IOException, SQLException {
-        this.projectModel = projectModel;
+    public void setAbstractProjectModel(T abstractProjectModel) throws IOException, SQLException {
+        this.abstractProjectModel = abstractProjectModel;
         this.initAllProperties();
         this.setAllListeners();
         createOrUpdateActiveRowInDb();
-        // TODO lazily create UUID (when table entry is made), or actively create it here when detecting a new object?
     }
 
     public UUID getProjectUUID() {
-        return projectModel.getProject_uuid();
+        return abstractProjectModel.getProject_uuid();
     }
 
     public String getProjectTitle() {
@@ -94,18 +84,17 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
         this.lastChangedTimestamp.set(lastChangedTimestamp);
     }
 
-
     // Initialisation methods
+    @Override
     protected void initAllProperties() {
-        this.projectTitle = new SimpleStringProperty(projectModel.getProject_title());
-        this.projectDescription = new SimpleStringProperty(projectModel.getProject_description());
-        this.creationTimestamp = new SimpleStringProperty(projectModel.getCreation_timestamp().toString());
-        this.lastChangedTimestamp = new SimpleStringProperty(projectModel.getLast_changed_timestamp().toString());
+        this.projectTitle = new SimpleStringProperty(abstractProjectModel.getProject_title());
+        this.projectDescription = new SimpleStringProperty(abstractProjectModel.getProject_description());
+        this.creationTimestamp = new SimpleStringProperty(abstractProjectModel.getCreation_timestamp().toString());
+        this.lastChangedTimestamp = new SimpleStringProperty(abstractProjectModel.getLast_changed_timestamp().toString());
     }
 
-
-
     // Other methods
+    @Override
     protected void setAllListeners() {
         setProjectTitleListener();
         setProjectDescriptionListener();
@@ -116,7 +105,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
         ChangeListener<String> changeListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                projectModel.setProject_title(newValue);
+                abstractProjectModel.setProject_title(newValue);
                 updateLastChangedTimestamp();
             }
         };
@@ -127,7 +116,7 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
         ChangeListener<String> changeListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                projectModel.setProject_description(newValue);
+                abstractProjectModel.setProject_description(newValue);
                 updateLastChangedTimestamp();
             }
         };
@@ -152,12 +141,12 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
 
     public void updateLastChangedTimestamp() {
         Date currentTimestamp = new Date();
-        projectModel.setLast_changed_timestamp(currentTimestamp);
+        abstractProjectModel.setLast_changed_timestamp(currentTimestamp);
         setLastChangedTimestamp(currentTimestamp.toString());
     }
 
     public void updateLastChangedTimestamp(Date currentTimestamp) {
-        projectModel.setLast_changed_timestamp(currentTimestamp);
+        abstractProjectModel.setLast_changed_timestamp(currentTimestamp);
         setLastChangedTimestamp(currentTimestamp.toString());
     }
 
@@ -173,15 +162,11 @@ public class ProjectActiveRecord<T extends AbstractProjectModel> extends Abstrac
         return tempDate;
     }
 
+    @Override
     public void createOrUpdateActiveRowInDb() throws SQLException, IOException {
         this.setupDbConnection();
-        dao.createOrUpdate(projectModel);
+        dao.createOrUpdate(abstractProjectModel);
         this.teardownDbConnection();
     }
-
-    // TODO make new project building the responsibility of this class
-
-
-
 
 }

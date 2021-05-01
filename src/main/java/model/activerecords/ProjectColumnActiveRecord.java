@@ -3,6 +3,7 @@ package model.activerecords;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import model.activerecords.project.ProjectActiveRecord;
 import model.domainobjects.column.AbstractColumnModel;
 
 import java.io.IOException;

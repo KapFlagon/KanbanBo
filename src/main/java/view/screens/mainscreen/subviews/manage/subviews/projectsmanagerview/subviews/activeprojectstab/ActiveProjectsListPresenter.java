@@ -9,7 +9,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
 
 
@@ -20,6 +20,8 @@ public class ActiveProjectsListPresenter implements Initializable {
     private TableView activeProjectListTableView;
     @FXML
     private TableColumn<ProjectActiveRecord, String> projectTitleTableCol;
+    //@FXML
+    //private TableColumn<ProjectActiveRecord, String> projectStatusTableCol;
     @FXML
     private TableColumn<ProjectActiveRecord, String> creationDateTableCol;
     @FXML
@@ -91,6 +93,7 @@ public class ActiveProjectsListPresenter implements Initializable {
 
     public void initTableColumns() {
         projectTitleTableCol.setCellValueFactory(cellData -> (cellData.getValue().projectTitleProperty()));
+        //projectStatusTableCol.setCellValueFactory(cellData -> (cellData.getValue().statusProperty()));
         creationDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().creationTimestampProperty()));
         lastChangedDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().lastChangedTimestampProperty()));
     }

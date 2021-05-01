@@ -2,7 +2,7 @@ package model.repositories.services;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.activerecords.ProjectActiveRecord;
+import model.activerecords.project.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
 import model.repositories.ActiveProjectListRepository;
 
