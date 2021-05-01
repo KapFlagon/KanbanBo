@@ -1,14 +1,17 @@
 package view.screens.mainscreen.subviews.workspace;
 
+import com.j256.ormlite.stmt.query.In;
 import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import model.activerecords.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
 import model.repositories.services.ProjectRepositoryService;
@@ -26,6 +29,7 @@ public class WorkspacePresenter implements Initializable {
     @FXML
     private TabPane workspaceTabPane;
     @FXML
+    private BorderPane borderPane;
     private Label emptyWorkspaceLbl;
 
     // Other variables
@@ -47,7 +51,9 @@ public class WorkspacePresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        emptyWorkspaceLbl.setText("No Projects opened in workspace...");
+        emptyWorkspaceLbl = new Label("No Projects opened in workspace...");
+        emptyWorkspaceLbl.setPadding(new Insets(5,5,5,5));
+        BorderPane.setMargin(emptyWorkspaceLbl, new Insets(5,5,5,5));
         tabPaneSelectionModel = workspaceTabPane.getSelectionModel();
     }
 
@@ -106,11 +112,12 @@ public class WorkspacePresenter implements Initializable {
 
     // Other methods
     private void updatePlaceholderLabel() {
-
         if (projectRepositoryService.getOpenedActiveProjects().size() < 1) {
-            emptyWorkspaceLbl.setVisible(true);
+            borderPane.setTop(emptyWorkspaceLbl);
+            //emptyWorkspaceLbl.setVisible(true);
         } else {
-            emptyWorkspaceLbl.setVisible(false);
+            borderPane.setTop(null);
+            //emptyWorkspaceLbl.setVisible(false);
         }
     }
 

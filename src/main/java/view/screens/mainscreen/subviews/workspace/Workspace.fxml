@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.WorkspacePresenter">
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.WorkspacePresenter">
    <center>
       <TabPane fx:id="workspaceTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="ALL_TABS" />
    </center>
-   <top>
-      <Label fx:id="emptyWorkspaceLbl" text="Label" BorderPane.alignment="CENTER" />
-   </top>
 </BorderPane>
