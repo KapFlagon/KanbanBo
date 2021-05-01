@@ -57,6 +57,9 @@ public class KanbanBoApp extends Application {
                 //StageUtils.changeMainScene("KanbanBo - Project manager", view);
                 StageUtils.changeMainScene("KanbanBo - Project manager", mainScreenView);
                 //currentScene = new Scene((mainScreenView.getView()));
+            } else {
+                StartScreenView startScreenView = new StartScreenView();
+                StageUtils.changeMainScene("KanbanBo - Database file selection", startScreenView);
             }
         } else {
             StartScreenView startScreenView = new StartScreenView();
