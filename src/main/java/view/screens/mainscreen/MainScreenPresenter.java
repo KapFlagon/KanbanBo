@@ -50,6 +50,7 @@ public class MainScreenPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        StageUtils.getMainStage().setTitle("KanbanBo - Database file selection");
         try {
             projectRepositoryService = new ProjectRepositoryService();
             projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ProjectModel>>() {

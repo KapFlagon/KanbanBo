@@ -4,8 +4,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import user.preferences.UserPreferences;
 import utils.StageUtils;
+import utils.database.DatabaseUtils;
+import view.screens.mainscreen.MainScreenView;
 import view.screens.startscreen.StartScreenView;
+
+import java.io.File;
+import java.nio.file.Path;
 
 
 public class KanbanBoApp extends Application {
@@ -24,11 +30,12 @@ public class KanbanBoApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         Platform.setImplicitExit(false);
         StageUtils.setMainStage(primaryStage);
-        StartScreenView startScreenView = new StartScreenView();
-        currentScene = new Scene(startScreenView.getView());
-        primaryStage.setScene(currentScene);
         setStageSizes(primaryStage);
-        primaryStage.show();
+        //StartScreenView startScreenView = new StartScreenView();
+        //currentScene = new Scene(startScreenView.getView());
+        determineScene();
+        //primaryStage.setScene(currentScene);
+        //primaryStage.show();
     }
 
     public void setStageSizes(Stage primaryStage) {
@@ -38,5 +45,24 @@ public class KanbanBoApp extends Application {
         primaryStage.setMinHeight(appMinHeight);
     }
 
+    public void determineScene () {
+        boolean autoLoadOn = UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically();
+        Path mostRecentPath = UserPreferences.getSingletonInstance().getMostRecentPath();
+        if (mostRecentPath != null) {
+            File mostRecentFile = mostRecentPath.toFile();
+            if(autoLoadOn && mostRecentFile.exists()) {
+                // Get latest path from preferences, check if it is valid, update to main screen
+                DatabaseUtils.setActiveDatabaseFile(mostRecentFile);
+                MainScreenView mainScreenView = new MainScreenView();
+                //StageUtils.changeMainScene("KanbanBo - Project manager", view);
+                StageUtils.changeMainScene("KanbanBo - Project manager", mainScreenView);
+                //currentScene = new Scene((mainScreenView.getView()));
+            }
+        } else {
+            StartScreenView startScreenView = new StartScreenView();
+            StageUtils.changeMainScene("KanbanBo - Database file selection", startScreenView);
+            //currentScene = new Scene(startScreenView.getView());
+        }
+    }
 
 }

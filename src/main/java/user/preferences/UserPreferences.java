@@ -51,7 +51,11 @@ public class UserPreferences {
         return recentFilePaths;
     }
     public Path getMostRecentPath() {
-        return recentFilePaths.get(0);
+        if (recentFilePaths.size() > 0) {
+            return recentFilePaths.get(0);
+        } else {
+            return null;
+        }
     }
 
 

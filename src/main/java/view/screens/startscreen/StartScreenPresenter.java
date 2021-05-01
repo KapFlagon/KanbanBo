@@ -131,7 +131,7 @@ public class StartScreenPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        StageUtils.getMainStage().setTitle("KanbanBo - Database file selection");
+        //StageUtils.getMainStage().setTitle("KanbanBo - Database file selection");
         System.out.println("Start screen loaded");
         autoLoadCheckBox.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
         autoLoadCheckMenuItem.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
@@ -142,14 +142,18 @@ public class StartScreenPresenter implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
                     File selectedRecentFile = rflp.getSelectedPath().toFile();
-                    DatabaseUtils.setActiveDatabaseFile(selectedRecentFile);
-                    System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
-                    try {
-                        UserPreferences.getSingletonInstance().addRecentFilePath(selectedRecentFile.toPath());
-                    } catch (BackingStoreException e) {
-                        e.printStackTrace();
+                    if(selectedRecentFile.exists()) {
+                        DatabaseUtils.setActiveDatabaseFile(selectedRecentFile);
+                        System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
+                        try {
+                            UserPreferences.getSingletonInstance().addRecentFilePath(selectedRecentFile.toPath());
+                        } catch (BackingStoreException e) {
+                            e.printStackTrace();
+                        }
+                        moveToMainSceneView();
+                    } else {
+                        // TODO need to account for the scenario where a file gets deleted between the time it is evaluated by the UI and the user clicks it.
                     }
-                    moveToMainSceneView();
                 }
             }
         });
