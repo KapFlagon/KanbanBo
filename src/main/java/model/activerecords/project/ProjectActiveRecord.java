@@ -11,8 +11,8 @@ import java.sql.SQLException;
 
 public class ProjectActiveRecord<T extends ProjectModel> extends AbstractProjectActiveRecord {
 
-
-    protected T projectModel;
+    // Variables
+    protected ProjectModel projectModel;
     protected SimpleIntegerProperty status;
 
 
@@ -20,7 +20,7 @@ public class ProjectActiveRecord<T extends ProjectModel> extends AbstractProject
     public ProjectActiveRecord(Class<T> modelClassType) {
         super(modelClassType);
     }
-    public ProjectActiveRecord(Class<T> modelClassType, T projectModel) {
+    public ProjectActiveRecord(Class<T> modelClassType, ProjectModel projectModel) {
         super(modelClassType);
         this.projectModel = projectModel;
         this.initAllProperties();
@@ -29,7 +29,7 @@ public class ProjectActiveRecord<T extends ProjectModel> extends AbstractProject
 
 
     // Getters and Setters
-    public void setProjectModel(T projectModel) throws IOException, SQLException {
+    public void setProjectModel(ProjectModel projectModel) throws IOException, SQLException {
         this.projectModel = projectModel;
         super.setAbstractProjectModel(projectModel);
     }
@@ -64,13 +64,8 @@ public class ProjectActiveRecord<T extends ProjectModel> extends AbstractProject
         ChangeListener<Number> changeListener = new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                try {
-                    createOrUpdateActiveRowInDb();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                projectModel.setProject_status((Integer) newValue);
+                updateLastChangedTimestamp();
             }
         };
         status.addListener(changeListener);
