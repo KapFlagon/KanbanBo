@@ -9,7 +9,7 @@ import model.domainobjects.card.TemplateCardModel;
 import model.domainobjects.column.ColumnModel;
 import model.domainobjects.column.TemplateColumnModel;
 import model.domainobjects.project.ProjectModel;
-import model.domainobjects.StatusModel;
+import model.domainobjects.ProjectStatusModel;
 import model.domainobjects.project.TemplateProjectModel;
 import model.domainobjects.subitems.ResourceItem;
 
@@ -86,9 +86,11 @@ public class DatabaseUtils {
         TableUtils.createTable(templateProjectModelDao);
     }
 
-    public static void createProjectStatusesTable(JdbcConnectionSource connectionSource) throws SQLException {
-        Dao<StatusModel, Integer> projectStatusesModelDao = DaoManager.createDao(connectionSource, StatusModel.class);
+    public static void createProjectStatusesTable(JdbcConnectionSource connectionSource) throws SQLException, IOException {
+        Dao<ProjectStatusModel, Integer> projectStatusesModelDao = DaoManager.createDao(connectionSource, ProjectStatusModel.class);
         TableUtils.createTable(projectStatusesModelDao);
+        DefaultDataGenerator ddg = new DefaultDataGenerator();
+        ddg.generateDefaultProjectStatuses();
     }
 
     public static void createColumnTable(JdbcConnectionSource connectionSource) throws SQLException{

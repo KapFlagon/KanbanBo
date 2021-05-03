@@ -1,13 +1,7 @@
 package utils.database;
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
-import javafx.util.Duration;
 
 public class DatabaseCreator {
 
@@ -39,6 +33,7 @@ public class DatabaseCreator {
                         case 2:
                             DatabaseUtils.createProjectStatusesTable(connectionSource);
                             this.updateMessage("'Project Statuses' table generated");
+                            // TODO need to generate default statuses...
                             break;
                         case 3:
                             DatabaseUtils.createColumnTable(connectionSource);
@@ -90,7 +85,5 @@ public class DatabaseCreator {
         Thread thread = new Thread(databaseCreationTask);
         thread.setDaemon(true);
         thread.start();
-        // TODO how to stop the task and scheduled service?
-        // TODO how to close the pop-up?
     }
 }
