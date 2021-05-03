@@ -1,6 +1,7 @@
 package model.activerecords.project;
 
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import model.domainobjects.project.ProjectModel;
@@ -9,15 +10,16 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 
-public class ProjectActiveRecord<T extends ProjectModel> extends AbstractProjectActiveRecord {
+public class ProjectActiveRecord extends AbstractProjectActiveRecord {
 
     // Variables
     protected ProjectModel projectModel;
-    protected SimpleIntegerProperty status;
+    protected SimpleStringProperty statusText;
+    protected SimpleIntegerProperty statusID;
 
 
     // Constructors
-    public ProjectActiveRecord(Class<T> modelClassType) {
+    /*public ProjectActiveRecord(Class<T> modelClassType) {
         super(modelClassType);
     }
     public ProjectActiveRecord(Class<T> modelClassType, ProjectModel projectModel) {
@@ -25,30 +27,54 @@ public class ProjectActiveRecord<T extends ProjectModel> extends AbstractProject
         this.projectModel = projectModel;
         this.initAllProperties();
         this.setAllListeners();
+    }*/
+    public ProjectActiveRecord() {
+        super(ProjectModel.class);
+    }
+    public ProjectActiveRecord(ProjectModel projectModel) throws SQLException, IOException {
+        super(ProjectModel.class, projectModel);
+        this.projectModel = projectModel;
+        this.initAllProperties();
+        updateStatusText();
+        this.setAllListeners();
     }
 
 
     // Getters and Setters
     public void setProjectModel(ProjectModel projectModel) throws IOException, SQLException {
-        this.projectModel = projectModel;
         super.setAbstractProjectModel(projectModel);
+        this.projectModel = projectModel;
+        this.initAllProperties();
+        updateStatusText();
+        this.setAllListeners();
     }
 
-    public int getStatus() {
-        return status.get();
+    public String getStatusText() {
+        return statusText.get();
     }
-    public SimpleIntegerProperty statusProperty() {
-        return status;
+    public SimpleStringProperty statusTextProperty() {
+        return statusText;
     }
-    public void setStatus(int status) {
-        this.status.set(status);
+    public void setStatusText(String statusText) {
+        this.statusText.set(statusText);
+    }
+
+    public int getStatusID() {
+        return statusID.get();
+    }
+    public SimpleIntegerProperty statusIDProperty() {
+        return statusID;
+    }
+    public void setStatusID(int statusID) {
+        this.statusID.set(statusID);
     }
 
 
     // Initialisation methods
     protected void initAllProperties() {
         super.initAllProperties();
-        status = new SimpleIntegerProperty(projectModel.getProject_status());
+        statusText = new SimpleStringProperty();
+        statusID = new SimpleIntegerProperty(projectModel.getProject_status());
     }
 
 
@@ -65,15 +91,26 @@ public class ProjectActiveRecord<T extends ProjectModel> extends AbstractProject
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 projectModel.setProject_status((Integer) newValue);
+                try {
+                    statusText.set(updateStatusText());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 updateLastChangedTimestamp();
             }
         };
-        status.addListener(changeListener);
+        statusID.addListener(changeListener);
     }
 
-    // TODO make new project building the responsibility of this class
-
-
+    private String updateStatusText() throws SQLException, IOException {
+        String value = "";
+        ProjectStatusActiveRecord psar = new ProjectStatusActiveRecord();
+        value = psar.getStatusByID(statusID.getValue());
+        statusText.set(value);
+        return value;
+    }
 
 
 }

@@ -28,16 +28,20 @@ public abstract class AbstractProjectActiveRecord<T extends AbstractProjectModel
     protected AbstractProjectActiveRecord(Class domainModelClassType) {
         super(domainModelClassType);
     }
+    public AbstractProjectActiveRecord(Class domainModelClassType, T abstractProjectModel) {
+        super(domainModelClassType);
+        setAbstractProjectModel(abstractProjectModel);
+    }
 
     // Getters and Setters
     public T getAbstractProjectModel() {
         return abstractProjectModel;
     }
-    public void setAbstractProjectModel(T abstractProjectModel) throws IOException, SQLException {
+    public void setAbstractProjectModel(T abstractProjectModel) {
         this.abstractProjectModel = abstractProjectModel;
-        this.initAllProperties();
-        this.setAllListeners();
-        createOrUpdateActiveRowInDb();
+        //this.initAllProperties();
+        //this.setAllListeners();
+        //createOrUpdateActiveRowInDb();
     }
 
     public UUID getProjectUUID() {

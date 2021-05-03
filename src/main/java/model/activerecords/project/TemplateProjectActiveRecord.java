@@ -10,8 +10,8 @@ public class TemplateProjectActiveRecord<T extends TemplateProjectModel> extends
     protected TemplateProjectModel templateProjectModel;
 
     // Constructors
-    protected TemplateProjectActiveRecord(Class domainModelClassType) {
-        super(domainModelClassType);
+    public TemplateProjectActiveRecord() {
+        super(TemplateProjectModel.class);
     }
 
     // Getters and Setters
