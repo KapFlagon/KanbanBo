@@ -88,7 +88,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     // Other methods
     public void saveProjectDetailsChange() throws SQLException, IOException {
         if(projectActiveRecord == null) {
-            projectActiveRecord = new ProjectActiveRecord(ProjectModel.class);
+            projectActiveRecord = new ProjectActiveRecord();
             // TODO make new project building the responsibility of class ProjectActiveRecord
             projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
         } else {

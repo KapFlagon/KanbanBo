@@ -27,7 +27,7 @@ public class ColumnDetailsWindowPresenter implements Initializable {
 
     // Variables
     private ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord;
-    private ProjectActiveRecord<ProjectModel> parentProject;
+    private ProjectActiveRecord parentProject;
 
     // Constructors
 
@@ -48,10 +48,10 @@ public class ColumnDetailsWindowPresenter implements Initializable {
         titleTextField.setText(projectColumnActiveRecord.getColumnTitle());
     }
 
-    public ProjectActiveRecord<ProjectModel> getParentProject() {
+    public ProjectActiveRecord getParentProject() {
         return parentProject;
     }
-    public void setParentProject(ProjectActiveRecord<ProjectModel> parentProject) {
+    public void setParentProject(ProjectActiveRecord parentProject) {
         this.parentProject = parentProject;
     }
 

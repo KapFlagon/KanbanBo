@@ -53,9 +53,9 @@ public class MainScreenPresenter implements Initializable {
         StageUtils.getMainStage().setTitle("KanbanBo - Database file selection");
         try {
             projectRepositoryService = new ProjectRepositoryService();
-            projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ProjectModel>>() {
+            projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord>() {
                 @Override
-                public void onChanged(Change<? extends ProjectActiveRecord<ProjectModel>> c) {
+                public void onChanged(Change<? extends ProjectActiveRecord> c) {
                     c.next();
                     if (c.wasAdded()) {
                         System.out.println("Change detected in main screen");

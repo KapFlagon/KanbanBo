@@ -45,7 +45,7 @@ public class ProjectContainerPresenter implements Initializable {
 
     // Other variables
     //private AbstractProjectModel projectModel;
-    private ProjectActiveRecord<ProjectModel> projectActiveRecord;
+    private ProjectActiveRecord projectActiveRecord;
     private ProjectColumnRepositoryService projectColumnRepositoryService;
     private ActiveColumnListRepository activeColumnListRepository;
     private ObservableList<ProjectColumnActiveRecord> projectColumnsList;
@@ -65,10 +65,10 @@ public class ProjectContainerPresenter implements Initializable {
     }
      */
 
-    public ProjectActiveRecord<ProjectModel> getProjectActiveRecord() {
+    public ProjectActiveRecord getProjectActiveRecord() {
         return projectActiveRecord;
     }
-    public void setProjectActiveRecord(ProjectActiveRecord<ProjectModel> projectActiveRecord) throws IOException, SQLException {
+    public void setProjectActiveRecord(ProjectActiveRecord projectActiveRecord) throws IOException, SQLException {
         this.projectActiveRecord = projectActiveRecord;
         customInit();
     }

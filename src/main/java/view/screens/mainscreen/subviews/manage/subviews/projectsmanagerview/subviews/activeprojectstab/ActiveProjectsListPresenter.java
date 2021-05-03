@@ -1,5 +1,6 @@
 package view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,8 +21,8 @@ public class ActiveProjectsListPresenter implements Initializable {
     private TableView activeProjectListTableView;
     @FXML
     private TableColumn<ProjectActiveRecord, String> projectTitleTableCol;
-    //@FXML
-    //private TableColumn<ProjectActiveRecord, String> projectStatusTableCol;
+    @FXML
+    private TableColumn<ProjectActiveRecord, String> projectStatusTableCol;
     @FXML
     private TableColumn<ProjectActiveRecord, String> creationDateTableCol;
     @FXML
@@ -49,6 +50,13 @@ public class ActiveProjectsListPresenter implements Initializable {
     }
     public void setProjectTitleTableCol(TableColumn projectTitleTableCol) {
         this.projectTitleTableCol = projectTitleTableCol;
+    }
+
+    public TableColumn<ProjectActiveRecord, String> getProjectStatusTableCol() {
+        return projectStatusTableCol;
+    }
+    public void setProjectStatusTableCol(TableColumn<ProjectActiveRecord, String> projectStatusTableCol) {
+        this.projectStatusTableCol = projectStatusTableCol;
     }
 
     public TableColumn getCreationDateTableCol() {
@@ -83,7 +91,7 @@ public class ActiveProjectsListPresenter implements Initializable {
     }
 
     public void initTableView() {
-        activeProjectListTableView.setPlaceholder(new Label ("No active projects in database..."));
+        activeProjectListTableView.setPlaceholder(new Label ("No projects in database..."));
     }
 
     public void initSelectionModel() {
@@ -93,7 +101,7 @@ public class ActiveProjectsListPresenter implements Initializable {
 
     public void initTableColumns() {
         projectTitleTableCol.setCellValueFactory(cellData -> (cellData.getValue().projectTitleProperty()));
-        //projectStatusTableCol.setCellValueFactory(cellData -> (cellData.getValue().statusProperty()));
+        projectStatusTableCol.setCellValueFactory(cellData -> (cellData.getValue().statusTextProperty()));
         creationDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().creationTimestampProperty()));
         lastChangedDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().lastChangedTimestampProperty()));
     }
@@ -102,7 +110,7 @@ public class ActiveProjectsListPresenter implements Initializable {
 
 
     // Other methods
-    public ProjectActiveRecord<ProjectModel> getSelectedRow() {
+    public ProjectActiveRecord getSelectedRow() {
         return selectionModel.getSelectedItem();
     }
 

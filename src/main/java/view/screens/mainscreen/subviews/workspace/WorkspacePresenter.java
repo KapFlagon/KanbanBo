@@ -57,9 +57,9 @@ public class WorkspacePresenter implements Initializable {
     }
 
     public void customInit() {
-        projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord<ProjectModel>>() {
+        projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord>() {
             @Override
-            public void onChanged(Change<? extends ProjectActiveRecord<ProjectModel>> c) {
+            public void onChanged(Change<? extends ProjectActiveRecord> c) {
                 c.next();
                 if (c.wasAdded()) {
                     System.out.println("Change detected, new project opened");
