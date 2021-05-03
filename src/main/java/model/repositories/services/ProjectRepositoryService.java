@@ -14,7 +14,7 @@ public class ProjectRepositoryService {
 
     // Variables
     private ActiveProjectListRepository activeProjectListRepository;
-    private ObservableList<ProjectActiveRecord<ProjectModel>> openedActiveProjects;
+    private ObservableList<ProjectActiveRecord> openedActiveProjects;
     /*
     private ProjectListRepository<ActiveProjectModel> activeProjectsRepository;
     private ProjectListRepository<ArchivedProjectModel> archivedProjectsRepository;
@@ -68,10 +68,10 @@ public class ProjectRepositoryService {
     }
     */
 
-    public ObservableList<ProjectActiveRecord<ProjectModel>> getOpenedActiveProjects() {
+    public ObservableList<ProjectActiveRecord> getOpenedActiveProjects() {
         return openedActiveProjects;
     }
-    public void setOpenedActiveProjects(ObservableList<ProjectActiveRecord<ProjectModel>> openedActiveProjects) {
+    public void setOpenedActiveProjects(ObservableList<ProjectActiveRecord> openedActiveProjects) {
         this.openedActiveProjects = openedActiveProjects;
     }
 

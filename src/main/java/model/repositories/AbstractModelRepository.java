@@ -87,7 +87,7 @@ public abstract class AbstractModelRepository<T1, T2>{
     }
 
     /*
-    public void test() {
+    public void generateTemplateProject() {
         activeRecordObservableList = FXCollections.observableArrayList(
                 new Callback<T1, Observable[]>() {
                     @Override

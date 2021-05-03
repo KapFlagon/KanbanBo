@@ -62,7 +62,7 @@ public class ActiveProjectListRepository {
         long count = modelDao.countOf();
         if (count != 0) {
             for (ProjectModel tempModel : modelDao) {
-                ProjectActiveRecord<ProjectModel> activeRecord = new ProjectActiveRecord<ProjectModel>(ProjectModel.class, tempModel);
+                ProjectActiveRecord activeRecord = new ProjectActiveRecord(tempModel);
                 activeRecordObservableList.add(activeRecord);
             }
         }

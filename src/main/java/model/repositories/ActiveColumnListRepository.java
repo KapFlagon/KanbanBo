@@ -24,7 +24,7 @@ public class ActiveColumnListRepository {
     // Variables
     protected JdbcConnectionSource connectionSource;
     protected Dao<ColumnModel, UUID> modelDao;
-    protected ProjectActiveRecord<ProjectModel> projectActiveRecord;
+    protected ProjectActiveRecord projectActiveRecord;
     protected ObservableList<ProjectColumnActiveRecord> activeRecordObservableList;
 
 
@@ -32,7 +32,7 @@ public class ActiveColumnListRepository {
     public ActiveColumnListRepository() {
         initActiveRecordObservableList();
     }
-    public ActiveColumnListRepository(ProjectActiveRecord<ProjectModel> projectActiveRecord) {
+    public ActiveColumnListRepository(ProjectActiveRecord projectActiveRecord) {
         initActiveRecordObservableList();
         this.projectActiveRecord = projectActiveRecord;
     }

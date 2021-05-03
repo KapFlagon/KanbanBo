@@ -16,7 +16,7 @@ public class ProjectColumnRepositoryService {
     private ActiveColumnListRepository activeColumnListRepository;
 
     // Constructors
-    public ProjectColumnRepositoryService(ProjectActiveRecord<ProjectModel> projectActiveRecord) throws IOException, SQLException {
+    public ProjectColumnRepositoryService(ProjectActiveRecord projectActiveRecord) throws IOException, SQLException {
         activeColumnListRepository = new ActiveColumnListRepository(projectActiveRecord);
         activeColumnListRepository.readFromDb();
         //initAllData();
