@@ -5,11 +5,10 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 
-@DatabaseTable(tableName = "status")
-public class StatusModel {
+@DatabaseTable(tableName = "project_status")
+public class ProjectStatusModel {
 
-    // TODO need to push data to DB during file creation, as well as create the table
-
+    public static final String PRIMARY_KEY = "status_id";
     // Variables
     @DatabaseField(generatedId = true, canBeNull = false, dataType = DataType.INTEGER, useGetSet = true)
     private int status_id;
@@ -17,7 +16,7 @@ public class StatusModel {
     private String status_text;
 
     // Constructors
-    public StatusModel() {
+    public ProjectStatusModel() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 
