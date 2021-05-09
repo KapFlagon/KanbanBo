@@ -95,6 +95,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
             projectActiveRecord.setProjectTitle(getProjectTitleTextField().getText());
             projectActiveRecord.setProjectDescription(getProjectDescriptionTextArea().getText());
         }
+        projectActiveRecord.createOrUpdateActiveRowInDb();
         StageUtils.hideSubStage();
     }
 
