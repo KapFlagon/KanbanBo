@@ -27,13 +27,17 @@ public class MainScreenPresenter implements Initializable {
     @FXML
     private TabPane mainScreenTabPane;
     @FXML
+    private Tab manageTab;
+    @FXML
     private Tab manageProjectsSubTab;
     @FXML
     private Tab manageTemplatesSubTab;
     @FXML
-    private Tab dashboardTab;
+    private Tab templatesTab;
     @FXML
-    private TabPane dashboardSubTabPane;
+    private Tab analyticsTab;
+    @FXML
+    private TabPane analyticsSubTabPane;
     @FXML
     private Tab workspaceTab;
 
@@ -72,7 +76,8 @@ public class MainScreenPresenter implements Initializable {
         projectsManagerView = new ProjectsManagerView();
         projectsManagerPresenter = (ProjectsManagerPresenter) projectsManagerView.getPresenter();
         projectsManagerPresenter.setProjectRepositoryService(projectRepositoryService);
-        manageProjectsSubTab.setContent(projectsManagerView.getView());
+        //manageProjectsSubTab.setContent(projectsManagerView.getView());
+        manageTab.setContent(projectsManagerView.getView());
 
         workspaceView = new WorkspaceView();
         workspacePresenter = (WorkspacePresenter) workspaceView.getPresenter();

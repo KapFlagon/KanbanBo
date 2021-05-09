@@ -12,20 +12,13 @@
    <center>
       <TabPane fx:id="mainScreenTabPane" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <tabs>
-            <Tab fx:id="manageTab" closable="false" text="Manage">
-               <content>
-                  <TabPane fx:id="manageSubTabPane" tabClosingPolicy="UNAVAILABLE">
-                     <tabs>
-                        <Tab fx:id="manageProjectsSubTab" closable="false" text="Projects" />
-                        <Tab fx:id="manageTemplatesSubTab" closable="false" text="Templates" />
-                     </tabs>
-                  </TabPane>
-               </content></Tab>
-            <Tab fx:id="dashboardTab" closable="false" text="Dashboard">
-               <content>
-                  <TabPane fx:id="dashboardSubTabPane" tabClosingPolicy="UNAVAILABLE" />
-               </content></Tab>
-            <Tab fx:id="workspaceTab" closable="false" text="Workspace" />
+             <Tab fx:id="manageTab" closable="false" text="Manage" />
+             <Tab fx:id="workspaceTab" closable="false" text="Workspace" />
+             <Tab fx:id="templatesTab" closable="false" text="Templates" />
+             <Tab fx:id="analyticsTab" closable="false" text="Analytics">
+                 <content>
+                     <TabPane fx:id="analyticsSubTabPane" tabClosingPolicy="UNAVAILABLE" />
+                 </content></Tab>
          </tabs></TabPane>
    </center>
    <top>
