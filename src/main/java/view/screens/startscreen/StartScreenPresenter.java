@@ -227,7 +227,8 @@ public class StartScreenPresenter implements Initializable {
     private void moveToMainSceneView() {
         //MainScreenView mainScreenView = new MainScreenView();
         MainScreenView view = new MainScreenView();
-        StageUtils.changeMainScene("KanbanBo - Project manager", view);
+        String databaseFileTitle = DatabaseUtils.getActiveDatabaseFile().getName();
+        StageUtils.changeMainScene("KanbanBo - Project Database '" + databaseFileTitle + "'", view);
     }
 
     public void autoLoadCheckMenuItemClicked() throws BackingStoreException {
