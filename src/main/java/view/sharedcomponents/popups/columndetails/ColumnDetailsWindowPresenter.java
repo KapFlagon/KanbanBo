@@ -3,7 +3,9 @@ package view.sharedcomponents.popups.columndetails;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import model.activerecords.project.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ColumnModel;
@@ -21,11 +23,15 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     @FXML
     private TextField titleTextField;
     @FXML
+    private Label titleErrorLbl;
+    @FXML
     private Button saveButton;
     @FXML
     private Button cancelButton;
 
     // Variables
+    private String noTitleError = "A title must be provided";
+    private boolean validTitle;
     private ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord;
     private ProjectActiveRecord parentProject;
 
@@ -58,20 +64,29 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        validTitle = true;
+        titleErrorLbl.setText(noTitleError);
+        titleErrorLbl.setVisible(false);
+        titleErrorLbl.setDisable(true);
+        establishTitleTextFieldValidation();
     }
 
 
     // UI event methods
     public void saveDetailsChange() throws IOException, SQLException {
-        if(projectColumnActiveRecord == null) {
-            projectColumnActiveRecord = new ProjectColumnActiveRecord(ColumnModel.class);
-            // TODO make new project building the responsibility of class ProjectActiveRecord
-            projectColumnActiveRecord.setProjectColumnModel(buildNewColumnModelInstance());
+        if(validTitle) {
+            if(projectColumnActiveRecord == null) {
+                projectColumnActiveRecord = new ProjectColumnActiveRecord(ColumnModel.class);
+                // TODO make new project building the responsibility of class ProjectActiveRecord
+                projectColumnActiveRecord.setProjectColumnModel(buildNewColumnModelInstance());
+            } else {
+                projectColumnActiveRecord.setColumnTitle(titleTextField.getText());
+            }
+            StageUtils.hideSubStage();
         } else {
-            projectColumnActiveRecord.setColumnTitle(titleTextField.getText());
+            titleErrorLbl.setVisible(true);
+            titleErrorLbl.setDisable(false);
         }
-        StageUtils.hideSubStage();
     }
 
 
@@ -90,4 +105,15 @@ public class ColumnDetailsWindowPresenter implements Initializable {
         return columnModel;
     }
 
+    private void establishTitleTextFieldValidation() {
+        titleTextField.setTextFormatter(new TextFormatter<Object>(change -> {
+            change = change.getControlNewText().matches(".{0,50}") ? change : null;
+            if (change != null && change.getControlNewText().length() < 1) {
+                validTitle = false;
+            } else {
+                validTitle = true;
+            }
+            return change;
+        }));
+    }
 }

@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter">
    <content>
       <BorderPane>
@@ -19,9 +18,14 @@
                         <Label alignment="CENTER" text="Column Title:" />
                         <TextField fx:id="titleTextField" alignment="CENTER">
                      <VBox.margin>
-                        <Insets bottom="15.0" />
+                        <Insets />
                      </VBox.margin>
                   </TextField>
+                  <Label fx:id="titleErrorLbl" text="TitleError">
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
