@@ -2,9 +2,7 @@ package view.sharedcomponents.popups.projectdetails;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import model.activerecords.project.ProjectActiveRecord;
 import model.domainobjects.project.ProjectModel;
 import utils.StageUtils;
@@ -20,6 +18,8 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     @FXML
     private TextField projectTitleTextField;
     @FXML
+    private Label titleErrorLbl;
+    @FXML
     private TextArea projectDescriptionTextArea;
     @FXML
     private Button saveButton;
@@ -27,6 +27,8 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     private Button cancelButton;
 
     // Variables
+    private String noTitleError = "A title must be provided";
+    private boolean validTitle;
     private ProjectModel selectedProjectModel;
     private ProjectActiveRecord projectActiveRecord;
 
@@ -81,36 +83,33 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        validTitle = true;
+        titleErrorLbl.setText(noTitleError);
+        titleErrorLbl.setVisible(false);
+        titleErrorLbl.setDisable(true);
+        establishTitleTextFieldValidation();
     }
 
 
     // Other methods
     public void saveProjectDetailsChange() throws SQLException, IOException {
-        if(projectActiveRecord == null) {
-            projectActiveRecord = new ProjectActiveRecord();
-            // TODO make new project building the responsibility of class ProjectActiveRecord
-            projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
+        if(validTitle) {
+            if(projectActiveRecord == null) {
+                projectActiveRecord = new ProjectActiveRecord();
+                // TODO make new project building the responsibility of class ProjectActiveRecord
+                projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
+            } else {
+                projectActiveRecord.setProjectTitle(getProjectTitleTextField().getText());
+                projectActiveRecord.setProjectDescription(getProjectDescriptionTextArea().getText());
+          }
+            projectActiveRecord.createOrUpdateActiveRowInDb();
+            StageUtils.hideSubStage();
         } else {
-            projectActiveRecord.setProjectTitle(getProjectTitleTextField().getText());
-            projectActiveRecord.setProjectDescription(getProjectDescriptionTextArea().getText());
+            titleErrorLbl.setVisible(true);
+            titleErrorLbl.setDisable(false);
         }
-        projectActiveRecord.createOrUpdateActiveRowInDb();
-        StageUtils.hideSubStage();
     }
 
-    /*
-    public void createProject(Dao<ActiveProjectModel, UUID> dao) throws SQLException {
-        selectedActiveProjectModel = buildNewProjectModelInstance();
-        // Use the DAO to create the table entry.
-        dao.create(selectedActiveProjectModel);
-    }
-
-    public void updateProject(Dao<ActiveProjectModel, UUID> dao) throws SQLException {
-        updateSelectedActiveProjectModel();
-        dao.update(selectedActiveProjectModel);
-    }
-*/
 
     public void cancelProjectDetailsChange() {
         // Close the window, do nothing.
@@ -129,10 +128,15 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         return newProjectModel;
     }
 
-    /*
-    private void updateSelectedActiveProjectModel() {
-        selectedActiveProjectModel.setProject_title(getProjectTitleTextField().getText());
-        selectedActiveProjectModel.setLast_changed_timestamp(new Date());
+    private void establishTitleTextFieldValidation() {
+        projectTitleTextField.setTextFormatter(new TextFormatter<Object>(change -> {
+            change = change.getControlNewText().matches(".{0,50}") ? change : null;
+            if (change != null && change.getControlNewText().length() < 1) {
+                validTitle = false;
+            } else {
+                validTitle = true;
+            }
+            return change;
+        }));
     }
-*/
 }
