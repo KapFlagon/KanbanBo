@@ -22,7 +22,7 @@
             </Label>
               <ToolBar prefHeight="36.0" prefWidth="58.0">
                   <items>
-                      <Button mnemonicParsing="false" text="Edit Card" />
+                      <Button mnemonicParsing="false" onAction="#editCard" text="Edit Card" />
                   </items>
               </ToolBar>
          </children>
