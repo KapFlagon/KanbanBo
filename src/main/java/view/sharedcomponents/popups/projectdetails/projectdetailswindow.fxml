@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowPresenter">
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowPresenter">
    <content>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="300.0">
          <top>
@@ -20,15 +20,17 @@
                </BorderPane.margin>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding></Label>
+               </padding>
+            </Label>
          </top>
          <center>
-            <VBox alignment="TOP_CENTER" spacing="5.0" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </BorderPane.margin>
+            <VBox>
                <children>
-                  <Label alignment="CENTER" text="Title:" />
+                  <Label alignment="CENTER" text="Title:">
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
+                  </Label>
                   <TextField fx:id="projectTitleTextField" alignment="CENTER">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -37,7 +39,11 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </TextField>
-                  <Label alignment="CENTER" layoutX="118.0" layoutY="15.0" text="Description:" />
+                  <Label alignment="CENTER" layoutX="118.0" layoutY="15.0" text="Description:">
+                     <VBox.margin>
+                        <Insets left="5.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
                   <TextArea fx:id="projectDescriptionTextArea" wrapText="true">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
