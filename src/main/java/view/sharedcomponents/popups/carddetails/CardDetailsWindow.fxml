@@ -16,22 +16,27 @@
          <center>
               <VBox>
                   <children>
-                      <Label alignment="CENTER" text="Card Title:">
+                      <Label alignment="CENTER" text="Card Title *">
                      <VBox.margin>
                         <Insets left="5.0" />
                      </VBox.margin>
                   </Label>
                       <TextField fx:id="titleTextField" alignment="CENTER">
                      <VBox.margin>
-                        <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </TextField>
-                      <Label text="Card Description:">
+                  <Label fx:id="titleErrorLbl" text="TitleError">
                      <VBox.margin>
-                        <Insets left="5.0" top="5.0" />
+                        <Insets left="15.0" />
+                     </VBox.margin>
+                  </Label>
+                      <Label text="Card Description">
+                     <VBox.margin>
+                        <Insets left="5.0" top="10.0" />
                      </VBox.margin>
                   </Label>
                   <TextArea fx:id="descriptionText" wrapText="true">
