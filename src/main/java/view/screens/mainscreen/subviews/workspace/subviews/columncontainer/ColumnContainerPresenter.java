@@ -119,11 +119,11 @@ public class ColumnContainerPresenter implements Initializable {
     public void renameColumn() {
         System.out.println("Renaming Column");
         initColumnDetailsWindow();
-        showProjectDetailsWindow();
+        showColumnDetailsWindow();
     }
 
     // Other methods
-    private void showProjectDetailsWindow() {
+    private void showColumnDetailsWindow() {
         StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
         ProjectColumnActiveRecord tempProjectColumnActiveRecord = columnDetailsWindowPresenter.getProjectColumnActiveRecord();
