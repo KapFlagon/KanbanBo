@@ -2,10 +2,14 @@ package view.screens.mainscreen.subviews.workspace.subviews.columncontainer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.activerecords.ColumnCardActiveRecord;
@@ -30,6 +34,8 @@ import java.util.ResourceBundle;
 public class ColumnContainerPresenter implements Initializable {
 
     // JavaFX injected node variables
+    @FXML
+    private BorderPane columnContainer;
     @FXML
     private VBox cardVBox;
     @FXML
@@ -68,6 +74,92 @@ public class ColumnContainerPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         cardsList = FXCollections.observableArrayList();
+        initDragAndDropMethods();
+    }
+
+    public void initDragAndDropMethods() {
+        // https://stackoverflow.com/questions/22424082/drag-and-drop-vbox-element-with-show-snapshot-in-javafx
+        // https://docs.oracle.com/javase/8/javafx/events-tutorial/drag-drop.htm#CHDJFJDH
+        // https://docs.oracle.com/javase/8/javafx/events-tutorial/paper-doll.htm#CBHFHJID
+        initDragDetection();
+        initDragDone();
+        initDragCardOver();
+        initCardDragEntered();
+        initCardDragExited();
+        initCardDragDropped();
+    }
+
+    private void initDragDetection() {
+        columnContainer.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Column drag has started");
+                Dragboard dragboard = columnContainer.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent clipboardContent = new ClipboardContent();
+                clipboardContent.putString("test data");
+                dragboard.setContent(clipboardContent);
+                ImageView imageView = new ImageView(columnContainer.snapshot(null, null));
+                dragboard.setDragView(imageView.getImage());
+                event.consume();
+            }
+        });
+    }
+
+    private void initDragDone() {
+        columnContainer.setOnDragDone(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                // Remove data from this container, don't write, and delete the container.
+                if (event.getTransferMode() == TransferMode.MOVE) {
+                    System.out.println("Column drag is done");
+                }
+                event.consume();
+            }
+        });
+    }
+
+    private void initDragCardOver() {
+        cardVBox.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Card dragged over column VBox");
+                event.acceptTransferModes(TransferMode.MOVE);
+                event.consume();
+            }
+        });
+    }
+
+    public void initCardDragEntered() {
+        cardVBox.setOnDragEntered(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Card drag entered column VBox");
+                cardVBox.setStyle("-fx-background-color: blue");
+                event.consume();
+            }
+        });
+    }
+
+    public void initCardDragExited() {
+        cardVBox.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Card drag exited column VBox");
+                cardVBox.setStyle("-fx-background-color: white");
+                event.consume();
+            }
+        });
+    }
+
+    public void initCardDragDropped() {
+        cardVBox.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Card dropped column VBox");
+                event.setDropCompleted(true);
+                event.consume();
+            }
+        });
     }
 
     public void customInit() throws IOException, SQLException {

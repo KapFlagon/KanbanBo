@@ -2,18 +2,19 @@ package view.screens.mainscreen.subviews.workspace.subviews.projectcontainer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import model.activerecords.project.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
 import model.domainobjects.column.ColumnModel;
-import model.domainobjects.project.ProjectModel;
 import model.repositories.ActiveColumnListRepository;
 import model.repositories.services.ProjectColumnRepositoryService;
 import utils.StageUtils;
@@ -85,6 +86,60 @@ public class ProjectContainerPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         projectColumnsList = FXCollections.observableArrayList();
+        initDragAndDropMethods();
+    }
+
+    public void initDragAndDropMethods() {
+        // https://docs.oracle.com/javase/8/javafx/events-tutorial/drag-drop.htm#CHDJFJDH
+        // https://docs.oracle.com/javase/8/javafx/events-tutorial/paper-doll.htm#CBHFHJID
+        initDragColumnOver();
+        initColumnDragEntered();
+        initColumnDragExited();
+        initColumnDragDropped();
+    }
+
+    private void initDragColumnOver() {
+        columnHBox.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Column dragged over project HBox");
+                event.acceptTransferModes(TransferMode.MOVE);
+                event.consume();
+            }
+        });
+    }
+
+    public void initColumnDragEntered() {
+        columnHBox.setOnDragEntered(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Column drag entered project HBox");
+                columnHBox.setStyle("-fx-background-color: green");
+                event.consume();
+            }
+        });
+    }
+
+    public void initColumnDragExited() {
+        columnHBox.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Column drag exited project HBox");
+                columnHBox.setStyle("-fx-background-color: white");
+                event.consume();
+            }
+        });
+    }
+
+    public void initColumnDragDropped() {
+        columnHBox.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                System.out.println("Column dropped project HBox");
+                event.setDropCompleted(true);
+                event.consume();
+            }
+        });
     }
 
     public void customInit() throws IOException, SQLException {
