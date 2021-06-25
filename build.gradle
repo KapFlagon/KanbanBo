@@ -1,18 +1,22 @@
 plugins {
     id 'java'
-    id 'org.openjfx.javafxplugin' version '0.0.9'
+    // https://badass-runtime-plugin.beryx.org/releases/latest/
+    id 'org.beryx.runtime' version '1.12.5'
+    // https://github.com/johnrengelman/shadow
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id 'org.openjfx.javafxplugin' version '0.0.10'
     id 'application'
 }
 
 group 'com.kapflagon'
-version '1.0-SNAPSHOT'
+version '0.1'
 
 repositories {
     mavenCentral()
 }
 
 javafx {
-    version = '11.0.1'
+    version = '15.0.1'
     modules = [ 'javafx.controls', 'javafx.fxml' ]
     //configuration = 'compileOnly'
 }
@@ -22,15 +26,15 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
-    compile group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
+    implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
 
     // Old Afterburner.fx
     // https://mvnrepository.com/artifact/com.airhacks/afterburner.fx
-    compile group: 'com.airhacks', name: 'afterburner.fx', version: '1.7.0'
+    implementation group: 'com.airhacks', name: 'afterburner.fx', version: '1.7.0'
 
     // New Afterburner.fx
     // https://mvnrepository.com/artifact/com.dlsc.afterburner/afterburner.fx
-    //compile group: 'com.dlsc.afterburner', name: 'afterburner.fx', version: '2.1.0'
+    //implementation group: 'com.dlsc.afterburner', name: 'afterburner.fx', version: '2.1.0'
 
     // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-core
     implementation group: 'com.j256.ormlite', name: 'ormlite-core', version: '5.3'
@@ -57,17 +61,60 @@ test {
 }
 
 jar {
+    duplicatesStrategy = 'include'
     manifest {
-        attributes 'Main-Class': 'driver.Main'
+        //attributes 'Main-Class': 'driver.Main'
+        attributes 'Main-Class': 'driver.KanbanBoApp'
     }
-    from {
+    /*from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+    }*/
+}
+
+runtime {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
 }
 
 application {
     //mainClassName = "java/driver/Main"
     //mainModule = "KanbanBo.main"
-    mainModule.set("KanbanBo.main")
-    mainClass.set("java/driver/Main")
+    //mainModule.set("KanbanBo.main")
+    mainClass.set("driver.Main")
+    applicationName = 'KanbanBo'
+}
+
+task runSnapshotJar(type: JavaExec) {
+    main = "-jar";
+    args jar.archiveFile.get()
+}
+
+task buildAndRunSnapshotJar() {
+    group 'custom tasks'
+    dependsOn('build')
+    dependsOn('runSnapshotJar')
+    tasks.findByName('runSnapshotJar').mustRunAfter('build')
+}
+
+jpackage {
+    // Uncomment and adjust the following line if your runtime task is configured to generate images for multiple platforms
+    // targetPlatformName = "mac"
+
+    def currentOs = org.gradle.internal.os.OperatingSystem.current()
+    def appVersion = "1.0.0"
+    //def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
+    //imageOptions += ['--icon', "src/main/resources/hellofx.$imgType"]
+    //skipInstaller = true
+    //installerOptions += ['--resource-dir', "src/main/resources"]
+    //installerOptions += ['--vendor', 'Acme Corporation']
+
+    /*
+    if(currentOs.windows) {
+        installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut']
+    }
+    else if (currentOs.linux) {
+        installerOptions += ['--linux-package-name', 'MurderMysteryHelper','--linux-shortcut']
+    }
+    else if (currentOs.macOsX) {
+        installerOptions += ['--mac-package-name', 'MurderMysteryHelper']
+    }*/
 }
