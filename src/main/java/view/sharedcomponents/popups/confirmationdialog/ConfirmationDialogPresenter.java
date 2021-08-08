@@ -34,7 +34,7 @@ public class ConfirmationDialogPresenter implements Initializable {
         promptTextLbl.setText(newPromptText);
     }
 
-    public double[] getDimensions() {
+    public double[] getDisplayDimensions() {
         double[] dimensions = new double[6];
         dimensions[0] = contentBorderPane.getMinHeight();
         dimensions[1] = contentBorderPane.getMinWidth();
