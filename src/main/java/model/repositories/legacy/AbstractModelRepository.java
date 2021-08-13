@@ -1,4 +1,4 @@
-package model.repositories;
+package model.repositories.legacy;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
