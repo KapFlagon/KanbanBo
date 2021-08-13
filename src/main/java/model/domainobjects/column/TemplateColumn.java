@@ -7,11 +7,11 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.UUID;
 
 @DatabaseTable(tableName = "template_column")
-public class TemplateColumnModel extends AbstractColumnModel{
+public class TemplateColumn extends AbstractColumn {
 
 
     // Variables
-    // Same fields as Column Model, but can be null in database.
+    // Same fields as Column, but can be null in database.
     @DatabaseField(canBeNull = true, dataType = DataType.UUID, useGetSet = true, columnName = FOREIGN_KEY_NAME)
     private UUID parent_project_uuid;
     @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.INTEGER)
@@ -19,7 +19,7 @@ public class TemplateColumnModel extends AbstractColumnModel{
 
 
     // Constructors
-    public TemplateColumnModel() {
+    public TemplateColumn() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 

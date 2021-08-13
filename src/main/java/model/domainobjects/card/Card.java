@@ -1,4 +1,4 @@
-package model.domainobjects.column;
+package model.domainobjects.card;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
@@ -6,32 +6,26 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.UUID;
 
-
-@DatabaseTable(tableName = "column")
-public class ColumnModel extends AbstractColumnModel{
-
+@DatabaseTable(tableName = "card")
+public class Card extends AbstractCard {
 
     // Variables
-    // Same fields as Column Model, but cannot be null in database.
     @DatabaseField(canBeNull = false, dataType = DataType.UUID, useGetSet = true, columnName = FOREIGN_KEY_NAME)
-    private UUID parent_project_uuid;
+    private UUID parent_column_uuid;
     @DatabaseField(canBeNull = false, dataType = DataType.INTEGER, useGetSet = true)
     private int column_status;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.INTEGER)
-    private int column_position;
+    private int card_position;
 
     // Constructors
-    public ColumnModel() {
-        // all persisted classes must define a no-arg constructor with at least package visibility
-    }
 
 
     // Getters and Setters
-    public UUID getParent_project_uuid() {
-        return parent_project_uuid;
+    public UUID getParent_column_uuid() {
+        return parent_column_uuid;
     }
-    public void setParent_project_uuid(UUID parent_project_uuid) {
-        this.parent_project_uuid = parent_project_uuid;
+    public void setParent_column_uuid(UUID parent_column_uuid) {
+        this.parent_column_uuid = parent_column_uuid;
     }
 
     public int getColumn_status() {
@@ -41,11 +35,11 @@ public class ColumnModel extends AbstractColumnModel{
         this.column_status = column_status;
     }
 
-    public int getColumn_position() {
-        return column_position;
+    public int getCard_position() {
+        return card_position;
     }
-    public void setColumn_position(int column_position) {
-        this.column_position = column_position;
+    public void setCard_position(int card_position) {
+        this.card_position = card_position;
     }
 
     // Initialisation methods

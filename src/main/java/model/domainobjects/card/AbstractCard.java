@@ -3,12 +3,13 @@ package model.domainobjects.card;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import model.domainobjects.DomainObjectWithUUID;
 
 import java.util.UUID;
 
 
 @DatabaseTable(tableName = "abstract_card")
-public abstract class AbstractCardModel {
+public abstract class AbstractCard implements DomainObjectWithUUID {
 
     // Constant for query building using database fields
     public static final String FOREIGN_KEY_NAME = "parent_column_uuid";
@@ -61,4 +62,8 @@ public abstract class AbstractCardModel {
     // Other methods
 
 
+    @Override
+    public UUID get_uuid() {
+        return getCard_uuid();
+    }
 }

@@ -4,17 +4,16 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.Date;
-
 @DatabaseTable(tableName = "project")
-public class ProjectModel extends AbstractProjectModel {
+public class Project extends AbstractProject {
 
+    // TODO Either use JPA annotations, or use DatabaseFieldConfig for even more decoupling
     // Variables
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.INTEGER)
     private int project_status;
 
     // Constructors
-    public ProjectModel() {
+    public Project() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 

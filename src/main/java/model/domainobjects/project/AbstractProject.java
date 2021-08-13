@@ -3,12 +3,13 @@ package model.domainobjects.project;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import model.domainobjects.DomainObjectWithUUID;
 
 import java.util.Date;
 import java.util.UUID;
 
 @DatabaseTable(tableName = "abstract_project")
-public abstract class AbstractProjectModel {
+public abstract class AbstractProject implements DomainObjectWithUUID {
 
 
     // Variables
@@ -25,7 +26,7 @@ public abstract class AbstractProjectModel {
 
 
     // Constructors
-    public AbstractProjectModel() {
+    public AbstractProject() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 
@@ -65,8 +66,12 @@ public abstract class AbstractProjectModel {
         this.last_changed_timestamp = last_changed_timestamp;
     }
 
-// Initialisation methods
+    // Initialisation methods
 
 
     // Other methods
+    @Override
+    public UUID get_uuid() {
+        return getProject_uuid();
+    }
 }

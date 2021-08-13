@@ -6,7 +6,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.activerecords.project.ProjectActiveRecord;
-import model.domainobjects.project.ProjectModel;
+import model.domainobjects.project.Project;
 import utils.database.DatabaseUtils;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class ActiveProjectListRepository {
 
     // Variables
     protected JdbcConnectionSource connectionSource;
-    protected Dao<ProjectModel, UUID> modelDao;
+    protected Dao<Project, UUID> modelDao;
     protected ObservableList<ProjectActiveRecord> activeRecordObservableList;
 
 
@@ -40,7 +40,7 @@ public class ActiveProjectListRepository {
         connectionSource = DatabaseUtils.getConnectionSource();
     }
     protected void initProjectDao() throws SQLException {
-        modelDao = DaoManager.createDao(connectionSource, ProjectModel.class);
+        modelDao = DaoManager.createDao(connectionSource, Project.class);
     }
     protected void initActiveRecordObservableList() {
         activeRecordObservableList = FXCollections.observableArrayList();
@@ -61,7 +61,7 @@ public class ActiveProjectListRepository {
         setupDbAccess();
         long count = modelDao.countOf();
         if (count != 0) {
-            for (ProjectModel tempModel : modelDao) {
+            for (Project tempModel : modelDao) {
                 ProjectActiveRecord activeRecord = new ProjectActiveRecord(tempModel);
                 activeRecordObservableList.add(activeRecord);
             }

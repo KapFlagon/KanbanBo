@@ -3,11 +3,12 @@ package model.domainobjects.column;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import model.domainobjects.DomainObjectWithUUID;
 
 import java.util.UUID;
 
 @DatabaseTable(tableName = "abstract_column")
-public abstract class AbstractColumnModel {
+public abstract class AbstractColumn implements DomainObjectWithUUID {
 
     // Constant for query building using database fields
     public static final String FOREIGN_KEY_NAME = "parent_project_uuid";
@@ -15,11 +16,11 @@ public abstract class AbstractColumnModel {
     // Variables
     @DatabaseField(generatedId = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
     private UUID column_uuid;
-    @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.STRING)
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
     private String column_title;
 
     // Constructors
-    public AbstractColumnModel() {
+    public AbstractColumn() {
         // all persisted classes must define a no-arg constructor with at least package visibility
     }
 
@@ -52,6 +53,9 @@ public abstract class AbstractColumnModel {
 
 
     // Other methods
-
+    @Override
+    public UUID get_uuid() {
+        return getColumn_uuid();
+    }
 
 }

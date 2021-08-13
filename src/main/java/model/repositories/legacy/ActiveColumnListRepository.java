@@ -9,8 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.activerecords.project.ProjectActiveRecord;
 import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.column.ColumnModel;
-import model.domainobjects.project.ProjectModel;
+import model.domainobjects.column.Column;
 import utils.database.DatabaseUtils;
 
 import java.io.IOException;
@@ -23,7 +22,7 @@ public class ActiveColumnListRepository {
 
     // Variables
     protected JdbcConnectionSource connectionSource;
-    protected Dao<ColumnModel, UUID> modelDao;
+    protected Dao<Column, UUID> modelDao;
     protected ProjectActiveRecord projectActiveRecord;
     protected ObservableList<ProjectColumnActiveRecord> activeRecordObservableList;
 
@@ -47,7 +46,7 @@ public class ActiveColumnListRepository {
         connectionSource = DatabaseUtils.getConnectionSource();
     }
     protected void initProjectDao() throws SQLException {
-        modelDao = DaoManager.createDao(connectionSource, ColumnModel.class);
+        modelDao = DaoManager.createDao(connectionSource, Column.class);
     }
     protected void initActiveRecordObservableList() {
         activeRecordObservableList = FXCollections.observableArrayList();
@@ -65,13 +64,13 @@ public class ActiveColumnListRepository {
 
     public void readFromDb() throws IOException, SQLException {
         setupDbAccess();
-        QueryBuilder<ColumnModel, UUID> queryBuilder = modelDao.queryBuilder();
-        queryBuilder.where().eq(ColumnModel.FOREIGN_KEY_NAME, projectActiveRecord.getProjectUUID());
-        PreparedQuery<ColumnModel> preparedQuery = queryBuilder.prepare();
-        List<ColumnModel> queryResultList = modelDao.query(preparedQuery);
+        QueryBuilder<Column, UUID> queryBuilder = modelDao.queryBuilder();
+        queryBuilder.where().eq(Column.FOREIGN_KEY_NAME, projectActiveRecord.getProjectUUID());
+        PreparedQuery<Column> preparedQuery = queryBuilder.prepare();
+        List<Column> queryResultList = modelDao.query(preparedQuery);
         if ((queryResultList != null) && (queryResultList.size() != 0)) {
-            for (ColumnModel tempColumnModel : queryResultList) {
-                ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord = new ProjectColumnActiveRecord<ColumnModel>(ColumnModel.class, tempColumnModel, projectActiveRecord);
+            for (Column tempColumnModel : queryResultList) {
+                ProjectColumnActiveRecord<Column> projectColumnActiveRecord = new ProjectColumnActiveRecord<Column>(Column.class, tempColumnModel, projectActiveRecord);
                 activeRecordObservableList.add(projectColumnActiveRecord);
             }
         }

@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.UUID;
 
 @DatabaseTable(tableName = "template_card")
-public class TemplateCardModel extends AbstractCardModel{
+public class TemplateCard extends AbstractCard {
 
 
     // Variables

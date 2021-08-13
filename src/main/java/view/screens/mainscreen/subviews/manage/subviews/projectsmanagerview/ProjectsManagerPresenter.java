@@ -3,19 +3,22 @@ package view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.PopupControl;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import model.activerecords.project.ProjectActiveRecord;
 import model.repositories.ActiveProjectListRepository;
-import model.repositories.services.ProjectRepositoryService;
+import model.services.ProjectRepositoryService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListPresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.subviews.activeprojectstab.ActiveProjectsListView;
+import view.sharedcomponents.popups.confirmationdialog.ConfirmationDialogPresenter;
+import view.sharedcomponents.popups.confirmationdialog.ConfirmationDialogView;
 import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
 import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowView;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ProjectsManagerPresenter implements Initializable {
@@ -207,7 +210,40 @@ public class ProjectsManagerPresenter implements Initializable {
 
     public void deleteSelectedProject() {
         System.out.println("Deleting a project");
-        PopupControl popupControl = new PopupControl();
+        ProjectActiveRecord activeRecord = activeProjectsListPresenter.getSelectedRow();
+        if (activeRecord != null) {
+            System.out.println("Project selected is not null");
+            ConfirmationDialogView confirmationDialogView = new ConfirmationDialogView();
+            ConfirmationDialogPresenter confirmationDialogPresenter = (ConfirmationDialogPresenter) confirmationDialogView.getPresenter();
+            confirmationDialogPresenter.setPromptText("Are you sure that you want to delete the selected project?");
+            confirmationDialogPresenter.setConfirmAction(actionEvent ->  {
+                try {
+                    activeRecord.deleteActiveRowInDb();
+                    activeProjectListRepository.getActiveRecordObservableList().remove(activeRecord);
+                } catch (SQLException throwables) {
+                    System.out.println("Could not delete project entry");
+                    throwables.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                StageUtils.closeSubStage();
+            });
+            confirmationDialogPresenter.setCancelAction(actionEvent ->  {
+                StageUtils.closeSubStage();
+            });
+            double[] displayDimensions = confirmationDialogPresenter.getDisplayDimensions();
+            StageUtils.createChildStage("Confirm deletion", confirmationDialogView.getView());
+            StageUtils.getSubStages().getLast().setMinHeight(displayDimensions[0]);
+            StageUtils.getSubStages().getLast().setMinWidth(displayDimensions[1]);
+            StageUtils.getSubStages().getLast().setHeight(displayDimensions[2]);
+            StageUtils.getSubStages().getLast().setWidth(displayDimensions[3]);
+            StageUtils.showAndWaitOnSubStage();
+            //initProjectDetailsUI();
+            //projectDetailsWindowPresenter.setProjectActiveRecord(activeRecord);
+            //showProjectDetailsWindow();
+        } else {
+            System.out.println("selected project was found to be null");
+        }
         // TODO verify selection and deletion in a pop-up.
     }
 
