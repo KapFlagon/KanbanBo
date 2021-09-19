@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.ArrayDeque;
+import java.util.Vector;
 
 public class StageUtils {
 
@@ -62,15 +63,38 @@ public class StageUtils {
         StageUtils.getSubStages().removeLast();
     }
 
-    public static void createChildStage(String title, Parent parent) {
+    public static void createChildStage(String title, Parent childStageContent) {
+        double[] dummyDimensions = {-1,-1,-1,-1,-1,-1};
+        StageUtils.createChildStage(title, childStageContent, dummyDimensions);
+    }
+
+    public static void createChildStage(String title, Parent childStageContent, double[] displayDimensions) {
         if (StageUtils.getSubStages() == null) {
             StageUtils.setSubStages(new ArrayDeque<Stage>());
         }
         Stage childStage = new Stage();
+        if (displayDimensions[0] > 0) {
+            childStage.setMinHeight(displayDimensions[0]);
+        }
+        if (displayDimensions[1] > 0) {
+            childStage.setMinWidth(displayDimensions[1]);
+        }
+        if (displayDimensions[2] > 0) {
+            childStage.setHeight(displayDimensions[2]);
+        }
+        if (displayDimensions[3] > 0) {
+            childStage.setWidth(displayDimensions[3]);
+        }
+        if (displayDimensions[4] > 0) {
+            childStage.setMaxWidth(displayDimensions[4]);
+        }
+        if (displayDimensions[5] > 0) {
+            childStage.setMaxWidth(displayDimensions[5]);
+        }
         childStage.setTitle(title);
         childStage.initOwner(StageUtils.getMainStage());
         childStage.initModality(Modality.APPLICATION_MODAL);
-        Scene internalScene = new Scene(parent);
+        Scene internalScene = new Scene(childStageContent);
         childStage.setScene(internalScene);
         StageUtils.addSubStageToDeque(childStage);
     }

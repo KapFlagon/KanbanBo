@@ -25,7 +25,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
             </Label>
-            <Label text="Status:">
+            <Label text="%label.status">
                <HBox.margin>
                   <Insets bottom="5.0" left="35.0" right="5.0" top="5.0" />
                </HBox.margin>
@@ -33,7 +33,7 @@
                   <Insets bottom="5.0" left="35.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <Label fx:id="pathStatusLbl" layoutX="57.0" layoutY="15.0" text="Label">
+            <Label fx:id="pathStatusLbl" layoutX="57.0" layoutY="15.0" text="pathStatusLbl">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -51,7 +51,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
          <children>
-            <Label fx:id="pathLabel" text="Path" wrapText="true">
+            <Label fx:id="pathLabel" text="%label.path_status" wrapText="true">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -61,8 +61,9 @@
             </Label>
             <MenuButton alignment="CENTER" mnemonicParsing="false" popupSide="RIGHT">
               <items>
-                <MenuItem fx:id="openItemMenuItem" mnemonicParsing="false" onAction="#openItem" text="Open" />
-                <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="Remove from List" />
+                <MenuItem fx:id="openItemMenuItem" mnemonicParsing="false" onAction="#openItem" text="%button.open" />
+                <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="%button.remove" />
+                  <MenuItem fx:id="deleteFileMenuItem" mnemonicParsing="false" onAction="#deleteFile" text="%button.delete" />
               </items>
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

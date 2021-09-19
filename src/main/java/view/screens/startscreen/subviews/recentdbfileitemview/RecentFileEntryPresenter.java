@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import user.preferences.UserPreferences;
-import utils.database.DatabaseUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -27,11 +25,14 @@ public class RecentFileEntryPresenter implements Initializable {
     private MenuItem openItemMenuItem;
     @FXML
     private MenuItem removeItemMenuItem;
+    @FXML
+    private MenuItem deleteFileMenuItem;
 
     // Other variables
     private Path itemPath;
-    private boolean fileExists ;
+    private boolean fileExists;
     private SimpleBooleanProperty beingDeleted;
+    private SimpleBooleanProperty beingRemoved;
     private SimpleBooleanProperty beingSelected;
 
     // Constructors
@@ -49,6 +50,8 @@ public class RecentFileEntryPresenter implements Initializable {
             pathStatusLbl.setText("File does not exist!");
             openItemMenuItem.setVisible(false);
             openItemMenuItem.setDisable(true);
+            deleteFileMenuItem.setVisible(false);
+            deleteFileMenuItem.setDisable(true);
         }
         this.pathLabel.setText(itemPath.toString());
         this.titleLabel.setText(getFileNameWithoutExtension());
@@ -62,6 +65,16 @@ public class RecentFileEntryPresenter implements Initializable {
     }
     public void setBeingDeleted(boolean beingDeleted) {
         this.beingDeleted.set(beingDeleted);
+    }
+
+    public boolean isBeingRemoved() {
+        return beingRemoved.get();
+    }
+    public SimpleBooleanProperty beingRemovedProperty() {
+        return beingRemoved;
+    }
+    public void setBeingRemoved(boolean beingRemoved) {
+        this.beingRemoved.set(beingRemoved);
     }
 
     public boolean isBeingSelected() {
@@ -78,11 +91,12 @@ public class RecentFileEntryPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         beingDeleted = new SimpleBooleanProperty(false);
+        beingRemoved = new SimpleBooleanProperty(false);
         beingSelected = new SimpleBooleanProperty(false);
     }
 
     // UI event methods
-    public void itemSelected() throws BackingStoreException {
+    @FXML private void itemSelected() throws BackingStoreException {
         String validationState;
         if(fileExists) {
             validationState = "and file exists";
@@ -93,13 +107,18 @@ public class RecentFileEntryPresenter implements Initializable {
         System.out.println("Item Selected: " + titleLabel.getText() + " , " + validationState);
     }
 
-    public void openItem() throws BackingStoreException {
+    @FXML private void openItem() throws BackingStoreException {
         System.out.println("Opening the selected item");
         itemSelected();
     }
 
-    public void removeItem() {
+    @FXML private void removeItem() {
         System.out.println("Removing the selected item from the list");
+        setBeingRemoved(true);
+    }
+
+    @FXML private void deleteFile() {
+        System.out.println("Deleting the file entirely");
         setBeingDeleted(true);
     }
 

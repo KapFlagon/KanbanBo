@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" minViewportHeight="400.0" minViewportWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox minWidth="400.0" spacing="5.0">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <children>
+            <Label text="Related Item details" VBox.vgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="Edit/Display">
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin></Button>
+            <Label text="Title:" />
+            <TextField />
+            <Label text="Type:" />
+            <ChoiceBox />
+            <Label layoutX="15.0" layoutY="130.0" text="Path:" />
+            <HBox spacing="20.0">
+               <children>
+                  <TextField editable="false" prefHeight="26.0" prefWidth="317.0" />
+                  <Button mnemonicParsing="false" text="Select" />
+               </children>
+            </HBox>
+            <Label text="Created on: " />
+            <TextField editable="false" />
+            <Label text="Last Changed on: " />
+            <TextField editable="false" />
+            <ButtonBar buttonOrder="" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <buttons>
+                  <Button mnemonicParsing="false" text="Save" />
+                  <Button layoutX="339.0" layoutY="17.0" mnemonicParsing="false" text="Cancel/Close" />
+               </buttons>
+            </ButtonBar>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

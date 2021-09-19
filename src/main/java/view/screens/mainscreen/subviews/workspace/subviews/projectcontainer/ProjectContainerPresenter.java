@@ -1,33 +1,35 @@
 package view.screens.mainscreen.subviews.workspace.subviews.projectcontainer;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.*;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
-import model.activerecords.project.ProjectActiveRecord;
-import model.activerecords.ProjectColumnActiveRecord;
-import model.domainobjects.column.ColumnModel;
-import model.repositories.ActiveColumnListRepository;
-import model.repositories.services.ProjectColumnRepositoryService;
+import domain.activerecords.ResourceItemActiveRecord;
+import domain.activerecords.project.ProjectActiveRecord;
+import domain.activerecords.ProjectColumnActiveRecord;
+import persistence.tables.column.ColumnTable;
+import persistence.repositories.legacy.ActiveColumnListRepository;
+import persistence.services.legacy.ProjectColumnRepositoryService;
+import persistence.services.legacy.ResourceItemRepositoryService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerView;
-import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
-import view.sharedcomponents.popups.columndetails.ColumnDetailsWindowView;
-import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
-import view.sharedcomponents.popups.projectdetails.ProjectDetailsWindowView;
+import view.sharedviewcomponents.DetailsPopupInitialDataMode;
+import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
+import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowView;
+import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
+import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowView;
+import view.sharedviewcomponents.popups.resourceitemdetails.ResourceItemDetailsPresenter;
+import view.sharedviewcomponents.popups.resourceitemdetails.ResourceItemDetailsView;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ProjectContainerPresenter implements Initializable {
@@ -36,20 +38,40 @@ public class ProjectContainerPresenter implements Initializable {
     @FXML
     private Label projectTitleLbl;
     @FXML
-    private Button createColumnBtn;
+    private Button editProjectDetailsBtn;
     @FXML
-    private HBox columnHBox;
+    private Button saveProjectDetailsBtn;
+    @FXML
+    private TextField projectTitleTextField;
+    @FXML
+    private TextField projectStatusTextField; // TODO Used to display the text in a copyable way, but replaced by choicebox in "edit" mode.
+    @FXML
+    private ChoiceBox projectStatusChoiceBox; // TODO Used to select status in "edit" mode, but replaced by non-editable TextField in "display" mode.
     @FXML
     private TextArea projectDescriptionTextArea;
     @FXML
-    private VBox resourcesVBox;
+    private TextField projectCreationDateTextField;
+    @FXML
+    private TextField projectLastChangedDateTextField;
+    @FXML
+    private TableView relatedItemTable;
+    @FXML
+    private TableColumn<ResourceItemActiveRecord, String> relatedItemTitleTableColumn;
+    @FXML
+    private TableColumn<ResourceItemActiveRecord, Number> relatedItemTypeTableColumn;
+    @FXML
+    private TableColumn<ResourceItemActiveRecord, String> relatedItemLinkTableColumn;
+    @FXML
+    private HBox columnHBox;
 
     // Other variables
     //private AbstractProjectModel projectModel;
     private ProjectActiveRecord projectActiveRecord;
     private ProjectColumnRepositoryService projectColumnRepositoryService;
     private ActiveColumnListRepository activeColumnListRepository;
+    private ResourceItemRepositoryService resourceItemRepositoryService;
     private ObservableList<ProjectColumnActiveRecord> projectColumnsList;
+    private ObservableList<ResourceItemActiveRecord> relatedItemsList;
     private ColumnDetailsWindowView columnDetailsWindowView;
     private ColumnDetailsWindowPresenter columnDetailsWindowPresenter;
 
@@ -86,74 +108,54 @@ public class ProjectContainerPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         projectColumnsList = FXCollections.observableArrayList();
-        initDragAndDropMethods();
+        relatedItemsList = FXCollections.observableArrayList();
+        relatedItemTitleTableColumn.setCellValueFactory(cellData -> (cellData.getValue().relatedItemTitleProperty()));
+        relatedItemTypeTableColumn.setCellValueFactory(cellData -> (cellData.getValue().relatedItemTypeProperty()));
+        //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (new Hyperlink(cellData.getValue().getRelatedItemPath())));
+        relatedItemLinkTableColumn.setCellValueFactory(cellData -> (cellData.getValue().relatedItemPathProperty()));
+        //initDragAndDropMethods();
     }
 
     public void initDragAndDropMethods() {
+        // https://stackoverflow.com/questions/22424082/drag-and-drop-vbox-element-with-show-snapshot-in-javafx
         // https://docs.oracle.com/javase/8/javafx/events-tutorial/drag-drop.htm#CHDJFJDH
         // https://docs.oracle.com/javase/8/javafx/events-tutorial/paper-doll.htm#CBHFHJID
-        initDragColumnOver();
-        initColumnDragEntered();
-        initColumnDragExited();
-        initColumnDragDropped();
-    }
+        // From James_D
+        // https://stackoverflow.com/questions/22820160/accessing-properties-of-custom-object-from-javafx-draganddrop-clipboard
+        // https://community.oracle.com/tech/developers/discussion/2513382/drag-and-drop-objects-with-javafx-properties
 
-    private void initDragColumnOver() {
-        columnHBox.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                System.out.println("Column dragged over project HBox");
-                event.acceptTransferModes(TransferMode.MOVE);
-                event.consume();
-            }
-        });
-    }
-
-    public void initColumnDragEntered() {
-        columnHBox.setOnDragEntered(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                System.out.println("Column drag entered project HBox");
-                columnHBox.setStyle("-fx-background-color: green");
-                event.consume();
-            }
-        });
-    }
-
-    public void initColumnDragExited() {
-        columnHBox.setOnDragExited(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                System.out.println("Column drag exited project HBox");
-                columnHBox.setStyle("-fx-background-color: white");
-                event.consume();
-            }
-        });
-    }
-
-    public void initColumnDragDropped() {
-        columnHBox.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                System.out.println("Column dropped project HBox");
-                event.setDropCompleted(true);
-                event.consume();
-            }
-        });
+        //initDragColumnOver();
+        //initColumnDragEntered();
+        //initColumnDragExited();
+        //initColumnDragDropped();
     }
 
     public void customInit() throws IOException, SQLException {
-        projectTitleLbl.setText(projectActiveRecord.getProjectTitle());
-        projectDescriptionTextArea.setText(projectActiveRecord.getProjectDescription());
+        projectTitleLbl.textProperty().bind(projectActiveRecord.projectTitleProperty());
+        projectTitleTextField.textProperty().bind(projectActiveRecord.projectTitleProperty());
+        Locale locale = Locale.getDefault();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("systemtexts", locale);
+        SimpleStringProperty statusProperty = new SimpleStringProperty(resourceBundle.getString(projectActiveRecord.statusTextProperty().getValue()));
+        projectStatusTextField.textProperty().bind(statusProperty);
+        // TODO examine binding for the choicebox
+        projectDescriptionTextArea.textProperty().bind(projectActiveRecord.projectDescriptionProperty());
+        projectCreationDateTextField.textProperty().bind(projectActiveRecord.creationTimestampProperty());
+        projectLastChangedDateTextField.textProperty().bind(projectActiveRecord.lastChangedTimestampProperty());
+
+        resourceItemRepositoryService = new ResourceItemRepositoryService(projectActiveRecord.getProjectUUID());
+        relatedItemsList = resourceItemRepositoryService.getRelatedItemsList();
+        for (ResourceItemActiveRecord resourceItemActiveRecord : relatedItemsList) {
+            // TODO fill table here
+        }
         projectColumnRepositoryService = new ProjectColumnRepositoryService(projectActiveRecord);
         projectColumnsList = projectColumnRepositoryService.getColumnsList();
-        for (ProjectColumnActiveRecord<ColumnModel> projectColumnActiveRecord : projectColumnsList) {
+        for (ProjectColumnActiveRecord<ColumnTable> projectColumnActiveRecord : projectColumnsList) {
             ColumnContainerView ccv = new ColumnContainerView();
             ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
             ccp.setProjectColumnActiveRecord(projectColumnActiveRecord);
             columnHBox.getChildren().add(ccv.getView());
         }
-        activeColumnListRepository = projectColumnRepositoryService.getActiveColumnListRepository();
+        //activeColumnListRepository = projectColumnRepositoryService.getActiveColumnListRepository();
         // TODO get all column records linked to the project, populate the data.
     }
 
@@ -164,28 +166,50 @@ public class ProjectContainerPresenter implements Initializable {
     }
 
     // UI event methods
-    public void editProjectDetails() {
+    @FXML private void editProjectDetails() {
+        // TODO Add a simple boolean property and switching to change text and behaviour of this button. Switch between "Edit" and "Display" text.
         System.out.println("Edit project details");
         ProjectDetailsWindowView view = new ProjectDetailsWindowView();
         ProjectDetailsWindowPresenter presenter = (ProjectDetailsWindowPresenter) view.getPresenter();
         presenter.setProjectActiveRecord(projectActiveRecord);
+        presenter.setInitialDataMode(DetailsPopupInitialDataMode.EDIT);
         StageUtils.createChildStage("Enter Project Details", view.getView());
         StageUtils.getSubStages().peekLast().initStyle(StageStyle.UNDECORATED);
         StageUtils.showAndWaitOnSubStage();
-        projectTitleLbl.setText(presenter.getProjectTitleTextField().getText());
-        projectDescriptionTextArea.setText(presenter.getProjectDescriptionTextArea().getText());
+    }
+
+    @FXML private void saveProjectDetails() {
+        // TODO Implement this
+    }
+
+    @FXML private void addRelatedItem() {
+        // TODO Implement this
+        ResourceItemDetailsView resourceItemDetailsView = new ResourceItemDetailsView();
+        ResourceItemDetailsPresenter resourceItemDetailsPresenter = (ResourceItemDetailsPresenter) resourceItemDetailsView.getPresenter();
+        resourceItemDetailsPresenter.setParentUUID(projectActiveRecord.getUUID());
+        resourceItemDetailsPresenter.setRelatedItemTypes(resourceItemRepositoryService.getRelatedItemRepository().getRelatedItemTypeObservableList());
+        StageUtils.createChildStage("Add Related Item", resourceItemDetailsView.getView());
+        StageUtils.showAndWaitOnSubStage();
+    }
+
+    @FXML private void editRelatedItem() {
+        // TODO Implement this
+    }
+
+    @FXML private void removeRelatedItem() {
+        // TODO Implement this
     }
 
     public void addProjectResource() {
         System.out.println("Adding project resource");
     }
 
-    public void createColumn() throws IOException, SQLException {
+    @FXML private void createColumn() throws IOException, SQLException {
         System.out.println("Create Column...");
         initColumnDetailsWindow();
         StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
-        ProjectColumnActiveRecord<ColumnModel> pcar = columnDetailsWindowPresenter.getProjectColumnActiveRecord();
+        ProjectColumnActiveRecord<ColumnTable> pcar = columnDetailsWindowPresenter.getProjectColumnActiveRecord();
         if(pcar != null) {
             pcar.setParentProjectActiveRecord(projectActiveRecord);
             pcar.getProjectColumnModel().setColumn_position(projectColumnsList.size() + 1);
@@ -197,7 +221,6 @@ public class ProjectContainerPresenter implements Initializable {
             columnHBox.getChildren().add(ccv.getView());
         }
     }
-
     // Other methods
 
 

@@ -2,21 +2,29 @@ package view.screens.mainscreen;
 
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import model.activerecords.project.ProjectActiveRecord;
-import model.domainobjects.project.ProjectModel;
-import model.repositories.services.ProjectRepositoryService;
+import domain.activerecords.project.ProjectActiveRecord;
+import persistence.tables.project.ProjectTable;
+import persistence.repositories.project.ORMLiteProjectRepository;
+import persistence.repositories.project.ORMLiteProjectStatusRepository;
+import persistence.services.latest.ProjectManagementService;
+import persistence.services.legacy.ProjectRepositoryService;
+import persistence.services.latest.WorkspaceService;
 import utils.StageUtils;
-import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerPresenter;
-import view.screens.mainscreen.subviews.manage.subviews.projectsmanagerview.ProjectsManagerView;
+import view.screens.mainscreen.subviews.manage.ManagePresenter;
+import view.screens.mainscreen.subviews.manage.ManageView;
 import view.screens.mainscreen.subviews.workspace.WorkspacePresenter;
 import view.screens.mainscreen.subviews.workspace.WorkspaceView;
 import view.screens.startscreen.StartScreenView;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -40,13 +48,20 @@ public class MainScreenPresenter implements Initializable {
     private TabPane analyticsSubTabPane;
     @FXML
     private Tab workspaceTab;
+    @FXML
+    private MenuItem sourceCodeRepoMenuItem;
 
     // Other variables and fields
+    private ProjectManagementService projectManagementService;
+    private WorkspaceService workspaceService;
     private ProjectRepositoryService projectRepositoryService;
-    private ProjectsManagerView projectsManagerView;
-    private ProjectsManagerPresenter projectsManagerPresenter;
+
+    private ManageView manageView;
+    private ManagePresenter managePresenter;
     private WorkspaceView workspaceView;
     private WorkspacePresenter workspacePresenter;
+
+    private ObservableList<ProjectTable> openedProjects;
 
     // Constructors
 
@@ -54,8 +69,9 @@ public class MainScreenPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //StageUtils.getMainStage().setTitle("KanbanBo - Database file selection");
         try {
+
+            workspaceService = new WorkspaceService();
             projectRepositoryService = new ProjectRepositoryService();
             projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord>() {
                 @Override
@@ -73,11 +89,11 @@ public class MainScreenPresenter implements Initializable {
             throwables.printStackTrace();
         }
 
-        projectsManagerView = new ProjectsManagerView();
-        projectsManagerPresenter = (ProjectsManagerPresenter) projectsManagerView.getPresenter();
-        projectsManagerPresenter.setProjectRepositoryService(projectRepositoryService);
+        manageView = new ManageView();
+        managePresenter = (ManagePresenter) manageView.getPresenter();
+        managePresenter.setProjectRepositoryService(projectRepositoryService);
         //manageProjectsSubTab.setContent(projectsManagerView.getView());
-        manageTab.setContent(projectsManagerView.getView());
+        manageTab.setContent(manageView.getView());
 
         workspaceView = new WorkspaceView();
         workspacePresenter = (WorkspacePresenter) workspaceView.getPresenter();
@@ -95,6 +111,16 @@ public class MainScreenPresenter implements Initializable {
         System.out.println("Exiting program...");
         Platform.exit();
         System.exit(0);
+    }
+
+    public void openOnlineSourceCodeRepo() {
+        //System.out.println("Redirect to online repository");
+        Desktop dt = Desktop.getDesktop();
+        try {
+            dt.browse(new URI("http://www.github.com/kapflagon/kanbanbo"));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
 

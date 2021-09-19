@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import user.preferences.UserPreferences;
+import userpreferences.UserPreferences;
 import utils.StageUtils;
 import utils.database.DatabaseUtils;
 import view.screens.mainscreen.MainScreenView;
@@ -20,7 +20,8 @@ public class KanbanBoApp extends Application {
     private int appMinWidth = 600;
     private Scene currentScene;
 
-
+    // TODO See this strategy for Afterburner bundles and internationalization: https://stackoverflow.com/questions/38082417/set-and-change-resource-bundle-with-afterburner-fx
+    // Perform internationalization in a single file.
     public static void main(String[] args) {
         launch(args);
     }

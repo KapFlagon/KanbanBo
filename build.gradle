@@ -7,7 +7,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.10'
     id 'application'
 }
-
+processResources.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 group 'com.kapflagon'
 version '0.1'
 

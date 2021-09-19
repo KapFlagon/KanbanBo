@@ -11,6 +11,8 @@ public class DatabaseCreator {
 
     // Constructors
     public DatabaseCreator() {
+        // TODO Create an interface from this, and then make an ORM specific implementation
+        // TODO move the task initialization into a specific method
         databaseCreationTask = new Task<Void>() {
 
             @Override
@@ -19,6 +21,7 @@ public class DatabaseCreator {
                 int iterations;
                 int max = DatabaseUtils.MAX_TABLES;
                 System.out.println("Inside the task");
+                // TODO https://stackoverflow.com/questions/26203660/how-to-create-list-filled-with-methods-in-java-and-iterate-over-it-using-method
                 for (iterations = 0; iterations < max; iterations++) {
                     System.out.println("Inside the table creator loop");
                     switch (iterations) {
@@ -33,7 +36,6 @@ public class DatabaseCreator {
                         case 2:
                             DatabaseUtils.createProjectStatusesTable(connectionSource);
                             this.updateMessage("'Project Statuses' table generated");
-                            // TODO need to generate default statuses...
                             break;
                         case 3:
                             DatabaseUtils.createColumnTable(connectionSource);
@@ -56,6 +58,10 @@ public class DatabaseCreator {
                             this.updateMessage("'Resource Item' table generated");
                             break;
                         case 8:
+                            DatabaseUtils.createResourceItemTypeTable(connectionSource);
+                            this.updateMessage("'Resource Item Type' table generated");
+                            break;
+                        case 9:
                             DatabaseUtils.createIntermediaryTables(connectionSource);
                             this.updateMessage("'Intermediary' table generated");
                             break;

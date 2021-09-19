@@ -1,5 +1,6 @@
 package view.screens.startscreen.subviews.recentdbfilesview;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -8,12 +9,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import user.preferences.UserPreferences;
-import utils.database.DatabaseUtils;
+import userpreferences.UserPreferences;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryView;
 
-import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
@@ -29,6 +28,7 @@ public class RecentFilesListPresenter implements Initializable {
     private ObservableList<Path> recentFilePathList;
     private Path selectedPath;
     private SimpleBooleanProperty itemBeingOpened;
+    private SimpleBooleanProperty itemBeingDeleted;
 
     // Constructors
 
@@ -58,10 +58,21 @@ public class RecentFilesListPresenter implements Initializable {
         this.itemBeingOpened.set(itemBeingOpened);
     }
 
+    public boolean isItemBeingDeleted() {
+        return itemBeingDeleted.get();
+    }
+    public SimpleBooleanProperty itemBeingDeletedProperty() {
+        return itemBeingDeleted;
+    }
+    public void setItemBeingDeleted(boolean itemBeingDeleted) {
+        this.itemBeingDeleted.set(itemBeingDeleted);
+    }
+
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         itemBeingOpened = new SimpleBooleanProperty(false);
+        itemBeingDeleted = new SimpleBooleanProperty(false);
     }
 
     // UI event methods
@@ -76,13 +87,27 @@ public class RecentFilesListPresenter implements Initializable {
                 presenter.beingDeletedProperty().addListener(new ChangeListener<Boolean>() {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        // TODO Add logging here
+                        if (newValue) {
+                            selectedPath = presenter.getItemPath();
+                            setItemBeingDeleted(true);
+                        }
+                    }
+                });
+                presenter.beingRemovedProperty().addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        // TODO Add logging here
                         System.out.println("change detected in boolean");
                         if (newValue) {
-                            System.out.println("if passed");
                             UserPreferences.getSingletonInstance().removeRecentFilePath(presenter.getItemPath());
                             recentFilePathList.remove(presenter.getItemPath());
-                            recentFilesVBox.getChildren().clear();
-                            createFileEntriesInView();
+                            Platform.runLater(new Runnable() {
+                                // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
+                                public void run() {
+                                    recentFilesVBox.getChildren().remove(view.getView());
+                                }
+                            });
                         }
                     }
                 });

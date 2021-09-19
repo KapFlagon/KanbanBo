@@ -6,26 +6,25 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import user.preferences.UserPreferences;
+import userpreferences.UserPreferences;
 import utils.database.DatabaseUtils;
 import utils.FileChooserUtils;
 import utils.FileCreationUtils;
 import utils.StageUtils;
-import view.screens.mainscreen.MainScreenPresenter;
 import view.screens.mainscreen.MainScreenView;
-import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListView;
-import view.sharedcomponents.popups.info.DatabaseCreationProgressPresenter;
-import view.sharedcomponents.popups.info.DatabaseCreationProgressView;
+import view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter;
+import view.sharedviewcomponents.popups.info.DatabaseCreationProgressView;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -34,6 +33,7 @@ import java.util.prefs.BackingStoreException;
 public class StartScreenPresenter implements Initializable {
 
     // FXML injected variables
+    // TODO Add option to delete a db from the recent items list also. (make sure to give confirmation prompt).
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -53,7 +53,7 @@ public class StartScreenPresenter implements Initializable {
     @FXML
     private MenuItem aboutMenuItem;
     @FXML
-    private MenuItem repoMenuItem;
+    private MenuItem sourceCodeRepoMenuItem;
 
     // Other variables
 
@@ -119,12 +119,12 @@ public class StartScreenPresenter implements Initializable {
         this.aboutMenuItem = aboutMenuItem;
     }
 
-    public MenuItem getRepoMenuItem() {
-        return repoMenuItem;
+    public MenuItem getSourceCodeRepoMenuItem() {
+        return sourceCodeRepoMenuItem;
     }
 
-    public void setRepoMenuItem(MenuItem repoMenuItem) {
-        this.repoMenuItem = repoMenuItem;
+    public void setSourceCodeRepoMenuItem(MenuItem sourceCodeRepoMenuItem) {
+        this.sourceCodeRepoMenuItem = sourceCodeRepoMenuItem;
     }
 
 
@@ -157,6 +157,22 @@ public class StartScreenPresenter implements Initializable {
                 }
             }
         });
+        rflp.itemBeingDeletedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    File fileForDeletion = rflp.getSelectedPath().toFile();
+                    // TODO Prompt user with confirmation dialog
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure that you want to Delete the Database file?");
+                    alert.setTitle("Confirm database Deletion");
+                    alert.showAndWait().filter(response -> response == ButtonType.OK)
+                            .ifPresent((response) -> {
+                                deleteDbFile(fileForDeletion);
+                                //rflp. // TODO Need to figure out a better mechanism for removing the item from list at same time as deletion
+                            });
+                }
+            }
+        });
         rflp.setRecentFilePathList(UserPreferences.getSingletonInstance().getRecentFilePaths());
         borderPane.setCenter(rflv.getView());
         BorderPane.setMargin(rflv.getView(), new Insets(5,5,5,5));
@@ -183,6 +199,12 @@ public class StartScreenPresenter implements Initializable {
             System.out.println("File creation cancelled");
         }
         // TODO Insert some kind of logging here.
+    }
+
+    public void deleteDbFile(File fileForDeletion) {
+        // TODO Perform logging here
+        System.out.println("Deleting file: " + fileForDeletion.getName());
+        fileForDeletion.delete();
     }
 
 
@@ -214,14 +236,14 @@ public class StartScreenPresenter implements Initializable {
     }
 
 
-    public void openOnlineCodeRepo() {
-        System.out.println("Redirect to online repository");
-        //Desktop dt = Desktop.getDesktop();
-        //try {
-        //    dt.browse(new URI("http://www.github.com"));
-        //} catch (Exception exception) {
-        //    exception.printStackTrace();
-        //}
+    public void openOnlineSourceCodeRepo() {
+        //System.out.println("Redirect to online repository");
+        Desktop dt = Desktop.getDesktop();
+        try {
+            dt.browse(new URI("http://www.github.com/kapflagon/kanbanbo"));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     private void moveToMainSceneView() {

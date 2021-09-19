@@ -1,19 +1,18 @@
 package view.screens.mainscreen.subviews.workspace;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
-import model.activerecords.project.ProjectActiveRecord;
-import model.domainobjects.project.ProjectModel;
-import model.repositories.services.ProjectRepositoryService;
+import domain.activerecords.project.ProjectActiveRecord;
+import persistence.services.legacy.ProjectRepositoryService;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
 
@@ -28,36 +27,30 @@ public class WorkspacePresenter implements Initializable {
     @FXML
     private TabPane workspaceTabPane;
     @FXML
-    private BorderPane borderPane;
     private Label emptyWorkspaceLbl;
 
     // Other variables
-    private enum ProjectType {ACTIVE, ARCHIVED, COMPLETED, TEMPLATE}
+    private ObservableList<ProjectActiveRecord> openedProjectsViewModel;
     private ProjectRepositoryService projectRepositoryService;
     private SelectionModel tabPaneSelectionModel;
 
     // Constructors
 
     // Getters & Setters
-    public ProjectRepositoryService getProjectRepositoryService() {
-        return projectRepositoryService;
-    }
     public void setProjectRepositoryService(ProjectRepositoryService projectRepositoryService) {
         this.projectRepositoryService = projectRepositoryService;
+        openedProjectsViewModel = projectRepositoryService.getOpenedActiveProjects();
         customInit();
     }
 
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        emptyWorkspaceLbl = new Label("No Projects opened in workspace...");
-        emptyWorkspaceLbl.setPadding(new Insets(5,5,5,5));
-        BorderPane.setMargin(emptyWorkspaceLbl, new Insets(5,5,5,5));
         tabPaneSelectionModel = workspaceTabPane.getSelectionModel();
     }
 
     public void customInit() {
-        projectRepositoryService.getOpenedActiveProjects().addListener(new ListChangeListener<ProjectActiveRecord>() {
+        openedProjectsViewModel.addListener(new ListChangeListener<ProjectActiveRecord>() {
             @Override
             public void onChanged(Change<? extends ProjectActiveRecord> c) {
                 c.next();
@@ -75,8 +68,13 @@ public class WorkspacePresenter implements Initializable {
                             throwables.printStackTrace();
                         }
                         tab.setContent(pcv.getView());
+                        // TODO Investigate use of getViewAsync here and further down the chain
+                        //Pane testPane = new Pane();
+                        //pcv.getViewAsync(testPane.getChildren()::add);
+                        //tab.setContent(testPane);
                         workspaceTabPane.getTabs().add(tab);
-                        tab.setText("Project '" + par1.getProjectTitle() + "'");
+                        tab.textProperty().bind(Bindings.concat("Project: ").concat(par1.projectTitleProperty()));
+                        //tab.setText("Project '" + par1.getProjectTitle() + "'");
                         tab.setClosable(true);
                         updatePlaceholderLabel();
                         // TODO refactor this into another method or something. 
@@ -92,7 +90,7 @@ public class WorkspacePresenter implements Initializable {
                                     }
                                 }
                                 if (index != -1) {
-                                    projectRepositoryService.getOpenedActiveProjects().remove(index);
+                                    openedProjectsViewModel.remove(index);
                                     System.out.println("workspace project tab is finally closed");
                                     updatePlaceholderLabel();
                                 }
@@ -111,12 +109,12 @@ public class WorkspacePresenter implements Initializable {
 
     // Other methods
     private void updatePlaceholderLabel() {
-        if (projectRepositoryService.getOpenedActiveProjects().size() < 1) {
-            borderPane.setTop(emptyWorkspaceLbl);
-            //emptyWorkspaceLbl.setVisible(true);
+        if (openedProjectsViewModel.size() < 1) {
+            emptyWorkspaceLbl.setDisable(false);
+            emptyWorkspaceLbl.setVisible(true);
         } else {
-            borderPane.setTop(null);
-            //emptyWorkspaceLbl.setVisible(false);
+            emptyWorkspaceLbl.setDisable(true);
+            emptyWorkspaceLbl.setVisible(false);
         }
     }
 

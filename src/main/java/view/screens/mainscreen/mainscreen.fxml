@@ -12,10 +12,10 @@
    <center>
       <TabPane fx:id="mainScreenTabPane" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <tabs>
-             <Tab fx:id="manageTab" closable="false" text="Manage" />
-             <Tab fx:id="workspaceTab" closable="false" text="Workspace" />
-             <Tab fx:id="templatesTab" closable="false" text="Templates" />
-             <Tab fx:id="analyticsTab" closable="false" text="Analytics">
+             <Tab fx:id="manageTab" closable="false" text="%tab.title.manage" />
+             <Tab fx:id="workspaceTab" closable="false" text="%tab.title.workspace" />
+             <Tab fx:id="templatesTab" closable="false" text="%tab.title.templates" />
+             <Tab fx:id="analyticsTab" closable="false" text="%tab.title.analytics">
                  <content>
                      <TabPane fx:id="analyticsSubTabPane" tabClosingPolicy="UNAVAILABLE" />
                  </content></Tab>
@@ -24,13 +24,17 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="%menu.header.file">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#closeDb" text="Close Database" />
-                  <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="Exit" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeDb" text="%menu.file.sub.close_database" />
+                  <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="%menu.file.sub.exit" />
                </items></Menu>
-          <Menu mnemonicParsing="false" text="Edit" />
-          <Menu mnemonicParsing="false" text="Help" />
+          <Menu mnemonicParsing="false" text="%menu.header.edit" />
+          <Menu mnemonicParsing="false" text="%menu.header.help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="%menu.help.sub.about" />
+                  <MenuItem fx:id="sourceCodeRepoMenuItem" mnemonicParsing="false" onAction="#openOnlineSourceCodeRepo" text="%menu.help.sub.source" />
+               </items></Menu>
         </menus>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

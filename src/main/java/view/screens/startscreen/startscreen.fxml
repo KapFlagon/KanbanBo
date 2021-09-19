@@ -4,13 +4,14 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
+<BorderPane id="thing" fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
    <left>
       <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -20,7 +21,8 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <children>
-            <Button fx:id="newDbButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#createDbFile" text="New">
+            <Label text="%label.database_options" />
+            <Button fx:id="newDbButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#createDbFile" text="%button.new">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
@@ -28,7 +30,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Button>
-            <Button fx:id="browseForDbButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#browseForDbFile" text="Browse">
+            <Button fx:id="browseForDbButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#browseForDbFile" text="%button.browse">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -36,7 +38,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <CheckBox fx:id="autoLoadCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#autoLoadCheckBoxClicked" text="Auto load last file" wrapText="true">
+            <CheckBox fx:id="autoLoadCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#autoLoadCheckBoxClicked" text="%checkbox.auto_load_database" wrapText="true">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
@@ -52,19 +54,19 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="%menu.header.file">
             <items>
-                  <MenuItem fx:id="newDbMenuItem" mnemonicParsing="false" onAction="#createDbFile" text="New Database" />
-                  <MenuItem fx:id="browseForDbMenuItem" mnemonicParsing="false" onAction="#browseForDbFile" text="Browse for Database" />
-              <MenuItem mnemonicParsing="false" text="Preferences" />
-                  <CheckMenuItem fx:id="autoLoadCheckMenuItem" mnemonicParsing="false" onAction="#autoLoadCheckMenuItemClicked" text="Auto load last file" />
-                  <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#exitApplication" text="Exit" />
+                  <MenuItem fx:id="newDbMenuItem" mnemonicParsing="false" onAction="#createDbFile" text="%menu.file.sub.new_database" />
+                  <MenuItem fx:id="browseForDbMenuItem" mnemonicParsing="false" onAction="#browseForDbFile" text="%menu.file.sub.browse_database_files" />
+              <MenuItem mnemonicParsing="false" text="%menu.file.sub.preferences" />
+                  <CheckMenuItem fx:id="autoLoadCheckMenuItem" mnemonicParsing="false" onAction="#autoLoadCheckMenuItemClicked" text="%checkbox.auto_load_database" />
+                  <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#exitApplication" text="%menu.file.sub.exit" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" text="%menu.header.help">
             <items>
-              <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#displayApplicationInfo" text="About" />
-                  <MenuItem fx:id="repoMenuItem" mnemonicParsing="false" onAction="#openOnlineCodeRepo" text="Repo" />
+              <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#displayApplicationInfo" text="%menu.help.sub.about" />
+                  <MenuItem fx:id="sourceCodeRepoMenuItem" mnemonicParsing="false" onAction="#openOnlineSourceCodeRepo" text="%menu.help.sub.source" />
             </items>
           </Menu>
         </menus>

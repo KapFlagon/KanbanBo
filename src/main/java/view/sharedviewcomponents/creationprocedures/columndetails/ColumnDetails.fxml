@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" minViewportHeight="400.0" minViewportWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox minWidth="400.0" spacing="5.0">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <children>
+            <Label text="Column Details" VBox.vgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="Edit/Display">
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin></Button>
+            <Button layoutX="15.0" layoutY="37.0" mnemonicParsing="false" text="Fill using template" />
+            <Accordion>
+              <panes>
+                <TitledPane animated="false" text="Details">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Title" />
+                              <TextField />
+                              <Label text="Final Column" />
+                              <HBox alignment="CENTER" spacing="30.0">
+                                 <children>
+                                    <RadioButton mnemonicParsing="false" selected="true" text="Non-final">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="finalColToggleGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Final" toggleGroup="$finalColToggleGroup" />
+                                 </children>
+                              </HBox>
+                              <Label text="Description" />
+                              <TextArea prefWidth="200.0" wrapText="true" />
+                              <Label text="Created on: " />
+                              <TextField editable="false" />
+                              <Label text="Last Changed on: " />
+                              <TextField editable="false" />
+                           </children>
+                        </VBox>
+                     </content>
+                  </TitledPane>
+              </panes>
+            </Accordion>
+            <Accordion layoutX="15.0" layoutY="494.0">
+               <panes>
+                  <TitledPane animated="false" text="Cards">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label text="Add blank cards or cards from templates" />
+                           </children>
+                        </VBox>
+                     </content>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+            <ButtonBar buttonOrder="" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <buttons>
+                  <Button mnemonicParsing="false" text="Save" />
+                  <Button layoutX="339.0" layoutY="17.0" mnemonicParsing="false" text="Cancel/Close" />
+               </buttons>
+            </ButtonBar>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

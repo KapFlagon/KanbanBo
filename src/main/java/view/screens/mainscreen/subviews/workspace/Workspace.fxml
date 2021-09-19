@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
@@ -7,4 +8,7 @@
    <center>
       <TabPane fx:id="workspaceTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" tabClosingPolicy="ALL_TABS" />
    </center>
+   <top>
+      <Label fx:id="emptyWorkspaceLbl" text="%table.placeholder.projects" BorderPane.alignment="CENTER" />
+   </top>
 </BorderPane>
