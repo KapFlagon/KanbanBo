@@ -1,20 +1,21 @@
 package view.sharedviewcomponents.popups.projectdetails;
 
+import domain.entities.project.ObservableProject;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import domain.activerecords.project.ProjectActiveRecord;
-import persistence.tables.project.ProjectTable;
+import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 import view.sharedviewcomponents.DetailsPopupInitialDataMode;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Date;
+import java.text.ParseException;
 import java.util.ResourceBundle;
 
 public class ProjectDetailsWindowPresenter implements Initializable {
@@ -34,12 +35,13 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     private Button cancelButton;
 
     // Variables
+    @Inject
+    KanbanBoDataService kanbanBoDataService;
     private DetailsPopupInitialDataMode initialDataMode;
     private SimpleBooleanProperty editing;
     private String noTitleError = "A title must be provided";
     private boolean validTitle;
-    private ProjectTable selectedProjectModel;
-    private ProjectActiveRecord projectActiveRecord;
+    private ObservableProject projectViewModel;
 
     // Constructors
 
@@ -48,45 +50,18 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     public TextField getProjectTitleTextField() {
         return projectTitleTextField;
     }
-    public void setProjectTitleTextField(TextField projectTitleTextField) {
-        this.projectTitleTextField = projectTitleTextField;
-    }
 
     public TextArea getProjectDescriptionTextArea() {
         return projectDescriptionTextArea;
     }
-    public void setProjectDescriptionTextArea(TextArea projectDescriptionTextArea) {
-        this.projectDescriptionTextArea = projectDescriptionTextArea;
-    }
 
-    public Button getSaveButton() {
-        return saveButton;
+    public ObservableProject getProjectViewModel() {
+        return projectViewModel;
     }
-    public void setSaveButton(Button saveButton) {
-        this.saveButton = saveButton;
-    }
-
-    public Button getCancelButton() {
-        return cancelButton;
-    }
-    public void setCancelButton(Button cancelButton) {
-        this.cancelButton = cancelButton;
-    }
-
-    public ProjectTable getSelectedActiveProjectModel() {
-        return selectedProjectModel;
-    }
-    public void setSelectedActiveProjectModel(ProjectTable selectedProjectModel) {
-        this.selectedProjectModel = selectedProjectModel;
-    }
-
-    public ProjectActiveRecord getProjectActiveRecord() {
-        return projectActiveRecord;
-    }
-    public void setProjectActiveRecord(ProjectActiveRecord projectActiveRecord) {
-        this.projectActiveRecord = projectActiveRecord;
-        projectTitleTextField.setText(projectActiveRecord.getProjectTitle());
-        projectDescriptionTextArea.setText(projectActiveRecord.getProjectDescription());
+    public void setProjectViewModel(ObservableProject projectViewModel) {
+        this.projectViewModel = projectViewModel;
+        projectTitleTextField.textProperty().bind(projectViewModel.projectTitleProperty());
+        projectDescriptionTextArea.textProperty().bind(projectViewModel.projectDescriptionProperty());
     }
 
     public void setInitialDataMode(DetailsPopupInitialDataMode initialDataMode) {
@@ -139,17 +114,15 @@ public class ProjectDetailsWindowPresenter implements Initializable {
 
 
     // Other methods
-    public void saveProjectDetailsChange() throws SQLException, IOException {
+    public void saveProjectDetailsChange() throws SQLException, IOException, ParseException {
         if(validTitle) {
-            if(projectActiveRecord == null) {
-                projectActiveRecord = new ProjectActiveRecord();
-                // TODO make new project building the responsibility of class ProjectActiveRecord
-                projectActiveRecord.setProjectModel(buildNewProjectModelInstance());
+            if(projectViewModel == null) {
+                kanbanBoDataService.createProject(projectTitleTextField.getText(), projectDescriptionTextArea.getText());
             } else {
-                projectActiveRecord.setProjectTitle(getProjectTitleTextField().getText());
-                projectActiveRecord.setProjectDescription(getProjectDescriptionTextArea().getText());
-          }
-            projectActiveRecord.createOrUpdateActiveRowInDb();
+                projectViewModel.projectTitleProperty().set(getProjectTitleTextField().getText());
+                projectViewModel.projectDescriptionProperty().set(getProjectDescriptionTextArea().getText());
+                kanbanBoDataService.updateProject(projectViewModel);
+            }
             StageUtils.hideSubStage();
         } else {
             titleErrorLbl.setVisible(true);
@@ -161,18 +134,6 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     public void cancelProjectDetailsChange() {
         // Close the window, do nothing.
         StageUtils.hideSubStage();
-    }
-
-
-    private ProjectTable buildNewProjectModelInstance() {
-        // Create blank project instance, and populate with data.
-        ProjectTable newProjectModel = new ProjectTable();
-        newProjectModel.setProject_title(getProjectTitleTextField().getText());
-        newProjectModel.setProject_description(getProjectDescriptionTextArea().getText());
-        newProjectModel.setCreation_timestamp(new Date());
-        newProjectModel.setLast_changed_timestamp(new Date());
-        newProjectModel.setProject_status_id(1);
-        return newProjectModel;
     }
 
     private void establishTitleTextFieldValidation() {

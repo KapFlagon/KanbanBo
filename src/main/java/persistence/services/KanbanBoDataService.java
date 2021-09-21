@@ -1,4 +1,4 @@
-package persistence.services.latest;
+package persistence.services;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -24,7 +24,6 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -34,8 +33,8 @@ public class KanbanBoDataService extends AbstractService{
     // Variables
     private final Locale locale;
     private final ResourceBundle resourceBundle;
-    private ObservableList<ObservableProject> allProjectsList;
-    private ObservableList<ObservableProject> projectsInWorkspaceList;
+    private ObservableList<ObservableProject> projectsList;
+    private ObservableList<ObservableProject> workspaceProjectsList;
 
     private Dao<ProjectTable, UUID> projectDao;
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
@@ -57,15 +56,17 @@ public class KanbanBoDataService extends AbstractService{
 
     // Constructors
 
-    public KanbanBoDataService() {
+    public KanbanBoDataService() throws SQLException, IOException {
         locale = Locale.getDefault();
         resourceBundle = ResourceBundle.getBundle("systemtexts", locale);
-        allProjectsList = FXCollections.observableArrayList();
-        projectsInWorkspaceList = FXCollections.observableArrayList();
-        projectsInWorkspaceList.addListener(new ListChangeListener<ObservableProject>() {
+        projectsList = FXCollections.observableArrayList();
+        initProjectsList();
+        workspaceProjectsList = FXCollections.observableArrayList();
+        workspaceProjectsList.addListener(new ListChangeListener<ObservableProject>() {
             @Override
             public void onChanged(Change<? extends ObservableProject> c) {
-                if(c.wasAdded()) {
+                while (c.next())
+                    if(c.wasAdded()) {
                     for(ObservableProject observableProject: c.getAddedSubList()) {
                         try {
                             fillProjectFromDb(observableProject);
@@ -78,18 +79,24 @@ public class KanbanBoDataService extends AbstractService{
                 }
             }
         });
+
     }
 
 
     // Getters and Setters
+    public ObservableList<ObservableProject> getProjectsList() {
+        return projectsList;
+    }
+
+    public ObservableList<ObservableProject> getWorkspaceProjectsList() {
+        return workspaceProjectsList;
+    }
+
 
 
     // Initialisation methods
-
-
-    // Other methods
-    public ObservableList<ObservableProject> getProjectsList() throws SQLException, IOException {
-        allProjectsList.clear();
+    public void initProjectsList() throws SQLException, IOException {
+        projectsList.clear();
         List<ProjectTable> projects = getProjectsTableAsList();
         List<ProjectStatusTable> projectStatuses = getProjectStatusTableAsList();
         for(ProjectTable projectEntry : projects) {
@@ -104,10 +111,11 @@ public class KanbanBoDataService extends AbstractService{
             ObservableProject projectDomainObject = new ObservableProject(projectEntry, localisedStatusText);
             ChangeListener<Boolean> changeListener = addProjectChangeListener(projectDomainObject.dataChangePendingProperty(), projectDomainObject);
             projectDomainObject.dataChangePendingProperty().addListener(changeListener);
-            allProjectsList.add(projectDomainObject);
+            projectsList.add(projectDomainObject);
         }
-        return allProjectsList;
     }
+
+    // Other methods
 
 
     private List<ProjectTable> getProjectsTableAsList() throws SQLException, IOException {
@@ -127,6 +135,7 @@ public class KanbanBoDataService extends AbstractService{
         teardownDbConnection();
         return projectStatusList;
     }
+
 
     public ObservableList<ObservableProject> getResourceItemProjectSubList(UUID potentialParentItemUUID) throws SQLException, IOException {
         setupDbConnection();
@@ -156,7 +165,7 @@ public class KanbanBoDataService extends AbstractService{
         List<ResourceItemTable> resourceList = resourceItemTableQueryBuilder.query();
         buildResourceItemProjectOmissionList(projectUUIDsToOmit, startingUUID, resourceList);
         ObservableList<ObservableProject> projectSubList = FXCollections.observableArrayList();
-        for(ObservableProject observableProject : allProjectsList) {
+        for(ObservableProject observableProject : projectsList) {
             boolean additionPermitted = true;
             for(UUID ommittedProjectUUID : projectUUIDsToOmit) {
                 if (ommittedProjectUUID.equals(observableProject.getProjectUUID())) {
@@ -259,8 +268,8 @@ public class KanbanBoDataService extends AbstractService{
         projectTable.setLast_changed_timestamp(new Date());
         ProjectStatusTable statusKey;
         setupDbConnection();
-        projectDao = DaoManager.lookupDao(connectionSource, ProjectTable.class);
-        projectStatusDao = DaoManager.lookupDao(connectionSource, ProjectStatusTable.class);
+        projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
+        projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
         int result = projectDao.create(projectTable);
         statusKey = projectStatusDao.queryForId(1);
         teardownDbConnection();
@@ -269,8 +278,8 @@ public class KanbanBoDataService extends AbstractService{
             ObservableProject observableProject = new ObservableProject(projectTable, localizedStatusText);
             ChangeListener<Boolean> changeListener = addProjectChangeListener(observableProject.dataChangePendingProperty(), observableProject);
             observableProject.dataChangePendingProperty().addListener(changeListener);
-            allProjectsList.add(observableProject);
-            projectsInWorkspaceList.add(observableProject);
+            projectsList.add(observableProject);
+            workspaceProjectsList.add(observableProject);
             System.out.println("Project updated successfully");
             return true;
         } else {
@@ -281,9 +290,13 @@ public class KanbanBoDataService extends AbstractService{
     }
 
     public boolean updateProject(ObservableProject projectDomainObject) throws ParseException, SQLException, IOException {
-        ProjectTable projectTableData = prepareObservableProjectForCommit(projectDomainObject);
         setupDbConnection();
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
+        ProjectTable projectTableData = projectDao.queryForId(projectDomainObject.getProjectUUID());
+        projectTableData.setProject_title(projectDomainObject.projectTitleProperty().getValue());
+        projectTableData.setProject_description(projectDomainObject.projectDescriptionProperty().getValue());
+        projectTableData.setProject_status_id(projectDomainObject.statusIDProperty().getValue());
+        projectTableData.setLast_changed_timestamp(new Date());
         int result = projectDao.update(projectTableData);
         teardownDbConnection();
         if(result > 0) {
@@ -297,8 +310,6 @@ public class KanbanBoDataService extends AbstractService{
     }
 
     public void deleteProject(ObservableProject projectDomainObject) throws ParseException, SQLException, IOException {
-        ProjectTable projectTableData = prepareObservableProjectForCommit(projectDomainObject);
-
         setupDbConnection();
 
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -351,39 +362,36 @@ public class KanbanBoDataService extends AbstractService{
                     cardDao.delete(cardDelete);
                 }
                 columnDao.delete(columnPreparedDelete);
-                projectDao.deleteById(projectTableData.getID());
+                projectDao.deleteById(projectDomainObject.getProjectUUID());
                 return true;
             }
         });
 
         teardownDbConnection();
-        allProjectsList.remove(projectDomainObject);
-        projectsInWorkspaceList.remove(projectDomainObject);
+        projectsList.remove(projectDomainObject);
+        workspaceProjectsList.remove(projectDomainObject);
         // TODO respond to a failure...
     }
 
-    private ProjectTable prepareObservableProjectForCommit(ObservableProject projectDomainObject) throws ParseException {
-        ProjectTable projectTableData = new ProjectTable();
-        projectTableData.setProject_uuid(projectDomainObject.getProjectUUID());
-        projectTableData.setCreation_timestamp(stringToDate(projectDomainObject.creationTimestampProperty().getValue()));
-        projectTableData.setProject_title(projectDomainObject.projectTitleProperty().getValue());
-        projectTableData.setProject_description(projectDomainObject.projectDescriptionProperty().getValue());
-        projectTableData.setProject_status_id(projectDomainObject.statusIDProperty().getValue());
-        projectTableData.setLast_changed_timestamp(new Date());
-        return projectTableData;
+    private void copyProject(ObservableProject originalProject) throws SQLException, ParseException, IOException {
+        // TODO Implement this
     }
 
 
-    public boolean createColumn(UUID parentProjectUUID, String title, boolean finalColumn, int position) throws SQLException, IOException {
+    public boolean createColumn(UUID parentProjectUUID, String title, boolean finalColumn) throws SQLException, IOException {
         ColumnTable columnTable = new ColumnTable();
         columnTable.setParent_project_uuid(parentProjectUUID);
         columnTable.setColumn_title(title);
         columnTable.setFinal_column(finalColumn);
-        columnTable.setColumn_position(position);
         setupDbConnection();
 
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         columnTableQueryBuilder = columnDao.queryBuilder();
+
+        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, parentProjectUUID);
+        long columnCount = columnTableQueryBuilder.countOf();
+        int position = (int) (columnCount + 1);
+        columnTable.setColumn_position(position);
         columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, parentProjectUUID).and().eq(ColumnTable.FINAL_FLAG_NAME, true);
         long countOfFinalColumns = columnTableQueryBuilder.countOf();
         if (countOfFinalColumns > 0) {
@@ -393,7 +401,7 @@ public class KanbanBoDataService extends AbstractService{
             teardownDbConnection();
             if (result > 0) {
                 ObservableProject observableProject = null;
-                for (ObservableProject op : projectsInWorkspaceList) {
+                for (ObservableProject op : workspaceProjectsList) {
                     if(op.getProjectUUID().equals(parentProjectUUID)){
                         observableProject = op;
                     }
@@ -558,18 +566,24 @@ public class KanbanBoDataService extends AbstractService{
         teardownDbConnection();
     }
 
-    public void createCard(UUID parentColumnUUID, String title, String description, int position) throws SQLException, IOException {
+    public void createCard(UUID parentColumnUUID, String title, String description) throws SQLException, IOException {
         CardTable card = new CardTable();
         card.setParent_column_uuid(parentColumnUUID);
         card.setCard_title(title);
         card.setCard_description_text(description);
-        card.setCard_position(position);
 
         setupDbConnection();
 
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
+
+        cardTableQueryBuilder = cardDao.queryBuilder();
+        cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, parentColumnUUID);
+        long cardCount = cardTableQueryBuilder.countOf();
+        int position = (int) (cardCount + 1);
+        card.setCard_position(position);
+
         ColumnTable column = columnDao.queryForId(parentColumnUUID);
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
         project.setLast_changed_timestamp(new Date());
@@ -880,11 +894,12 @@ public class KanbanBoDataService extends AbstractService{
         return projectChangeListener;
     }
 
+    /*
     private Date stringToDate(String dateTimeValue) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat();
-        Date tempDate = null;
-        tempDate = dateFormat.parse(dateTimeValue);
-        return tempDate;
-    }
+        LocalDateTime localDateTime = LocalDateTime.parse(dateTimeValue);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter(Locale.getDefault());
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
+    }*/
 
 }

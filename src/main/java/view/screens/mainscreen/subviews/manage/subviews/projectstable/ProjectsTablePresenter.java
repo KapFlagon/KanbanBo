@@ -1,85 +1,47 @@
 package view.screens.mainscreen.subviews.manage.subviews.projectstable;
 
-import javafx.beans.property.SimpleStringProperty;
+import domain.entities.project.ObservableProject;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.SelectionMode;
+import persistence.services.KanbanBoDataService;
 
+import javax.inject.Inject;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
-import domain.activerecords.project.ProjectActiveRecord;
 
 
 public class ProjectsTablePresenter implements Initializable {
 
     // Injected JavaFX field variables
     @FXML
-    private TableView activeProjectListTableView;
+    private TableView<ObservableProject> activeProjectListTableView;
     @FXML
-    private TableColumn<ProjectActiveRecord, String> projectTitleTableCol;
+    private TableColumn<ObservableProject, String> projectTitleTableCol;
     @FXML
-    private TableColumn<ProjectActiveRecord, String> projectStatusTableCol;
+    private TableColumn<ObservableProject, String> projectStatusTableCol;
     @FXML
-    private TableColumn<ProjectActiveRecord, String> creationDateTableCol;
+    private TableColumn<ObservableProject, String> creationDateTableCol;
     @FXML
-    private TableColumn<ProjectActiveRecord, String> lastChangedDateTableCol;
+    private TableColumn<ObservableProject, String> lastChangedDateTableCol;
 
 
     // Variables
-    private ObservableList<ProjectActiveRecord> activeProjectList;
-    private TableView.TableViewSelectionModel<ProjectActiveRecord> selectionModel;
+    @Inject
+    KanbanBoDataService kanbanBoDataService;
+    private ObservableList<ObservableProject> projectTableViewModel;
+    private TableView.TableViewSelectionModel<ObservableProject> selectionModel;
 
 
     // Constructors
 
 
     // Getters and Setters
-    public TableView getActiveProjectListTableView() {
-        return activeProjectListTableView;
-    }
-    public void setActiveProjectListTableView(TableView activeProjectListTableView) {
-        this.activeProjectListTableView = activeProjectListTableView;
-    }
-
-    public TableColumn getProjectTitleTableCol() {
-        return projectTitleTableCol;
-    }
-    public void setProjectTitleTableCol(TableColumn projectTitleTableCol) {
-        this.projectTitleTableCol = projectTitleTableCol;
-    }
-
-    public TableColumn<ProjectActiveRecord, String> getProjectStatusTableCol() {
-        return projectStatusTableCol;
-    }
-    public void setProjectStatusTableCol(TableColumn<ProjectActiveRecord, String> projectStatusTableCol) {
-        this.projectStatusTableCol = projectStatusTableCol;
-    }
-
-    public TableColumn getCreationDateTableCol() {
-        return creationDateTableCol;
-    }
-    public void setCreationDateTableCol(TableColumn creationDateTableCol) {
-        this.creationDateTableCol = creationDateTableCol;
-    }
-
-    public TableColumn getLastChangedDateTableCol() {
-        return lastChangedDateTableCol;
-    }
-    public void setLastChangedDateTableCol(TableColumn lastChangedDateTableCol) {
-        this.lastChangedDateTableCol = lastChangedDateTableCol;
-    }
-
-    public ObservableList<ProjectActiveRecord> getActiveProjectList() {
-        return activeProjectList;
-    }
-    public void setActiveProjectList(ObservableList<ProjectActiveRecord> activeProjectList) {
-        this.activeProjectList = activeProjectList;
-        activeProjectListTableView.setItems(activeProjectList);
-    }
 
 
     // Initialisation methods
@@ -88,6 +50,8 @@ public class ProjectsTablePresenter implements Initializable {
         initTableView();
         initSelectionModel();
         initTableColumns();
+        projectTableViewModel = kanbanBoDataService.getProjectsList();
+        activeProjectListTableView.setItems(projectTableViewModel);
     }
 
     public void initTableView() {
@@ -101,13 +65,7 @@ public class ProjectsTablePresenter implements Initializable {
 
     public void initTableColumns() {
         projectTitleTableCol.setCellValueFactory(cellData -> (cellData.getValue().projectTitleProperty()));
-        Locale locale = Locale.getDefault();
-        ResourceBundle bundle = ResourceBundle.getBundle("systemtexts", locale);
-        projectStatusTableCol.setCellValueFactory((cellData) -> {
-            String localisedStatusText = bundle.getString(cellData.getValue().statusTextProperty().getValue());
-            SimpleStringProperty tempProperty = new SimpleStringProperty(localisedStatusText);
-            return tempProperty;
-        });
+        projectStatusTableCol.setCellValueFactory(cellData -> (cellData.getValue().statusTextProperty()));
         creationDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().creationTimestampProperty()));
         lastChangedDateTableCol.setCellValueFactory(cellData -> (cellData.getValue().lastChangedTimestampProperty()));
     }
@@ -116,7 +74,7 @@ public class ProjectsTablePresenter implements Initializable {
 
 
     // Other methods
-    public ProjectActiveRecord getSelectedRow() {
+    public ObservableProject getSelectedRow() {
         return selectionModel.getSelectedItem();
     }
 

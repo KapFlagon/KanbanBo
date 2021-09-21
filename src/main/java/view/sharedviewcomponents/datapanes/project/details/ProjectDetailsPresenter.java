@@ -1,11 +1,11 @@
 package view.sharedviewcomponents.datapanes.project.details;
 
+import domain.entities.project.ObservableProject;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
-import domain.activerecords.project.ProjectActiveRecord;
 import domain.viewmodels.project.ProjectDetailsViewModel;
 
 import java.net.URL;
@@ -38,15 +38,15 @@ public class ProjectDetailsPresenter implements Initializable {
 
     // Other variables
     //private ProjectDetailsViewModel projectDetailsViewModel;
-    private ProjectActiveRecord projectActiveRecord;
+    private ObservableProject observableProject;
     private ProjectDetailsViewModel projectDetailsViewModel;
     private SimpleBooleanProperty changesPending;
 
     // Constructors
 
     // Getters & Setters
-    public void setProjectActiveRecord(ProjectActiveRecord projectActiveRecord) {
-        this.projectActiveRecord = projectActiveRecord;
+    public void setObservableProject(ObservableProject observableProject) {
+        this.observableProject = observableProject;
         initializeTexts();
     }
 

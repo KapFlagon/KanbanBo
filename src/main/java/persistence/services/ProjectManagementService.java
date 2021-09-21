@@ -1,4 +1,4 @@
-package persistence.services.latest;
+package persistence.services;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;

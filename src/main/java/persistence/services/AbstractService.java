@@ -1,4 +1,4 @@
-package persistence.services.latest;
+package persistence.services;
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.misc.TransactionManager;

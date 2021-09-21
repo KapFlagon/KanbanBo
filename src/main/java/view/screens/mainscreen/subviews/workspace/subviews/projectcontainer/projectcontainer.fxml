@@ -78,7 +78,7 @@
                                     <Button mnemonicParsing="false" onAction="#removeRelatedItem" text="Remove" />
                                  </children>
                               </HBox>
-                              <TableView fx:id="relatedItemTable">
+                              <TableView fx:id="resourceItemTableView">
                                 <columns>
                                   <TableColumn fx:id="relatedItemTitleTableColumn" prefWidth="75.0" text="Title" />
                                   <TableColumn fx:id="relatedItemTypeTableColumn" prefWidth="75.0" text="Type" />

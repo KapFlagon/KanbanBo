@@ -1,20 +1,18 @@
 package view.sharedviewcomponents.popups.columndetails;
 
+import domain.entities.column.ObservableColumn;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import domain.activerecords.project.ProjectActiveRecord;
-import domain.activerecords.ProjectColumnActiveRecord;
-import persistence.tables.column.ColumnTable;
+import javafx.scene.control.*;
+import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class ColumnDetailsWindowPresenter implements Initializable {
 
@@ -24,40 +22,31 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     @FXML
     private Label titleErrorLbl;
     @FXML
+    private CheckBox finalColumnCheckBox;
+    @FXML
     private Button saveButton;
     @FXML
     private Button cancelButton;
 
     // Variables
+    @Inject
+    KanbanBoDataService kanbanBoDataService;
     private String noTitleError = "A title must be provided";
     private boolean validTitle;
-    private ProjectColumnActiveRecord<ColumnTable> projectColumnActiveRecord;
-    private ProjectActiveRecord parentProject;
+
+    private UUID parentProjectUUID;
+    private ObservableColumn columnViewModel;
 
     // Constructors
 
 
     // Getters and Setters
-    public TextField getTitleTextField() {
-        return titleTextField;
-    }
-    public void setTitleTextField(TextField titleTextField) {
-        this.titleTextField = titleTextField;
+    public void setParentProjectUUID(UUID parentProjectUUID) {
+        this.parentProjectUUID = parentProjectUUID;
     }
 
-    public ProjectColumnActiveRecord<ColumnTable> getProjectColumnActiveRecord() {
-        return projectColumnActiveRecord;
-    }
-    public void setProjectColumnActiveRecord(ProjectColumnActiveRecord<ColumnTable> projectColumnActiveRecord) {
-        this.projectColumnActiveRecord = projectColumnActiveRecord;
-        titleTextField.setText(projectColumnActiveRecord.getColumnTitle());
-    }
-
-    public ProjectActiveRecord getParentProject() {
-        return parentProject;
-    }
-    public void setParentProject(ProjectActiveRecord parentProject) {
-        this.parentProject = parentProject;
+    public void setColumnViewModel(ObservableColumn columnViewModel) {
+        this.columnViewModel = columnViewModel;
     }
 
     // Initialisation methods
@@ -72,14 +61,15 @@ public class ColumnDetailsWindowPresenter implements Initializable {
 
 
     // UI event methods
-    public void saveDetailsChange() throws IOException, SQLException {
+    @FXML private void saveDetailsChange() throws IOException, SQLException {
         if(validTitle) {
-            if(projectColumnActiveRecord == null) {
-                projectColumnActiveRecord = new ProjectColumnActiveRecord(ColumnTable.class);
-                // TODO make new project building the responsibility of class ProjectActiveRecord
-                projectColumnActiveRecord.setProjectColumnModel(buildNewColumnModelInstance());
+            if(columnViewModel == null) {
+                kanbanBoDataService.createColumn(parentProjectUUID, titleTextField.getText(), finalColumnCheckBox.isSelected());
             } else {
-                projectColumnActiveRecord.setColumnTitle(titleTextField.getText());
+                columnViewModel.columnTitleProperty().set(titleTextField.getText());
+                columnViewModel.finalColumnProperty().set(finalColumnCheckBox.isSelected());
+                // TODO figure out how to manage position...
+                // columnViewModel.columnPositionProperty().set(position?);
             }
             StageUtils.hideSubStage();
         } else {
@@ -89,20 +79,13 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     }
 
 
-    public void cancelDetailsChange() {
+    @FXML private void cancelDetailsChange() {
         // Close the window, do nothing.
         StageUtils.hideSubStage();
     }
 
 
     // Other methods
-    private ColumnTable buildNewColumnModelInstance() {
-        // Create blank column instance, and populate with data.
-        ColumnTable columnModel = new ColumnTable();
-        columnModel.setColumn_title(titleTextField.getText());
-        columnModel.setParent_project_uuid(parentProject.getProjectUUID());
-        return columnModel;
-    }
 
     private void establishTitleTextFieldValidation() {
         titleTextField.setTextFormatter(new TextFormatter<Object>(change -> {

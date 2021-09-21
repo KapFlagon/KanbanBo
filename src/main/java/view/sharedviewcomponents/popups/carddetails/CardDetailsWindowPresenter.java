@@ -1,23 +1,26 @@
 package view.sharedviewcomponents.popups.carddetails;
 
+import domain.entities.card.ObservableCard;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import domain.activerecords.ColumnCardActiveRecord;
-import domain.activerecords.ProjectColumnActiveRecord;
+import persistence.services.KanbanBoDataService;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import utils.StageUtils;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class CardDetailsWindowPresenter implements Initializable {
+
 
     // JavaFX injected node variables
     @FXML
@@ -28,29 +31,29 @@ public class CardDetailsWindowPresenter implements Initializable {
     private TextArea descriptionText;
 
     // Other variables
+    @Inject
+    KanbanBoDataService kanbanBoDataService;
     private String noTitleError = "A title must be provided";
     private boolean validTitle;
-    private ProjectColumnActiveRecord<ColumnTable> parentColumnActiveRecord;
-    private ColumnCardActiveRecord<CardTable> columnCardActiveRecord;
+
+    private UUID parentColumnUUID;
+    private ObservableCard cardViewModel;
 
     // Constructors
 
     // Getters & Setters
-    public ProjectColumnActiveRecord getParentColumnActiveRecord() {
-        return parentColumnActiveRecord;
-    }
-    public void setParentColumnActiveRecord(ProjectColumnActiveRecord parentColumnActiveRecord) {
-        this.parentColumnActiveRecord = parentColumnActiveRecord;
+
+
+    public void setParentColumnUUID(UUID parentColumnUUID) {
+        this.parentColumnUUID = parentColumnUUID;
     }
 
-    public ColumnCardActiveRecord getColumnCardActiveRecord() {
-        return columnCardActiveRecord;
+    public void setCardViewModel(ObservableCard cardViewModel) {
+        this.cardViewModel = cardViewModel;
+        this.titleTextField.textProperty().bind(cardViewModel.cardTitleProperty());
+        this.descriptionText.textProperty().bind(cardViewModel.cardDescriptionProperty());
     }
-    public void setColumnCardActiveRecord(ColumnCardActiveRecord columnCardActiveRecord) {
-        this.columnCardActiveRecord = columnCardActiveRecord;
-        this.titleTextField.setText(columnCardActiveRecord.getCardTitle());
-        this.descriptionText.setText(columnCardActiveRecord.getCardDescription());
-    }
+
 
     // Initialization methods
     @Override
@@ -62,16 +65,15 @@ public class CardDetailsWindowPresenter implements Initializable {
         establishTitleTextFieldValidation();
     }
 
+
     // UI event methods
-    public void saveDetailsChange() throws IOException, SQLException {
+    @FXML private void saveDetailsChange() throws IOException, SQLException {
         if(validTitle) {
-            if(columnCardActiveRecord == null) {
-                columnCardActiveRecord = new ColumnCardActiveRecord<>(CardTable.class);
-                // TODO make new project building the responsibility of class ProjectActiveRecord
-                columnCardActiveRecord.setColumnCardModel(buildNewCardModelInstance());
+            if(cardViewModel == null) {
+                kanbanBoDataService.createCard(parentColumnUUID, titleTextField.getText(), descriptionText.getText());
             } else {
-                columnCardActiveRecord.setCardTitle(titleTextField.getText());
-                columnCardActiveRecord.setCardDescription(descriptionText.getText());
+                cardViewModel.setCardTitle(titleTextField.getText());
+                cardViewModel.setCardDescription(descriptionText.getText());
             }
             StageUtils.hideSubStage();
         } else {
@@ -81,20 +83,12 @@ public class CardDetailsWindowPresenter implements Initializable {
     }
 
 
-    public void cancelDetailsChange() {
+    @FXML private void cancelDetailsChange() {
         // Close the window, do nothing.
         StageUtils.hideSubStage();
     }
 
     // Other methods
-    private CardTable buildNewCardModelInstance() {
-        // Create blank column instance, and populate with data.
-        CardTable cardModel = new CardTable();
-        cardModel.setCard_title(titleTextField.getText());
-        cardModel.setCard_description_text(descriptionText.getText());
-        cardModel.setParent_column_uuid(parentColumnActiveRecord.getProjectColumnModel().getColumn_uuid());
-        return cardModel;
-    }
 
     private void establishTitleTextFieldValidation() {
         titleTextField.setTextFormatter(new TextFormatter<Object> (change -> {

@@ -1,5 +1,6 @@
 package view.screens.mainscreen.subviews.workspace;
 
+import domain.entities.project.ObservableProject;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -11,11 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import domain.activerecords.project.ProjectActiveRecord;
-import persistence.services.legacy.ProjectRepositoryService;
+import persistence.services.KanbanBoDataService;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,62 +31,57 @@ public class WorkspacePresenter implements Initializable {
     private Label emptyWorkspaceLbl;
 
     // Other variables
-    private ObservableList<ProjectActiveRecord> openedProjectsViewModel;
-    private ProjectRepositoryService projectRepositoryService;
+    @Inject
+    KanbanBoDataService kanbanBoDataService;
+    private ObservableList<ObservableProject> openedProjectsViewModel;
     private SelectionModel tabPaneSelectionModel;
 
     // Constructors
 
     // Getters & Setters
-    public void setProjectRepositoryService(ProjectRepositoryService projectRepositoryService) {
-        this.projectRepositoryService = projectRepositoryService;
-        openedProjectsViewModel = projectRepositoryService.getOpenedActiveProjects();
-        customInit();
-    }
+
 
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.openedProjectsViewModel = kanbanBoDataService.getWorkspaceProjectsList();
         tabPaneSelectionModel = workspaceTabPane.getSelectionModel();
-    }
-
-    public void customInit() {
-        openedProjectsViewModel.addListener(new ListChangeListener<ProjectActiveRecord>() {
+        openedProjectsViewModel.addListener(new ListChangeListener<ObservableProject>() {
             @Override
-            public void onChanged(Change<? extends ProjectActiveRecord> c) {
+            public void onChanged(Change<? extends ObservableProject> c) {
                 c.next();
                 if (c.wasAdded()) {
                     System.out.println("Change detected, new project opened");
                     Tab tab = new Tab();
-                    ProjectContainerView pcv = new ProjectContainerView();
-                    ProjectContainerPresenter pcp = (ProjectContainerPresenter) pcv.getPresenter();
-                    for (ProjectActiveRecord par1 : c.getAddedSubList()) {
+                    ProjectContainerView projectContainerView = new ProjectContainerView();
+                    ProjectContainerPresenter projectContainerPresenter = (ProjectContainerPresenter) projectContainerView.getPresenter();
+                    for (ObservableProject observableProject : c.getAddedSubList()) {
                         try {
-                            pcp.setProjectActiveRecord(par1);
+                            projectContainerPresenter.setProjectViewModel(observableProject);
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
                         }
-                        tab.setContent(pcv.getView());
+                        tab.setContent(projectContainerView.getView());
                         // TODO Investigate use of getViewAsync here and further down the chain
                         //Pane testPane = new Pane();
                         //pcv.getViewAsync(testPane.getChildren()::add);
                         //tab.setContent(testPane);
                         workspaceTabPane.getTabs().add(tab);
-                        tab.textProperty().bind(Bindings.concat("Project: ").concat(par1.projectTitleProperty()));
-                        //tab.setText("Project '" + par1.getProjectTitle() + "'");
+                        tab.textProperty().bind(Bindings.concat("Project: ").concat(observableProject.projectTitleProperty()));
+                        //tab.setText("Project '" + observableProject.getProjectTitle() + "'");
                         tab.setClosable(true);
                         updatePlaceholderLabel();
-                        // TODO refactor this into another method or something. 
+                        // TODO refactor this into another method or something.
                         tab.setOnClosed(new EventHandler<Event>() {
                             @Override
                             public void handle(Event event) {
                                 System.out.println("workspace project tab is being closed");
                                 int index = -1;
                                 for (int innerIterator = 0; innerIterator < (c.getAddedSubList().size()); innerIterator++) {
-                                    ProjectActiveRecord par2 = c.getAddedSubList().get(innerIterator);
-                                    if (par1.getProjectUUID().equals(par2.getProjectUUID())) {
+                                    ObservableProject par2 = c.getAddedSubList().get(innerIterator);
+                                    if (observableProject.getProjectUUID().equals(par2.getProjectUUID())) {
                                         index = innerIterator;
                                     }
                                 }
@@ -104,6 +100,7 @@ public class WorkspacePresenter implements Initializable {
         updatePlaceholderLabel();
     }
 
+
     // UI event methods
 
 
@@ -117,5 +114,4 @@ public class WorkspacePresenter implements Initializable {
             emptyWorkspaceLbl.setVisible(false);
         }
     }
-
 }

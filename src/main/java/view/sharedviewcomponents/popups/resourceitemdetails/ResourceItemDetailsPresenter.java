@@ -1,5 +1,6 @@
 package view.sharedviewcomponents.popups.resourceitemdetails;
 
+import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,9 +9,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import domain.activerecords.ResourceItemActiveRecord;
-import domain.activerecords.ResourceItemTypeActiveRecord;
-import persistence.tables.resourceitems.ResourceItemTable;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTablePresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTableView;
@@ -41,8 +39,8 @@ public class ResourceItemDetailsPresenter implements Initializable {
 
     // Other variables
     private UUID parentUUID;
-    private ResourceItemActiveRecord resourceItemActiveRecord;
-    private ObservableList<ResourceItemTypeActiveRecord> relatedItemTypes;
+    private ObservableResourceItem observableResourceItem;
+    private ObservableList<ObservableResourceItem> relatedItemTypes;
 
     // Constructors
 
@@ -52,25 +50,25 @@ public class ResourceItemDetailsPresenter implements Initializable {
     }
     public void setParentUUID(UUID parentUUID) {
         this.parentUUID = parentUUID;
-        resourceItemActiveRecord = new ResourceItemActiveRecord(parentUUID, new ResourceItemTable());
-        resourceItemActiveRecord.setParentItemUUID(parentUUID);
+        //observableResourceItem = new ObservableResourceItem(parentUUID, new ResourceItemTable());
+        //observableResourceItem.setParentItemUUID(parentUUID);
     }
 
-    public ResourceItemActiveRecord getRelatedItemActiveRecord() {
-        return resourceItemActiveRecord;
-    }
-    public void setRelatedItemActiveRecord(ResourceItemActiveRecord resourceItemActiveRecord) {
-        this.resourceItemActiveRecord = resourceItemActiveRecord;
-        this.parentUUID = resourceItemActiveRecord.getParentItemUUID();
-        itemTitleTextField.textProperty().bind(resourceItemActiveRecord.relatedItemTitleProperty());
-        itemDescriptionTextArea.textProperty().bind(resourceItemActiveRecord.relatedItemDescriptionProperty());
-        itemPathTextField.textProperty().bind(getRelatedItemActiveRecord().relatedItemPathProperty());
+    /*public ResourceItemActiveRecord getRelatedItemActiveRecord() {
+        return observableResourceItem;
+    }*/
+    public void setRelatedItemActiveRecord(ObservableResourceItem observableResourceItem) {
+        this.observableResourceItem = observableResourceItem;
+        this.parentUUID = observableResourceItem.getParentItemUUID();
+        itemTitleTextField.textProperty().bind(observableResourceItem.titleProperty());
+        itemDescriptionTextArea.textProperty().bind(observableResourceItem.descriptionProperty());
+        itemPathTextField.textProperty().bind(observableResourceItem.pathProperty());
     }
 
-    public ObservableList<ResourceItemTypeActiveRecord> getRelatedItemTypes() {
+    public ObservableList<ObservableResourceItem> getRelatedItemTypes() {
         return relatedItemTypes;
     }
-    public void setRelatedItemTypes(ObservableList<ResourceItemTypeActiveRecord> relatedItemTypes) {
+    public void setRelatedItemTypes(ObservableList<ObservableResourceItem> relatedItemTypes) {
         this.relatedItemTypes = relatedItemTypes;
         initChoiceBox();
     }
@@ -150,11 +148,11 @@ public class ResourceItemDetailsPresenter implements Initializable {
     @FXML private void saveRelatedItemDetailsChange() {
         // TODO Finish implementing this method
 
-        resourceItemActiveRecord.setRelatedItemTitle(itemTitleTextField.getText());
+        //observableResourceItem.setRelatedItemTitle(itemTitleTextField.getText());
         // TODO Implement this
         // relatedItemActiveRecord.setRelatedItemType();
-        resourceItemActiveRecord.setRelatedItemPath(itemPathTextField.getText());
-        resourceItemActiveRecord.setRelatedItemDescription(itemDescriptionTextArea.getText());
+        //observableResourceItem.setRelatedItemPath(itemPathTextField.getText());
+        //observableResourceItem.setRelatedItemDescription(itemDescriptionTextArea.getText());
         StageUtils.hideSubStage();
     }
 

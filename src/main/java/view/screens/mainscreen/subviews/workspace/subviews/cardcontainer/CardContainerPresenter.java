@@ -1,5 +1,6 @@
 package view.screens.mainscreen.subviews.workspace.subviews.cardcontainer;
 
+import domain.entities.card.ObservableCard;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
-import domain.activerecords.ColumnCardActiveRecord;
 import persistence.tables.card.CardTable;
 import utils.StageUtils;
 import view.sharedviewcomponents.popups.carddetails.CardDetailsWindowPresenter;
@@ -36,7 +36,7 @@ public class CardContainerPresenter implements Initializable {
     private TextArea cardDescriptionTextArea;
 
     // Other variables
-    private ColumnCardActiveRecord<CardTable> columnCardActiveRecord;
+    private ObservableCard cardViewModel;
     private CardDetailsWindowView cardDetailsWindowView;
     private CardDetailsWindowPresenter cardDetailsWindowPresenter;
     private VBox parentVBox;
@@ -44,19 +44,13 @@ public class CardContainerPresenter implements Initializable {
     // Constructors
 
     // Getters & Setters
-    public ColumnCardActiveRecord<CardTable> getColumnCardActiveRecord() {
-        return columnCardActiveRecord;
-    }
-    public void setColumnCardActiveRecord(ColumnCardActiveRecord<CardTable> columnCardActiveRecord) {
-        this.columnCardActiveRecord = columnCardActiveRecord;
-        this.cardTitleLbl.textProperty().bind(columnCardActiveRecord.cardTitleProperty());
-        this.cardTitleTextField.textProperty().bind(columnCardActiveRecord.cardTitleProperty());
-        this.cardDescriptionTextArea.textProperty().bind(columnCardActiveRecord.cardDescriptionProperty());
+    public void setCardViewModel(ObservableCard cardViewModel) {
+        this.cardViewModel = cardViewModel;
+        this.cardTitleLbl.textProperty().bind(cardViewModel.cardTitleProperty());
+        this.cardTitleTextField.textProperty().bind(cardViewModel.cardTitleProperty());
+        this.cardDescriptionTextArea.textProperty().bind(cardViewModel.cardDescriptionProperty());
     }
 
-    public void setParentVBox(VBox parentVBox) {
-        this.parentVBox = parentVBox;
-    }
 
     // Initialization methods
     @Override
@@ -71,43 +65,13 @@ public class CardContainerPresenter implements Initializable {
         // From James_D
         // https://stackoverflow.com/questions/22820160/accessing-properties-of-custom-object-from-javafx-draganddrop-clipboard
         // https://community.oracle.com/tech/developers/discussion/2513382/drag-and-drop-objects-with-javafx-properties
-        //initDragDetection();
-        initDragDone();
     }
 
-    private void initDragDetection() {
-        cardContainer.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("Card drag has started");
-                Dragboard dragboard = cardContainer.startDragAndDrop(TransferMode.MOVE);
-                ClipboardContent clipboardContent = new ClipboardContent();
-                clipboardContent.putString("Card");
-                dragboard.setContent(clipboardContent);
-                ImageView imageView = new ImageView(cardContainer.snapshot(null, null));
-                dragboard.setDragView(imageView.getImage());
-                event.consume();
-            }
-        });
-    }
-
-    private void initDragDone() {
-        cardContainer.setOnDragDone(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                // Remove data from this container, don't write, and delete the container.
-                if (event.getTransferMode() == TransferMode.MOVE) {
-                    System.out.println("Card drag is done");
-                }
-                event.consume();
-            }
-        });
-    }
 
     private void initCardDetailsWindow() {
         cardDetailsWindowView = new CardDetailsWindowView();
         cardDetailsWindowPresenter = (CardDetailsWindowPresenter) cardDetailsWindowView.getPresenter();
-        cardDetailsWindowPresenter.setColumnCardActiveRecord(columnCardActiveRecord);
+        cardDetailsWindowPresenter.setCardViewModel(cardViewModel);
     }
 
     // UI event methods
@@ -136,23 +100,11 @@ public class CardContainerPresenter implements Initializable {
 
     // Other methods
     private void showCardDetailsWindow() {
+
         StageUtils.createChildStage("Enter Column Details", cardDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
-        ColumnCardActiveRecord tempColumnCardActiveRecord = cardDetailsWindowPresenter.getColumnCardActiveRecord();
         StageUtils.closeSubStage();
+
     }
-
-    public void dragDetected() {
-        System.out.println("Card drag has started");
-        Dragboard dragboard = cardContainer.startDragAndDrop(TransferMode.MOVE);
-        ClipboardContent clipboardContent = new ClipboardContent();
-        clipboardContent.putString("test data");
-        dragboard.setContent(clipboardContent);
-        ImageView imageView = new ImageView(cardContainer.snapshot(null, null));
-        dragboard.setDragView(imageView.getImage());
-    }
-
-
-
 
 }

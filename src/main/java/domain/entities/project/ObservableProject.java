@@ -21,17 +21,20 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
     // Constructors
     public ObservableProject(String title, String description) {
         super(title, description);
+        initEditingProperty();
     }
 
 
     public ObservableProject(ProjectTable projectDomainObject, String projectStatusText) {
         super(projectDomainObject);
-        initProjectStatusProperty(projectDomainObject, projectStatusText);
+        initStatusTextProperty(projectStatusText);
+        initEditingProperty();
     }
 
-    public ObservableProject(ProjectTable projectDomainObject, String projectStatusText, ObservableList<ObservableResourceItem> resourceItems, ObservableList<domain.entities.column.ObservableColumn> columns) {
+    public ObservableProject(ProjectTable projectDomainObject, String projectStatusText, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns) {
         super(projectDomainObject, resourceItems, columns);
-        initProjectStatusProperty(projectDomainObject, projectStatusText);
+        initStatusTextProperty(projectStatusText);
+        initEditingProperty();
     }
 
 
@@ -46,19 +49,32 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
 
 
     // Initialisation methods
+    @Override
     protected void initAllProperties() {
         super.initAllProperties();
         statusID = new SimpleIntegerProperty();
         statusText = new SimpleStringProperty();
     }
 
-    protected void initProjectStatusProperty(ProjectTable projectTableObject, String projectStatusText) {
-        super.initAllProperties(projectTableObject);
-        statusID = new SimpleIntegerProperty(projectTableObject.getProject_status_id());
+    @Override
+    protected void initAllProperties(ProjectTable projectDomainObject) {
+        super.initAllProperties(projectDomainObject);
+        statusID = new SimpleIntegerProperty(projectDomainObject.getProject_status_id());
+    }
+
+    protected void initAllProperties(ProjectTable projectDomainObject, String projectStatusText){
+        super.initAllProperties(projectDomainObject);
+        statusID = new SimpleIntegerProperty(projectDomainObject.getProject_status_id());
+    }
+
+    protected void initStatusTextProperty(String projectStatusText) {
+        statusText = new SimpleStringProperty(projectStatusText);
+    }
+
+    protected void initEditingProperty() {
         if (statusID.get() == 2 || statusID.get() == 4) {
             editingPermittedProperty().set(false);
         }
-        statusText = new SimpleStringProperty(projectStatusText);
     }
 
     @Override
@@ -66,14 +82,20 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
         super.initPropertyListeners();
         statusID.addListener(numberChangeListener);
         // TODO Finish this: Theoretically will update the last changed time
+
+    }
+
+    @Override
+    protected void initAllObservableListListeners() {
+        super.initAllObservableListListeners();
         columns.addListener(new ListChangeListener<domain.entities.column.ObservableColumn>() {
             @Override
             public void onChanged(Change<? extends domain.entities.column.ObservableColumn> c) {
-                lastChangedTimestamp.set(new Date().toString());
+                // TODO figure out what to update here...
+
             }
         });
     }
-
 
     // Other methods
 
