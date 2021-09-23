@@ -1,10 +1,11 @@
 package view.screens.mainscreen.subviews.workspace.subviews.projectcontainer;
 
+import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
 import domain.entities.resourceitem.ObservableResourceItem;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -26,6 +27,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -67,6 +69,7 @@ public class ProjectContainerPresenter implements Initializable {
     private ObservableProject projectViewModel;
     private ColumnDetailsWindowView columnDetailsWindowView;
     private ColumnDetailsWindowPresenter columnDetailsWindowPresenter;
+    private SimpleBooleanProperty forRemoval;
 
 
     // Constructors
@@ -81,7 +84,9 @@ public class ProjectContainerPresenter implements Initializable {
         customInit();
     }
 
-
+    public SimpleBooleanProperty forRemovalProperty() {
+        return forRemoval;
+    }
 
     // Initialization methods
     @Override
@@ -90,6 +95,7 @@ public class ProjectContainerPresenter implements Initializable {
         relatedItemTypeTableColumn.setCellValueFactory(cellData -> (cellData.getValue().typeProperty()));
         //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (new Hyperlink(cellData.getValue().getRelatedItemPath())));
         relatedItemLinkTableColumn.setCellValueFactory(cellData -> (cellData.getValue().pathProperty()));
+        forRemoval = new SimpleBooleanProperty(false);
     }
 
 
@@ -103,42 +109,41 @@ public class ProjectContainerPresenter implements Initializable {
         projectLastChangedDateTextField.textProperty().bind(projectViewModel.lastChangedTimestampProperty());
 
         resourceItemTableView.setItems(projectViewModel.getResourceItems());
-
+        // TODO Resume here. Need to devise a strategy to handle populating old data and storing object references properly to remove them from the HBox efficiently later when deleted.
         for (ObservableColumn columnViewModel : projectViewModel.getColumns()) {
             ColumnContainerView columnContainerView = new ColumnContainerView();
             ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) columnContainerView.getPresenter();
             columnContainerPresenter.setColumnViewModel(columnViewModel);
-            columnHBox.getChildren().add(columnContainerView.getView());
+            columnContainerPresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
+                if(newVal) {
+                    columnContainerView.getViewAsync(columnHBox.getChildren()::remove);
+                }
+            });
+            columnContainerView.getViewAsync(columnHBox.getChildren()::add);
+            //columnHBox.getChildren().add(columnContainerView.getView());
         }
         projectViewModel.getColumns().addListener(new ListChangeListener<ObservableColumn>() {
             @Override
             public void onChanged(Change<? extends ObservableColumn> c) {
-                while (c.next())
-                    if(c.wasAdded()) {
-                        for(ObservableColumn observableColumn : c.getAddedSubList()) {
-                            ColumnContainerView columnContainerView = new ColumnContainerView();
-                            ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) columnContainerView.getPresenter();
+                while (c.next()) {
+                    ColumnContainerView columnContainerView = new ColumnContainerView();
+                    ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) columnContainerView.getPresenter();
+                    columnContainerPresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
+                        if(newVal) {
+                            columnContainerView.getViewAsync(columnHBox.getChildren()::remove);
+                        }
+                    });
+                    if (c.wasAdded()) {
+                        for (ObservableColumn observableColumn : c.getAddedSubList()) {
                             columnContainerPresenter.setColumnViewModel(observableColumn);
-                            columnHBox.getChildren().add(columnContainerView.getView());
+                            columnContainerView.getViewAsync(columnHBox.getChildren()::add);
                         }
                     }
-                    if(c.wasRemoved()) {
-                        for(ObservableColumn observableColumn : c.getRemoved()) {
-                            List thing = columnHBox.getChildren();
-                            for(Object nodeObject : thing) {
-                                if(nodeObject.getClass() == ColumnContainerView.class) {
-                                    ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) ((ColumnContainerView) nodeObject).getPresenter();
-                                    if(columnContainerPresenter.getColumnViewModel().getColumnUUID().equals(observableColumn.getColumnUUID())) {
-                                        columnHBox.getChildren().remove(nodeObject);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if(c.wasUpdated()) {
+                    if (c.wasUpdated()) {
                         // TODO Check if this needs to be implemented...
                         System.out.println("column list was updated");
                     }
+                }
             }
         });
     }
@@ -193,20 +198,8 @@ public class ProjectContainerPresenter implements Initializable {
         System.out.println("Create Column...");
         initColumnDetailsWindow();
         StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
+        // TODO Need to respond and feedback scenario where a final column already exists...
         StageUtils.showAndWaitOnSubStage();
-        /*
-        if(pcar != null) {
-            pcar.setParentProjectActiveRecord(projectActiveRecord);
-            pcar.getProjectColumnModel().setColumn_position(projectColumnsList.size() + 1);
-            projectColumnsList.add(pcar);
-            ColumnContainerView ccv = new ColumnContainerView();
-            ColumnContainerPresenter ccp = (ColumnContainerPresenter) ccv.getPresenter();
-            // use ccp to set data in the column data.
-            ccp.setProjectColumnActiveRecord(pcar);
-            columnHBox.getChildren().add(ccv.getView());
-        }
-
-         */
     }
     // Other methods
 

@@ -87,14 +87,19 @@ public class ManagePresenter implements Initializable {
                 System.out.println("No projects opened yet in workspace");
                 kanbanBoDataService.getWorkspaceProjectsList().add(selectedProjectRow);
             } else {
+                boolean projectCanBeFreshlyOpened = true;
                 for (ObservableProject observableProject: kanbanBoDataService.getWorkspaceProjectsList()) {
-                    if (selectedProjectRow.getProjectUUID() != observableProject.getProjectUUID()) {
-                        kanbanBoDataService.getWorkspaceProjectsList().add(selectedProjectRow);
-                        System.out.println("Project opened");
-                    } else {
-                        // TODO Logging here
-                        System.out.println("Project already open");
+                    if (selectedProjectRow.getProjectUUID().equals(observableProject.getProjectUUID())) {
+                        projectCanBeFreshlyOpened = false;
                     }
+                }
+                if(projectCanBeFreshlyOpened) {
+                    kanbanBoDataService.getWorkspaceProjectsList().add(selectedProjectRow);
+                    System.out.println("Project opened");
+                } else {
+                    // TODO Need some mechanism here to open the project...
+                    System.out.println("Project already open");
+
                 }
             }
         }

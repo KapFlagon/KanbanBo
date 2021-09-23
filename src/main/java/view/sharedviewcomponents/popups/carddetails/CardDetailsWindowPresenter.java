@@ -50,8 +50,8 @@ public class CardDetailsWindowPresenter implements Initializable {
 
     public void setCardViewModel(ObservableCard cardViewModel) {
         this.cardViewModel = cardViewModel;
-        this.titleTextField.textProperty().bind(cardViewModel.cardTitleProperty());
-        this.descriptionText.textProperty().bind(cardViewModel.cardDescriptionProperty());
+        this.titleTextField.textProperty().set(cardViewModel.cardTitleProperty().getValue());
+        this.descriptionText.textProperty().set(cardViewModel.cardDescriptionProperty().getValue());
     }
 
 

@@ -47,6 +47,8 @@ public class ColumnDetailsWindowPresenter implements Initializable {
 
     public void setColumnViewModel(ObservableColumn columnViewModel) {
         this.columnViewModel = columnViewModel;
+        this.titleTextField.textProperty().set(columnViewModel.columnTitleProperty().getValue());
+        this.finalColumnCheckBox.selectedProperty().set(columnViewModel.isFinalColumn());
     }
 
     // Initialisation methods
@@ -65,6 +67,7 @@ public class ColumnDetailsWindowPresenter implements Initializable {
         if(validTitle) {
             if(columnViewModel == null) {
                 kanbanBoDataService.createColumn(parentProjectUUID, titleTextField.getText(), finalColumnCheckBox.isSelected());
+                //columnViewModel = new ObservableColumn();
             } else {
                 columnViewModel.columnTitleProperty().set(titleTextField.getText());
                 columnViewModel.finalColumnProperty().set(finalColumnCheckBox.isSelected());

@@ -476,9 +476,9 @@ public class KanbanBoDataService extends AbstractService{
         resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
         List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
 
-        cardTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, column.getColumnUUID());
+        cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, column.getColumnUUID());
         List<CardTable> allCards = cardTableQueryBuilder.query();
-        cardTableDeleteBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, column.getColumnUUID());
+        cardTableDeleteBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, column.getColumnUUID());
         cardPreparedDeleteList.add(cardTableDeleteBuilder.prepare());
 
 
@@ -504,67 +504,18 @@ public class KanbanBoDataService extends AbstractService{
             }
         });
         teardownDbConnection();
-    }
-
-    public void deleteColumns(ObservableList<ObservableColumn> columnList) throws SQLException, IOException {
-        setupDbConnection();
-
-        projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
-        columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
-        cardDao = DaoManager.createDao(connectionSource, CardTable.class);
-
-        ProjectTable project = projectDao.queryForId(columnList.get(0).getParentProjectUUID());
-        project.setLast_changed_timestamp(new Date());
-
-        columnTableDeleteBuilder = columnDao.deleteBuilder();
-        List<PreparedDelete<ColumnTable>> columnDeleteList = new ArrayList<PreparedDelete<ColumnTable>>();
-        cardTableQueryBuilder = cardDao.queryBuilder();
-        List<List<CardTable>> allCards = new ArrayList<List<CardTable>>();
-        cardTableDeleteBuilder = cardDao.deleteBuilder();
-        List<PreparedDelete<CardTable>> cardPreparedDeleteList = new ArrayList<PreparedDelete<CardTable>>();
-        resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
-        List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
-        for(ObservableColumn observableColumn : columnList) {
-            columnTableDeleteBuilder.reset();
-            columnTableDeleteBuilder.where().idEq(observableColumn.getColumnUUID());
-            columnDeleteList.add(columnTableDeleteBuilder.prepare());
-            cardTableQueryBuilder.reset();
-            cardTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, observableColumn.getColumnUUID());
-            allCards.add(cardTableQueryBuilder.query());
-            cardTableDeleteBuilder.reset();
-            cardTableDeleteBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, observableColumn.getColumnUUID());
-            cardPreparedDeleteList.add(cardTableDeleteBuilder.prepare());
-        }
-
-        for(List<CardTable> cardSubList : allCards) {
-            for(CardTable card : cardSubList) {
-                resourceItemTableDeleteBuilder.reset();
-                resourceItemTableDeleteBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, card.getID());
-                PreparedDelete<ResourceItemTable> preparedDelete = resourceItemTableDeleteBuilder.prepare();
-                resourceItemPreparedDeleteList.add(preparedDelete);
+        for(ObservableProject observableProject : workspaceProjectsList) {
+            if(observableProject.getProjectUUID().equals(column.getParentProjectUUID())){
+                for(Iterator<ObservableColumn> observableColumnIterator = observableProject.getColumns().listIterator(); observableColumnIterator.hasNext();) {
+                    UUID tempUUID = observableColumnIterator.next().getColumnUUID();
+                    if(tempUUID.equals(column.getColumnUUID())) {
+                        observableColumnIterator.remove();
+                    }
+                }
             }
         }
-
-        TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                for(PreparedDelete<ResourceItemTable> resourceDelete: resourceItemPreparedDeleteList) {
-                    resourceItemDao.delete(resourceDelete);
-                }
-                for(PreparedDelete<CardTable> cardDelete : cardPreparedDeleteList) {
-                    cardDao.delete(cardDelete);
-                }
-                for(PreparedDelete<ColumnTable> columnDelete : columnDeleteList) {
-                    columnDao.delete(columnDelete);
-                }
-                projectDao.update(project);
-                return true;
-            }
-        });
-
-        teardownDbConnection();
     }
+
 
     public void createCard(UUID parentColumnUUID, String title, String description) throws SQLException, IOException {
         CardTable card = new CardTable();
@@ -596,6 +547,17 @@ public class KanbanBoDataService extends AbstractService{
             }
         });
         teardownDbConnection();
+
+        for(ObservableProject observableProject : workspaceProjectsList) {
+            if(project.getID().equals(observableProject.getProjectUUID())) {
+                for(ObservableColumn observableColumn : observableProject.getColumns()) {
+                    if(observableColumn.getColumnUUID().equals(parentColumnUUID)) {
+                        ObservableCard newObservableCard = new ObservableCard(card, FXCollections.observableArrayList());
+                        observableColumn.getCards().add(newObservableCard);
+                    }
+                }
+            }
+        }
     }
 
     public void updateCard(ObservableCard observableCard) throws SQLException, IOException {
@@ -655,45 +617,21 @@ public class KanbanBoDataService extends AbstractService{
             }
         });
         teardownDbConnection();
-    }
+        for(ObservableProject observableProject : workspaceProjectsList) {
+            if(observableProject.getProjectUUID().equals(column.getParent_project_uuid())){
+                for(ObservableColumn observableColumn : observableProject.getColumns()) {
+                    for(Iterator<ObservableCard> observableCardIterator = observableColumn.getCards().listIterator(); observableCardIterator.hasNext();) {
+                        UUID tempUUID = observableCardIterator.next().getCardUUID();
+                        if(tempUUID.equals(card.getCardUUID())) {
+                            observableCardIterator.remove();
+                        }
+                    }
 
-    public void deleteCards(ObservableList<ObservableCard> cardList) throws SQLException, IOException {
-        setupDbConnection();
-        projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
-        columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
-        cardDao = DaoManager.createDao(connectionSource, CardTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
-        resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
-        ColumnTable column = columnDao.queryForId(cardList.get(0).getParentColumnUUID());
-        ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(new Date());
-
-        List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
-        for(ObservableCard observableCard : cardList) {
-            for(ObservableResourceItem observableResourceItem : observableCard.getResourceItems()) {
-                resourceItemTableDeleteBuilder.reset();
-                resourceItemTableDeleteBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, observableCard.getCardUUID());
-                resourceItemPreparedDeleteList.add(resourceItemTableDeleteBuilder.prepare());
+                }
             }
         }
-
-        TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                for(PreparedDelete<ResourceItemTable> resourceItemPreparedDelete : resourceItemPreparedDeleteList) {
-                    resourceItemDao.delete(resourceItemPreparedDelete);
-                }
-                for(ObservableCard card : cardList) {
-                    cardDao.deleteById(card.getCardUUID());
-                }
-                projectDao.update(project);
-                // TODO need to remove cards from column list
-                return null;
-            }
-        });
-        teardownDbConnection();
-
     }
+
 
     private void createResourceItem(UUID topLevelProjectUUID, ResourceItemTable resourceItemTable) throws SQLException, IOException {
         setupDbConnection();

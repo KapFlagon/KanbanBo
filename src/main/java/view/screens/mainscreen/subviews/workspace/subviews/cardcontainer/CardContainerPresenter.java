@@ -1,6 +1,7 @@
 package view.screens.mainscreen.subviews.workspace.subviews.cardcontainer;
 
 import domain.entities.card.ObservableCard;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,12 +12,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
+import persistence.services.KanbanBoDataService;
 import persistence.tables.card.CardTable;
 import utils.StageUtils;
 import view.sharedviewcomponents.popups.carddetails.CardDetailsWindowPresenter;
 import view.sharedviewcomponents.popups.carddetails.CardDetailsWindowView;
 
+import javax.inject.Inject;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CardContainerPresenter implements Initializable {
@@ -36,14 +41,21 @@ public class CardContainerPresenter implements Initializable {
     private TextArea cardDescriptionTextArea;
 
     // Other variables
+    @Inject
+    KanbanBoDataService kanbanBoDataService;
     private ObservableCard cardViewModel;
     private CardDetailsWindowView cardDetailsWindowView;
     private CardDetailsWindowPresenter cardDetailsWindowPresenter;
+    private SimpleBooleanProperty forRemoval;
     private VBox parentVBox;
 
     // Constructors
 
+
     // Getters & Setters
+    public ObservableCard getCardViewModel() {
+        return cardViewModel;
+    }
     public void setCardViewModel(ObservableCard cardViewModel) {
         this.cardViewModel = cardViewModel;
         this.cardTitleLbl.textProperty().bind(cardViewModel.cardTitleProperty());
@@ -51,10 +63,14 @@ public class CardContainerPresenter implements Initializable {
         this.cardDescriptionTextArea.textProperty().bind(cardViewModel.cardDescriptionProperty());
     }
 
+    public SimpleBooleanProperty forRemovalProperty() {
+        return forRemoval;
+    }
 
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        forRemoval = new SimpleBooleanProperty(false);
         //initDragAndDropMethods();
     }
 
@@ -98,9 +114,14 @@ public class CardContainerPresenter implements Initializable {
         // TODO Implement this
     }
 
+    @FXML
+    private void deleteCard() throws SQLException, IOException {
+        kanbanBoDataService.deleteCard(cardViewModel);
+        forRemovalProperty().set(true);
+    }
+
     // Other methods
     private void showCardDetailsWindow() {
-
         StageUtils.createChildStage("Enter Column Details", cardDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
         StageUtils.closeSubStage();

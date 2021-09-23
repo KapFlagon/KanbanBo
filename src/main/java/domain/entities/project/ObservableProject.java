@@ -2,26 +2,27 @@ package domain.entities.project;
 
 import domain.entities.column.ObservableColumn;
 import domain.entities.resourceitem.ObservableResourceItem;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import persistence.tables.project.ProjectTable;
 
-import java.util.Date;
-
-public class ObservableProject extends AbstractObservableProjectBase<ProjectTable, domain.entities.column.ObservableColumn>{
+public class ObservableProject extends AbstractObservableProjectBase<ProjectTable, ObservableColumn>{
 
 
     // Variables
     protected SimpleIntegerProperty statusID;
     protected SimpleStringProperty statusText;
+    protected SimpleBooleanProperty hasFinalColumn;
 
 
     // Constructors
     public ObservableProject(String title, String description) {
         super(title, description);
         initEditingProperty();
+        initHasFinalColumnProperty();
     }
 
 
@@ -29,12 +30,14 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
         super(projectDomainObject);
         initStatusTextProperty(projectStatusText);
         initEditingProperty();
+        initHasFinalColumnProperty();
     }
 
     public ObservableProject(ProjectTable projectDomainObject, String projectStatusText, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns) {
         super(projectDomainObject, resourceItems, columns);
         initStatusTextProperty(projectStatusText);
         initEditingProperty();
+        initHasFinalColumnProperty(columns);
     }
 
 
@@ -46,6 +49,8 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
     public SimpleStringProperty statusTextProperty() {
         return statusText;
     }
+
+
 
 
     // Initialisation methods
@@ -74,6 +79,19 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
     protected void initEditingProperty() {
         if (statusID.get() == 2 || statusID.get() == 4) {
             editingPermittedProperty().set(false);
+        }
+    }
+
+    protected void initHasFinalColumnProperty() {
+        hasFinalColumn = new SimpleBooleanProperty(false);
+    }
+
+    protected void initHasFinalColumnProperty(ObservableList<ObservableColumn> columnList) {
+        initHasFinalColumnProperty();
+        for(ObservableColumn column : columnList) {
+            if (column.isFinalColumn()) {
+                hasFinalColumn.set(true);
+            }
         }
     }
 

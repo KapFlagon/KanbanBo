@@ -1,6 +1,8 @@
 package view.screens.mainscreen;
 
+import domain.entities.project.ObservableProject;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -67,6 +69,20 @@ public class MainScreenPresenter implements Initializable {
         workspaceView = new WorkspaceView();
         workspacePresenter = (WorkspacePresenter) workspaceView.getPresenter();
         workspaceTab.setContent(workspaceView.getView());
+
+        kanbanBoDataService.getWorkspaceProjectsList().addListener(new ListChangeListener<ObservableProject>() {
+            @Override
+            public void onChanged(Change<? extends ObservableProject> c) {
+                while(c.next()) {
+                    if(c.wasAdded()) {
+                        mainScreenTabPane.getSelectionModel().select(workspaceTab);
+                    }
+                    if(c.wasRemoved()) {
+                        // TODO Do I need this?
+                    }
+                }
+            }
+        });
     }
 
 

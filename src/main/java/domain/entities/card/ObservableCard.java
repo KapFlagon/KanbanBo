@@ -1,6 +1,8 @@
 package domain.entities.card;
 
+import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 import persistence.tables.card.CardTable;
 
 import java.util.UUID;
@@ -13,6 +15,10 @@ public class ObservableCard extends AbstractObservableCardBase<CardTable> {
 
     public ObservableCard(CardTable domainObject) {
         super(domainObject);
+    }
+
+    public ObservableCard(CardTable domainObject, ObservableList<ObservableResourceItem> resourceItems) {
+        super(domainObject, resourceItems);
     }
 
 

@@ -28,6 +28,14 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardBaseTable
         initAllProperties(domainObject);
     }
 
+    public AbstractObservableCardBase(T domainObject, ObservableList<ObservableResourceItem> resourceItems) {
+        super();
+        this.parentColumnUUID = domainObject.getParent_column_uuid();
+        this.cardUUID = domainObject.getCard_uuid();
+        this.resourceItems = resourceItems;
+        initAllProperties(domainObject);
+    }
+
 
     // Getters and Setters
     public UUID getParentColumnUUID() {

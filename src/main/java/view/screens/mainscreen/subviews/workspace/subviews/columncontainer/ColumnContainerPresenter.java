@@ -3,6 +3,7 @@ package view.screens.mainscreen.subviews.workspace.subviews.columncontainer;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -66,6 +68,7 @@ public class ColumnContainerPresenter implements Initializable {
     private ColumnDetailsWindowPresenter columnDetailsWindowPresenter;
     private CardDetailsWindowView cardDetailsWindowView;
     private CardDetailsWindowPresenter cardDetailsWindowPresenter;
+    private SimpleBooleanProperty forRemoval;
 
     // Constructors
 
@@ -76,13 +79,17 @@ public class ColumnContainerPresenter implements Initializable {
 
     public void setColumnViewModel(ObservableColumn columnViewModel) {
         this.columnViewModel = columnViewModel;
+        customInit();
     }
 
+    public SimpleBooleanProperty forRemovalProperty() {
+        return forRemoval;
+    }
 
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        forRemoval = new SimpleBooleanProperty(false);
     }
 
     public void initDragAndDropMethods() {
@@ -96,7 +103,7 @@ public class ColumnContainerPresenter implements Initializable {
 
 
 
-    public void customInit() throws IOException, SQLException {
+    public void customInit() {
         columnTitleLbl.textProperty().bind(columnViewModel.columnTitleProperty());
         columnTitleTextField.textProperty().bind(columnViewModel.columnTitleProperty());
         finalColumnCheckBox.selectedProperty().bind(columnViewModel.finalColumnProperty());
@@ -104,41 +111,37 @@ public class ColumnContainerPresenter implements Initializable {
             CardContainerView cardContainerView = new CardContainerView();
             CardContainerPresenter cardContainerPresenter = (CardContainerPresenter) cardContainerView.getPresenter();
             cardContainerPresenter.setCardViewModel(cardViewModel);
-            cardVBox.getChildren().add(cardContainerView.getView());
+            cardContainerPresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
+                if(newVal) {
+                    cardContainerView.getViewAsync(cardVBox.getChildren()::remove);
+                }
+            });
+            cardContainerView.getViewAsync(cardVBox.getChildren()::add);
         }
-        // TODO RESUME HERE
-        /*
-        projectViewModel.getColumns().addListener(new ListChangeListener<ObservableColumn>() {
+
+        columnViewModel.getCards().addListener(new ListChangeListener<ObservableCard>() {
             @Override
-            public void onChanged(Change<? extends ObservableColumn> c) {
+            public void onChanged(Change<? extends ObservableCard> c) {
                 while (c.next())
                     if(c.wasAdded()) {
-                        for(ObservableColumn observableColumn : c.getAddedSubList()) {
-                            ColumnContainerView columnContainerView = new ColumnContainerView();
-                            ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) columnContainerView.getPresenter();
-                            columnContainerPresenter.setColumnViewModel(observableColumn);
-                            columnHBox.getChildren().add(columnContainerView.getView());
-                        }
-                    }
-                if(c.wasRemoved()) {
-                    for(ObservableColumn observableColumn : c.getRemoved()) {
-                        List thing = columnHBox.getChildren();
-                        for(Object nodeObject : thing) {
-                            if(nodeObject.getClass() == ColumnContainerView.class) {
-                                ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) ((ColumnContainerView) nodeObject).getPresenter();
-                                if(columnContainerPresenter.getColumnViewModel().getColumnUUID().equals(observableColumn.getColumnUUID())) {
-                                    columnHBox.getChildren().remove(nodeObject);
+                        for(ObservableCard observableCard : c.getAddedSubList()) {
+                            CardContainerView cardContainerView = new CardContainerView();
+                            CardContainerPresenter cardContainerPresenter = (CardContainerPresenter) cardContainerView.getPresenter();
+                            cardContainerPresenter.setCardViewModel(observableCard);
+                            cardContainerPresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
+                                if(newVal) {
+                                    cardContainerView.getViewAsync(cardVBox.getChildren()::remove);
                                 }
-                            }
+                            });
+                            cardContainerView.getViewAsync(cardVBox.getChildren()::add);
                         }
                     }
-                }
                 if(c.wasUpdated()) {
                     // TODO Check if this needs to be implemented...
                     System.out.println("column list was updated");
                 }
             }
-        });*/
+        });
     }
 
     private void initColumnDetailsWindow() {
@@ -175,6 +178,11 @@ public class ColumnContainerPresenter implements Initializable {
 
     @FXML private void createCardFromTemplate() {
         // TODO Implement this
+    }
+
+    @FXML private void deleteColumn() throws SQLException, IOException {
+        kanbanBoDataService.deleteColumn(columnViewModel);
+        forRemovalProperty().set(true);
     }
 
     // Other methods

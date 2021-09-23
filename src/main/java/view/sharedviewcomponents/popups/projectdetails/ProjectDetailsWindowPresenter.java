@@ -60,8 +60,8 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     }
     public void setProjectViewModel(ObservableProject projectViewModel) {
         this.projectViewModel = projectViewModel;
-        projectTitleTextField.textProperty().bind(projectViewModel.projectTitleProperty());
-        projectDescriptionTextArea.textProperty().bind(projectViewModel.projectDescriptionProperty());
+        projectTitleTextField.textProperty().set(projectViewModel.projectTitleProperty().getValue());
+        projectDescriptionTextArea.textProperty().set(projectViewModel.projectDescriptionProperty().getValue());
     }
 
     public void setInitialDataMode(DetailsPopupInitialDataMode initialDataMode) {
