@@ -10,19 +10,43 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="cardContainer" prefHeight="300.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter">
    <children>
-      <HBox spacing="5.0">
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
             <Label text="%card.header" />
             <Label text=":" />
             <Label fx:id="cardTitleLbl" layoutX="10.0" layoutY="10.0" text="cardTitleLbl" />
+            <Button fx:id="editCardBtn" mnemonicParsing="false">
+               <tooltip>
+                  <Tooltip text="Edit card" />
+               </tooltip>
+            </Button>
          </children>
       </HBox>
-      <Button mnemonicParsing="false" onAction="#deleteCard" text="Delete" />
+      <ToolBar>
+         <items>
+            <Button fx:id="copyCardBtn" mnemonicParsing="false">
+               <tooltip>
+                  <Tooltip text="Copy card" />
+               </tooltip>
+            </Button>
+            <Button fx:id="moveCardBtn" mnemonicParsing="false">
+               <tooltip>
+                  <Tooltip text="Move card" />
+               </tooltip>
+            </Button>
+            <Button fx:id="deleteCardBtn" mnemonicParsing="false" onAction="#deleteCard">
+               <tooltip>
+                  <Tooltip text="Delete card" />
+               </tooltip>
+            </Button>
+         </items>
+      </ToolBar>
       <Accordion>
         <panes>
           <TitledPane text="Details">

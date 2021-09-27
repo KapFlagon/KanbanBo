@@ -47,6 +47,16 @@ public class ColumnContainerPresenter implements Initializable {
     @FXML
     private Button editColumnDetailsBtn;
     @FXML
+    private Button createCardBtn;
+    @FXML
+    private Button createCardFromTemplateBtn;
+    @FXML
+    private Button copyColumnBtn;
+    @FXML
+    private Button moveColumnBtn;
+    @FXML
+    private Button deleteColumnBtn;
+    @FXML
     private Button saveColumnDetailsBtn;
     @FXML
     private TextField columnTitleTextField;
@@ -89,6 +99,7 @@ public class ColumnContainerPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initButtonGraphics();
         forRemoval = new SimpleBooleanProperty(false);
     }
 
@@ -105,8 +116,8 @@ public class ColumnContainerPresenter implements Initializable {
 
     public void customInit() {
         columnTitleLbl.textProperty().bind(columnViewModel.columnTitleProperty());
-        columnTitleTextField.textProperty().bind(columnViewModel.columnTitleProperty());
-        finalColumnCheckBox.selectedProperty().bind(columnViewModel.finalColumnProperty());
+        //columnTitleTextField.textProperty().bind(columnViewModel.columnTitleProperty());
+        //finalColumnCheckBox.selectedProperty().bind(columnViewModel.finalColumnProperty());
         for (ObservableCard cardViewModel : columnViewModel.getCards()) {
             CardContainerView cardContainerView = new CardContainerView();
             CardContainerPresenter cardContainerPresenter = (CardContainerPresenter) cardContainerView.getPresenter();
@@ -154,6 +165,22 @@ public class ColumnContainerPresenter implements Initializable {
         cardDetailsWindowView = new CardDetailsWindowView();
         cardDetailsWindowPresenter = (CardDetailsWindowPresenter) cardDetailsWindowView.getPresenter();
         cardDetailsWindowPresenter.setParentColumnUUID(columnViewModel.getColumnUUID());
+    }
+
+    private void initButtonGraphics() {
+        ImageView editColumnDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView addCardImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialiconsoutlined/black/res/drawable-hdpi/outline_add_circle_outline_black_18.png").toExternalForm());
+        ImageView createFromTemplateImageView = new ImageView(getClass().getResource("/icons/square_foot/materialiconsoutlined/black/res/drawable-hdpi/outline_square_foot_black_18.png").toExternalForm());
+        ImageView copyColumnImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-hdpi/baseline_content_copy_black_18.png").toExternalForm());
+        ImageView moveColumnImageView = new ImageView(getClass().getResource("/icons/chevron_right/materialiconsoutlined/black/res/drawable-hdpi/outline_chevron_right_black_18.png").toExternalForm());
+        ImageView deleteColumnImageView = new ImageView(getClass().getResource("/icons/remove_circle_outline/materialicons/black/res/drawable-hdpi/baseline_remove_circle_outline_black_18.png").toExternalForm());
+
+        editColumnDetailsBtn.setGraphic(editColumnDetailsImageView);
+        createCardBtn.setGraphic(addCardImageView);
+        createCardFromTemplateBtn.setGraphic(createFromTemplateImageView);
+        copyColumnBtn.setGraphic(copyColumnImageView);
+        moveColumnBtn.setGraphic(moveColumnImageView);
+        deleteColumnBtn.setGraphic(deleteColumnImageView);
     }
 
 

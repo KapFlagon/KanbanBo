@@ -4,6 +4,7 @@ import domain.entities.project.ObservableProject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
@@ -56,6 +57,7 @@ public class ManagePresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initButtonImages();
         projectsTableView = new ProjectsTableView();
         projectsTablePresenter = (ProjectsTablePresenter) projectsTableView.getPresenter();
         mainContainer.setCenter(projectsTableView.getView());
@@ -64,6 +66,19 @@ public class ManagePresenter implements Initializable {
     private void initProjectDetailsUI() {
         projectDetailsWindowView = new ProjectDetailsWindowView();
         projectDetailsWindowPresenter = (ProjectDetailsWindowPresenter) projectDetailsWindowView.getPresenter();
+    }
+
+    private void initButtonImages() {
+        ImageView newProjectImageView = new ImageView(getClass().getResource("/icons/create_new_folder/materialiconsoutlined/black/res/drawable-hdpi/outline_create_new_folder_black_18.png").toExternalForm());
+        ImageView openProjectImageView = new ImageView(getClass().getResource("/icons/open_in_new/materialicons/black/res/drawable-hdpi/baseline_open_in_new_black_18.png").toExternalForm());
+        ImageView accessProjectImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView deleteProjectImageView = new ImageView(getClass().getResource("/icons/delete/materialicons/black/res/drawable-hdpi/baseline_delete_black_18.png").toExternalForm());
+        ImageView duplicateProjectImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-hdpi/baseline_content_copy_black_18.png").toExternalForm());
+        newProjectBtn.setGraphic(newProjectImageView);
+        openProjectBtn.setGraphic(openProjectImageView);
+        accessProjectDetailsBtn.setGraphic(accessProjectImageView);
+        deleteProjectBtn.setGraphic(deleteProjectImageView);
+        duplicateProjectBtn.setGraphic(duplicateProjectImageView);
     }
 
 

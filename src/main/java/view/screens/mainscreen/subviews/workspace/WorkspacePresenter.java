@@ -17,6 +17,7 @@ import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.Proj
 import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
 
 import javax.inject.Inject;
+import javafx.scene.image.ImageView;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -50,6 +51,8 @@ public class WorkspacePresenter implements Initializable {
             @Override
             public void onChanged(Change<? extends ObservableProject> c) {
                 Tab tab = new Tab();
+                ImageView projectImageView = new ImageView(getClass().getResource("/icons/topic/materialiconsoutlined/black/res/drawable-hdpi/outline_topic_black_18.png").toExternalForm());
+                tab.setGraphic(projectImageView);
                 while(c.next()) {
                     if (c.wasAdded()) {
                         System.out.println("Change detected, new project opened");

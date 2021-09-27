@@ -9,6 +9,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.StageStyle;
 import persistence.services.KanbanBoDataService;
@@ -41,7 +42,9 @@ public class ProjectContainerPresenter implements Initializable {
     @FXML
     private Button saveProjectDetailsBtn;
     @FXML
-    private TextField projectTitleTextField;
+    private Button createColumnBtn;
+    @FXML
+    private Button createColumnFromTemplateBtn;
     @FXML
     private TextField projectStatusTextField; // TODO Used to display the text in a copyable way, but replaced by choicebox in "edit" mode.
     @FXML
@@ -91,6 +94,7 @@ public class ProjectContainerPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initButtonGraphics();
         relatedItemTitleTableColumn.setCellValueFactory(cellData -> (cellData.getValue().titleProperty()));
         relatedItemTypeTableColumn.setCellValueFactory(cellData -> (cellData.getValue().typeProperty()));
         //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (new Hyperlink(cellData.getValue().getRelatedItemPath())));
@@ -101,12 +105,7 @@ public class ProjectContainerPresenter implements Initializable {
 
     public void customInit() throws IOException, SQLException {
         projectTitleLbl.textProperty().bind(projectViewModel.projectTitleProperty());
-        projectTitleTextField.textProperty().bind(projectViewModel.projectTitleProperty());
-        projectStatusTextField.textProperty().bind(projectViewModel.statusTextProperty());
         // TODO examine binding for the choicebox
-        projectDescriptionTextArea.textProperty().bind(projectViewModel.projectDescriptionProperty());
-        projectCreationDateTextField.textProperty().bind(projectViewModel.creationTimestampProperty());
-        projectLastChangedDateTextField.textProperty().bind(projectViewModel.lastChangedTimestampProperty());
 
         resourceItemTableView.setItems(projectViewModel.getResourceItems());
         // TODO Resume here. Need to devise a strategy to handle populating old data and storing object references properly to remove them from the HBox efficiently later when deleted.
@@ -152,6 +151,15 @@ public class ProjectContainerPresenter implements Initializable {
         columnDetailsWindowView = new ColumnDetailsWindowView();
         columnDetailsWindowPresenter = (ColumnDetailsWindowPresenter) columnDetailsWindowView.getPresenter();
         columnDetailsWindowPresenter.setParentProjectUUID(projectViewModel.getProjectUUID());
+    }
+
+    private void initButtonGraphics() {
+        ImageView editProjectDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView createColumnImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialicons/black/res/drawable-hdpi/baseline_add_circle_outline_black_18.png").toExternalForm());
+        ImageView createFromTemplateImageView = new ImageView(getClass().getResource("/icons/square_foot/materialiconsoutlined/black/res/drawable-hdpi/outline_square_foot_black_18.png").toExternalForm());
+        editProjectDetailsBtn.setGraphic(editProjectDetailsImageView);
+        createColumnBtn.setGraphic(createColumnImageView);
+        createColumnFromTemplateBtn.setGraphic(createFromTemplateImageView);
     }
 
     // UI event methods

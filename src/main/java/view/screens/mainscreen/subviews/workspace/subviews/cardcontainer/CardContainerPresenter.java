@@ -32,9 +32,13 @@ public class CardContainerPresenter implements Initializable {
     @FXML
     private Label cardTitleLbl;    //TODO examine bug where card title is not being updated after saving a change.
     @FXML
-    private Button editCardDetailsBtn;
+    private Button editCardBtn;
     @FXML
-    private Button saveCardDetailsBtn;
+    private Button copyCardBtn;
+    @FXML
+    private Button moveCardBtn;
+    @FXML
+    private Button deleteCardBtn;
     @FXML
     private TextField cardTitleTextField;
     @FXML
@@ -70,6 +74,7 @@ public class CardContainerPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initButtonGraphics();
         forRemoval = new SimpleBooleanProperty(false);
         //initDragAndDropMethods();
     }
@@ -89,6 +94,19 @@ public class CardContainerPresenter implements Initializable {
         cardDetailsWindowPresenter = (CardDetailsWindowPresenter) cardDetailsWindowView.getPresenter();
         cardDetailsWindowPresenter.setCardViewModel(cardViewModel);
     }
+
+    private void initButtonGraphics() {
+        ImageView editCardDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView copyCardImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-hdpi/baseline_content_copy_black_18.png").toExternalForm());
+        ImageView moveCardImageView = new ImageView(getClass().getResource("/icons/chevron_right/materialiconsoutlined/black/res/drawable-hdpi/outline_chevron_right_black_18.png").toExternalForm());
+        ImageView deleteCardImageView = new ImageView(getClass().getResource("/icons/remove_circle_outline/materialicons/black/res/drawable-hdpi/baseline_remove_circle_outline_black_18.png").toExternalForm());
+
+        editCardBtn.setGraphic(editCardDetailsImageView);
+        copyCardBtn.setGraphic(copyCardImageView);
+        moveCardBtn.setGraphic(moveCardImageView);
+        deleteCardBtn.setGraphic(deleteCardImageView);
+    }
+
 
     // UI event methods
     @FXML private void editCardDetails() {

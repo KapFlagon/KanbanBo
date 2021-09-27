@@ -13,17 +13,18 @@ public class ObservableCard extends AbstractObservableCardBase<CardTable> {
     // Variables
     private SimpleIntegerProperty position;
 
-    public ObservableCard(CardTable domainObject) {
-        super(domainObject);
-    }
 
-    public ObservableCard(CardTable domainObject, ObservableList<ObservableResourceItem> resourceItems) {
-        super(domainObject, resourceItems);
-    }
 
 
     // Constructors
-
+    public ObservableCard(CardTable domainObject) {
+        super(domainObject);
+        this.position = new SimpleIntegerProperty(domainObject.getCard_position());
+    }
+    public ObservableCard(CardTable domainObject, ObservableList<ObservableResourceItem> resourceItems) {
+        super(domainObject, resourceItems);
+        this.position = new SimpleIntegerProperty(domainObject.getCard_position());
+    }
 
     // Getters and Setters
     public SimpleIntegerProperty positionProperty() {

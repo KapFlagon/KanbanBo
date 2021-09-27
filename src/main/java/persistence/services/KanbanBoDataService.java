@@ -245,9 +245,15 @@ public class KanbanBoDataService extends AbstractService{
                 }
                 ObservableCard observableCard = new ObservableCard(cardTable);
                 observableCard.setResourceItems(cardObservableResourceItemList);
+                observableCard.positionProperty().addListener((observable, oldVal, newVal) -> {
+                    // TODO implement function to change position of the Card in its list
+                });
                 observableCardsList.add(observableCard);
             }
             ObservableColumn observableColumn = new ObservableColumn(columnTableItem, observableCardsList);
+            observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
+                // TODO implement function to change position of the Column in its list
+            });
             observableColumnsList.add(observableColumn);
         }
 
@@ -408,6 +414,9 @@ public class KanbanBoDataService extends AbstractService{
                 }
                 ObservableList<ObservableCard> emptyCardList = FXCollections.observableArrayList();
                 ObservableColumn observableColumn = new ObservableColumn(columnTable, emptyCardList);
+                observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
+                    // TODO implement function to change position of the Column in its list
+                });
                 observableColumn.dataChangePendingProperty().addListener(((observable, oldValue, newValue) -> {
                     if(newValue) {
                         try {
@@ -553,6 +562,9 @@ public class KanbanBoDataService extends AbstractService{
                 for(ObservableColumn observableColumn : observableProject.getColumns()) {
                     if(observableColumn.getColumnUUID().equals(parentColumnUUID)) {
                         ObservableCard newObservableCard = new ObservableCard(card, FXCollections.observableArrayList());
+                        newObservableCard.positionProperty().addListener((observable, oldVal, newVal) -> {
+                            // TODO implement function to change position of the Card in its list
+                        });
                         observableColumn.getCards().add(newObservableCard);
                     }
                 }
@@ -831,13 +843,5 @@ public class KanbanBoDataService extends AbstractService{
         };
         return projectChangeListener;
     }
-
-    /*
-    private Date stringToDate(String dateTimeValue) throws ParseException {
-        LocalDateTime localDateTime = LocalDateTime.parse(dateTimeValue);
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter(Locale.getDefault());
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        return Date.from(instant);
-    }*/
 
 }

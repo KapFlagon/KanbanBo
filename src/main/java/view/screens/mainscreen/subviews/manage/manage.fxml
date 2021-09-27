@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -24,11 +25,26 @@
             </Label>
             <ToolBar>
               <items>
-                <Button fx:id="newProjectBtn" mnemonicParsing="false" onAction="#createNewProject" text="%button.new" />
-                  <Button fx:id="openProjectBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#openSelectedProject" text="%button.open" />
-                  <Button fx:id="accessProjectDetailsBtn" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#accessProjectDetails" text="%button.details" />
-                  <Button fx:id="duplicateProjectBtn" layoutX="234.0" layoutY="12.0" mnemonicParsing="false" onAction="#duplicateSelectedProject" text="%button.duplicate" />
-                  <Button fx:id="deleteProjectBtn" layoutX="254.0" layoutY="32.0" mnemonicParsing="false" onAction="#deleteSelectedProject" text="%button.delete" />
+                <Button fx:id="newProjectBtn" mnemonicParsing="false" onAction="#createNewProject">
+                     <tooltip>
+                        <Tooltip text="%button.new" />
+                     </tooltip></Button>
+                  <Button fx:id="openProjectBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#openSelectedProject">
+                     <tooltip>
+                        <Tooltip text="%button.open" />
+                     </tooltip></Button>
+                  <Button fx:id="accessProjectDetailsBtn" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#accessProjectDetails">
+                     <tooltip>
+                        <Tooltip text="%button.details" />
+                     </tooltip></Button>
+                  <Button fx:id="duplicateProjectBtn" layoutX="234.0" layoutY="12.0" mnemonicParsing="false" onAction="#duplicateSelectedProject">
+                     <tooltip>
+                        <Tooltip text="%button.duplicate" />
+                     </tooltip></Button>
+                  <Button fx:id="deleteProjectBtn" layoutX="254.0" layoutY="32.0" mnemonicParsing="false" onAction="#deleteSelectedProject">
+                     <tooltip>
+                        <Tooltip text="%button.delete" />
+                     </tooltip></Button>
               </items>
             </ToolBar>
          </children>
