@@ -8,12 +8,11 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
+<ScrollPane cacheShape="false" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
    <content>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
          <top>
@@ -24,10 +23,7 @@
                         <Label fx:id="projectTitleHeaderLbl" layoutX="10.0" layoutY="10.0" text="%project.header" />
                         <Label layoutX="10.0" layoutY="10.0" text=": " />
                         <Label fx:id="projectTitleLbl" layoutX="10.0" layoutY="10.0" text="projectTitleLbl" />
-                        <Button fx:id="editProjectDetailsBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false">
-                           <tooltip>
-                              <Tooltip text="%button.edit" />
-                           </tooltip></Button>
+                        <Button fx:id="editProjectDetailsBtn" mnemonicParsing="false" text="%button.project.details" />
                      </children>
                   </HBox>
                 <TitledPane expanded="false" text="Project Resource Items">
@@ -36,10 +32,10 @@
                            <children>
                               <HBox spacing="10.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Open" />
-                                    <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#addRelatedItem" text="Add" />
-                                    <Button mnemonicParsing="false" onAction="#editRelatedItem" text="Edit" />
-                                    <Button mnemonicParsing="false" onAction="#removeRelatedItem" text="Remove" />
+                                     <Button fx:id="addResourceBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#addResourceItem" text="%button.resource.add" />
+                                     <Button fx:id="openResourceBtn" mnemonicParsing="false" onAction="#openResourceItem" text="%button.resource.open" />
+                                     <Button fx:id="editResourceBtn" mnemonicParsing="false" onAction="#editResourceItem" text="%button.resource.details" />
+                                     <Button fx:id="removeResourceBtn" mnemonicParsing="false" onAction="#removeProjectResourceItem" text="%button.resource.delete" />
                                  </children>
                               </HBox>
                               <TableView fx:id="resourceItemTableView">
@@ -69,19 +65,10 @@
                      <children>
                         <ToolBar>
                            <items>
-                            <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn">
-                                 <tooltip>
-                                    <Tooltip text="Create Column" />
-                                 </tooltip>
-                              </Button>
-                              <Button fx:id="createColumnFromTemplateBtn" mnemonicParsing="false">
-                                 <tooltip>
-                                    <Tooltip text="Create Column from Template" />
-                                 </tooltip>
-                              </Button>
+                            <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn" text="%button.column.create" />
                            </items>
                         </ToolBar>
-                        <ScrollPane prefHeight="400.0" prefWidth="400.0">
+                        <ScrollPane cacheShape="false" prefHeight="400.0" prefWidth="400.0">
                            <content>
                               <HBox fx:id="columnHBox" alignment="CENTER_LEFT" spacing="5.0">
                                  <padding>

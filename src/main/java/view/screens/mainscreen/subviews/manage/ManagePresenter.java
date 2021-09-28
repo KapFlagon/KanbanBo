@@ -69,11 +69,11 @@ public class ManagePresenter implements Initializable {
     }
 
     private void initButtonImages() {
-        ImageView newProjectImageView = new ImageView(getClass().getResource("/icons/create_new_folder/materialiconsoutlined/black/res/drawable-hdpi/outline_create_new_folder_black_18.png").toExternalForm());
-        ImageView openProjectImageView = new ImageView(getClass().getResource("/icons/open_in_new/materialicons/black/res/drawable-hdpi/baseline_open_in_new_black_18.png").toExternalForm());
-        ImageView accessProjectImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
-        ImageView deleteProjectImageView = new ImageView(getClass().getResource("/icons/delete/materialicons/black/res/drawable-hdpi/baseline_delete_black_18.png").toExternalForm());
-        ImageView duplicateProjectImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-hdpi/baseline_content_copy_black_18.png").toExternalForm());
+        ImageView newProjectImageView = new ImageView(getClass().getResource("/icons/create_new_folder/materialicons/black/res/drawable-mdpi/baseline_create_new_folder_black_18.png").toExternalForm());
+        ImageView openProjectImageView = new ImageView(getClass().getResource("/icons/open_in_new/materialicons/black/res/drawable-mdpi/baseline_open_in_new_black_18.png").toExternalForm());
+        ImageView accessProjectImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView deleteProjectImageView = new ImageView(getClass().getResource("/icons/delete/materialicons/black/res/drawable-mdpi/baseline_delete_black_18.png").toExternalForm());
+        ImageView duplicateProjectImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-mdpi/baseline_content_copy_black_18.png").toExternalForm());
         newProjectBtn.setGraphic(newProjectImageView);
         openProjectBtn.setGraphic(openProjectImageView);
         accessProjectDetailsBtn.setGraphic(accessProjectImageView);
@@ -140,7 +140,7 @@ public class ManagePresenter implements Initializable {
 
 
 
-    public void duplicateSelectedProject() {
+    public void copySelectedProject() {
         // TODO Add option to deep duplicate a project, including all of its contents, but with new UUID values.
     }
 

@@ -10,41 +10,24 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="cardContainer" prefHeight="300.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter">
+<VBox fx:id="cardContainer" cacheShape="false" prefHeight="300.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
             <Label text="%card.header" />
             <Label text=":" />
             <Label fx:id="cardTitleLbl" layoutX="10.0" layoutY="10.0" text="cardTitleLbl" />
-            <Button fx:id="editCardBtn" mnemonicParsing="false">
-               <tooltip>
-                  <Tooltip text="Edit card" />
-               </tooltip>
-            </Button>
+            <Button fx:id="editCardBtn" mnemonicParsing="false" text="%button.card.details" />
          </children>
       </HBox>
       <ToolBar>
          <items>
-            <Button fx:id="copyCardBtn" mnemonicParsing="false">
-               <tooltip>
-                  <Tooltip text="Copy card" />
-               </tooltip>
-            </Button>
-            <Button fx:id="moveCardBtn" mnemonicParsing="false">
-               <tooltip>
-                  <Tooltip text="Move card" />
-               </tooltip>
-            </Button>
-            <Button fx:id="deleteCardBtn" mnemonicParsing="false" onAction="#deleteCard">
-               <tooltip>
-                  <Tooltip text="Delete card" />
-               </tooltip>
-            </Button>
+            <Button fx:id="copyCardBtn" mnemonicParsing="false" text="%button.card.copy" />
+            <Button fx:id="moveCardBtn" mnemonicParsing="false" text="%button.card.move" />
+            <Button fx:id="deleteCardBtn" mnemonicParsing="false" onAction="#deleteCard" text="%button.card.delete" />
          </items>
       </ToolBar>
       <Accordion>
@@ -55,8 +38,8 @@
                      <children>
                         <ToolBar>
                            <items>
-                                  <Button fx:id="editCardDetailsBtn" mnemonicParsing="false" onAction="#editCardDetails" text="Edit Details" />
-                              <Button fx:id="saveCardDetailsBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveCardDetails" text="Save" />
+                                  <Button fx:id="editCardDetailsBtn" mnemonicParsing="false" onAction="#editCardDetails" text="%button.card.details" />
+                              <Button fx:id="saveCardDetailsBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveCardDetails" text="%button.save" />
                            </items>
                         </ToolBar>
                         <Label text="Title:">
@@ -78,9 +61,10 @@
                         <Label text="Related Item" />
                         <ToolBar>
                            <items>
-                              <Button mnemonicParsing="false" onAction="#addRelatedItem" text="Add" />
-                              <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editRelatedItem" text="Edit" />
-                              <Button layoutX="52.0" layoutY="10.0" mnemonicParsing="false" onAction="#removeRelatedItem" text="Remove" />
+                               <Button fx:id="addResourceBtn" mnemonicParsing="false" onAction="#addResourceItem" text="%button.resource.add" />
+                               <Button fx:id="openResourceBtn" onAction="#openResourceItem" text="%button.resource.open" />
+                               <Button fx:id="editResourceBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editResourceItem" text="%button.resource.details" />
+                               <Button fx:id="deleteResourceBtn" layoutX="52.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteResourceItem" text="%button.resource.delete" />
                            </items>
                         </ToolBar>
                         <TableView fx:id="relatedItemTableView" prefHeight="55.0">

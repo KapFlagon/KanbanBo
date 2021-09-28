@@ -32,11 +32,7 @@ public class KanbanBoApp extends Application {
         Platform.setImplicitExit(false);
         StageUtils.setMainStage(primaryStage);
         setStageSizes(primaryStage);
-        //StartScreenView startScreenView = new StartScreenView();
-        //currentScene = new Scene(startScreenView.getView());
         determineScene();
-        //primaryStage.setScene(currentScene);
-        //primaryStage.show();
     }
 
     public void setStageSizes(Stage primaryStage) {

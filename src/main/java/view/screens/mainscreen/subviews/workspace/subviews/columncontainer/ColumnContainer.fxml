@@ -5,17 +5,16 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="columnBorderPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="360.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter">
+<BorderPane fx:id="columnBorderPane" cacheShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="360.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter">
     <center>
-        <ScrollPane maxHeight="600.0" BorderPane.alignment="CENTER">
+        <ScrollPane cacheShape="false" maxHeight="600.0" BorderPane.alignment="CENTER">
             <content>
-                <VBox fx:id="cardVBox" alignment="TOP_CENTER" spacing="5.0">
+                <VBox fx:id="cardVBox" alignment="TOP_CENTER" cacheShape="false" spacing="5.0">
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding></VBox>
@@ -36,37 +35,15 @@
                   <Label text="%column.header" />
                   <Label layoutX="10.0" layoutY="10.0" text=":" />
                   <Label fx:id="columnTitleLbl" layoutX="10.0" layoutY="10.0" text="columnTitleLbl" />
-                        <Button fx:id="editColumnDetailsBtn" mnemonicParsing="false" onAction="#editColumnDetails">
-                     <tooltip>
-                        <Tooltip text="Edit Details" />
-                     </tooltip>
-                  </Button>
+                        <Button fx:id="editColumnDetailsBtn" mnemonicParsing="false" onAction="#editColumnDetails" text="%button.column.details" />
                </children>
             </HBox>
             <ToolBar layoutX="10.0" layoutY="32.0" prefWidth="150.0">
                <items>
-                  <Button fx:id="createCardBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#createCard">
-                     <tooltip>
-                        <Tooltip text="Create Card" />
-                     </tooltip></Button>
-                  <Button fx:id="createCardFromTemplateBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#createCardFromTemplate">
-                     <tooltip>
-                        <Tooltip text="Create Card from Template" />
-                     </tooltip></Button>
-                  <Button fx:id="copyColumnBtn" mnemonicParsing="false">
-                     <tooltip>
-                        <Tooltip text="Copy Column" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="moveColumnBtn" mnemonicParsing="false">
-                     <tooltip>
-                        <Tooltip text="Move Column" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="deleteColumnBtn" mnemonicParsing="false" onAction="#deleteColumn">
-                     <tooltip>
-                        <Tooltip text="Delete Column" />
-                     </tooltip></Button>
+                  <Button fx:id="createCardBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#createCard" text="%button.card.create" />
+                  <Button fx:id="copyColumnBtn" mnemonicParsing="false" text="%button.column.copy" />
+                  <Button fx:id="moveColumnBtn" mnemonicParsing="false" text="%button.column.move" />
+                  <Button fx:id="deleteColumnBtn" mnemonicParsing="false" onAction="#deleteColumn" text="%button.column.delete" />
                </items>
             </ToolBar>
                 <HBox spacing="5.0">

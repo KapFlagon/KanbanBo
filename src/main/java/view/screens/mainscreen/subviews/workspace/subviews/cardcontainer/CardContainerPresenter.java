@@ -96,10 +96,10 @@ public class CardContainerPresenter implements Initializable {
     }
 
     private void initButtonGraphics() {
-        ImageView editCardDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
-        ImageView copyCardImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-hdpi/baseline_content_copy_black_18.png").toExternalForm());
-        ImageView moveCardImageView = new ImageView(getClass().getResource("/icons/chevron_right/materialiconsoutlined/black/res/drawable-hdpi/outline_chevron_right_black_18.png").toExternalForm());
-        ImageView deleteCardImageView = new ImageView(getClass().getResource("/icons/remove_circle_outline/materialicons/black/res/drawable-hdpi/baseline_remove_circle_outline_black_18.png").toExternalForm());
+        ImageView editCardDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView copyCardImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-mdpi/baseline_content_copy_black_18.png").toExternalForm());
+        ImageView moveCardImageView = new ImageView(getClass().getResource("/icons/chevron_right/materialicons/black/res/drawable-mdpi/baseline_chevron_right_black_18.png").toExternalForm());
+        ImageView deleteCardImageView = new ImageView(getClass().getResource("/icons/remove_circle_outline/materialicons/black/res/drawable-mdpi/baseline_remove_circle_outline_black_18.png").toExternalForm());
 
         editCardBtn.setGraphic(editCardDetailsImageView);
         copyCardBtn.setGraphic(copyCardImageView);
@@ -120,15 +120,19 @@ public class CardContainerPresenter implements Initializable {
         // TODO Implement this
     }
 
-    @FXML private void addRelatedItem() {
+    @FXML private void addResourceItem() {
         // TODO Implement this
     }
 
-    @FXML private void editRelatedItem() {
+    @FXML private void openResourceItem() {
         // TODO Implement this
     }
 
-    @FXML private void removeRelatedItem() {
+    @FXML private void editResourceItem() {
+        // TODO Implement this
+    }
+
+    @FXML private void deleteResourceItem() {
         // TODO Implement this
     }
 

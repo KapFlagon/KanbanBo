@@ -44,8 +44,6 @@ public class ProjectContainerPresenter implements Initializable {
     @FXML
     private Button createColumnBtn;
     @FXML
-    private Button createColumnFromTemplateBtn;
-    @FXML
     private TextField projectStatusTextField; // TODO Used to display the text in a copyable way, but replaced by choicebox in "edit" mode.
     @FXML
     private ChoiceBox projectStatusChoiceBox; // TODO Used to select status in "edit" mode, but replaced by non-editable TextField in "display" mode.
@@ -154,12 +152,10 @@ public class ProjectContainerPresenter implements Initializable {
     }
 
     private void initButtonGraphics() {
-        ImageView editProjectDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
-        ImageView createColumnImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialicons/black/res/drawable-hdpi/baseline_add_circle_outline_black_18.png").toExternalForm());
-        ImageView createFromTemplateImageView = new ImageView(getClass().getResource("/icons/square_foot/materialiconsoutlined/black/res/drawable-hdpi/outline_square_foot_black_18.png").toExternalForm());
+        ImageView editProjectDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView createColumnImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialicons/black/res/drawable-mdpi/baseline_add_circle_outline_black_18.png").toExternalForm());
         editProjectDetailsBtn.setGraphic(editProjectDetailsImageView);
         createColumnBtn.setGraphic(createColumnImageView);
-        createColumnFromTemplateBtn.setGraphic(createFromTemplateImageView);
     }
 
     // UI event methods
@@ -179,7 +175,7 @@ public class ProjectContainerPresenter implements Initializable {
         // TODO Implement this
     }
 
-    @FXML private void addRelatedItem() {
+    @FXML private void addResourceItem() {
         // TODO Implement this
         ResourceItemDetailsView resourceItemDetailsView = new ResourceItemDetailsView();
         ResourceItemDetailsPresenter resourceItemDetailsPresenter = (ResourceItemDetailsPresenter) resourceItemDetailsView.getPresenter();
@@ -189,15 +185,19 @@ public class ProjectContainerPresenter implements Initializable {
         StageUtils.showAndWaitOnSubStage();
     }
 
-    @FXML private void editRelatedItem() {
+    @FXML private void openResourceItem() {
+        // TODO implement this
+    }
+
+    @FXML private void editResourceItem() {
         // TODO Implement this
     }
 
-    @FXML private void removeRelatedItem() {
+    @FXML private void removeProjectResourceItem() {
         // TODO Implement this
     }
 
-    public void addProjectResource() {
+    public void addProjectResourceItem() {
         // TODO Implement this
         System.out.println("Adding project resource");
     }

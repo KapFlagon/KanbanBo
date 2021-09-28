@@ -111,10 +111,10 @@ public class MainScreenPresenter implements Initializable {
 
     // Other methods
     private void initTabIcons() {
-        ImageView manageImageView = new ImageView(getClass().getResource("/icons/topic/materialiconsoutlined/black/res/drawable-hdpi/outline_topic_black_18.png").toExternalForm());
-        ImageView workspaceImageView = new ImageView(getClass().getResource("/icons/handyman/materialiconsoutlined/black/res/drawable-hdpi/outline_handyman_black_18.png").toExternalForm());
-        ImageView templatesImageView = new ImageView(getClass().getResource("/icons/square_foot/materialiconsoutlined/black/res/drawable-hdpi/outline_square_foot_black_18.png").toExternalForm());
-        ImageView analyticsImageView = new ImageView(getClass().getResource("/icons/assessment/materialiconsoutlined/black/res/drawable-hdpi/outline_assessment_black_18.png").toExternalForm());
+        ImageView manageImageView = new ImageView(getClass().getResource("/icons/topic/materialicons/black/res/drawable-mdpi/baseline_topic_black_18.png").toExternalForm());
+        ImageView workspaceImageView = new ImageView(getClass().getResource("/icons/handyman/materialicons/black/res/drawable-mdpi/baseline_handyman_black_18.png").toExternalForm());
+        ImageView templatesImageView = new ImageView(getClass().getResource("/icons/square_foot/materialicons/black/res/drawable-mdpi/baseline_square_foot_black_18.png").toExternalForm());
+        ImageView analyticsImageView = new ImageView(getClass().getResource("/icons/assessment/materialicons/black/res/drawable-mdpi/baseline_assessment_black_18.png").toExternalForm());
         manageTab.setGraphic(manageImageView);
         workspaceTab.setGraphic(workspaceImageView);
         templatesTab.setGraphic(templatesImageView);

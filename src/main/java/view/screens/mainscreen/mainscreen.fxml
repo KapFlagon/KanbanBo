@@ -8,9 +8,9 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.MainScreenPresenter">
+<BorderPane depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.MainScreenPresenter">
    <center>
-      <TabPane fx:id="mainScreenTabPane" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="mainScreenTabPane" depthTest="DISABLE" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="1.7976189313486232E308" BorderPane.alignment="CENTER">
          <tabs>
              <Tab fx:id="manageTab" closable="false" text="%tab.title.manage" />
              <Tab fx:id="workspaceTab" closable="false" text="%tab.title.workspace" />

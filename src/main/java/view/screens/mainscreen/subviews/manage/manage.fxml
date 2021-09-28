@@ -25,26 +25,11 @@
             </Label>
             <ToolBar>
               <items>
-                <Button fx:id="newProjectBtn" mnemonicParsing="false" onAction="#createNewProject">
-                     <tooltip>
-                        <Tooltip text="%button.new" />
-                     </tooltip></Button>
-                  <Button fx:id="openProjectBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#openSelectedProject">
-                     <tooltip>
-                        <Tooltip text="%button.open" />
-                     </tooltip></Button>
-                  <Button fx:id="accessProjectDetailsBtn" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#accessProjectDetails">
-                     <tooltip>
-                        <Tooltip text="%button.details" />
-                     </tooltip></Button>
-                  <Button fx:id="duplicateProjectBtn" layoutX="234.0" layoutY="12.0" mnemonicParsing="false" onAction="#duplicateSelectedProject">
-                     <tooltip>
-                        <Tooltip text="%button.duplicate" />
-                     </tooltip></Button>
-                  <Button fx:id="deleteProjectBtn" layoutX="254.0" layoutY="32.0" mnemonicParsing="false" onAction="#deleteSelectedProject">
-                     <tooltip>
-                        <Tooltip text="%button.delete" />
-                     </tooltip></Button>
+                  <Button fx:id="newProjectBtn" mnemonicParsing="false" onAction="#createNewProject" text="%button.project.create" />
+                  <Button fx:id="openProjectBtn" layoutX="10.0" layoutY="12.0" mnemonicParsing="false" onAction="#openSelectedProject" text="%button.project.open" />
+                  <Button fx:id="accessProjectDetailsBtn" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#accessProjectDetails" text="%button.project.details" />
+                  <Button fx:id="duplicateProjectBtn" layoutX="234.0" layoutY="12.0" mnemonicParsing="false" onAction="#copySelectedProject" text="%button.project.copy" />
+                  <Button fx:id="deleteProjectBtn" layoutX="254.0" layoutY="32.0" mnemonicParsing="false" onAction="#deleteSelectedProject" text="%button.project.delete" />
               </items>
             </ToolBar>
          </children>

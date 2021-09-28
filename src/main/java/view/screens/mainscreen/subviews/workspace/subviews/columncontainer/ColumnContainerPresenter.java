@@ -49,8 +49,6 @@ public class ColumnContainerPresenter implements Initializable {
     @FXML
     private Button createCardBtn;
     @FXML
-    private Button createCardFromTemplateBtn;
-    @FXML
     private Button copyColumnBtn;
     @FXML
     private Button moveColumnBtn;
@@ -168,16 +166,14 @@ public class ColumnContainerPresenter implements Initializable {
     }
 
     private void initButtonGraphics() {
-        ImageView editColumnDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-hdpi/baseline_edit_note_black_18.png").toExternalForm());
-        ImageView addCardImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialiconsoutlined/black/res/drawable-hdpi/outline_add_circle_outline_black_18.png").toExternalForm());
-        ImageView createFromTemplateImageView = new ImageView(getClass().getResource("/icons/square_foot/materialiconsoutlined/black/res/drawable-hdpi/outline_square_foot_black_18.png").toExternalForm());
-        ImageView copyColumnImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-hdpi/baseline_content_copy_black_18.png").toExternalForm());
-        ImageView moveColumnImageView = new ImageView(getClass().getResource("/icons/chevron_right/materialiconsoutlined/black/res/drawable-hdpi/outline_chevron_right_black_18.png").toExternalForm());
-        ImageView deleteColumnImageView = new ImageView(getClass().getResource("/icons/remove_circle_outline/materialicons/black/res/drawable-hdpi/baseline_remove_circle_outline_black_18.png").toExternalForm());
+        ImageView editColumnDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView addCardImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialicons/black/res/drawable-mdpi/baseline_add_circle_outline_black_18.png").toExternalForm());
+        ImageView copyColumnImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-mdpi/baseline_content_copy_black_18.png").toExternalForm());
+        ImageView moveColumnImageView = new ImageView(getClass().getResource("/icons/chevron_right/materialicons/black/res/drawable-mdpi/baseline_chevron_right_black_18.png").toExternalForm());
+        ImageView deleteColumnImageView = new ImageView(getClass().getResource("/icons/remove_circle_outline/materialicons/black/res/drawable-mdpi/baseline_remove_circle_outline_black_18.png").toExternalForm());
 
         editColumnDetailsBtn.setGraphic(editColumnDetailsImageView);
         createCardBtn.setGraphic(addCardImageView);
-        createCardFromTemplateBtn.setGraphic(createFromTemplateImageView);
         copyColumnBtn.setGraphic(copyColumnImageView);
         moveColumnBtn.setGraphic(moveColumnImageView);
         deleteColumnBtn.setGraphic(deleteColumnImageView);
