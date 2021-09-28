@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.StageStyle;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
+import utils.view.ScrollPaneFixer;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerView;
 import view.sharedviewcomponents.DetailsPopupInitialDataMode;
@@ -63,6 +64,10 @@ public class ProjectContainerPresenter implements Initializable {
     private TableColumn<ObservableResourceItem, String> relatedItemLinkTableColumn;
     @FXML
     private HBox columnHBox;
+    @FXML
+    private ScrollPane mainScrollPane;
+    @FXML
+    private ScrollPane subScrollPane;
 
     // Other variables
     @Inject
@@ -98,6 +103,12 @@ public class ProjectContainerPresenter implements Initializable {
         //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (new Hyperlink(cellData.getValue().getRelatedItemPath())));
         relatedItemLinkTableColumn.setCellValueFactory(cellData -> (cellData.getValue().pathProperty()));
         forRemoval = new SimpleBooleanProperty(false);
+        mainScrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
+            ScrollPaneFixer.fixBlurryScrollPan(mainScrollPane);
+        }));
+        subScrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
+            ScrollPaneFixer.fixBlurryScrollPan(subScrollPane);
+        }));
     }
 
 

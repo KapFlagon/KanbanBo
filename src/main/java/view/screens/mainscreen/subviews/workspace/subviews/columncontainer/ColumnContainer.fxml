@@ -12,7 +12,7 @@
 
 <BorderPane fx:id="columnBorderPane" cacheShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="360.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.columncontainer.ColumnContainerPresenter">
     <center>
-        <ScrollPane cacheShape="false" maxHeight="600.0" BorderPane.alignment="CENTER">
+        <ScrollPane fx:id="scrollPane" cacheShape="false" maxHeight="600.0" BorderPane.alignment="CENTER">
             <content>
                 <VBox fx:id="cardVBox" alignment="TOP_CENTER" cacheShape="false" spacing="5.0">
                     <padding>

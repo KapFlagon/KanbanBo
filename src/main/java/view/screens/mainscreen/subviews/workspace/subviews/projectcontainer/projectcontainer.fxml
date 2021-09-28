@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane cacheShape="false" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
+<ScrollPane fx:id="mainScrollPane" cacheShape="false" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
    <content>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
          <top>
@@ -68,7 +68,7 @@
                             <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn" text="%button.column.create" />
                            </items>
                         </ToolBar>
-                        <ScrollPane cacheShape="false" prefHeight="400.0" prefWidth="400.0">
+                        <ScrollPane fx:id="subScrollPane" cacheShape="false" prefHeight="400.0" prefWidth="400.0">
                            <content>
                               <HBox fx:id="columnHBox" alignment="CENTER_LEFT" spacing="5.0">
                                  <padding>

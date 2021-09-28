@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 
 <?import javafx.scene.control.Label?>
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTablePresenter">
+<ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTablePresenter">
    <content>
       <TableView fx:id="activeProjectListTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
           <placeholder>

@@ -10,10 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
@@ -24,6 +21,7 @@ import persistence.services.KanbanBoDataService;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import utils.StageUtils;
+import utils.view.ScrollPaneFixer;
 import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerView;
 import view.sharedviewcomponents.popups.carddetails.CardDetailsWindowPresenter;
@@ -66,6 +64,8 @@ public class ColumnContainerPresenter implements Initializable {
     private VBox cardVBox;
     @FXML
     private Text cardCountTxt;
+    @FXML
+    private ScrollPane scrollPane;
 
 
     // Other variables
@@ -99,6 +99,9 @@ public class ColumnContainerPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initButtonGraphics();
         forRemoval = new SimpleBooleanProperty(false);
+        scrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
+            ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
+        }));
     }
 
     public void initDragAndDropMethods() {

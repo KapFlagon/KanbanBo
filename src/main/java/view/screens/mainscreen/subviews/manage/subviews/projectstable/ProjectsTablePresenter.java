@@ -4,10 +4,12 @@ import domain.entities.project.ObservableProject;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.SelectionMode;
 import persistence.services.KanbanBoDataService;
+import utils.view.ScrollPaneFixer;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.ResourceBundle;
 public class ProjectsTablePresenter implements Initializable {
 
     // Injected JavaFX field variables
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private TableView<ObservableProject> activeProjectListTableView;
     @FXML
@@ -52,6 +56,9 @@ public class ProjectsTablePresenter implements Initializable {
         initTableColumns();
         projectTableViewModel = kanbanBoDataService.getProjectsList();
         activeProjectListTableView.setItems(projectTableViewModel);
+        scrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
+            ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
+        }));
     }
 
     public void initTableView() {

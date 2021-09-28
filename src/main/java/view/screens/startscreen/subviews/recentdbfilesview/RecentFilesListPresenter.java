@@ -8,8 +8,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import userpreferences.UserPreferences;
+import utils.view.ScrollPaneFixer;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryView;
 
@@ -23,6 +25,8 @@ public class RecentFilesListPresenter implements Initializable {
     // JavaFX injected node variables
     @FXML
     private VBox recentFilesVBox;
+    @FXML
+    private ScrollPane scrollPane;
 
     // Other variables
     private ObservableList<Path> recentFilePathList;
@@ -73,6 +77,9 @@ public class RecentFilesListPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         itemBeingOpened = new SimpleBooleanProperty(false);
         itemBeingDeleted = new SimpleBooleanProperty(false);
+        scrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
+            ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
+        }));
     }
 
     // UI event methods
