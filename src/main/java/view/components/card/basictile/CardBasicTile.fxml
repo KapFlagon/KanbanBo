@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="rootContainer" maxHeight="210.0" maxWidth="300.0" minWidth="300.0" spacing="6.0" style="-fx-background-color: yellow; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.card.basictile.CardBasicTilePresenter">
+   <children>
+      <Label fx:id="cardTypeLbl" text="Card Type (card/template)">
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </Label>
+      <HBox alignment="CENTER_LEFT" maxHeight="50.0" maxWidth="300.0" spacing="10.0">
+         <children>
+            <Label fx:id="cardTitleLbl" text="Title Text" wrapText="true" />
+            <MenuButton fx:id="cardMenuBtn" mnemonicParsing="false" popupSide="RIGHT">
+              <items>
+                <MenuItem fx:id="cardDetailsBtn" mnemonicParsing="false" onAction="#showCardDetailsPopup" text="%button.card.details" />
+                <MenuItem fx:id="copyCardBtn" mnemonicParsing="false" onAction="#copyCard" text="%button.card.copy" />
+                  <MenuItem fx:id="moveCardBtn" mnemonicParsing="false" onAction="#moveCard" text="%button.card.move" />
+                  <MenuItem fx:id="deleteCardBtn" mnemonicParsing="false" onAction="#deleteCard" text="%button.card.delete" />
+              </items>
+            </MenuButton>
+         </children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </HBox>
+      <FlowPane fx:id="tagFlowPane" prefWrapLength="250.0">
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </FlowPane>
+      <Label fx:id="dueDateLbl" text="01 Sep 2021">
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </Label>
+      <HBox fx:id="checklistHBox" spacing="5.0">
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+         <children>
+            <Label fx:id="completedChecklistItemsLbl" text="2" />
+            <Label layoutX="10.0" layoutY="10.0" text="%label.checklist_divisor" />
+            <Label fx:id="allChecklistItemsLbl" layoutX="48.0" layoutY="10.0" text="4" />
+            <ProgressBar fx:id="checklistProgressBar" progress="0.5" />
+         </children>
+      </HBox>
+      <Label fx:id="descriptionLbl" text="Icon indicating 'has description'">
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </Label>
+      <HBox fx:id="resourcesHBox" spacing="10.0">
+         <children>
+            <Label fx:id="resourcesLbl" text="Icon indicating 'has links', and amount" />
+            <MenuButton fx:id="resourcesMenuBtn" mnemonicParsing="false" popupSide="RIGHT" />
+         </children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+   <effect>
+      <DropShadow offsetX="3.0" offsetY="3.0" />
+   </effect>
+</VBox>

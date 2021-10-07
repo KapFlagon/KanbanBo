@@ -22,6 +22,8 @@ import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import utils.StageUtils;
 import utils.view.ScrollPaneFixer;
+import view.components.card.basictile.CardBasicTilePresenter;
+import view.components.card.basictile.CardBasicTileView;
 import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter;
 import view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerView;
 import view.sharedviewcomponents.popups.carddetails.CardDetailsWindowPresenter;
@@ -120,6 +122,7 @@ public class ColumnContainerPresenter implements Initializable {
         //columnTitleTextField.textProperty().bind(columnViewModel.columnTitleProperty());
         //finalColumnCheckBox.selectedProperty().bind(columnViewModel.finalColumnProperty());
         for (ObservableCard cardViewModel : columnViewModel.getCards()) {
+            /*
             CardContainerView cardContainerView = new CardContainerView();
             CardContainerPresenter cardContainerPresenter = (CardContainerPresenter) cardContainerView.getPresenter();
             cardContainerPresenter.setCardViewModel(cardViewModel);
@@ -129,6 +132,17 @@ public class ColumnContainerPresenter implements Initializable {
                 }
             });
             cardContainerView.getViewAsync(cardVBox.getChildren()::add);
+             */
+
+            CardBasicTileView cardBasicTileView = new CardBasicTileView();
+            CardBasicTilePresenter cardBasicTilePresenter = (CardBasicTilePresenter) cardBasicTileView.getPresenter();
+            cardBasicTilePresenter.setCardViewModel(cardViewModel);
+            cardBasicTilePresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
+                if(newVal) {
+                    cardBasicTileView.getViewAsync(cardVBox.getChildren()::remove);
+                }
+            });
+            cardBasicTileView.getViewAsync(cardVBox.getChildren()::add);
         }
 
         columnViewModel.getCards().addListener(new ListChangeListener<ObservableCard>() {
@@ -137,6 +151,7 @@ public class ColumnContainerPresenter implements Initializable {
                 while (c.next())
                     if(c.wasAdded()) {
                         for(ObservableCard observableCard : c.getAddedSubList()) {
+                            /*
                             CardContainerView cardContainerView = new CardContainerView();
                             CardContainerPresenter cardContainerPresenter = (CardContainerPresenter) cardContainerView.getPresenter();
                             cardContainerPresenter.setCardViewModel(observableCard);
@@ -146,6 +161,16 @@ public class ColumnContainerPresenter implements Initializable {
                                 }
                             });
                             cardContainerView.getViewAsync(cardVBox.getChildren()::add);
+                            */
+                            CardBasicTileView cardBasicTileView = new CardBasicTileView();
+                            CardBasicTilePresenter cardBasicTilePresenter = (CardBasicTilePresenter) cardBasicTileView.getPresenter();
+                            cardBasicTilePresenter.setCardViewModel(observableCard);
+                            cardBasicTilePresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
+                                if(newVal) {
+                                    cardBasicTileView.getViewAsync(cardVBox.getChildren()::remove);
+                                }
+                            });
+                            cardBasicTileView.getViewAsync(cardVBox.getChildren()::add);
                         }
                     }
                 if(c.wasUpdated()) {

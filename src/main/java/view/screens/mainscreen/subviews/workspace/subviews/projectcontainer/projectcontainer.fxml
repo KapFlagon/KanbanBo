@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="mainScrollPane" cacheShape="false" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
+<ScrollPane fx:id="mainScrollPane" cacheShape="false" fitToWidth="true" style="-fx-border-color: khaki;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter">
    <content>
-      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: khaki;">
          <top>
             <VBox BorderPane.alignment="CENTER">
                <children>
@@ -59,9 +59,9 @@
             </VBox>
          </top>
          <center>
-            <TitledPane text="Columns" BorderPane.alignment="CENTER">
+            <TitledPane style="-fx-background-color: khaki;" text="Columns" BorderPane.alignment="CENTER">
                <content>
-                  <VBox>
+                  <VBox style="-fx-background-color: khaki;">
                      <children>
                         <ToolBar>
                            <items>

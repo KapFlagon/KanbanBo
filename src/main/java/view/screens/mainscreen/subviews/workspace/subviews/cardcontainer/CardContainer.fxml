@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="cardContainer" cacheShape="false" prefHeight="300.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter">
+<VBox fx:id="cardContainer" styleClass="card-vbox" cacheShape="false" prefHeight="300.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.subviews.workspace.subviews.cardcontainer.CardContainerPresenter">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
