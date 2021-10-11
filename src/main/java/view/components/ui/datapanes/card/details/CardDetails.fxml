@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<Accordion fx:id="rootItem" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.ui.datapanes.card.details.CardDetailsPresenter">
+   <panes>
+      <TitledPane expanded="false" text="%label.details">
+         <content>
+            <VBox fx:id="contentVBox" spacing="14.0">
+               <children>
+                  <VBox spacing="2.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="%label.title" />
+                              <Label text=":" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="cardTitleTextField" />
+                        <Label fx:id="titleValidationLbl" text="%label.validation.title" visible="false" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="2.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="%label.Description" />
+                              <Label text=":" />
+                           </children>
+                        </HBox>
+                        <TextArea fx:id="cardDescriptionTextArea" prefWidth="200.0" wrapText="true" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="2.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="%label.due_on_date" />
+                              <Label text=":" />
+                           </children>
+                        </HBox>
+                        <DatePicker fx:id="dueOnDatePicker" showWeekNumbers="true" />
+                        <Label fx:id="dueOnDateValidationLbl" text="%label.validation.due_on_date" visible="false" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="2.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="%label.created_on_date" />
+                              <Label text=":" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="createdOnTextField" editable="false" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="2.0">
+                     <children>
+                        <HBox>
+                           <children>
+                              <Label text="%label.last_changed_on_date" />
+                              <Label text=":" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="lastChangedOnTextField" editable="false" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+      </TitledPane>
+   </panes>
+</Accordion>

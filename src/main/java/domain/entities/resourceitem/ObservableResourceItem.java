@@ -31,7 +31,6 @@ public class ObservableResourceItem extends AbstractObservableEntity<ResourceIte
         this.resourceItemUUID = resourceItemTable.getResource_item_uuid();
         this.parentItemUUID = resourceItemTable.getParent_item_uuid();
         initAllProperties(resourceItemTable, typeText);
-        initPropertyListeners();
     }
 
     public ObservableResourceItem(UUID parentItemUUID, String title, String description, String path, int type, String typeText) {
@@ -39,7 +38,6 @@ public class ObservableResourceItem extends AbstractObservableEntity<ResourceIte
         this.resourceItemUUID = UUID.randomUUID();
         this.parentItemUUID = parentItemUUID;
         initAllProperties(title, description, path, type, typeText);
-        initPropertyListeners();
     }
 
 
@@ -88,13 +86,6 @@ public class ObservableResourceItem extends AbstractObservableEntity<ResourceIte
         this.path = new SimpleStringProperty(resourceItemTable.getResource_item_path());
         this.type = new SimpleIntegerProperty(resourceItemTable.getResource_item_type());
         this.typeText = new SimpleStringProperty(typeText);
-    }
-
-    protected void initPropertyListeners() {
-        this.title.addListener(stringChangeListener);
-        this.description.addListener(stringChangeListener);
-        this.path.addListener(stringChangeListener);
-        this.type.addListener(numberChangeListener);
     }
 
 

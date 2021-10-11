@@ -1,7 +1,6 @@
 package view.screens.mainscreen.subviews.workspace;
 
 import domain.entities.project.ObservableProject;
-import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -13,8 +12,8 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import persistence.services.KanbanBoDataService;
-import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerPresenter;
-import view.screens.mainscreen.subviews.workspace.subviews.projectcontainer.ProjectContainerView;
+import view.components.project.container.ProjectContainerPresenter;
+import view.components.project.container.ProjectContainerView;
 
 import javax.inject.Inject;
 import javafx.scene.image.ImageView;

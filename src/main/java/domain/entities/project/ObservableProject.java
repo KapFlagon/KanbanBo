@@ -95,26 +95,6 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
         }
     }
 
-    @Override
-    protected void initPropertyListeners() {
-        super.initPropertyListeners();
-        statusID.addListener(numberChangeListener);
-        // TODO Finish this: Theoretically will update the last changed time
-
-    }
-
-    @Override
-    protected void initAllObservableListListeners() {
-        super.initAllObservableListListeners();
-        columns.addListener(new ListChangeListener<domain.entities.column.ObservableColumn>() {
-            @Override
-            public void onChanged(Change<? extends domain.entities.column.ObservableColumn> c) {
-                // TODO figure out what to update here...
-
-            }
-        });
-    }
-
     // Other methods
 
 }

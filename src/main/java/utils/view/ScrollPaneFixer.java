@@ -20,6 +20,12 @@ public class ScrollPaneFixer {
 
     // Other methods
     public static void fixBlurryScrollPan(ScrollPane scrollPane) {
+        scrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
+            setEmbeddedStackPaneCache(scrollPane);
+        }));
+    }
+
+    private static void setEmbeddedStackPaneCache(ScrollPane scrollPane) {
         StackPane stackPane = (StackPane) scrollPane.lookup("ScrollPane .viewport");
         stackPane.setCache(false);
     }

@@ -13,6 +13,10 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import persistence.services.KanbanBoDataService;
+import utils.StageUtils;
+import view.components.card.editor.CardEditorPresenter;
+import view.components.card.editor.CardEditorView;
+import view.components.ui.datapanes.card.details.CardDetailsView;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -90,6 +94,11 @@ public class CardBasicTilePresenter implements Initializable {
     public void setCardViewModel(ObservableCard cardViewModel) {
         this.cardViewModel = cardViewModel;
         lateViewInitialization();
+        cardViewModel.dataChangePendingProperty().addListener((changeable, oldValue, newValue) -> {
+            if(newValue) {
+                lateViewInitialization();
+            }
+        });
     }
 
     public SimpleBooleanProperty forRemovalProperty() {
@@ -110,18 +119,25 @@ public class CardBasicTilePresenter implements Initializable {
         tagFlowPane.setVisible(false);
         dueDateLbl.setVisible(false);
         checklistHBox.setVisible(false);
-        if(cardViewModel.cardDescriptionProperty().getValue() != "") {
-            descriptionLbl.setVisible(true);
+        if(cardViewModel.cardDescriptionProperty().getValue().trim().isEmpty() || cardViewModel.cardDescriptionProperty().getValue().trim().isBlank()) {
+            descriptionLbl.setVisible(false);
         }
-        resourcesLbl.setText(String.valueOf(cardViewModel.getResourceItems().size()));
-        for(ObservableResourceItem resourceItem : cardViewModel.getResourceItems()) {
-            MenuItem resourceMenuItem = new MenuItem(resourceItem.typeTextProperty().getValue());
-            resourceMenuItem.setOnAction(event -> {
-                switch(resourceItem.typeProperty().get()) {
-                    // TODO Designate "run" behaviour for button click, based on resource type
-                    default: System.out.println("run the thing");
-                }
-            });
+        if(cardViewModel.getResourceItems().size() == 0) {
+            resourcesMenuBtn.setDisable(true);
+            resourcesLbl.setText("0");
+        } else{
+            resourcesMenuBtn.setDisable(false);
+            resourcesLbl.setText(String.valueOf(cardViewModel.getResourceItems().size()));
+            for(ObservableResourceItem resourceItem : cardViewModel.getResourceItems()) {
+                MenuItem resourceMenuItem = new MenuItem(resourceItem.typeTextProperty().getValue());
+                resourceMenuItem.setOnAction(event -> {
+                    switch(resourceItem.typeProperty().get()) {
+                        // TODO Designate "run" behaviour for button click, based on resource type
+                        default: System.out.println("run the thing");
+                    }
+                });
+                resourcesMenuBtn.getItems().add(resourceMenuItem);
+            }
         }
     }
 
@@ -138,18 +154,18 @@ public class CardBasicTilePresenter implements Initializable {
     }
 
     private void initDataGraphics() {
-        ImageView dueDateImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView dueDateImageView = new ImageView(getClass().getResource("/icons/event/materialicons/black/res/drawable-mdpi/baseline_event_black_18.png").toExternalForm());
         dueDateLbl.setGraphic(dueDateImageView);
 
-        ImageView checkListImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView checkListImageView = new ImageView(getClass().getResource("/icons/checklist/materialicons/black/res/drawable-mdpi/baseline_checklist_black_18.png").toExternalForm());
         completedChecklistItemsLbl.setGraphic(checkListImageView);
 
-        ImageView descriptionImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
+        ImageView descriptionImageView = new ImageView(getClass().getResource("/icons/article/materialicons/black/res/drawable-mdpi/baseline_article_black_18.png").toExternalForm());
         descriptionLbl.setGraphic(descriptionImageView);
         descriptionLbl.setText("");
 
-        ImageView resourcesImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
-        resourcesLbl.setGraphic(descriptionImageView);
+        ImageView resourcesImageView = new ImageView(getClass().getResource("/icons/link/materialicons/black/res/drawable-mdpi/baseline_link_black_18.png").toExternalForm());
+        resourcesLbl.setGraphic(resourcesImageView);
     }
 
     // UI event methods
@@ -161,10 +177,9 @@ public class CardBasicTilePresenter implements Initializable {
 
     @FXML
     void deleteCard(ActionEvent event) throws SQLException, IOException {
-        // TODO Implement this
         System.out.println("Delete Card");
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure that you want to Delete the card?");
-        alert.setTitle("Confirm card celetion");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure that you want to delete the card?");
+        alert.setTitle("Confirm card deletion");
         alert.showAndWait().filter(response -> response == ButtonType.OK)
                 .ifPresent((response) -> {
                     try {
@@ -191,6 +206,12 @@ public class CardBasicTilePresenter implements Initializable {
     void showCardDetailsPopup(ActionEvent event) {
         // TODO Implement this
         System.out.println("Show card details");
+        CardEditorView cardEditorView = new CardEditorView();
+        CardEditorPresenter cardEditorPresenter = (CardEditorPresenter) cardEditorView.getPresenter();
+        cardEditorPresenter.setCardViewModel(cardViewModel);
+        StageUtils.createChildStage("Card details", cardEditorView.getView());
+        StageUtils.showAndWaitOnSubStage();
+        StageUtils.closeSubStage();
     }
 
     // Other methods

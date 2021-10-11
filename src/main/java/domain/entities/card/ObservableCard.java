@@ -37,11 +37,6 @@ public class ObservableCard extends AbstractObservableCardBase<CardTable> {
 
     // Initialisation methods
 
-    @Override
-    protected void initPropertyListeners() {
-        super.initPropertyListeners();
-        position.addListener(numberChangeListener);
-    }
 
 
     // Other methods

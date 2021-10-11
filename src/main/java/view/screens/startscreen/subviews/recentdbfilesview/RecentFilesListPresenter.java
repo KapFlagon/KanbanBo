@@ -77,9 +77,7 @@ public class RecentFilesListPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         itemBeingOpened = new SimpleBooleanProperty(false);
         itemBeingDeleted = new SimpleBooleanProperty(false);
-        scrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
-            ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
-        }));
+        ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
     }
 
     // UI event methods

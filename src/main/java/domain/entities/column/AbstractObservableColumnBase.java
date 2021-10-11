@@ -26,9 +26,7 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseT
         super();
         this.columnUUID = UUID.randomUUID();
         initAllProperties();
-        initPropertyListeners();
         initObservableList();
-        initObservableListListeners();
     }
 
     public AbstractObservableColumnBase(T domainObject, ObservableList<U> cardsList) {
@@ -36,9 +34,7 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseT
         this.parentProjectUUID = domainObject.getParent_project_uuid();
         this.columnUUID = domainObject.getColumn_uuid();
         initAllProperties();
-        initPropertyListeners();
         initObservableList(cardsList);
-        initObservableListListeners();
     }
 
     public AbstractObservableColumnBase(UUID parentProjectUUID) {
@@ -46,9 +42,7 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseT
         this.parentProjectUUID = parentProjectUUID;
         columnUUID = UUID.randomUUID();
         initAllProperties();
-        initPropertyListeners();
         initObservableList();
-        initObservableListListeners();
     }
 
     public AbstractObservableColumnBase(UUID parentProjectUUID, T domainObject, ObservableList<U> cardsList) {
@@ -56,9 +50,7 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseT
         this.parentProjectUUID = parentProjectUUID;
         this.columnUUID = domainObject.getColumn_uuid();
         initAllProperties();
-        initPropertyListeners();
         initObservableList(cardsList);
-        initObservableListListeners();
     }
 
 
@@ -98,21 +90,6 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseT
 
     protected void initObservableList(ObservableList<U> cardsList) {
         this.cards = cardsList;
-    }
-
-    protected void initObservableListListeners() {
-        // TODO Implement this so that if a change happens in a child item, the change is pushed upward by observable property
-        cards.addListener(new ListChangeListener<U>() {
-            @Override
-            public void onChanged(Change<? extends U> c) {
-                dataChangePendingProperty().set(true);
-            }
-        });
-    }
-
-
-    protected void initPropertyListeners() {
-        this.columnTitle.addListener(stringChangeListener);
     }
 
 

@@ -56,9 +56,7 @@ public class ProjectsTablePresenter implements Initializable {
         initTableColumns();
         projectTableViewModel = kanbanBoDataService.getProjectsList();
         activeProjectListTableView.setItems(projectTableViewModel);
-        scrollPane.skinProperty().addListener(((observable, oldValue, newValue) -> {
-            ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
-        }));
+        ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
     }
 
     public void initTableView() {

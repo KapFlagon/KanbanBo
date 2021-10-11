@@ -94,21 +94,7 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardBaseTable
         this.resourceItems = resourceItemsList;
     }
 
-    protected void initObservableListListeners() {
-        resourceItems.addListener(new ListChangeListener<ObservableResourceItem>() {
-            @Override
-            public void onChanged(Change<? extends ObservableResourceItem> c) {
-                dataChangePendingProperty().set(true);
-            }
-        });
-    }
 
-
-    protected void initPropertyListeners() {
-        this.cardTitle.addListener(stringChangeListener);
-
-        this.cardDescription.addListener(stringChangeListener);
-    }
 
 
 }

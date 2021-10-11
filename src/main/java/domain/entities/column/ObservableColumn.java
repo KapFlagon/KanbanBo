@@ -23,7 +23,6 @@ public class ObservableColumn extends AbstractObservableColumnBase<ColumnTable, 
     }
 
     public ObservableColumn(UUID parentProjectUUID, int position) {
-        initializeBaseProperties();
         initAllProperties(position);
     }
 
@@ -67,15 +66,6 @@ public class ObservableColumn extends AbstractObservableColumnBase<ColumnTable, 
         super.initAllProperties(domainObject);
         this.columnPosition = new SimpleIntegerProperty(domainObject.getColumn_position());
         this.finalColumn = new SimpleBooleanProperty(domainObject.isFinal_column());
-    }
-
-
-
-    @Override
-    protected void initPropertyListeners() {
-        super.initPropertyListeners();
-        this.columnPosition.addListener(numberChangeListener);
-        this.finalColumn.addListener(booleanChangeListener);
     }
 
 

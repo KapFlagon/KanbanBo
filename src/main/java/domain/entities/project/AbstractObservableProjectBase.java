@@ -29,9 +29,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
         super();
         projectUUID = UUID.randomUUID();
         initAllProperties(title, description);
-        initPropertyListeners();
         initAllObservableLists();
-        initAllObservableListListeners();
     }
 
 
@@ -39,25 +37,20 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
         super();
         projectUUID = projectDomainObject.getProject_uuid();
         initAllProperties(projectDomainObject);
-        initPropertyListeners();
         initAllObservableLists();
-        initAllObservableListListeners();
     }
 
     public AbstractObservableProjectBase(T projectDomainObject, ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
         super();
         projectUUID = projectDomainObject.getProject_uuid();
         initAllProperties(projectDomainObject);
-        initPropertyListeners();
         initAllObservableLists(resourceItems, columnsList);
-        initAllObservableListListeners();
     }
 
     // Getters and Setters
     public UUID getProjectUUID() {
         return projectUUID;
     }
-
 
     public SimpleStringProperty projectTitleProperty() {
         return projectTitle;
@@ -111,12 +104,6 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
         this.lastChangedTimestamp = new SimpleStringProperty(projectDomainObject.getLast_changed_timestamp().toString());
     }
 
-    protected void initPropertyListeners(){
-        projectTitle.addListener(stringChangeListener);
-        projectDescription.addListener(stringChangeListener);
-        lastChangedTimestamp.addListener(stringChangeListener);
-    }
-
     protected void initAllObservableLists() {
         this.resourceItems = FXCollections.observableArrayList();
         this.columns = FXCollections.observableArrayList();
@@ -125,22 +112,6 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
     protected void initAllObservableLists(ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
         this.resourceItems = resourceItems;
         this.columns = columnsList;
-    }
-
-    protected void initAllObservableListListeners() {
-        // TODO Implement this so that if a change happens in a child item, the change is pushed upward by observable property
-        resourceItems.addListener(new ListChangeListener<ObservableResourceItem>() {
-            @Override
-            public void onChanged(Change<? extends ObservableResourceItem> c) {
-                dataChangePendingProperty().set(true);
-            }
-        });
-        columns.addListener(new ListChangeListener<U>() {
-            @Override
-            public void onChanged(Change<? extends U> c) {
-                dataChangePendingProperty().set(true);
-            }
-        });
     }
 
 

@@ -63,7 +63,7 @@
                            <items>
                                <Button fx:id="addResourceBtn" mnemonicParsing="false" onAction="#addResourceItem" text="%button.resource.add" />
                                <Button fx:id="openResourceBtn" onAction="#openResourceItem" text="%button.resource.open" />
-                               <Button fx:id="editResourceBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editResourceItem" text="%button.resource.details" />
+                               <Button fx:id="editResourceBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#editResourceItem" text="%button.resource.edit" />
                                <Button fx:id="deleteResourceBtn" layoutX="52.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteResourceItem" text="%button.resource.delete" />
                            </items>
                         </ToolBar>
