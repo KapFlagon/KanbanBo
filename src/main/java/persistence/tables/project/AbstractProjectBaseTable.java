@@ -19,10 +19,10 @@ public abstract class AbstractProjectBaseTable implements TableObject<UUID> {
     private String project_title;
     @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.STRING)
     private String project_description;
-    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.DATE_STRING)
-    private Date creation_timestamp;
-    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.DATE_STRING)
-    private Date last_changed_timestamp;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String creation_timestamp;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String last_changed_timestamp;
 
 
     // Constructors
@@ -52,17 +52,17 @@ public abstract class AbstractProjectBaseTable implements TableObject<UUID> {
         this.project_description = project_description;
     }
 
-    public Date getCreation_timestamp() {
+    public String getCreation_timestamp() {
         return creation_timestamp;
     }
-    public void setCreation_timestamp(Date creation_timestamp) {
+    public void setCreation_timestamp(String creation_timestamp) {
         this.creation_timestamp = creation_timestamp;
     }
 
-    public Date getLast_changed_timestamp() {
+    public String getLast_changed_timestamp() {
         return last_changed_timestamp;
     }
-    public void setLast_changed_timestamp(Date last_changed_timestamp) {
+    public void setLast_changed_timestamp(String last_changed_timestamp) {
         this.last_changed_timestamp = last_changed_timestamp;
     }
 

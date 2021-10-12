@@ -1,4 +1,4 @@
-package persistence.tables.templating.bridges;
+package persistence.tables.bridges.templating;
 
 import java.util.UUID;
 

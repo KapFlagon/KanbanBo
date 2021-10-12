@@ -24,6 +24,8 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -109,8 +111,6 @@ public class KanbanBoDataService extends AbstractService{
                 }
             }
             ObservableProject projectDomainObject = new ObservableProject(projectEntry, localisedStatusText);
-            ChangeListener<Boolean> changeListener = addProjectChangeListener(projectDomainObject.dataChangePendingProperty(), projectDomainObject);
-            projectDomainObject.dataChangePendingProperty().addListener(changeListener);
             projectsList.add(projectDomainObject);
         }
     }
@@ -270,8 +270,11 @@ public class KanbanBoDataService extends AbstractService{
         projectTable.setProject_title(title);
         projectTable.setProject_description(description);
         projectTable.setProject_status_id(1);
-        projectTable.setCreation_timestamp(new Date());
-        projectTable.setLast_changed_timestamp(new Date());
+        // TODO RE-EXAMINE THIS FURTHER
+        // https://stackoverflow.com/questions/37390080/convert-local-time-to-utc-and-vice-versa
+        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
+        projectTable.setCreation_timestamp(offsetDateTime.toString());
+        projectTable.setLast_changed_timestamp(offsetDateTime.toString());
         ProjectStatusTable statusKey;
         setupDbConnection();
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -282,8 +285,6 @@ public class KanbanBoDataService extends AbstractService{
         if (result > 0) {
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
             ObservableProject observableProject = new ObservableProject(projectTable, localizedStatusText);
-            ChangeListener<Boolean> changeListener = addProjectChangeListener(observableProject.dataChangePendingProperty(), observableProject);
-            observableProject.dataChangePendingProperty().addListener(changeListener);
             projectsList.add(observableProject);
             workspaceProjectsList.add(observableProject);
             System.out.println("Project updated successfully");
@@ -417,19 +418,6 @@ public class KanbanBoDataService extends AbstractService{
                 observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
                     // TODO implement function to change position of the Column in its list
                 });
-                observableColumn.dataChangePendingProperty().addListener(((observable, oldValue, newValue) -> {
-                    if(newValue) {
-                        try {
-                            updateColumn(observableColumn);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }));
                 // TODO finish this
                 observableProject.getColumns().add(observableColumn);
                 System.out.println("Column was created successfully");
@@ -456,6 +444,7 @@ public class KanbanBoDataService extends AbstractService{
             @Override
             public Object call() throws Exception {
                 ProjectTable parentProject = projectDao.queryForId(columnTableData.getParent_project_uuid());
+
                 parentProject.setLast_changed_timestamp(new Date());
                 columnDao.update(columnTableData);
                 projectDao.update(parentProject);
@@ -802,6 +791,7 @@ public class KanbanBoDataService extends AbstractService{
         // todo
     }
 
+    /*
     private ChangeListener addProjectChangeListener(SimpleBooleanProperty booleanProperty, ObservableProject observableProject) {
         ChangeListener<Boolean> projectChangeListener = new ChangeListener<Boolean>() {
             @Override
@@ -821,7 +811,7 @@ public class KanbanBoDataService extends AbstractService{
             }
         };
         return projectChangeListener;
-    }
+    } */
 
     private ChangeListener addColumnChangeListener(SimpleBooleanProperty booleanProperty, ObservableColumn observableColumn) {
         ChangeListener<Boolean> projectChangeListener = new ChangeListener<Boolean>() {
