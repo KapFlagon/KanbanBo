@@ -94,11 +94,6 @@ public class CardBasicTilePresenter implements Initializable {
     public void setCardViewModel(ObservableCard cardViewModel) {
         this.cardViewModel = cardViewModel;
         lateViewInitialization();
-        cardViewModel.dataChangePendingProperty().addListener((changeable, oldValue, newValue) -> {
-            if(newValue) {
-                lateViewInitialization();
-            }
-        });
     }
 
     public SimpleBooleanProperty forRemovalProperty() {

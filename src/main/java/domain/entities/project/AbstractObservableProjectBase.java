@@ -20,6 +20,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
     protected SimpleStringProperty projectDescription;
     protected SimpleStringProperty creationTimestamp;
     protected SimpleStringProperty lastChangedTimestamp;
+    //protected SimpleStringProperty dueOnDate; // TODO RESUME HERE
     protected ObservableList<ObservableResourceItem> resourceItems;
     protected ObservableList<U> columns;
 
