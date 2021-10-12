@@ -4,16 +4,20 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import persistence.tables.bridges.data.LabelBridgeTable;
 import persistence.tables.card.CardTable;
 import persistence.tables.card.TemplateCardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.column.TemplateColumnTable;
+import persistence.tables.data.ChecklistItemTable;
+import persistence.tables.data.LabelTable;
 import persistence.tables.project.ProjectTable;
 import persistence.tables.project.ProjectStatusTable;
 import persistence.tables.project.TemplateProjectTable;
 import persistence.tables.resourceitems.ResourceItemTable;
 import persistence.tables.resourceitems.ResourceItemTypeTable;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,7 +34,7 @@ public class DatabaseUtils {
     // Static variables
     private static File activeDatabaseFile;
     private static String connectionURLstring;
-    public static final int MAX_TABLES = 10;
+    public static final int MAX_TABLES = 14;
 
     // Constructors
 
@@ -63,20 +67,6 @@ public class DatabaseUtils {
         DatabaseUtils.setConnectionURLstring(builtConnectionString);
     }
 
-    public static void initDatabaseTablesInFile() throws SQLException, IOException {
-        // establish connection
-        JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
-
-        // TODO need to add some sort of progress bar to indicate work is being done here.
-        //createProjectTables(connectionSource);
-        //createColumnTables(connectionSource);
-        //createCardTables(connectionSource);
-        //createSubItemTables(connectionSource);
-        //createIntermediaryTables(connectionSource);
-
-        // Close the connection for the data source.
-        connectionSource.close();
-    }
 
     public static void createProjectTable(JdbcConnectionSource connectionSource) throws SQLException {
         Dao<ProjectTable, UUID> projectModelDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -91,6 +81,9 @@ public class DatabaseUtils {
     public static void createProjectStatusesTable(JdbcConnectionSource connectionSource) throws SQLException, IOException {
         Dao<ProjectStatusTable, Integer> projectStatusesModelDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
         TableUtils.createTable(projectStatusesModelDao);
+    }
+
+    public static void createDefaultProjectStatuses(JdbcConnectionSource connectionSource) throws SQLException, IOException {
         DefaultDataGenerator ddg = new DefaultDataGenerator();
         ddg.generateDefaultProjectStatuses();
     }
@@ -121,13 +114,32 @@ public class DatabaseUtils {
     }
 
     public static void createResourceItemTypeTable(JdbcConnectionSource connectionSource) throws SQLException, IOException {
-        Dao<ResourceItemTypeTable, Integer> linkedItemDao = DaoManager.createDao(connectionSource, ResourceItemTypeTable.class);
-        TableUtils.createTable(linkedItemDao);
+        Dao<ResourceItemTypeTable, Integer> resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTypeTable.class);
+        TableUtils.createTable(resourceItemDao);
+    }
+
+    public static void createDefaultResourceItemTypeData(JdbcConnectionSource connectionSource) throws SQLException, IOException {
         DefaultDataGenerator ddg = new DefaultDataGenerator();
         ddg.generateResourceItemTypeDefaultData();
     }
 
-    public static void createIntermediaryTables(JdbcConnectionSource connectionSource) throws SQLException{
+    public static void createLabelTable(JdbcConnectionSource connectionSource) throws SQLException{
+        Dao<LabelTable, Integer> labelTableDao = DaoManager.createDao(connectionSource, LabelTable.class);
+        TableUtils.createTable(labelTableDao);
+    }
 
+    public static void createDefaultLabelData(JdbcConnectionSource connectionSource) throws SQLException, IOException {
+        DefaultDataGenerator ddg = new DefaultDataGenerator();
+        ddg.generateLabelDefaultData();
+    }
+
+    public static void createLabelBridgeTable(JdbcConnectionSource connectionSource) throws SQLException {
+        Dao<LabelBridgeTable, UUID> labelBridgeTableDao = DaoManager.createDao(connectionSource, LabelBridgeTable.class);
+        TableUtils.createTable(labelBridgeTableDao);
+    }
+
+    public static void createChecklistItemTable(JdbcConnectionSource connectionSource) throws SQLException {
+        Dao<ChecklistItemTable, UUID> checklistItemTableDao = DaoManager.createDao(connectionSource, ChecklistItemTable.class);
+        TableUtils.createTable(checklistItemTableDao);
     }
 }

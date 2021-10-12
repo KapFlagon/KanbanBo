@@ -3,11 +3,14 @@ package utils.database;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import persistence.tables.data.LabelTable;
 import persistence.tables.project.ProjectStatusTable;
 import persistence.tables.resourceitems.ResourceItemTypeTable;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class DefaultDataGenerator {
@@ -98,6 +101,40 @@ public class DefaultDataGenerator {
             resourceItemTypeTable.setResource_item_type_text_key(resourceItemDescriptionResourceBundleKeys[iterator]);
             statusModelDao.createOrUpdate(resourceItemTypeTable);
         }
+        connectionSource.close();
+    }
+
+    public void generateLabelDefaultData() throws SQLException, IOException {
+        JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
+        Dao<LabelTable, Integer> labelTableDao = DaoManager.createDao(connectionSource, LabelTable.class);
+        LabelTable labelTable = new LabelTable();
+        labelTable.setLabel_title("Planning");
+        labelTable.setLabel_description("Planning and preparation");
+        labelTableDao.create(labelTable);
+        labelTable = new LabelTable();
+        labelTable.setLabel_title("Design");
+        labelTable.setLabel_description("Design and interface");
+        labelTableDao.create(labelTable);
+        labelTable = new LabelTable();
+        labelTable.setLabel_title("Implementation");
+        labelTable.setLabel_description("Implementation and execution");
+        labelTableDao.create(labelTable);
+        labelTable = new LabelTable();
+        labelTable.setLabel_title("Requires discussion");
+        labelTable.setLabel_description("Requires further discussion before proceeding");
+        labelTableDao.create(labelTable);
+        labelTable = new LabelTable();
+        labelTable.setLabel_title("Bug");
+        labelTable.setLabel_description("Bug or programming error that requires attention");
+        labelTableDao.create(labelTable);
+        labelTable = new LabelTable();
+        labelTable.setLabel_title("No go");
+        labelTable.setLabel_description("Won't be addressed further");
+        labelTableDao.create(labelTable);
+        labelTable = new LabelTable();
+        labelTable.setLabel_title("Enhancement");
+        labelTable.setLabel_description("Enhancement or additional feature");
+        labelTableDao.create(labelTable);
         connectionSource.close();
     }
 

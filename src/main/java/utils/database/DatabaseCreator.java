@@ -19,10 +19,9 @@ public class DatabaseCreator {
             protected Void call() throws Exception {
                 JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
                 int iterations;
-                int max = DatabaseUtils.MAX_TABLES;
                 System.out.println("Inside the task");
                 // TODO https://stackoverflow.com/questions/26203660/how-to-create-list-filled-with-methods-in-java-and-iterate-over-it-using-method
-                for (iterations = 0; iterations < max; iterations++) {
+                for (iterations = 0; iterations < DatabaseUtils.MAX_TABLES; iterations++) {
                     System.out.println("Inside the table creator loop");
                     switch (iterations) {
                         case 0:
@@ -62,11 +61,31 @@ public class DatabaseCreator {
                             this.updateMessage("'Resource Item Type' table generated");
                             break;
                         case 9:
-                            DatabaseUtils.createIntermediaryTables(connectionSource);
-                            this.updateMessage("'Intermediary' table generated");
+                            DatabaseUtils.createLabelTable(connectionSource);
+                            this.updateMessage("'Label' table generated");
+                            break;
+                        case 10:
+                            DatabaseUtils.createLabelBridgeTable(connectionSource);
+                            this.updateMessage("'Label Bridge' table generated");
+                            break;
+                        case 11:
+                            DatabaseUtils.createChecklistItemTable(connectionSource);
+                            this.updateMessage("'Checklist Item' table generated");
+                            break;
+                        case 12:
+                            DatabaseUtils.createDefaultProjectStatuses(connectionSource);
+                            this.updateMessage("Default project statuses generated");
+                            break;
+                        case 13:
+                            DatabaseUtils.createDefaultResourceItemTypeData(connectionSource);
+                            this.updateMessage("Default resource item types generated");
+                            break;
+                        case 14:
+                            DatabaseUtils.createDefaultLabelData(connectionSource);
+                            this.updateMessage("Default labels generated");
                             break;
                     }
-                    updateProgress(iterations, max);
+                    updateProgress(iterations, DatabaseUtils.MAX_TABLES);
                 }
                 connectionSource.close();
                 this.succeeded();
