@@ -281,8 +281,8 @@ public class ProjectService extends AbstractService{
         projectTable.setProject_title(newProjectData.getTitle());
         projectTable.setProject_description(newProjectData.getDescription());
         projectTable.setProject_status_id(1);
-        projectTable.setCreation_timestamp(new Date());
-        projectTable.setLast_changed_timestamp(new Date());
+        projectTable.setCreation_timestamp(getOffsetNowTime());
+        projectTable.setLast_changed_timestamp(getOffsetNowTime());
         ProjectStatusTable statusKey;
 
         setupDbConnection();
@@ -315,7 +315,7 @@ public class ProjectService extends AbstractService{
         projectTableData.setProject_title(newProjectData.getTitle());
         projectTableData.setProject_description(newProjectData.getDescription());
         projectTableData.setProject_status_id(projectDomainObject.statusIDProperty().getValue());
-        projectTableData.setLast_changed_timestamp(new Date());
+        projectTableData.setLast_changed_timestamp(getOffsetNowTime());
         int result = projectDao.update(projectTableData);
 
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);

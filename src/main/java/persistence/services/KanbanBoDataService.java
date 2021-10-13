@@ -24,8 +24,6 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -270,11 +268,9 @@ public class KanbanBoDataService extends AbstractService{
         projectTable.setProject_title(title);
         projectTable.setProject_description(description);
         projectTable.setProject_status_id(1);
-        // TODO RE-EXAMINE THIS FURTHER
-        // https://stackoverflow.com/questions/37390080/convert-local-time-to-utc-and-vice-versa
-        OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneOffset.UTC);
-        projectTable.setCreation_timestamp(offsetDateTime.toString());
-        projectTable.setLast_changed_timestamp(offsetDateTime.toString());
+
+        projectTable.setCreation_timestamp(getOffsetNowTime());
+        projectTable.setLast_changed_timestamp(getOffsetNowTime());
         ProjectStatusTable statusKey;
         setupDbConnection();
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -303,7 +299,7 @@ public class KanbanBoDataService extends AbstractService{
         projectTableData.setProject_title(projectDomainObject.projectTitleProperty().getValue());
         projectTableData.setProject_description(projectDomainObject.projectDescriptionProperty().getValue());
         projectTableData.setProject_status_id(projectDomainObject.statusIDProperty().getValue());
-        projectTableData.setLast_changed_timestamp(new Date());
+        projectTableData.setLast_changed_timestamp(getOffsetNowTime());
         int result = projectDao.update(projectTableData);
         teardownDbConnection();
         if(result > 0) {
@@ -445,7 +441,7 @@ public class KanbanBoDataService extends AbstractService{
             public Object call() throws Exception {
                 ProjectTable parentProject = projectDao.queryForId(columnTableData.getParent_project_uuid());
 
-                parentProject.setLast_changed_timestamp(new Date());
+                parentProject.setLast_changed_timestamp(getOffsetNowTime());
                 columnDao.update(columnTableData);
                 projectDao.update(parentProject);
                 System.out.println("Column and project updated successfully");
@@ -466,7 +462,7 @@ public class KanbanBoDataService extends AbstractService{
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
 
         ProjectTable project = projectDao.queryForId(column.getParentProjectUUID());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
 
         cardTableQueryBuilder = cardDao.queryBuilder();
         cardTableDeleteBuilder = cardDao.deleteBuilder();
@@ -535,7 +531,7 @@ public class KanbanBoDataService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(parentColumnUUID);
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -576,7 +572,7 @@ public class KanbanBoDataService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(cardTable.getParent_column_uuid());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -597,7 +593,7 @@ public class KanbanBoDataService extends AbstractService{
         resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
         ColumnTable column = columnDao.queryForId(card.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
 
         List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
 
@@ -640,7 +636,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(new Date());
+        projectTable.setLast_changed_timestamp(getOffsetNowTime());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
@@ -661,7 +657,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(new Date());
+        projectTable.setLast_changed_timestamp(getOffsetNowTime());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
@@ -681,7 +677,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(new Date());
+        projectTable.setLast_changed_timestamp(getOffsetNowTime());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override

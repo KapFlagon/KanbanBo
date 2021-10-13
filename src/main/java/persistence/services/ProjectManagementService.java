@@ -53,17 +53,6 @@ public class ProjectManagementService extends AbstractService{
                 }
             }
             ObservableProject projectDomainObject = new ObservableProject(projectEntry, localisedStatusText);
-            projectDomainObject.dataChangePendingProperty().addListener(change -> {
-                try {
-                    updateProject(projectDomainObject);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            });
             projectDomainObjectsList.add(projectDomainObject);
         }
         /*projectDomainObjectsList.addListener(new ListChangeListener<ObservableProject>() {
@@ -128,14 +117,15 @@ public class ProjectManagementService extends AbstractService{
         return tempDate;
     }
 
+
     private ProjectTable prepareProjectForCommit(ObservableProject projectDomainObject) throws ParseException {
         ProjectTable projectTableData = new ProjectTable();
         projectTableData.setProject_uuid(projectDomainObject.getProjectUUID());
-        projectTableData.setCreation_timestamp(stringToDate(projectDomainObject.creationTimestampProperty().getValue()));
+        //projectTableData.setCreation_timestamp(stringToDate(projectDomainObject.creationTimestampProperty().getValue()));
         projectTableData.setProject_title(projectDomainObject.projectTitleProperty().getValue());
         projectTableData.setProject_description(projectDomainObject.projectDescriptionProperty().getValue());
         projectTableData.setProject_status_id(projectDomainObject.statusIDProperty().getValue());
-        projectTableData.setLast_changed_timestamp(new Date());
+        projectTableData.setLast_changed_timestamp(getOffsetNowTime());
         return projectTableData;
     }
 

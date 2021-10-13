@@ -7,6 +7,8 @@ import utils.database.DatabaseUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 public abstract class AbstractService {
 
@@ -40,6 +42,14 @@ public abstract class AbstractService {
 
     protected void setupTransactionManager(ConnectionSource connectionSource) {
 
+    }
+
+    protected String getOffsetNowTime() {
+        return OffsetDateTime.now().toString();
+    }
+
+    protected String formatUTCforLocale() {
+        return null;
     }
 
 }

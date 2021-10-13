@@ -10,7 +10,6 @@ import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
@@ -102,19 +101,6 @@ public class ColumnService extends AbstractService{
                 observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
                     // TODO implement function to change position of the Column in its list
                 });
-                observableColumn.dataChangePendingProperty().addListener(((observable, oldValue, newValue) -> {
-                    if(newValue) {
-                        try {
-                            updateColumn(observableColumn);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }));
                 // TODO finish this
                 observableProject.getColumns().add(observableColumn);
                 System.out.println("Column was created successfully");
@@ -141,7 +127,7 @@ public class ColumnService extends AbstractService{
             @Override
             public Object call() throws Exception {
                 ProjectTable parentProject = projectDao.queryForId(columnTableData.getParent_project_uuid());
-                parentProject.setLast_changed_timestamp(new Date());
+                parentProject.setLast_changed_timestamp(getOffsetNowTime());
                 columnDao.update(columnTableData);
                 projectDao.update(parentProject);
                 System.out.println("Column and project updated successfully");
@@ -162,7 +148,7 @@ public class ColumnService extends AbstractService{
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
 
         ProjectTable project = projectDao.queryForId(column.getParentProjectUUID());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
 
         cardTableQueryBuilder = cardDao.queryBuilder();
         cardTableDeleteBuilder = cardDao.deleteBuilder();

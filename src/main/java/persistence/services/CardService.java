@@ -88,7 +88,7 @@ public class CardService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(parentColumnUUID);
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -156,7 +156,7 @@ public class CardService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(cardTable.getParent_column_uuid());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -188,7 +188,7 @@ public class CardService extends AbstractService{
         resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
         ColumnTable column = columnDao.queryForId(card.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(new Date());
+        project.setLast_changed_timestamp(getOffsetNowTime());
 
         List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
 
