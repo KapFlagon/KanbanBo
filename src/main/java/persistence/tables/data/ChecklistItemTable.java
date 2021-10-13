@@ -13,9 +13,9 @@ public class ChecklistItemTable implements TableObject<UUID> {
 
     // Variables
     @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
-    private UUID parent_card_uuid;
-    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
     private UUID checklist_item_uuid;
+    @DatabaseField(canBeNull = false, dataType = DataType.UUID, useGetSet = true)
+    private UUID parent_card_uuid;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.BOOLEAN)
     private boolean checklist_item_finished;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)

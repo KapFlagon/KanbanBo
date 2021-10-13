@@ -11,6 +11,8 @@ public class LabelBridgeTable {
 
 
     // Variables
+    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
+    private UUID bridge_uuid;
     @DatabaseField(canBeNull = false, dataType = DataType.UUID, useGetSet = true)
     private UUID parent_uuid;
     @DatabaseField(canBeNull = false, dataType = DataType.UUID, useGetSet = true)
@@ -23,6 +25,13 @@ public class LabelBridgeTable {
 
 
     // Getters and Setters
+    public UUID getBridge_uuid() {
+        return bridge_uuid;
+    }
+    public void setBridge_uuid(UUID bridge_uuid) {
+        this.bridge_uuid = bridge_uuid;
+    }
+
     public UUID getParent_uuid() {
         return parent_uuid;
     }
