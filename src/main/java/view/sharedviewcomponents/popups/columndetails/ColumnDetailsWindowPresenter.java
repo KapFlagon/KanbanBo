@@ -1,5 +1,6 @@
 package view.sharedviewcomponents.popups.columndetails;
 
+import persistence.dto.column.ColumnDTO;
 import domain.entities.column.ObservableColumn;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -66,7 +67,11 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     @FXML private void saveDetailsChange() throws IOException, SQLException {
         if(validTitle) {
             if(columnViewModel == null) {
-                kanbanBoDataService.createColumn(parentProjectUUID, titleTextField.getText(), finalColumnCheckBox.isSelected());
+                ColumnDTO columnDTO = new ColumnDTO();
+                columnDTO.setParentProjectUUID(parentProjectUUID);
+                columnDTO.setTitle(titleTextField.getText());
+                columnDTO.setFinalColumn(finalColumnCheckBox.isSelected());
+                kanbanBoDataService.createColumn(columnDTO);
                 //columnViewModel = new ObservableColumn();
             } else {
                 columnViewModel.columnTitleProperty().set(titleTextField.getText());

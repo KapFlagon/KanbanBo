@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
 
 import java.io.File;
 import java.net.URL;
@@ -54,7 +55,9 @@ public class RecentFileEntryPresenter implements Initializable {
             deleteFileMenuItem.setDisable(true);
         }
         this.pathLabel.setText(itemPath.toString());
+        this.pathLabel.setTooltip((new Tooltip(itemPath.toString())));
         this.titleLabel.setText(getFileNameWithoutExtension());
+        this.titleLabel.setTooltip(new Tooltip(getFileNameWithoutExtension()));
     }
 
     public boolean isBeingDeleted() {

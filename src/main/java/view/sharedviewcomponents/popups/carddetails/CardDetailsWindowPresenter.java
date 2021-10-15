@@ -1,5 +1,6 @@
 package view.sharedviewcomponents.popups.carddetails;
 
+import persistence.dto.card.CardDTO;
 import domain.entities.card.ObservableCard;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,8 +9,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import persistence.services.KanbanBoDataService;
-import persistence.tables.card.CardTable;
-import persistence.tables.column.ColumnTable;
 import utils.StageUtils;
 
 import javax.inject.Inject;
@@ -70,7 +69,11 @@ public class CardDetailsWindowPresenter implements Initializable {
     @FXML private void saveDetailsChange() throws IOException, SQLException {
         if(validTitle) {
             if(cardViewModel == null) {
-                kanbanBoDataService.createCard(parentColumnUUID, titleTextField.getText(), descriptionText.getText());
+                CardDTO cardDTO = new CardDTO();
+                cardDTO.setParentColumnUUID(parentColumnUUID);
+                cardDTO.setTitle(titleTextField.getText());
+                cardDTO.setDescription(descriptionText.getText());
+                kanbanBoDataService.createCard(cardDTO);
             } else {
                 cardViewModel.setCardTitle(titleTextField.getText());
                 cardViewModel.setCardDescription(descriptionText.getText());

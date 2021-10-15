@@ -1,5 +1,6 @@
 package view.sharedviewcomponents.popups.projectdetails;
 
+import persistence.dto.project.ProjectDTO;
 import domain.entities.project.ObservableProject;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -117,11 +118,15 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     public void saveProjectDetailsChange() throws SQLException, IOException, ParseException {
         if(validTitle) {
             if(projectViewModel == null) {
-                kanbanBoDataService.createProject(projectTitleTextField.getText(), projectDescriptionTextArea.getText());
+                ProjectDTO newProjectData = new ProjectDTO();
+                newProjectData.setTitle(projectTitleTextField.getText());
+                newProjectData.setDescription(projectDescriptionTextArea.getText());
+                kanbanBoDataService.createProject(newProjectData);
             } else {
-                projectViewModel.projectTitleProperty().set(getProjectTitleTextField().getText());
-                projectViewModel.projectDescriptionProperty().set(getProjectDescriptionTextArea().getText());
-                kanbanBoDataService.updateProject(projectViewModel);
+                ProjectDTO projectDTO = new ProjectDTO();
+                projectDTO.setTitle(getProjectTitleTextField().getText());
+                projectDTO.setDescription(getProjectDescriptionTextArea().getText());
+                kanbanBoDataService.updateProject(projectDTO, projectViewModel);
             }
             StageUtils.hideSubStage();
         } else {

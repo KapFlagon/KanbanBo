@@ -1,5 +1,6 @@
 package view.screens.startscreen;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,7 +10,11 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import userpreferences.UserPreferences;
 import utils.database.DatabaseUtils;
 import utils.FileChooserUtils;
@@ -18,6 +23,7 @@ import utils.StageUtils;
 import view.screens.mainscreen.MainScreenView;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListView;
+import view.sharedviewcomponents.ScrimRectangle;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressView;
 
@@ -34,6 +40,8 @@ public class StartScreenPresenter implements Initializable {
 
     // FXML injected variables
     // TODO Add option to delete a db from the recent items list also. (make sure to give confirmation prompt).
+    @FXML
+    private StackPane baseStackPane;
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -56,6 +64,7 @@ public class StartScreenPresenter implements Initializable {
     private MenuItem sourceCodeRepoMenuItem;
 
     // Other variables
+    private ScrimRectangle scrimRectangle;
 
 
 
@@ -132,6 +141,7 @@ public class StartScreenPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //StageUtils.getMainStage().setTitle("KanbanBo - Database file selection");
+        initButtonImages();
         System.out.println("Start screen loaded");
         autoLoadCheckBox.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
         autoLoadCheckMenuItem.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
@@ -176,12 +186,23 @@ public class StartScreenPresenter implements Initializable {
         rflp.setRecentFilePathList(UserPreferences.getSingletonInstance().getRecentFilePaths());
         borderPane.setCenter(rflv.getView());
         BorderPane.setMargin(rflv.getView(), new Insets(5,5,5,5));
+        scrimRectangle = new ScrimRectangle(baseStackPane);
+        baseStackPane.getChildren().add(scrimRectangle);
+    }
+
+    private void initButtonImages() {
+        ImageView newDbImageView = new ImageView(getClass().getResource("/icons/add/materialicons/black/res/drawable-mdpi/baseline_add_black_18.png").toExternalForm());
+        ImageView searchDbImageView = new ImageView(getClass().getResource("/icons/search/materialicons/black/res/drawable-mdpi/baseline_search_black_18.png").toExternalForm());
+        newDbButton.setGraphic(newDbImageView);
+        browseForDbButton.setGraphic(searchDbImageView);
     }
 
 
     // Other methods
     public void createDbFile() throws IOException, SQLException, BackingStoreException {
         System.out.println("creating");
+
+        scrimRectangle.showScrim();
         File newFile = FileChooserUtils.createFilePopup();
         if(newFile != null) {
             FileCreationUtils.createEmptyDatabaseFile(newFile);
@@ -198,6 +219,7 @@ public class StartScreenPresenter implements Initializable {
             // Accounting for scenario where user cancels file creation.
             System.out.println("File creation cancelled");
         }
+        scrimRectangle.hideScrim();
         // TODO Insert some kind of logging here.
     }
 
@@ -210,6 +232,7 @@ public class StartScreenPresenter implements Initializable {
 
     public void browseForDbFile() throws BackingStoreException {
         System.out.println("browsing for database file");
+        scrimRectangle.showScrim();
         File selectedFile = FileChooserUtils.openFilePopup();
         if (selectedFile != null) {
             // Accounting for scenario where user cancels opening file.
@@ -220,6 +243,7 @@ public class StartScreenPresenter implements Initializable {
         } else {
             System.out.println("File opening cancelled");
         }
+        scrimRectangle.hideScrim();
         // TODO Insert some kind of logging for selected file here.
     }
 
