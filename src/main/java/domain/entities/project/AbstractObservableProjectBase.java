@@ -1,17 +1,19 @@
 package domain.entities.project;
 
+import persistence.dto.project.AbstractProjectDTO;
 import domain.entities.column.AbstractObservableColumnBase;
 import domain.entities.resourceitem.ObservableResourceItem;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import persistence.tables.project.AbstractProjectBaseTable;
 import domain.entities.AbstractObservableEntity;
 
+import java.util.List;
 import java.util.UUID;
 
-public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U extends AbstractObservableColumnBase> extends AbstractObservableEntity<T> {
+public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U extends AbstractObservableColumnBase> extends AbstractObservableEntity<T> {
 
 
     // Variables
@@ -20,31 +22,23 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
     protected SimpleStringProperty projectDescription;
     protected SimpleStringProperty creationTimestamp;
     protected SimpleStringProperty lastChangedTimestamp;
-    //protected SimpleStringProperty dueOnDate; // TODO RESUME HERE
     protected ObservableList<ObservableResourceItem> resourceItems;
     protected ObservableList<U> columns;
+    protected SimpleBooleanProperty hasFinalColumn;
 
 
     // Constructors
-    public AbstractObservableProjectBase(String title, String description) {
+    public AbstractObservableProjectBase(T projectObjectDTO) {
         super();
-        projectUUID = UUID.randomUUID();
-        initAllProperties(title, description);
+        projectUUID = projectObjectDTO.getUuid();
+        initAllProperties(projectObjectDTO);
         initAllObservableLists();
     }
 
-
-    public AbstractObservableProjectBase(T projectDomainObject) {
+    public AbstractObservableProjectBase(T projectObjectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
         super();
-        projectUUID = projectDomainObject.getProject_uuid();
-        initAllProperties(projectDomainObject);
-        initAllObservableLists();
-    }
-
-    public AbstractObservableProjectBase(T projectDomainObject, ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
-        super();
-        projectUUID = projectDomainObject.getProject_uuid();
-        initAllProperties(projectDomainObject);
+        projectUUID = projectObjectDTO.getUuid();
+        initAllProperties(projectObjectDTO);
         initAllObservableLists(resourceItems, columnsList);
     }
 
@@ -91,18 +85,12 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
         this.lastChangedTimestamp = new SimpleStringProperty();
     }
 
-    protected void initAllProperties(String title, String description) {
-        this.projectTitle = new SimpleStringProperty(title);
-        this.projectDescription = new SimpleStringProperty(description);
-        this.creationTimestamp = new SimpleStringProperty();
-        this.lastChangedTimestamp = new SimpleStringProperty();
-    }
-
-    protected void initAllProperties(T projectDomainObject) {
-        this.projectTitle = new SimpleStringProperty(projectDomainObject.getProject_title());
-        this.projectDescription = new SimpleStringProperty(projectDomainObject.getProject_description());
-        this.creationTimestamp = new SimpleStringProperty(projectDomainObject.getCreation_timestamp().toString());
-        this.lastChangedTimestamp = new SimpleStringProperty(projectDomainObject.getLast_changed_timestamp().toString());
+    protected void initAllProperties(T projectObjectDTO) {
+        this.projectTitle = new SimpleStringProperty(projectObjectDTO.getTitle());
+        this.projectDescription = new SimpleStringProperty(projectObjectDTO.getDescription());
+        this.creationTimestamp = new SimpleStringProperty(projectObjectDTO.getCreatedOnDate().toString());
+        this.lastChangedTimestamp = new SimpleStringProperty(projectObjectDTO.getLastChangedOnDate().toString());
+        this.hasFinalColumn = new SimpleBooleanProperty(false);
     }
 
     protected void initAllObservableLists() {
@@ -113,10 +101,24 @@ public class AbstractObservableProjectBase<T extends AbstractProjectBaseTable, U
     protected void initAllObservableLists(ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
         this.resourceItems = resourceItems;
         this.columns = columnsList;
+        updateHasFinalColumn(columns);
+        this.columns.addListener((ListChangeListener<U>) c -> {
+            while(c.next()) {
+                updateHasFinalColumn(columns);
+            }
+        });
     }
 
 
     // Other methods
+    private void updateHasFinalColumn(List<U> columnsList) {
+        this.hasFinalColumn.set(false);
+        for(AbstractObservableColumnBase abstractObservableColumnBase : columnsList) {
+            if (abstractObservableColumnBase.isFinalColumn()) {
+                this.hasFinalColumn.set(true);
+            }
+        }
+    }
 
 
 

@@ -1,16 +1,15 @@
 package domain.entities.card;
 
+import persistence.dto.card.AbstractCardDTO;
 import domain.entities.AbstractObservableEntity;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import persistence.tables.card.AbstractCardBaseTable;
 
 import java.util.UUID;
 
-public abstract class AbstractObservableCardBase<T extends AbstractCardBaseTable> extends AbstractObservableEntity<T> {
+public abstract class AbstractObservableCardBase<T extends AbstractCardDTO> extends AbstractObservableEntity<T> {
 
 
     // Variables
@@ -21,19 +20,20 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardBaseTable
     protected ObservableList<ObservableResourceItem> resourceItems;
 
     // Constructors
-    public AbstractObservableCardBase(T domainObject) {
+    public AbstractObservableCardBase(T cardDTO) {
         super();
-        this.parentColumnUUID = domainObject.getParent_column_uuid();
-        this.cardUUID = domainObject.getCard_uuid();
-        initAllProperties(domainObject);
+        this.parentColumnUUID = cardDTO.getParentColumnUUID();
+        this.cardUUID = cardDTO.getUuid();
+        this.resourceItems = FXCollections.observableArrayList();
+        initAllProperties(cardDTO);
     }
 
-    public AbstractObservableCardBase(T domainObject, ObservableList<ObservableResourceItem> resourceItems) {
+    public AbstractObservableCardBase(T cardDTO, ObservableList<ObservableResourceItem> resourceItems) {
         super();
-        this.parentColumnUUID = domainObject.getParent_column_uuid();
-        this.cardUUID = domainObject.getCard_uuid();
+        this.parentColumnUUID = cardDTO.getParentColumnUUID();
+        this.cardUUID = cardDTO.getUuid();
         this.resourceItems = resourceItems;
-        initAllProperties(domainObject);
+        initAllProperties(cardDTO);
     }
 
 
@@ -80,19 +80,11 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardBaseTable
 
 
     // Other methods
-
-    protected void initAllProperties(T domainObject) {
-        this.cardTitle = new SimpleStringProperty(domainObject.getCard_title());
-        this.cardDescription = new SimpleStringProperty(domainObject.getCard_description_text());
+    protected void initAllProperties(T cardDTO) {
+        this.cardTitle = new SimpleStringProperty(cardDTO.getTitle());
+        this.cardDescription = new SimpleStringProperty(cardDTO.getDescription());
     }
 
-    protected void initObservableList() {
-        this.resourceItems = FXCollections.observableArrayList();
-    }
-
-    protected void initObservableList(ObservableList<ObservableResourceItem> resourceItemsList) {
-        this.resourceItems = resourceItemsList;
-    }
 
 
 

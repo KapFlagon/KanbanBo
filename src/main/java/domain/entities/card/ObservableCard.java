@@ -1,29 +1,29 @@
 package domain.entities.card;
 
+import persistence.dto.card.CardDTO;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import persistence.tables.card.CardTable;
 
-import java.util.UUID;
-
-public class ObservableCard extends AbstractObservableCardBase<CardTable> {
+public class ObservableCard extends AbstractObservableCardBase<CardDTO> {
 
 
     // Variables
     private SimpleIntegerProperty position;
-
+    private SimpleStringProperty dueOnDate;
 
 
 
     // Constructors
-    public ObservableCard(CardTable domainObject) {
-        super(domainObject);
-        this.position = new SimpleIntegerProperty(domainObject.getCard_position());
+    public ObservableCard(CardDTO cardDTO) {
+        super(cardDTO);
+        this.position = new SimpleIntegerProperty(cardDTO.getPosition());
     }
-    public ObservableCard(CardTable domainObject, ObservableList<ObservableResourceItem> resourceItems) {
-        super(domainObject, resourceItems);
-        this.position = new SimpleIntegerProperty(domainObject.getCard_position());
+    public ObservableCard(CardDTO cardDTO, ObservableList<ObservableResourceItem> resourceItems) {
+        super(cardDTO, resourceItems);
+        this.position = new SimpleIntegerProperty(cardDTO.getPosition());
+        this.dueOnDate = new SimpleStringProperty(cardDTO.getDueOnDate().toString());
     }
 
     // Getters and Setters

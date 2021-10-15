@@ -1,54 +1,30 @@
 package domain.entities.column;
 
+import persistence.dto.column.AbstractColumnDTO;
 import domain.entities.card.AbstractObservableCardBase;
-import domain.entities.resourceitem.ObservableResourceItem;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import persistence.tables.column.AbstractColumnBaseTable;
 import domain.entities.AbstractObservableEntity;
 
 import java.util.UUID;
 
-public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseTable, U extends AbstractObservableCardBase> extends AbstractObservableEntity<T> {
+public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, U extends AbstractObservableCardBase> extends AbstractObservableEntity<T> {
 
 
     // Variables
     protected UUID parentProjectUUID;
     protected UUID columnUUID;
     protected SimpleStringProperty columnTitle;
+    private SimpleBooleanProperty finalColumn;
     protected ObservableList<U> cards;
 
     // Constructors
-
-    public AbstractObservableColumnBase() {
+    public AbstractObservableColumnBase(T columnDTO, ObservableList<U> cardsList) {
         super();
-        this.columnUUID = UUID.randomUUID();
-        initAllProperties();
-        initObservableList();
-    }
-
-    public AbstractObservableColumnBase(T domainObject, ObservableList<U> cardsList) {
-        super();
-        this.parentProjectUUID = domainObject.getParent_project_uuid();
-        this.columnUUID = domainObject.getColumn_uuid();
-        initAllProperties();
-        initObservableList(cardsList);
-    }
-
-    public AbstractObservableColumnBase(UUID parentProjectUUID) {
-        super();
-        this.parentProjectUUID = parentProjectUUID;
-        columnUUID = UUID.randomUUID();
-        initAllProperties();
-        initObservableList();
-    }
-
-    public AbstractObservableColumnBase(UUID parentProjectUUID, T domainObject, ObservableList<U> cardsList) {
-        super();
-        this.parentProjectUUID = parentProjectUUID;
-        this.columnUUID = domainObject.getColumn_uuid();
+        this.parentProjectUUID = columnDTO.getParentProjectUUID();
+        this.columnUUID = columnDTO.getUuid();
         initAllProperties();
         initObservableList(cardsList);
     }
@@ -59,12 +35,24 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseT
         return parentProjectUUID;
     }
 
+    public void setParentProjectUUID(UUID parentProjectUUID) {
+        this.parentProjectUUID = parentProjectUUID;
+    }
+
     public UUID getColumnUUID() {
         return columnUUID;
     }
 
     public SimpleStringProperty columnTitleProperty() {
         return columnTitle;
+    }
+
+    public boolean isFinalColumn() {
+        return finalColumn.get();
+    }
+
+    public SimpleBooleanProperty finalColumnProperty() {
+        return finalColumn;
     }
 
     public ObservableList<U> getCards() {
@@ -81,7 +69,7 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnBaseT
     }
 
     protected void initAllProperties(T domainObject) {
-        this.columnTitle = new SimpleStringProperty(domainObject.getColumn_title());
+        this.columnTitle = new SimpleStringProperty(domainObject.getTitle());
     }
 
     protected void initObservableList() {

@@ -1,43 +1,37 @@
 package domain.entities.project;
 
+import persistence.dto.project.ProjectDTO;
 import domain.entities.column.ObservableColumn;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import persistence.tables.project.ProjectTable;
 
-public class ObservableProject extends AbstractObservableProjectBase<ProjectTable, ObservableColumn>{
+import java.util.List;
+
+public class ObservableProject extends AbstractObservableProjectBase<ProjectDTO, ObservableColumn>{
 
 
     // Variables
     protected SimpleIntegerProperty statusID;
     protected SimpleStringProperty statusText;
-    protected SimpleBooleanProperty hasFinalColumn;
+    protected SimpleStringProperty dueOnDate;
 
 
     // Constructors
-    public ObservableProject(String title, String description) {
-        super(title, description);
-        initEditingProperty();
-        initHasFinalColumnProperty();
-    }
-
-
-    public ObservableProject(ProjectTable projectDomainObject, String projectStatusText) {
-        super(projectDomainObject);
-        initStatusTextProperty(projectStatusText);
-        initEditingProperty();
-        initHasFinalColumnProperty();
-    }
-
-    public ObservableProject(ProjectTable projectDomainObject, String projectStatusText, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns) {
-        super(projectDomainObject, resourceItems, columns);
-        initStatusTextProperty(projectStatusText);
-        initEditingProperty();
+    public ObservableProject(ProjectDTO projectDTO, String projectStatusText) {
+        super(projectDTO);
+        statusText = new SimpleStringProperty(projectStatusText);
         initHasFinalColumnProperty(columns);
+        dueOnDate = new SimpleStringProperty();
+    }
+
+    public ObservableProject(ProjectDTO projectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns, String projectStatusText) {
+        super(projectDTO, resourceItems, columns);
+        statusText = new SimpleStringProperty(projectStatusText);
+        initHasFinalColumnProperty(columns);
+        dueOnDate = new SimpleStringProperty();
     }
 
 
@@ -51,8 +45,6 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
     }
 
 
-
-
     // Initialisation methods
     @Override
     protected void initAllProperties() {
@@ -61,40 +53,33 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectTabl
         statusText = new SimpleStringProperty();
     }
 
-    @Override
-    protected void initAllProperties(ProjectTable projectDomainObject) {
-        super.initAllProperties(projectDomainObject);
-        statusID = new SimpleIntegerProperty(projectDomainObject.getProject_status_id());
-    }
-
-    protected void initAllProperties(ProjectTable projectDomainObject, String projectStatusText){
-        super.initAllProperties(projectDomainObject);
-        statusID = new SimpleIntegerProperty(projectDomainObject.getProject_status_id());
-    }
-
-    protected void initStatusTextProperty(String projectStatusText) {
+    protected void initAllProperties(ProjectDTO projectDTO, String projectStatusText){
+        super.initAllProperties(projectDTO);
+        statusID = new SimpleIntegerProperty(projectDTO.getStatus());
+        statusID.addListener((observable, oldValue, newValue) -> updateEditingProperty());
         statusText = new SimpleStringProperty(projectStatusText);
     }
 
-    protected void initEditingProperty() {
+    protected void initHasFinalColumnProperty(ObservableList<ObservableColumn> columnList) {
+        hasFinalColumn = new SimpleBooleanProperty(false);
+        updateHasFinalColumnProperty(columnList);
+        hasFinalColumn.addListener((changeable, oldValue, newValue) -> updateHasFinalColumnProperty(columnList));
+    }
+
+
+    // Other methods
+    private void updateEditingProperty() {
         if (statusID.get() == 2 || statusID.get() == 4) {
             editingPermittedProperty().set(false);
         }
     }
 
-    protected void initHasFinalColumnProperty() {
-        hasFinalColumn = new SimpleBooleanProperty(false);
-    }
-
-    protected void initHasFinalColumnProperty(ObservableList<ObservableColumn> columnList) {
-        initHasFinalColumnProperty();
+    private void updateHasFinalColumnProperty(List<ObservableColumn> columnList) {
         for(ObservableColumn column : columnList) {
             if (column.isFinalColumn()) {
                 hasFinalColumn.set(true);
             }
         }
     }
-
-    // Other methods
 
 }
