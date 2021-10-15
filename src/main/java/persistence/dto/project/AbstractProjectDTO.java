@@ -1,24 +1,35 @@
-package domain.dto;
+package persistence.dto.project;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
-public class ProjectDTO {
+public abstract class AbstractProjectDTO {
 
 
     // Variables
     private UUID uuid;
     private String title;
     private String description;
-    private int status;
     private LocalDateTime createdOnDate;
     private LocalDateTime lastChangedOnDate;
-    private LocalDate dueOnDate;
-
 
     // Constructors
+    public AbstractProjectDTO() {
+        this.uuid = null;
+        this.title = "";
+        this.description = "";
+        this.createdOnDate = null;
+        this.lastChangedOnDate = null;
+    }
 
+    public AbstractProjectDTO(UUID uuid, String title, String description, LocalDateTime createdOnDate, LocalDateTime lastChangedOnDate) {
+        this.uuid = uuid;
+        this.title = title;
+        this.description = description;
+        this.createdOnDate = createdOnDate;
+        this.lastChangedOnDate = lastChangedOnDate;
+    }
 
     // Getters and Setters
     public UUID getUuid() {
@@ -42,13 +53,6 @@ public class ProjectDTO {
         this.description = description;
     }
 
-    public int getStatus() {
-        return status;
-    }
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public LocalDateTime getCreatedOnDate() {
         return createdOnDate;
     }
@@ -61,13 +65,6 @@ public class ProjectDTO {
     }
     public void setLastChangedOnDate(LocalDateTime lastChangedOnDate) {
         this.lastChangedOnDate = lastChangedOnDate;
-    }
-
-    public LocalDate getDueOnDate() {
-        return dueOnDate;
-    }
-    public void setDueOnDate(LocalDate dueOnDate) {
-        this.dueOnDate = dueOnDate;
     }
 
 

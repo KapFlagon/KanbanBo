@@ -1,9 +1,9 @@
-package domain.dto;
+package persistence.dto.card;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
-public class CardDTO {
+public abstract class AbstractCardDTO {
 
 
     // Variables
@@ -11,18 +11,21 @@ public class CardDTO {
     private UUID parentColumnUUID;
     private String title;
     private String description;
-    private int position;
-    private List<ResourceItemDTO> resourcesList;
 
 
     // Constructors
-    public CardDTO(UUID uuid, UUID parentColumnUUID, String title, String description, int position, List<ResourceItemDTO> resourcesList) {
+    public AbstractCardDTO() {
+        this.uuid = null;
+        this.parentColumnUUID = null;
+        this.title = "";
+        this.description = "";
+    }
+
+    public AbstractCardDTO(UUID uuid, UUID parentColumnUUID, String title, String description) {
         this.uuid = uuid;
         this.parentColumnUUID = parentColumnUUID;
         this.title = title;
         this.description = description;
-        this.position = position;
-        this.resourcesList = resourcesList;
     }
 
 
@@ -53,20 +56,6 @@ public class CardDTO {
     }
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public List<ResourceItemDTO> getResourcesList() {
-        return resourcesList;
-    }
-    public void setResourcesList(List<ResourceItemDTO> resourcesList) {
-        this.resourcesList = resourcesList;
     }
 
 

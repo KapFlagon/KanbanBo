@@ -1,4 +1,4 @@
-package domain.dto;
+package persistence.dto;
 
 import java.util.UUID;
 
