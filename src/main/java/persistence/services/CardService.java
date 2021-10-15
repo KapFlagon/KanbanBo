@@ -6,8 +6,8 @@ import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.QueryBuilder;
-import domain.dto.CardDTO;
-import domain.dto.ResourceItemDTO;
+import persistence.dto.card.CardDTO;
+import persistence.dto.ResourceItemDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
@@ -32,7 +32,6 @@ public class CardService extends AbstractService{
     // Variables
     private final Locale locale;
     private final ResourceBundle resourceBundle;
-    private ObservableList<ObservableProject> projectsList;
     private ObservableList<ObservableProject> workspaceProjectsList;
 
     private Dao<ProjectTable, UUID> projectDao;
@@ -54,10 +53,9 @@ public class CardService extends AbstractService{
 
 
     // Constructors
-    public CardService (Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> projectsList, ObservableList<ObservableProject> workspaceProjectsList) {
+    public CardService (Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> workspaceProjectsList) {
         this.locale = locale;
         this.resourceBundle = resourceBundle;
-        this.projectsList = projectsList;
         this.workspaceProjectsList = workspaceProjectsList;
     }
 
@@ -68,11 +66,11 @@ public class CardService extends AbstractService{
 
 
     // Other methods
-    public void createCard(UUID parentColumnUUID, String title, String description) throws SQLException, IOException {
+    public void createCard(CardDTO cardDTO) throws SQLException, IOException {
         CardTable card = new CardTable();
-        card.setParent_column_uuid(parentColumnUUID);
-        card.setCard_title(title);
-        card.setCard_description_text(description);
+        card.setParent_column_uuid(cardDTO.getParentColumnUUID());
+        card.setCard_title(cardDTO.getTitle());
+        card.setCard_description_text(cardDTO.getDescription());
 
         setupDbConnection();
 
@@ -81,12 +79,12 @@ public class CardService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         cardTableQueryBuilder = cardDao.queryBuilder();
-        cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, parentColumnUUID);
+        cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, cardDTO.getParentColumnUUID());
         long cardCount = cardTableQueryBuilder.countOf();
         int position = (int) (cardCount + 1);
         card.setCard_position(position);
 
-        ColumnTable column = columnDao.queryForId(parentColumnUUID);
+        ColumnTable column = columnDao.queryForId(cardDTO.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
         project.setLast_changed_timestamp(getOffsetNowTime());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
@@ -102,8 +100,8 @@ public class CardService extends AbstractService{
         for(ObservableProject observableProject : workspaceProjectsList) {
             if(project.getID().equals(observableProject.getProjectUUID())) {
                 for(ObservableColumn observableColumn : observableProject.getColumns()) {
-                    if(observableColumn.getColumnUUID().equals(parentColumnUUID)) {
-                        ObservableCard newObservableCard = new ObservableCard(card, FXCollections.observableArrayList());
+                    if(observableColumn.getColumnUUID().equals(cardDTO.getParentColumnUUID())) {
+                        ObservableCard newObservableCard = new ObservableCard(cardDTO, FXCollections.observableArrayList());
                         newObservableCard.positionProperty().addListener((observable, oldVal, newVal) -> {
                             // TODO implement function to change position of the Card in its list
                         });
@@ -114,23 +112,23 @@ public class CardService extends AbstractService{
         }
     }
 
-    public void updateCard(CardDTO newCardData, ObservableCard observableCard) throws SQLException, IOException {
+    public void updateCard(CardDTO cardDTO, ObservableCard observableCard) throws SQLException, IOException {
         CardTable cardTable = new CardTable();
-        cardTable.setCard_uuid(newCardData.getUuid());
-        cardTable.setParent_column_uuid(newCardData.getParentColumnUUID());
-        cardTable.setCard_title(newCardData.getTitle());
-        cardTable.setCard_description_text(newCardData.getDescription());
-        cardTable.setCard_position(newCardData.getPosition());
+        cardTable.setCard_uuid(cardDTO.getUuid());
+        cardTable.setParent_column_uuid(cardDTO.getParentColumnUUID());
+        cardTable.setCard_title(cardDTO.getTitle());
+        cardTable.setCard_description_text(cardDTO.getDescription());
+        cardTable.setCard_position(cardDTO.getPosition());
 
         ArrayList<ResourceItemTable> newResourceData = new ArrayList<>();
-        for(ResourceItemDTO resourceItemDTO : newCardData.getResourcesList()) {
+        /*for(ResourceItemDTO resourceItemDTO : cardDTO.getResourcesList()) {
             ResourceItemTable resourceItemTable = new ResourceItemTable();
             resourceItemTable.setResource_item_uuid(resourceItemDTO.getUuid());
             resourceItemTable.setParent_item_uuid(resourceItemDTO.getParentUUID());
             resourceItemTable.setResource_item_title(resourceItemDTO.getTitle());
             resourceItemTable.setResource_item_type(resourceItemDTO.getType());
             resourceItemTable.setResource_item_path(resourceItemDTO.getPath());
-        }
+        }*/
 
         setupDbConnection();
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
@@ -171,10 +169,10 @@ public class CardService extends AbstractService{
                 return null;
             }
         });
-        observableCard.setCardTitle(newCardData.getTitle());
-        observableCard.setCardDescription(newCardData.getDescription());
-        observableCard.setPosition(newCardData.getPosition());
-        //observableCard.setResourceItems(newCardData.getResourcesList());
+        observableCard.setCardTitle(cardDTO.getTitle());
+        observableCard.setCardDescription(cardDTO.getDescription());
+        observableCard.setPosition(cardDTO.getPosition());
+        //observableCard.setResourceItems(cardDTO.getResourcesList());
         // TODO need to figure out how to update the resource items...
         teardownDbConnection();
     }

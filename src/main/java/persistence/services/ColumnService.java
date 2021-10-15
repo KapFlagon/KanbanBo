@@ -6,6 +6,7 @@ import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.QueryBuilder;
+import persistence.dto.column.ColumnDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
@@ -30,7 +31,6 @@ public class ColumnService extends AbstractService{
     // Variables
     private final Locale locale;
     private final ResourceBundle resourceBundle;
-    private ObservableList<ObservableProject> projectsList;
     private ObservableList<ObservableProject> workspaceProjectsList;
 
     private Dao<ProjectTable, UUID> projectDao;
@@ -53,10 +53,9 @@ public class ColumnService extends AbstractService{
 
     // Constructors
 
-    public ColumnService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> projectsList, ObservableList<ObservableProject> workspaceProjectsList) {
+    public ColumnService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> workspaceProjectsList) {
         this.locale = locale;
         this.resourceBundle = resourceBundle;
-        this.projectsList = projectsList;
         this.workspaceProjectsList = workspaceProjectsList;
     }
 
@@ -68,21 +67,21 @@ public class ColumnService extends AbstractService{
 
 
     // Other methods
-    public boolean createColumn(UUID parentProjectUUID, String title, boolean finalColumn) throws SQLException, IOException {
+    public boolean createColumn(ColumnDTO columnDTO) throws SQLException, IOException {
         ColumnTable columnTable = new ColumnTable();
-        columnTable.setParent_project_uuid(parentProjectUUID);
-        columnTable.setColumn_title(title);
-        columnTable.setFinal_column(finalColumn);
+        columnTable.setParent_project_uuid(columnDTO.getParentProjectUUID());
+        columnTable.setColumn_title(columnDTO.getTitle());
+        columnTable.setFinal_column(columnDTO.isFinalColumn());
         setupDbConnection();
 
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         columnTableQueryBuilder = columnDao.queryBuilder();
 
-        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, parentProjectUUID);
+        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, columnDTO.getParentProjectUUID());
         long columnCount = columnTableQueryBuilder.countOf();
         int position = (int) (columnCount + 1);
         columnTable.setColumn_position(position);
-        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, parentProjectUUID).and().eq(ColumnTable.FINAL_FLAG_NAME, true);
+        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, columnDTO.getParentProjectUUID()).and().eq(ColumnTable.FINAL_FLAG_NAME, true);
         long countOfFinalColumns = columnTableQueryBuilder.countOf();
         if (countOfFinalColumns > 0) {
             return false;
@@ -92,12 +91,12 @@ public class ColumnService extends AbstractService{
             if (result > 0) {
                 ObservableProject observableProject = null;
                 for (ObservableProject op : workspaceProjectsList) {
-                    if(op.getProjectUUID().equals(parentProjectUUID)){
+                    if(op.getProjectUUID().equals(columnDTO.getParentProjectUUID())){
                         observableProject = op;
                     }
                 }
                 ObservableList<ObservableCard> emptyCardList = FXCollections.observableArrayList();
-                ObservableColumn observableColumn = new ObservableColumn(columnTable, emptyCardList);
+                ObservableColumn observableColumn = new ObservableColumn(columnDTO, emptyCardList);
                 observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
                     // TODO implement function to change position of the Column in its list
                 });
@@ -113,30 +112,36 @@ public class ColumnService extends AbstractService{
         }
     }
 
-    public boolean updateColumn(ObservableColumn observableColumn) throws ParseException, SQLException, IOException {
+    public void updateColumn(ColumnDTO columnDTO, ObservableColumn observableColumn) throws ParseException, SQLException, IOException {
         ColumnTable columnTableData = new ColumnTable();
-        columnTableData.setColumn_uuid(observableColumn.getColumnUUID());
-        columnTableData.setParent_project_uuid(observableColumn.getParentProjectUUID());
-        columnTableData.setColumn_title(observableColumn.columnTitleProperty().getValue());
-        columnTableData.setColumn_position(observableColumn.columnPositionProperty().get());
-        columnTableData.setFinal_column(observableColumn.isFinalColumn());
+        columnTableData.setColumn_uuid(columnDTO.getUuid());
+        columnTableData.setParent_project_uuid(columnDTO.getParentProjectUUID());
+        columnTableData.setColumn_title(columnDTO.getTitle());
+        columnTableData.setColumn_position(columnDTO.getPosition());
+        columnTableData.setFinal_column(columnDTO.isFinalColumn());
         setupDbConnection();
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
+        final int[] result = new int[1];
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
+                result[0] = 0;
                 ProjectTable parentProject = projectDao.queryForId(columnTableData.getParent_project_uuid());
                 parentProject.setLast_changed_timestamp(getOffsetNowTime());
-                columnDao.update(columnTableData);
-                projectDao.update(parentProject);
+                result[0] += columnDao.update(columnTableData);
+                result[0] += projectDao.update(parentProject);
                 System.out.println("Column and project updated successfully");
                 return null;
             }
         });
+        if (result[0] > 1) {
+            observableColumn.setParentProjectUUID(columnDTO.getParentProjectUUID());
+            observableColumn.columnTitleProperty().setValue(columnDTO.getTitle());
+            observableColumn.columnPositionProperty().setValue(columnDTO.getPosition());
+            observableColumn.finalColumnProperty().setValue(columnDTO.isFinalColumn());
+        }
         teardownDbConnection();
-        return true;
-        // TODO respond to a failure...
     }
 
     public void deleteColumn(ObservableColumn column) throws SQLException, IOException {

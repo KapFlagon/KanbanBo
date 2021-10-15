@@ -6,7 +6,9 @@ import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.QueryBuilder;
-import domain.dto.ProjectDTO;
+import persistence.dto.card.CardDTO;
+import persistence.dto.column.ColumnDTO;
+import persistence.dto.project.ProjectDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
@@ -14,6 +16,7 @@ import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
@@ -24,6 +27,8 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -56,12 +61,12 @@ public class ProjectService extends AbstractService{
 
 
     // Constructors
-    public ProjectService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> projectsList) throws SQLException, IOException {
+    public ProjectService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> projectsList, ObservableList<ObservableProject> workspaceProjectsList) throws SQLException, IOException {
         this.locale = locale;
         this.resourceBundle = resourceBundle;
-        projectsList = FXCollections.observableArrayList();
+        this.projectsList = projectsList;
         initProjectsList();
-        workspaceProjectsList = FXCollections.observableArrayList();
+        this.workspaceProjectsList = workspaceProjectsList;
         workspaceProjectsList.addListener(new ListChangeListener<ObservableProject>() {
             @Override
             public void onChanged(Change<? extends ObservableProject> c) {
@@ -128,9 +133,8 @@ public class ProjectService extends AbstractService{
                     localisedStatusText = resourceBundle.getString(statusTextKey);
                 }
             }
-            ObservableProject projectDomainObject = new ObservableProject(projectEntry, localisedStatusText);
-            //ChangeListener<Boolean> changeListener = addProjectChangeListener(projectDomainObject.dataChangePendingProperty(), projectDomainObject);
-            //projectDomainObject.dataChangePendingProperty().addListener(changeListener);
+            ProjectDTO projectDTO = TableToDTO.mapProjectTableToProjectDTO(projectEntry);
+            ObservableProject projectDomainObject = new ObservableProject(projectDTO, localisedStatusText);
             projectsList.add(projectDomainObject);
         }
     }
@@ -187,14 +191,17 @@ public class ProjectService extends AbstractService{
                     ObservableResourceItem cardObservableResourceItem = new ObservableResourceItem(resourceItemTableItem, typeText);
                     cardObservableResourceItemList.add(cardObservableResourceItem);
                 }
-                ObservableCard observableCard = new ObservableCard(cardTable);
+
+                CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
+                ObservableCard observableCard = new ObservableCard(cardDTO);
                 observableCard.setResourceItems(cardObservableResourceItemList);
                 observableCard.positionProperty().addListener((observable, oldVal, newVal) -> {
                     // TODO implement function to change position of the Card in its list
                 });
                 observableCardsList.add(observableCard);
             }
-            ObservableColumn observableColumn = new ObservableColumn(columnTableItem, observableCardsList);
+            ColumnDTO columnDTO = TableToDTO.mapColumnTableToColumnDTO(columnTableItem);
+            ObservableColumn observableColumn = new ObservableColumn(columnDTO, observableCardsList);
             observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
                 // TODO implement function to change position of the Column in its list
             });
@@ -276,11 +283,12 @@ public class ProjectService extends AbstractService{
     }
 
 
-    public boolean createProject(ProjectDTO newProjectData) throws SQLException, IOException {
+    public void createProject(ProjectDTO projectDTO) throws SQLException, IOException {
         ProjectTable projectTable = new ProjectTable();
-        projectTable.setProject_title(newProjectData.getTitle());
-        projectTable.setProject_description(newProjectData.getDescription());
+        projectTable.setProject_title(projectDTO.getTitle());
+        projectTable.setProject_description(projectDTO.getDescription());
         projectTable.setProject_status_id(1);
+        projectTable.setDue_on_date(projectDTO.getDueOnDate().toString());
         projectTable.setCreation_timestamp(getOffsetNowTime());
         projectTable.setLast_changed_timestamp(getOffsetNowTime());
         ProjectStatusTable statusKey;
@@ -295,26 +303,24 @@ public class ProjectService extends AbstractService{
 
         if (result > 0) {
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
-            ObservableProject observableProject = new ObservableProject(projectTable, localizedStatusText);
+            ObservableProject observableProject = new ObservableProject(projectDTO, localizedStatusText);
             projectsList.add(observableProject);
             workspaceProjectsList.add(observableProject);
             System.out.println("Project created successfully");
-            return true;
         } else {
             // TODO respond to a failure...
             System.out.println("Project creation failed...");
-            return false;
         }
     }
 
-    public boolean updateProject(ProjectDTO newProjectData, ObservableProject projectDomainObject) throws ParseException, SQLException, IOException {
+    public boolean updateProject(ProjectDTO newProjectData, ObservableProject observableProject) throws ParseException, SQLException, IOException {
         setupDbConnection();
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
-        ProjectTable projectTableData = projectDao.queryForId(projectDomainObject.getProjectUUID());
+        ProjectTable projectTableData = projectDao.queryForId(observableProject.getProjectUUID());
         projectTableData.setProject_title(newProjectData.getTitle());
         projectTableData.setProject_description(newProjectData.getDescription());
-        projectTableData.setProject_status_id(projectDomainObject.statusIDProperty().getValue());
+        projectTableData.setProject_status_id(observableProject.statusIDProperty().getValue());
         projectTableData.setLast_changed_timestamp(getOffsetNowTime());
         int result = projectDao.update(projectTableData);
 
@@ -322,12 +328,12 @@ public class ProjectService extends AbstractService{
         ProjectStatusTable statusKey = projectStatusDao.queryForId(newProjectData.getStatus());
         teardownDbConnection();
         if(result > 0) {
-            projectDomainObject.projectTitleProperty().setValue(newProjectData.getTitle());
-            projectDomainObject.projectDescriptionProperty().setValue(newProjectData.getDescription());
-            projectDomainObject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnDate().toString());
-            projectDomainObject.statusIDProperty().setValue(newProjectData.getStatus());
+            observableProject.projectTitleProperty().setValue(newProjectData.getTitle());
+            observableProject.projectDescriptionProperty().setValue(newProjectData.getDescription());
+            observableProject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnDate().toString());
+            observableProject.statusIDProperty().setValue(newProjectData.getStatus());
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
-            projectDomainObject.statusTextProperty().setValue(localizedStatusText);
+            observableProject.statusTextProperty().setValue(localizedStatusText);
             System.out.println("Project updated successfully");
             return true;
         } else {
@@ -400,7 +406,7 @@ public class ProjectService extends AbstractService{
         workspaceProjectsList.remove(projectDomainObject);
     }
 
-    private void copyProject(ObservableProject originalProject) throws SQLException, ParseException, IOException {
+    public void copyProject(ObservableProject originalProject) throws SQLException, ParseException, IOException {
         // TODO Implement this
     }
 
