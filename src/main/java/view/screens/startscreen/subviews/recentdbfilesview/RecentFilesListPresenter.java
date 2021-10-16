@@ -103,12 +103,6 @@ public class RecentFilesListPresenter implements Initializable {
                     if (newValue) {
                         UserPreferences.getSingletonInstance().removeRecentFilePath(presenter.getItemPath());
                         recentFilePathList.remove(presenter.getItemPath());
-                        Platform.runLater(new Runnable() {
-                            // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
-                            public void run() {
-                                recentFilesVBox.getChildren().remove(view.getView());
-                            }
-                        });
                     }
                 });
                 presenter.beingSelectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -126,7 +120,8 @@ public class RecentFilesListPresenter implements Initializable {
                         if(c.wasRemoved()){
                             for(Path path : c.getRemoved()) {
                                 if (path.equals(presenter.getItemPath())) {
-                                    recentFilesVBox.getChildren().remove(view.getView());
+                                    // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
+                                    Platform.runLater(() -> recentFilesVBox.getChildren().remove(view.getView()));
                                 }
                             }
                         }
