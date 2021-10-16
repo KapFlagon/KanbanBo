@@ -1,6 +1,5 @@
 package view.screens.startscreen;
 
-import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,8 +12,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import userpreferences.UserPreferences;
 import utils.database.DatabaseUtils;
 import utils.FileChooserUtils;
@@ -172,14 +169,10 @@ public class StartScreenPresenter implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
                     File fileForDeletion = rflp.getSelectedPath().toFile();
-                    // TODO Prompt user with confirmation dialog
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure that you want to Delete the Database file?");
-                    alert.setTitle("Confirm database Deletion");
-                    alert.showAndWait().filter(response -> response == ButtonType.OK)
-                            .ifPresent((response) -> {
-                                deleteDbFile(fileForDeletion);
-                                //rflp. // TODO Need to figure out a better mechanism for removing the item from list at same time as deletion
-                            });
+                    boolean deletionResult = deleteDbFile(fileForDeletion);
+                    if(deletionResult) {
+                        rflp.getRecentFilePathList().remove(rflp.getSelectedPath());
+                    }
                 }
             }
         });
@@ -223,10 +216,10 @@ public class StartScreenPresenter implements Initializable {
         // TODO Insert some kind of logging here.
     }
 
-    public void deleteDbFile(File fileForDeletion) {
+    public boolean deleteDbFile(File fileForDeletion) {
         // TODO Perform logging here
         System.out.println("Deleting file: " + fileForDeletion.getName());
-        fileForDeletion.delete();
+        return fileForDeletion.delete();
     }
 
 

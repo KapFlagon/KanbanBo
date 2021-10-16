@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -89,31 +90,25 @@ public class RecentFilesListPresenter implements Initializable {
                 RecentFileEntryView view = new RecentFileEntryView();
                 RecentFileEntryPresenter presenter = (RecentFileEntryPresenter) view.getPresenter();
                 presenter.setItemPath(pathEntry);
-                presenter.beingDeletedProperty().addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        // TODO Add logging here
-                        if (newValue) {
-                            selectedPath = presenter.getItemPath();
-                            setItemBeingDeleted(true);
-                        }
+                presenter.beingDeletedProperty().addListener((observable, oldValue, newValue) -> {
+                    // TODO Add logging here
+                    if (newValue) {
+                        selectedPath = presenter.getItemPath();
+                        setItemBeingDeleted(true);
                     }
                 });
-                presenter.beingRemovedProperty().addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        // TODO Add logging here
-                        System.out.println("change detected in boolean");
-                        if (newValue) {
-                            UserPreferences.getSingletonInstance().removeRecentFilePath(presenter.getItemPath());
-                            recentFilePathList.remove(presenter.getItemPath());
-                            Platform.runLater(new Runnable() {
-                                // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
-                                public void run() {
-                                    recentFilesVBox.getChildren().remove(view.getView());
-                                }
-                            });
-                        }
+                presenter.beingRemovedProperty().addListener((observable, oldValue, newValue) -> {
+                    // TODO Add logging here
+                    System.out.println("change detected in boolean");
+                    if (newValue) {
+                        UserPreferences.getSingletonInstance().removeRecentFilePath(presenter.getItemPath());
+                        recentFilePathList.remove(presenter.getItemPath());
+                        Platform.runLater(new Runnable() {
+                            // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
+                            public void run() {
+                                recentFilesVBox.getChildren().remove(view.getView());
+                            }
+                        });
                     }
                 });
                 presenter.beingSelectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -126,6 +121,17 @@ public class RecentFilesListPresenter implements Initializable {
                     }
                 });
                 recentFilesVBox.getChildren().add(view.getView());
+                recentFilePathList.addListener((ListChangeListener<Path>) c -> {
+                    while(c.next()) {
+                        if(c.wasRemoved()){
+                            for(Path path : c.getRemoved()) {
+                                if (path.equals(presenter.getItemPath())) {
+                                    recentFilesVBox.getChildren().remove(view.getView());
+                                }
+                            }
+                        }
+                    }
+                });
             }
         } else {
             Label label = new Label("No recent database files found");

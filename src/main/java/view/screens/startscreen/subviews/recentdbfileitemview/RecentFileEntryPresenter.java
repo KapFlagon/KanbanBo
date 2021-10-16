@@ -3,9 +3,8 @@ package view.screens.startscreen.subviews.recentdbfileitemview;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.net.URL;
@@ -16,6 +15,8 @@ import java.util.prefs.BackingStoreException;
 public class RecentFileEntryPresenter implements Initializable {
 
     // JavaFX injected node variables
+    @FXML
+    private VBox itemVBox;
     @FXML
     private Label titleLabel;
     @FXML
@@ -46,18 +47,28 @@ public class RecentFileEntryPresenter implements Initializable {
         this.itemPath = itemPath;
         validatePathAsFile();
         if (fileExists) {
-            pathStatusLbl.setText("File exists");
+            pathStatusLbl.setText("");
+            pathStatusLbl.setVisible(false);
+            pathStatusLbl.setDisable(true);
+            openItemMenuItem.setVisible(true);
+            openItemMenuItem.setDisable(false);
+            deleteFileMenuItem.setVisible(true);
+            deleteFileMenuItem.setDisable(false);
         } else {
             pathStatusLbl.setText("File does not exist!");
+            pathStatusLbl.setVisible(true);
+            pathStatusLbl.setDisable(false);
             openItemMenuItem.setVisible(false);
             openItemMenuItem.setDisable(true);
             deleteFileMenuItem.setVisible(false);
             deleteFileMenuItem.setDisable(true);
+            this.itemVBox.getStyleClass().add("recent-item-missing");
         }
         this.pathLabel.setText(itemPath.toString());
         this.pathLabel.setTooltip((new Tooltip(itemPath.toString())));
         this.titleLabel.setText(getFileNameWithoutExtension());
         this.titleLabel.setTooltip(new Tooltip(getFileNameWithoutExtension()));
+        this.itemVBox.getStyleClass().add("recent-item");
     }
 
     public boolean isBeingDeleted() {
@@ -116,13 +127,38 @@ public class RecentFileEntryPresenter implements Initializable {
     }
 
     @FXML private void removeItem() {
-        System.out.println("Removing the selected item from the list");
         setBeingRemoved(true);
     }
 
     @FXML private void deleteFile() {
-        System.out.println("Deleting the file entirely");
-        setBeingDeleted(true);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete the Database file?");
+        alert.setTitle("Confirm database Deletion");
+        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Delete");
+        alert.setHeaderText("Delete Database?");
+        alert.showAndWait().filter(response -> response == ButtonType.OK).ifPresent((response)
+                -> {
+            System.out.println("Deleting the Database file");
+            setBeingDeleted(true);
+        });
+    }
+
+    @FXML private void mouseEnter() {
+        if(fileExists) {
+            itemVBox.getStyleClass().add("recent-item-highlight");
+        } else {
+            itemVBox.getStyleClass().remove("recent-item-missing");
+            itemVBox.getStyleClass().add("recent-item-missing-highlight");
+        }
+    }
+
+    @FXML private void mouseExit() {
+
+        if(fileExists) {
+            itemVBox.getStyleClass().remove("recent-item-highlight");
+        } else {
+            itemVBox.getStyleClass().remove("recent-item-missing-highlight");
+            itemVBox.getStyleClass().add("recent-item-missing");
+        }
     }
 
     // Other methods
