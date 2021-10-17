@@ -7,38 +7,48 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 
-<BorderPane depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.MainScreenPresenter">
-   <center>
-      <TabPane fx:id="mainScreenTabPane" depthTest="DISABLE" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="1.7976189313486232E308" BorderPane.alignment="CENTER">
-         <tabs>
-             <Tab fx:id="manageTab" closable="false" text="%tab.title.manage" />
-             <Tab fx:id="workspaceTab" closable="false" text="%tab.title.workspace" />
-             <Tab fx:id="templatesTab" closable="false" text="%tab.title.templates" />
-             <Tab fx:id="analyticsTab" closable="false" text="%tab.title.analytics">
-                 <content>
-                     <TabPane fx:id="analyticsSubTabPane" tabClosingPolicy="UNAVAILABLE" />
-                 </content></Tab>
-         </tabs></TabPane>
-   </center>
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="%menu.header.file">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#closeDb" text="%menu.file.sub.close_database" />
-                  <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="%menu.file.sub.exit" />
-               </items></Menu>
-          <Menu mnemonicParsing="false" text="%menu.header.edit" />
-          <Menu mnemonicParsing="false" text="%menu.header.help">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="%menu.help.sub.about" />
-                  <MenuItem fx:id="sourceCodeRepoMenuItem" mnemonicParsing="false" onAction="#openOnlineSourceCodeRepo" text="%menu.help.sub.source" />
-               </items></Menu>
-        </menus>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </MenuBar>
-   </top>
-</BorderPane>
+
+<StackPane fx:id="baseStackPane" minHeight="400.0" minWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.mainscreen.MainScreenPresenter">
+   <children>
+      <BorderPane fx:id="borderPane" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0">
+         <center>
+            <TabPane fx:id="mainScreenTabPane" depthTest="DISABLE" nodeOrientation="LEFT_TO_RIGHT" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="1.7976189313486232E308" BorderPane.alignment="CENTER">
+               <tabs>
+                   <Tab fx:id="manageTab" closable="false" text="%tab.title.manage" />
+                   <Tab fx:id="workspaceTab" closable="false" text="%tab.title.workspace" />
+                   <Tab fx:id="templatesTab" closable="false" text="%tab.title.templates" />
+                   <Tab fx:id="analyticsTab" closable="false" text="%tab.title.analytics">
+                       <content>
+                           <TabPane fx:id="analyticsSubTabPane" tabClosingPolicy="UNAVAILABLE" />
+                       </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+         </center>
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="%menu.header.file">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#closeDb" text="%menu.file.sub.close_database" />
+                        <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="%menu.file.sub.exit" />
+                     </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="%menu.header.edit" />
+                <Menu mnemonicParsing="false" text="%menu.header.help">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="%menu.help.sub.about" />
+                        <MenuItem fx:id="sourceCodeRepoMenuItem" mnemonicParsing="false" onAction="#openOnlineSourceCodeRepo" text="%menu.help.sub.source" />
+                     </items>
+                  </Menu>
+              </menus>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </MenuBar>
+         </top>
+      </BorderPane>
+   </children>
+</StackPane>

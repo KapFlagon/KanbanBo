@@ -3,6 +3,7 @@ package view.screens.startscreen;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -10,6 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import userpreferences.UserPreferences;
@@ -192,22 +196,15 @@ public class StartScreenPresenter implements Initializable {
 
 
     // Other methods
-    public void createDbFile() throws IOException, SQLException, BackingStoreException {
+    @FXML
+    private void createDbFile() throws IOException, SQLException, BackingStoreException {
         System.out.println("creating");
 
         scrimRectangle.showScrim();
         File newFile = FileChooserUtils.createFilePopup();
         if(newFile != null) {
-            FileCreationUtils.createEmptyDatabaseFile(newFile);
-            DatabaseUtils.setActiveDatabaseFile(newFile);
-            //DatabaseUtils.initDatabaseTablesInFile();
-            DatabaseCreationProgressView progressView= new DatabaseCreationProgressView();
-            DatabaseCreationProgressPresenter progressPresenter = (DatabaseCreationProgressPresenter) progressView.getPresenter();
-            StageUtils.createChildStage("Database creation", progressView.getView());
-            StageUtils.showAndWaitOnSubStage();
-            System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
-            UserPreferences.getSingletonInstance().addRecentFilePath(newFile.toPath());
-            moveToMainSceneView();
+            createFile(newFile);
+            openFile(newFile);
         } else {
             // Accounting for scenario where user cancels file creation.
             System.out.println("File creation cancelled");
@@ -216,23 +213,22 @@ public class StartScreenPresenter implements Initializable {
         // TODO Insert some kind of logging here.
     }
 
-    public boolean deleteDbFile(File fileForDeletion) {
+    @FXML
+    private boolean deleteDbFile(File fileForDeletion) {
         // TODO Perform logging here
         System.out.println("Deleting file: " + fileForDeletion.getName());
         return fileForDeletion.delete();
     }
 
 
-    public void browseForDbFile() throws BackingStoreException {
+    @FXML
+    private void browseForDbFile() throws BackingStoreException {
         System.out.println("browsing for database file");
         scrimRectangle.showScrim();
         File selectedFile = FileChooserUtils.openFilePopup();
-        if (selectedFile != null) {
+        if (selectedFile != null && isValidDbFile(selectedFile.toString())) {
             // Accounting for scenario where user cancels opening file.
-            DatabaseUtils.setActiveDatabaseFile(selectedFile);
-            System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
-            UserPreferences.getSingletonInstance().addRecentFilePath(selectedFile.toPath());
-            moveToMainSceneView();
+            openFile(selectedFile);
         } else {
             System.out.println("File opening cancelled");
         }
@@ -241,19 +237,22 @@ public class StartScreenPresenter implements Initializable {
     }
 
 
-    public void exitApplication() {
+    @FXML
+    private void exitApplication() {
         System.out.println("Exiting application");
         Platform.exit();
         System.exit(0);
     }
 
 
-    public void displayApplicationInfo() {
+    @FXML
+    private void displayApplicationInfo() {
         System.out.println("Info output");
     }
 
 
-    public void openOnlineSourceCodeRepo() {
+    @FXML
+    private void openOnlineSourceCodeRepo(ActionEvent event) {
         //System.out.println("Redirect to online repository");
         Desktop dt = Desktop.getDesktop();
         try {
@@ -261,6 +260,7 @@ public class StartScreenPresenter implements Initializable {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+        event.consume();
     }
 
     private void moveToMainSceneView() {
@@ -270,19 +270,69 @@ public class StartScreenPresenter implements Initializable {
         StageUtils.changeMainScene("KanbanBo - Project Database '" + databaseFileTitle + "'", view);
     }
 
-    public void autoLoadCheckMenuItemClicked() throws BackingStoreException {
+    @FXML
+    private void autoLoadCheckMenuItemClicked() throws BackingStoreException {
         updateAutoLoad(autoLoadCheckMenuItem.isSelected());
         autoLoadCheckBox.setSelected(autoLoadCheckMenuItem.isSelected());
     }
 
-    public void autoLoadCheckBoxClicked() throws BackingStoreException {
+    @FXML
+    private void autoLoadCheckBoxClicked() throws BackingStoreException {
         updateAutoLoad(autoLoadCheckBox.isSelected());
         autoLoadCheckMenuItem.setSelected(autoLoadCheckBox.isSelected());
+    }
+
+    @FXML
+    void onDragoOver(DragEvent event) {
+        event.acceptTransferModes(TransferMode.MOVE);
+    }
+
+    @FXML
+    void onDragDropped(DragEvent event) throws BackingStoreException {
+        Dragboard dragboard = event.getDragboard();
+        if(event.getDragboard().hasFiles()) {
+            File selectedFile = event.getDragboard().getFiles().get(0);
+            if (isValidDbFile(selectedFile.toString())) {
+                // Accounting for scenario where user cancels opening file.
+                dragboard.clear();
+                event.consume();
+                openFile(selectedFile);
+            }
+        }
     }
 
     public void updateAutoLoad(boolean value) throws BackingStoreException {
         UserPreferences.getSingletonInstance().setOpeningMostRecentAutomatically(value);
         System.out.println("autoload value: " + value);
+    }
+
+    private boolean isValidDbFile(String fileName) {
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        if (extension.equals("kbbdb")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void createFile(File newFile) throws IOException, BackingStoreException {
+        FileCreationUtils.createEmptyDatabaseFile(newFile);
+        DatabaseUtils.setActiveDatabaseFile(newFile);
+        DatabaseCreationProgressView progressView= new DatabaseCreationProgressView();
+        DatabaseCreationProgressPresenter progressPresenter = (DatabaseCreationProgressPresenter) progressView.getPresenter();
+        StageUtils.createChildStage("Database creation", progressView.getView());
+        StageUtils.showAndWaitOnSubStage();
+        openFile(newFile);
+    }
+
+    private void openFile(File fileToOpen) throws BackingStoreException {
+        if (isValidDbFile(fileToOpen.toString())) {
+            // Accounting for scenario where user cancels opening file.
+            DatabaseUtils.setActiveDatabaseFile(fileToOpen);
+            System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
+            UserPreferences.getSingletonInstance().addRecentFilePath(fileToOpen.toPath());
+            moveToMainSceneView();
+        }
     }
 
 }

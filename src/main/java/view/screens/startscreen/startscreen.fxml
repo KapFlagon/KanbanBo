@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="baseStackPane" minHeight="300.0" minWidth="500.0" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
+<StackPane fx:id="baseStackPane" minHeight="300.0" minWidth="500.0" onDragDropped="#onDragDropped" onDragOver="#onDragoOver" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
    <children>
       <BorderPane id="thing" fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="500.0" prefHeight="300.0" prefWidth="500.0">
          <left>

@@ -95,6 +95,7 @@ public class RecentFilesListPresenter implements Initializable {
                     if (newValue) {
                         selectedPath = presenter.getItemPath();
                         setItemBeingDeleted(true);
+                        setItemBeingDeleted(false);
                     }
                 });
                 presenter.beingRemovedProperty().addListener((observable, oldValue, newValue) -> {
@@ -105,13 +106,10 @@ public class RecentFilesListPresenter implements Initializable {
                         recentFilePathList.remove(presenter.getItemPath());
                     }
                 });
-                presenter.beingSelectedProperty().addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        if (newValue) {
-                            selectedPath = presenter.getItemPath();
-                            setItemBeingOpened(true);
-                        }
+                presenter.beingSelectedProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        selectedPath = presenter.getItemPath();
+                        setItemBeingOpened(true);
                     }
                 });
                 recentFilesVBox.getChildren().add(view.getView());
@@ -122,6 +120,7 @@ public class RecentFilesListPresenter implements Initializable {
                                 if (path.equals(presenter.getItemPath())) {
                                     // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
                                     Platform.runLater(() -> recentFilesVBox.getChildren().remove(view.getView()));
+                                    // TODO fix bug where deleting files does not properly remove them from the view on reload.
                                 }
                             }
                         }
@@ -130,6 +129,7 @@ public class RecentFilesListPresenter implements Initializable {
             }
         } else {
             Label label = new Label("No recent database files found");
+            // TODO Update with localised string
             recentFilesVBox.getChildren().add(label);
         }
     }
