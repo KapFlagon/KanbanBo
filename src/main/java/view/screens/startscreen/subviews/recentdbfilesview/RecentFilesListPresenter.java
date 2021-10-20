@@ -28,6 +28,8 @@ public class RecentFilesListPresenter implements Initializable {
     private VBox recentFilesVBox;
     @FXML
     private ScrollPane scrollPane;
+    @FXML
+    private Label noDatabasesFileLbl;
 
     // Other variables
     private ObservableList<Path> recentFilePathList;
@@ -113,6 +115,7 @@ public class RecentFilesListPresenter implements Initializable {
                     }
                 });
                 recentFilesVBox.getChildren().add(view.getView());
+                recentFilesVBox.getChildren().remove(noDatabasesFileLbl);
                 recentFilePathList.addListener((ListChangeListener<Path>) c -> {
                     while(c.next()) {
                         if(c.wasRemoved()){
@@ -120,6 +123,7 @@ public class RecentFilesListPresenter implements Initializable {
                                 if (path.equals(presenter.getItemPath())) {
                                     // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
                                     Platform.runLater(() -> recentFilesVBox.getChildren().remove(view.getView()));
+                                    recentFilesVBox.getChildren().add(noDatabasesFileLbl);
                                     // TODO fix bug where deleting files does not properly remove them from the view on reload.
                                 }
                             }
@@ -127,10 +131,6 @@ public class RecentFilesListPresenter implements Initializable {
                     }
                 });
             }
-        } else {
-            Label label = new Label("No recent database files found");
-            // TODO Update with localised string
-            recentFilesVBox.getChildren().add(label);
         }
     }
 

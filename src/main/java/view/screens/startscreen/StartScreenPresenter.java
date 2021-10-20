@@ -176,6 +176,7 @@ public class StartScreenPresenter implements Initializable {
                     boolean deletionResult = deleteDbFile(fileForDeletion);
                     if(deletionResult) {
                         rflp.getRecentFilePathList().remove(rflp.getSelectedPath());
+                        UserPreferences.getSingletonInstance().removeRecentFilePath(rflp.getSelectedPath());
                     }
                 }
             }
