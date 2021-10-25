@@ -47,6 +47,8 @@ public class TableToDTO {
         columnDTO.setTitle(columnTable.getColumn_title());
         columnDTO.setPosition(columnTable.getColumn_position());
         columnDTO.setFinalColumn(columnTable.isFinal_column());
+        columnDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(columnTable.getCreation_timestamp()));
+        columnDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(columnTable.getLast_changed_timestamp()));
         return columnDTO;
     }
 
@@ -57,8 +59,12 @@ public class TableToDTO {
         cardDTO.setTitle(cardTable.getCard_title());
         cardDTO.setDescription(cardTable.getCard_description_text());
         cardDTO.setPosition(cardTable.getCard_position());
-        cardDTO.setDueOnDate(LocalDate.parse(cardTable.getDue_on_date()));
-        return null;
+        cardDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(cardTable.getCreation_timestamp()));
+        cardDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(cardTable.getLast_changed_timestamp()));
+        if(cardTable.getDue_on_date() != null) {
+            cardDTO.setDueOnDate(LocalDate.parse(cardTable.getDue_on_date()));
+        }
+        return cardDTO;
     }
 
 

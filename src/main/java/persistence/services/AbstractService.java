@@ -45,8 +45,4 @@ public abstract class AbstractService {
 
     }
 
-    protected String getZonedDateTimeNow() {
-        return ZonedDateTime.now().toString();
-    }
-
 }

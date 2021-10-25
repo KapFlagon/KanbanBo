@@ -23,7 +23,9 @@ public class ObservableCard extends AbstractObservableCardBase<CardDTO> {
     public ObservableCard(CardDTO cardDTO, ObservableList<ObservableResourceItem> resourceItems) {
         super(cardDTO, resourceItems);
         this.position = new SimpleIntegerProperty(cardDTO.getPosition());
-        this.dueOnDate = new SimpleStringProperty(cardDTO.getDueOnDate().toString());
+        if(cardDTO.getDueOnDate() != null) {
+            this.dueOnDate = new SimpleStringProperty(cardDTO.getDueOnDate().toString());
+        }
     }
 
     // Getters and Setters

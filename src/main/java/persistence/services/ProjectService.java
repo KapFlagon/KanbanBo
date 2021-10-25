@@ -16,6 +16,7 @@ import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import persistence.mappers.DTOToTable;
 import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
@@ -283,15 +284,15 @@ public class ProjectService extends AbstractService{
 
 
     public void createProject(ProjectDTO projectDTO) throws SQLException, IOException {
-        ProjectTable projectTable = new ProjectTable();
-        projectTable.setProject_title(projectDTO.getTitle());
-        projectTable.setProject_description(projectDTO.getDescription());
+        ProjectTable projectTable = DTOToTable.mapProjectDTOToProjectTable(projectDTO);
+        //projectTable.setProject_title(projectDTO.getTitle());
+        //projectTable.setProject_description(projectDTO.getDescription());
         projectTable.setProject_status_id(1);
-        if(projectDTO.getDueOnDate() != null) {
-            projectTable.setDue_on_date(projectDTO.getDueOnDate().toString());
-        }
-        projectTable.setCreation_timestamp(getZonedDateTimeNow());
-        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
+        //if(projectDTO.getDueOnDate() != null) {
+        //    projectTable.setDue_on_date(projectDTO.getDueOnDate().toString());
+        //}
+        projectTable.setCreation_timestamp(ZonedDateTime.now().toString());
+        projectTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
         ProjectStatusTable statusKey;
 
         setupDbConnection();
@@ -299,12 +300,12 @@ public class ProjectService extends AbstractService{
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
 
         int result = projectDao.create(projectTable);
-        statusKey = projectStatusDao.queryForId(1);
+        statusKey = projectStatusDao.queryForId(projectTable.getProject_status_id());
         teardownDbConnection();
 
         if (result > 0) {
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
-
+            projectDTO.setUuid(projectTable.getProject_uuid());
             projectDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(projectTable.getCreation_timestamp()));
             projectDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(projectTable.getLast_changed_timestamp()));
             ObservableProject observableProject = new ObservableProject(projectDTO, localizedStatusText);
@@ -325,7 +326,7 @@ public class ProjectService extends AbstractService{
         projectTableData.setProject_title(newProjectData.getTitle());
         projectTableData.setProject_description(newProjectData.getDescription());
         projectTableData.setProject_status_id(observableProject.statusIDProperty().getValue());
-        projectTableData.setLast_changed_timestamp(getZonedDateTimeNow());
+        projectTableData.setLast_changed_timestamp(ZonedDateTime.now().toString());
         int result = projectDao.update(projectTableData);
 
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
@@ -374,10 +375,10 @@ public class ProjectService extends AbstractService{
         List<PreparedDelete<CardTable>> cardPreparedDeleteList = new ArrayList<PreparedDelete<CardTable>>();
         for(ColumnTable column : columnsList) {
             cardTableQueryBuilder.reset();
-            cardTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, column.getColumn_uuid());
+            cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, column.getColumn_uuid());
             allCards.add(cardTableQueryBuilder.query());
             cardTableDeleteBuilder.reset();
-            cardTableDeleteBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, column.getColumn_uuid());
+            cardTableDeleteBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, column.getColumn_uuid());
             cardPreparedDeleteList.add(cardTableDeleteBuilder.prepare());
         }
 

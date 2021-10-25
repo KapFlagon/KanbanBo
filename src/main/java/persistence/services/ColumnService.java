@@ -12,6 +12,7 @@ import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import persistence.mappers.DTOToTable;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
@@ -22,6 +23,7 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -68,10 +70,12 @@ public class ColumnService extends AbstractService{
 
     // Other methods
     public boolean createColumn(ColumnDTO columnDTO) throws SQLException, IOException {
-        ColumnTable columnTable = new ColumnTable();
-        columnTable.setParent_project_uuid(columnDTO.getParentProjectUUID());
-        columnTable.setColumn_title(columnDTO.getTitle());
-        columnTable.setFinal_column(columnDTO.isFinalColumn());
+        ColumnTable columnTable = DTOToTable.mapColumnDTOToColumnTable(columnDTO);
+        //columnTable.setParent_project_uuid(columnDTO.getParentProjectUUID());
+        //columnTable.setColumn_title(columnDTO.getTitle());
+        //columnTable.setFinal_column(columnDTO.isFinalColumn());
+        columnTable.setCreation_timestamp(ZonedDateTime.now().toString());
+        columnTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
         setupDbConnection();
 
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
@@ -95,6 +99,7 @@ public class ColumnService extends AbstractService{
                         observableProject = op;
                     }
                 }
+                columnDTO.setUuid(columnTable.getColumn_uuid());
                 ObservableList<ObservableCard> emptyCardList = FXCollections.observableArrayList();
                 ObservableColumn observableColumn = new ObservableColumn(columnDTO, emptyCardList);
                 observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
@@ -128,7 +133,7 @@ public class ColumnService extends AbstractService{
             public Object call() throws Exception {
                 result[0] = 0;
                 ProjectTable parentProject = projectDao.queryForId(columnTableData.getParent_project_uuid());
-                parentProject.setLast_changed_timestamp(getZonedDateTimeNow());
+                parentProject.setLast_changed_timestamp(ZonedDateTime.now().toString());
                 result[0] += columnDao.update(columnTableData);
                 result[0] += projectDao.update(parentProject);
                 System.out.println("Column and project updated successfully");
@@ -153,7 +158,7 @@ public class ColumnService extends AbstractService{
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
 
         ProjectTable project = projectDao.queryForId(column.getParentProjectUUID());
-        project.setLast_changed_timestamp(getZonedDateTimeNow());
+        project.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
         cardTableQueryBuilder = cardDao.queryBuilder();
         cardTableDeleteBuilder = cardDao.deleteBuilder();

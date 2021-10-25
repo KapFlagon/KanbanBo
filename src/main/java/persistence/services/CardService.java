@@ -13,6 +13,7 @@ import domain.entities.project.ObservableProject;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import persistence.mappers.DTOToTable;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
@@ -22,6 +23,7 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -66,10 +68,9 @@ public class CardService extends AbstractService{
 
     // Other methods
     public void createCard(CardDTO cardDTO) throws SQLException, IOException {
-        CardTable card = new CardTable();
-        card.setParent_column_uuid(cardDTO.getParentColumnUUID());
-        card.setCard_title(cardDTO.getTitle());
-        card.setCard_description_text(cardDTO.getDescription());
+        CardTable card = DTOToTable.mapCardDTOToCardTable(cardDTO);
+        card.setCreation_timestamp(ZonedDateTime.now().toString());
+        card.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
         setupDbConnection();
 
@@ -85,11 +86,12 @@ public class CardService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(cardDTO.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(getZonedDateTimeNow());
+        project.setLast_changed_timestamp(ZonedDateTime.now().toString());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 cardDao.create(card);
+                cardDTO.setUuid(card.getID());
                 projectDao.update(project);
                 return null;
             }
@@ -153,7 +155,7 @@ public class CardService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(cardTable.getParent_column_uuid());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(getZonedDateTimeNow());
+        project.setLast_changed_timestamp(ZonedDateTime.now().toString());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -185,7 +187,7 @@ public class CardService extends AbstractService{
         resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
         ColumnTable column = columnDao.queryForId(card.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(getZonedDateTimeNow());
+        project.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
         List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
 

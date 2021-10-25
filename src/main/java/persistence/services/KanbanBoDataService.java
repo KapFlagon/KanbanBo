@@ -23,6 +23,7 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -133,7 +134,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
+        projectTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
@@ -154,7 +155,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
+        projectTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
@@ -174,7 +175,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
+        projectTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
