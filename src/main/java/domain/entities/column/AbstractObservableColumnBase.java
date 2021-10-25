@@ -18,6 +18,8 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, 
     protected UUID columnUUID;
     protected SimpleStringProperty columnTitle;
     private SimpleBooleanProperty finalColumn;
+    protected SimpleStringProperty creationTimestamp;
+    protected SimpleStringProperty lastChangedTimestamp;
     protected ObservableList<U> cards;
 
     // Constructors
@@ -53,6 +55,20 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, 
 
     public SimpleBooleanProperty finalColumnProperty() {
         return finalColumn;
+    }
+
+    public String getCreationTimestamp() {
+        return creationTimestamp.get();
+    }
+    public SimpleStringProperty creationTimestampProperty() {
+        return creationTimestamp;
+    }
+
+    public String getLastChangedTimestamp() {
+        return lastChangedTimestamp.get();
+    }
+    public SimpleStringProperty lastChangedTimestampProperty() {
+        return lastChangedTimestamp;
     }
 
     public ObservableList<U> getCards() {

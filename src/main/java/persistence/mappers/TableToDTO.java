@@ -8,7 +8,7 @@ import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectTable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class TableToDTO {
 
@@ -32,9 +32,11 @@ public class TableToDTO {
         projectDTO.setTitle(projectTable.getProject_title());
         projectDTO.setDescription(projectTable.getProject_description());
         projectDTO.setStatus(projectTable.getProject_status_id());
-        projectDTO.setCreatedOnDate(LocalDateTime.parse(projectTable.getCreation_timestamp()));
-        projectDTO.setLastChangedOnDate(LocalDateTime.parse(projectTable.getLast_changed_timestamp()));
-        projectDTO.setDueOnDate(LocalDate.parse(projectTable.getDue_on_date()));
+        projectDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(projectTable.getCreation_timestamp()));
+        projectDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(projectTable.getLast_changed_timestamp()));
+        if(projectTable.getDue_on_date() != null) {
+            projectDTO.setDueOnDate(LocalDate.parse(projectTable.getDue_on_date()));
+        }
         return projectDTO;
     }
 

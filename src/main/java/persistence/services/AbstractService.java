@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 public abstract class AbstractService {
 
@@ -44,12 +45,8 @@ public abstract class AbstractService {
 
     }
 
-    protected String getOffsetNowTime() {
-        return OffsetDateTime.now().toString();
-    }
-
-    protected String formatUTCforLocale() {
-        return null;
+    protected String getZonedDateTimeNow() {
+        return ZonedDateTime.now().toString();
     }
 
 }

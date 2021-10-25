@@ -21,6 +21,10 @@ public abstract class AbstractCardBaseTable implements TableObject<UUID> {
     private String card_title;
     @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.STRING)
     private String card_description_text;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String creation_timestamp;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String last_changed_timestamp;
 
     // Constructors
 
@@ -45,6 +49,20 @@ public abstract class AbstractCardBaseTable implements TableObject<UUID> {
     }
     public void setCard_description_text(String card_description_text) {
         this.card_description_text = card_description_text;
+    }
+
+    public String getCreation_timestamp() {
+        return creation_timestamp;
+    }
+    public void setCreation_timestamp(String creation_timestamp) {
+        this.creation_timestamp = creation_timestamp;
+    }
+
+    public String getLast_changed_timestamp() {
+        return last_changed_timestamp;
+    }
+    public void setLast_changed_timestamp(String last_changed_timestamp) {
+        this.last_changed_timestamp = last_changed_timestamp;
     }
 
     // Establishing contract for extending classes so that they have some sort of access for a parent UUID and position.

@@ -285,7 +285,7 @@ public class StartScreenPresenter implements Initializable {
 
     @FXML
     void onDragoOver(DragEvent event) {
-        event.acceptTransferModes(TransferMode.MOVE);
+        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
     }
 
     @FXML

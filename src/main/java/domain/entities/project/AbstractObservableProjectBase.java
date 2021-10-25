@@ -88,8 +88,8 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
     protected void initAllProperties(T projectObjectDTO) {
         this.projectTitle = new SimpleStringProperty(projectObjectDTO.getTitle());
         this.projectDescription = new SimpleStringProperty(projectObjectDTO.getDescription());
-        this.creationTimestamp = new SimpleStringProperty(projectObjectDTO.getCreatedOnDate().toString());
-        this.lastChangedTimestamp = new SimpleStringProperty(projectObjectDTO.getLastChangedOnDate().toString());
+        this.creationTimestamp = new SimpleStringProperty(projectObjectDTO.getCreatedOnTimeStamp().toString());
+        this.lastChangedTimestamp = new SimpleStringProperty(projectObjectDTO.getLastChangedOnTimeStamp().toString());
         this.hasFinalColumn = new SimpleBooleanProperty(false);
     }
 

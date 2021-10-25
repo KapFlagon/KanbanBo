@@ -27,8 +27,7 @@ import persistence.tables.resourceitems.ResourceItemTypeTable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -288,9 +287,11 @@ public class ProjectService extends AbstractService{
         projectTable.setProject_title(projectDTO.getTitle());
         projectTable.setProject_description(projectDTO.getDescription());
         projectTable.setProject_status_id(1);
-        projectTable.setDue_on_date(projectDTO.getDueOnDate().toString());
-        projectTable.setCreation_timestamp(getOffsetNowTime());
-        projectTable.setLast_changed_timestamp(getOffsetNowTime());
+        if(projectDTO.getDueOnDate() != null) {
+            projectTable.setDue_on_date(projectDTO.getDueOnDate().toString());
+        }
+        projectTable.setCreation_timestamp(getZonedDateTimeNow());
+        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
         ProjectStatusTable statusKey;
 
         setupDbConnection();
@@ -303,6 +304,9 @@ public class ProjectService extends AbstractService{
 
         if (result > 0) {
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
+
+            projectDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(projectTable.getCreation_timestamp()));
+            projectDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(projectTable.getLast_changed_timestamp()));
             ObservableProject observableProject = new ObservableProject(projectDTO, localizedStatusText);
             projectsList.add(observableProject);
             workspaceProjectsList.add(observableProject);
@@ -321,7 +325,7 @@ public class ProjectService extends AbstractService{
         projectTableData.setProject_title(newProjectData.getTitle());
         projectTableData.setProject_description(newProjectData.getDescription());
         projectTableData.setProject_status_id(observableProject.statusIDProperty().getValue());
-        projectTableData.setLast_changed_timestamp(getOffsetNowTime());
+        projectTableData.setLast_changed_timestamp(getZonedDateTimeNow());
         int result = projectDao.update(projectTableData);
 
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
@@ -330,7 +334,7 @@ public class ProjectService extends AbstractService{
         if(result > 0) {
             observableProject.projectTitleProperty().setValue(newProjectData.getTitle());
             observableProject.projectDescriptionProperty().setValue(newProjectData.getDescription());
-            observableProject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnDate().toString());
+            observableProject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnTimeStamp().toString());
             observableProject.statusIDProperty().setValue(newProjectData.getStatus());
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
             observableProject.statusTextProperty().setValue(localizedStatusText);

@@ -1,7 +1,6 @@
 package persistence.dto.project;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public abstract class AbstractProjectDTO {
@@ -11,24 +10,24 @@ public abstract class AbstractProjectDTO {
     private UUID uuid;
     private String title;
     private String description;
-    private LocalDateTime createdOnDate;
-    private LocalDateTime lastChangedOnDate;
+    private ZonedDateTime createdOnTimeStamp;
+    private ZonedDateTime lastChangedOnTimeStamp;
 
     // Constructors
     public AbstractProjectDTO() {
         this.uuid = null;
         this.title = "";
         this.description = "";
-        this.createdOnDate = null;
-        this.lastChangedOnDate = null;
+        this.createdOnTimeStamp = null;
+        this.lastChangedOnTimeStamp = null;
     }
 
-    public AbstractProjectDTO(UUID uuid, String title, String description, LocalDateTime createdOnDate, LocalDateTime lastChangedOnDate) {
+    public AbstractProjectDTO(UUID uuid, String title, String description, ZonedDateTime createdOnTimeStamp, ZonedDateTime lastChangedOnTimeStamp) {
         this.uuid = uuid;
         this.title = title;
         this.description = description;
-        this.createdOnDate = createdOnDate;
-        this.lastChangedOnDate = lastChangedOnDate;
+        this.createdOnTimeStamp = createdOnTimeStamp;
+        this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
     }
 
     // Getters and Setters
@@ -53,18 +52,18 @@ public abstract class AbstractProjectDTO {
         this.description = description;
     }
 
-    public LocalDateTime getCreatedOnDate() {
-        return createdOnDate;
+    public ZonedDateTime getCreatedOnTimeStamp() {
+        return createdOnTimeStamp;
     }
-    public void setCreatedOnDate(LocalDateTime createdOnDate) {
-        this.createdOnDate = createdOnDate;
+    public void setCreatedOnTimeStamp(ZonedDateTime createdOnTimeStamp) {
+        this.createdOnTimeStamp = createdOnTimeStamp;
     }
 
-    public LocalDateTime getLastChangedOnDate() {
-        return lastChangedOnDate;
+    public ZonedDateTime getLastChangedOnTimeStamp() {
+        return lastChangedOnTimeStamp;
     }
-    public void setLastChangedOnDate(LocalDateTime lastChangedOnDate) {
-        this.lastChangedOnDate = lastChangedOnDate;
+    public void setLastChangedOnTimeStamp(ZonedDateTime lastChangedOnTimeStamp) {
+        this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
     }
 
 

@@ -128,7 +128,7 @@ public class ColumnService extends AbstractService{
             public Object call() throws Exception {
                 result[0] = 0;
                 ProjectTable parentProject = projectDao.queryForId(columnTableData.getParent_project_uuid());
-                parentProject.setLast_changed_timestamp(getOffsetNowTime());
+                parentProject.setLast_changed_timestamp(getZonedDateTimeNow());
                 result[0] += columnDao.update(columnTableData);
                 result[0] += projectDao.update(parentProject);
                 System.out.println("Column and project updated successfully");
@@ -153,7 +153,7 @@ public class ColumnService extends AbstractService{
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
 
         ProjectTable project = projectDao.queryForId(column.getParentProjectUUID());
-        project.setLast_changed_timestamp(getOffsetNowTime());
+        project.setLast_changed_timestamp(getZonedDateTimeNow());
 
         cardTableQueryBuilder = cardDao.queryBuilder();
         cardTableDeleteBuilder = cardDao.deleteBuilder();

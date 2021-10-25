@@ -7,7 +7,6 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.QueryBuilder;
 import persistence.dto.card.CardDTO;
-import persistence.dto.ResourceItemDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
@@ -86,7 +85,7 @@ public class CardService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(cardDTO.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(getOffsetNowTime());
+        project.setLast_changed_timestamp(getZonedDateTimeNow());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -154,7 +153,7 @@ public class CardService extends AbstractService{
 
         ColumnTable column = columnDao.queryForId(cardTable.getParent_column_uuid());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(getOffsetNowTime());
+        project.setLast_changed_timestamp(getZonedDateTimeNow());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -186,7 +185,7 @@ public class CardService extends AbstractService{
         resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
         ColumnTable column = columnDao.queryForId(card.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
-        project.setLast_changed_timestamp(getOffsetNowTime());
+        project.setLast_changed_timestamp(getZonedDateTimeNow());
 
         List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
 

@@ -17,6 +17,9 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardDTO> exte
     private UUID cardUUID;
     private SimpleStringProperty cardTitle;
     private SimpleStringProperty cardDescription;
+    protected SimpleStringProperty creationTimestamp;
+    protected SimpleStringProperty lastChangedTimestamp;
+
     protected ObservableList<ObservableResourceItem> resourceItems;
 
     // Constructors
@@ -66,6 +69,20 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardDTO> exte
     }
     public void setCardDescription(String cardDescription) {
         this.cardDescription.set(cardDescription);
+    }
+
+    public String getCreationTimestamp() {
+        return creationTimestamp.get();
+    }
+    public SimpleStringProperty creationTimestampProperty() {
+        return creationTimestamp;
+    }
+
+    public String getLastChangedTimestamp() {
+        return lastChangedTimestamp.get();
+    }
+    public SimpleStringProperty lastChangedTimestampProperty() {
+        return lastChangedTimestamp;
     }
 
     public ObservableList<ObservableResourceItem> getResourceItems() {

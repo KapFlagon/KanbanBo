@@ -1,11 +1,7 @@
 package persistence.dto.project;
 
-import persistence.dto.ResourceItemDTO;
-import persistence.dto.column.AbstractColumnDTO;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class ProjectDTO extends AbstractProjectDTO{
@@ -25,7 +21,7 @@ public class ProjectDTO extends AbstractProjectDTO{
         this.dueOnDate = null;
     }
 
-    public ProjectDTO(UUID uuid, String title, String description, LocalDateTime createdOnDate, LocalDateTime lastChangedOnDate, int status, LocalDate dueOnDate) {
+    public ProjectDTO(UUID uuid, String title, String description, ZonedDateTime createdOnDate, ZonedDateTime lastChangedOnDate, int status, LocalDate dueOnDate) {
         super(uuid, title, description, createdOnDate, lastChangedOnDate);
         this.status = status;
         this.dueOnDate = dueOnDate;

@@ -1,5 +1,6 @@
 package persistence.dto.card;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ public abstract class AbstractCardDTO {
     private UUID parentColumnUUID;
     private String title;
     private String description;
+    private ZonedDateTime createdOnTimeStamp;
+    private ZonedDateTime lastChangedOnTimeStamp;
 
 
     // Constructors
@@ -56,6 +59,20 @@ public abstract class AbstractCardDTO {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ZonedDateTime getCreatedOnTimeStamp() {
+        return createdOnTimeStamp;
+    }
+    public void setCreatedOnTimeStamp(ZonedDateTime createdOnTimeStamp) {
+        this.createdOnTimeStamp = createdOnTimeStamp;
+    }
+
+    public ZonedDateTime getLastChangedOnTimeStamp() {
+        return lastChangedOnTimeStamp;
+    }
+    public void setLastChangedOnTimeStamp(ZonedDateTime lastChangedOnTimeStamp) {
+        this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
     }
 
 

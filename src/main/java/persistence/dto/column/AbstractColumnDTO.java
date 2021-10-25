@@ -1,5 +1,6 @@
 package persistence.dto.column;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ public abstract class AbstractColumnDTO {
     private UUID parentProjectUUID;
     private String title;
     private boolean finalColumn;
+    private ZonedDateTime createdOnTimeStamp;
+    private ZonedDateTime lastChangedOnTimeStamp;
 
 
     // Constructors
@@ -57,6 +60,19 @@ public abstract class AbstractColumnDTO {
         this.finalColumn = finalColumn;
     }
 
+    public ZonedDateTime getCreatedOnTimeStamp() {
+        return createdOnTimeStamp;
+    }
+    public void setCreatedOnTimeStamp(ZonedDateTime createdOnTimeStamp) {
+        this.createdOnTimeStamp = createdOnTimeStamp;
+    }
+
+    public ZonedDateTime getLastChangedOnTimeStamp() {
+        return lastChangedOnTimeStamp;
+    }
+    public void setLastChangedOnTimeStamp(ZonedDateTime lastChangedOnTimeStamp) {
+        this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
+    }
 
     // Initialisation methods
 

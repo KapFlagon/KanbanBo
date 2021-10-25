@@ -13,7 +13,6 @@ import domain.entities.card.ObservableCard;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
@@ -134,7 +133,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(getOffsetNowTime());
+        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
@@ -155,7 +154,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(getOffsetNowTime());
+        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
@@ -175,7 +174,7 @@ public class KanbanBoDataService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         ProjectTable projectTable = projectDao.queryForId(topLevelProjectUUID);
-        projectTable.setLast_changed_timestamp(getOffsetNowTime());
+        projectTable.setLast_changed_timestamp(getZonedDateTimeNow());
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override

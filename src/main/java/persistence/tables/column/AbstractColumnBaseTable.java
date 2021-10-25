@@ -18,6 +18,10 @@ public abstract class AbstractColumnBaseTable implements TableObject<UUID> {
     private UUID column_uuid;
     @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
     private String column_title;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String creation_timestamp;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String last_changed_timestamp;
 
     // Constructors
     public AbstractColumnBaseTable() {
@@ -38,6 +42,20 @@ public abstract class AbstractColumnBaseTable implements TableObject<UUID> {
     }
     public void setColumn_title(String column_title) {
         this.column_title = column_title;
+    }
+
+    public String getCreation_timestamp() {
+        return creation_timestamp;
+    }
+    public void setCreation_timestamp(String creation_timestamp) {
+        this.creation_timestamp = creation_timestamp;
+    }
+
+    public String getLast_changed_timestamp() {
+        return last_changed_timestamp;
+    }
+    public void setLast_changed_timestamp(String last_changed_timestamp) {
+        this.last_changed_timestamp = last_changed_timestamp;
     }
 
     // Establishing contract for extending classes so that they have some sort of access for a parent UUID and position.
