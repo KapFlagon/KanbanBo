@@ -218,7 +218,6 @@ public class ColumnContainerPresenter implements Initializable {
     }
 
     @FXML private void deleteColumn() throws SQLException, IOException {
-        forRemovalProperty().set(true);
         System.out.println("Delete Column");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure that you want to delete the column?");
         alert.setTitle("Confirm column deletion");
