@@ -12,6 +12,8 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -46,10 +48,11 @@ public class ColumnDetailsWindowPresenter implements Initializable {
         this.parentProjectUUID = parentProjectUUID;
     }
 
-    public void setColumnViewModel(ObservableColumn columnViewModel) {
+        public void setColumnViewModel(ObservableColumn columnViewModel) {
         this.columnViewModel = columnViewModel;
         this.titleTextField.textProperty().set(columnViewModel.columnTitleProperty().getValue());
         this.finalColumnCheckBox.selectedProperty().set(columnViewModel.isFinalColumn());
+        this.parentProjectUUID = columnViewModel.getParentProjectUUID();
     }
 
     // Initialisation methods
@@ -64,18 +67,19 @@ public class ColumnDetailsWindowPresenter implements Initializable {
 
 
     // UI event methods
-    @FXML private void saveDetailsChange() throws IOException, SQLException {
+    @FXML private void saveDetailsChange() throws IOException, SQLException, ParseException {
         if(validTitle) {
+            ColumnDTO columnDTO = new ColumnDTO();
+            columnDTO.setParentProjectUUID(parentProjectUUID);
+            columnDTO.setTitle(titleTextField.getText());
+            columnDTO.setFinalColumn(finalColumnCheckBox.isSelected());
             if(columnViewModel == null) {
-                ColumnDTO columnDTO = new ColumnDTO();
-                columnDTO.setParentProjectUUID(parentProjectUUID);
-                columnDTO.setTitle(titleTextField.getText());
-                columnDTO.setFinalColumn(finalColumnCheckBox.isSelected());
                 kanbanBoDataService.createColumn(columnDTO);
-                //columnViewModel = new ObservableColumn();
             } else {
-                columnViewModel.columnTitleProperty().set(titleTextField.getText());
-                columnViewModel.finalColumnProperty().set(finalColumnCheckBox.isSelected());
+                columnDTO.setUuid(columnViewModel.getColumnUUID());
+                columnDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(columnViewModel.creationTimestampProperty().getValue()));
+                columnDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(columnViewModel.lastChangedTimestampProperty().getValue()));
+                kanbanBoDataService.updateColumn(columnDTO, columnViewModel);
                 // TODO figure out how to manage position...
                 // columnViewModel.columnPositionProperty().set(position?);
             }

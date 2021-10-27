@@ -27,7 +27,7 @@
                         <Insets left="15.0" />
                      </VBox.margin>
                   </Label>
-                  <CheckBox fx:id="finalColumnCheckBox" mnemonicParsing="false" text="%column.checkbox.final" />
+                  <CheckBox fx:id="finalColumnCheckBox" mnemonicParsing="false" text="%column.final_column" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
