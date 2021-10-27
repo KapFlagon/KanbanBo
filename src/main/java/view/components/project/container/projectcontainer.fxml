@@ -65,7 +65,8 @@
                      <children>
                         <ToolBar>
                            <items>
-                            <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn" text="%button.column.create" />
+                            <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn" text="%button.project.create_column" />
+                              <Button fx:id="selectFinalColumnBtn" mnemonicParsing="false" onAction="#selectFinalColumn" text="%button.project.select_final_column" />
                            </items>
                         </ToolBar>
                         <ScrollPane fx:id="subScrollPane" cacheShape="false" prefHeight="400.0" prefWidth="400.0">

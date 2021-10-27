@@ -31,6 +31,8 @@ public class ColumnContainerPresenter implements Initializable {
 
     // JavaFX injected node variables
     @FXML
+    private Label finalLbl;
+    @FXML
     private Label columnTitleLbl;
     @FXML
     private Button editColumnDetailsBtn;
@@ -87,6 +89,7 @@ public class ColumnContainerPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initLabelGraphics();
         initButtonGraphics();
         forRemoval = new SimpleBooleanProperty(false);
         ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
@@ -105,6 +108,7 @@ public class ColumnContainerPresenter implements Initializable {
 
     public void customInit() {
         columnTitleLbl.textProperty().bind(columnViewModel.columnTitleProperty());
+        finalLbl.visibleProperty().bind(columnViewModel.finalColumnProperty());
         //columnTitleTextField.textProperty().bind(columnViewModel.columnTitleProperty());
         //finalColumnCheckBox.selectedProperty().bind(columnViewModel.finalColumnProperty());
         for (ObservableCard cardViewModel : columnViewModel.getCards()) {
@@ -177,6 +181,11 @@ public class ColumnContainerPresenter implements Initializable {
         cardDetailsWindowView = new CardDetailsWindowView();
         cardDetailsWindowPresenter = (CardDetailsWindowPresenter) cardDetailsWindowView.getPresenter();
         cardDetailsWindowPresenter.setParentColumnUUID(columnViewModel.getColumnUUID());
+    }
+
+    private void initLabelGraphics() {
+        ImageView finalColumnImageView = new ImageView(getClass().getResource("/icons/sports_score/materialicons/black/res/drawable-mdpi/baseline_sports_score_black_18.png").toExternalForm());
+        finalLbl.setGraphic(finalColumnImageView);
     }
 
     private void initButtonGraphics() {

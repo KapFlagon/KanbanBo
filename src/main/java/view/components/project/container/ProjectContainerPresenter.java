@@ -19,6 +19,8 @@ import view.components.column.container.ColumnContainerView;
 import view.sharedviewcomponents.DetailsPopupInitialDataMode;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowView;
+import view.sharedviewcomponents.popups.finalcolumnselection.FinalColumnSelectionPresenter;
+import view.sharedviewcomponents.popups.finalcolumnselection.FinalColumnSelectionView;
 import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
 import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowView;
 import view.sharedviewcomponents.popups.resourceitemdetails.ResourceItemDetailsPresenter;
@@ -41,6 +43,8 @@ public class ProjectContainerPresenter implements Initializable {
     private Button saveProjectDetailsBtn;
     @FXML
     private Button createColumnBtn;
+    @FXML
+    private Button selectFinalColumnBtn;
     @FXML
     private TextField projectStatusTextField; // TODO Used to display the text in a copyable way, but replaced by choicebox in "edit" mode.
     @FXML
@@ -111,6 +115,9 @@ public class ProjectContainerPresenter implements Initializable {
 
         resourceItemTableView.setItems(projectViewModel.getResourceItems());
         // TODO Resume here. Need to devise a strategy to handle populating old data and storing object references properly to remove them from the HBox efficiently later when deleted.
+        if(projectViewModel.getColumns().size() < 1) {
+            selectFinalColumnBtn.setDisable(true);
+        }
         for (ObservableColumn columnViewModel : projectViewModel.getColumns()) {
             ColumnContainerView columnContainerView = new ColumnContainerView();
             ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) columnContainerView.getPresenter();
@@ -139,10 +146,18 @@ public class ProjectContainerPresenter implements Initializable {
                             columnContainerPresenter.setColumnViewModel(observableColumn);
                             columnContainerView.getViewAsync(columnHBox.getChildren()::add);
                         }
+                        if(projectViewModel.getColumns().size() > 0) {
+                            selectFinalColumnBtn.setDisable(false);
+                        }
                     }
                     if (c.wasUpdated()) {
                         // TODO Check if this needs to be implemented...
                         System.out.println("column list was updated");
+                    }
+                    if (c.wasRemoved()) {
+                        if(projectViewModel.getColumns().size() < 1) {
+                            selectFinalColumnBtn.setDisable(true);
+                        }
                     }
                 }
             }
@@ -152,14 +167,15 @@ public class ProjectContainerPresenter implements Initializable {
     private void initColumnDetailsWindow() {
         columnDetailsWindowView = new ColumnDetailsWindowView();
         columnDetailsWindowPresenter = (ColumnDetailsWindowPresenter) columnDetailsWindowView.getPresenter();
-        columnDetailsWindowPresenter.setParentProjectUUID(projectViewModel.getProjectUUID());
     }
 
     private void initButtonGraphics() {
         ImageView editProjectDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
         ImageView createColumnImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialicons/black/res/drawable-mdpi/baseline_add_circle_outline_black_18.png").toExternalForm());
+        ImageView finalColumnSelectionImageView = new ImageView(getClass().getResource("/icons/sports_score/materialicons/black/res/drawable-mdpi/baseline_sports_score_black_18.png").toExternalForm());
         editProjectDetailsBtn.setGraphic(editProjectDetailsImageView);
         createColumnBtn.setGraphic(createColumnImageView);
+        selectFinalColumnBtn.setGraphic(finalColumnSelectionImageView);
     }
 
     // UI event methods
@@ -209,8 +225,17 @@ public class ProjectContainerPresenter implements Initializable {
     @FXML private void createColumn() throws IOException, SQLException {
         System.out.println("Create Column...");
         initColumnDetailsWindow();
+        columnDetailsWindowPresenter.setParentProjectUUID(projectViewModel.getProjectUUID());
         StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
         // TODO Need to respond and feedback scenario where a final column already exists...
+        StageUtils.showAndWaitOnSubStage();
+    }
+
+    @FXML private void selectFinalColumn() {
+        FinalColumnSelectionView finalColumnSelectionView = new FinalColumnSelectionView();
+        FinalColumnSelectionPresenter finalColumnSelectionPresenter = (FinalColumnSelectionPresenter) finalColumnSelectionView.getPresenter();
+        finalColumnSelectionPresenter.setAvailableColumns(projectViewModel.getColumns());
+        StageUtils.createChildStage("Select Final Column", finalColumnSelectionView.getView());
         StageUtils.showAndWaitOnSubStage();
     }
     // Other methods
