@@ -9,3 +9,12 @@ gradlew
 demos/*
 src/main/java/Notes.txt
 design/**
+**/materialiconsoutlined/**
+**/materialiconsround/**
+**/materialiconssharp/**
+**/materialiconstwotone/**
+**/drawable/**
+**/drawable-hdpi/**
+**/drawable-xhdpi/**
+**/drawable-xxhdpi/**
+**/drawable-xxxhdpi/**
