@@ -102,6 +102,8 @@ public class ColumnService extends AbstractService{
                     }
                 }
                 columnDTO.setUuid(columnTable.getColumn_uuid());
+                columnDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(columnTable.getCreation_timestamp()));
+                columnDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(columnTable.getLast_changed_timestamp()));
                 ObservableList<ObservableCard> emptyCardList = FXCollections.observableArrayList();
                 ObservableColumn observableColumn = new ObservableColumn(columnDTO, emptyCardList);
                 observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
@@ -121,12 +123,7 @@ public class ColumnService extends AbstractService{
     }
 
     public void updateColumn(ColumnDTO columnDTO, ObservableColumn observableColumn) throws ParseException, SQLException, IOException {
-        ColumnTable columnTableData = new ColumnTable();
-        columnTableData.setColumn_uuid(columnDTO.getUuid());
-        columnTableData.setParent_project_uuid(columnDTO.getParentProjectUUID());
-        columnTableData.setColumn_title(columnDTO.getTitle());
-        columnTableData.setColumn_position(columnDTO.getPosition());
-        columnTableData.setFinal_column(columnDTO.isFinalColumn());
+        ColumnTable columnTableData = DTOToTable.mapColumnDTOToColumnTable(columnDTO);
         setupDbConnection();
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -150,6 +147,48 @@ public class ColumnService extends AbstractService{
             observableColumn.finalColumnProperty().setValue(columnDTO.isFinalColumn());
         }
         teardownDbConnection();
+    }
+
+    public void updateColumns(List<ColumnDTO> columnDTOList, ObservableList<ObservableColumn> observableColumns) throws SQLException, IOException {
+        List<ColumnTable> columnTableList = new ArrayList<>();
+        for(ColumnDTO columnDTO : columnDTOList) {
+            ColumnTable columnTable = DTOToTable.mapColumnDTOToColumnTable(columnDTO);
+            columnTableList.add(columnTable);
+        }
+        setupDbConnection();
+        columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
+        projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
+        final int[] result = new int[1];
+        TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                result[0] = 0;
+                ProjectTable parentProject = projectDao.queryForId(columnTableList.get(0).getParent_project_uuid());
+                parentProject.setLast_changed_timestamp(ZonedDateTime.now().toString());
+
+                for(ColumnTable columnTable : columnTableList) {
+                    result[0] += columnDao.update(columnTable);
+                }
+                result[0] += projectDao.update(parentProject);
+                System.out.println("Column and project updated successfully");
+                return null;
+            }
+        });
+        teardownDbConnection();
+        if (result[0] > 1) {
+            for(ObservableColumn observableColumn : observableColumns) {
+                for(ColumnDTO columnDTO : columnDTOList) {
+                    if(observableColumn.getColumnUUID().equals(columnDTO.getUuid())) {
+                        observableColumn.setParentProjectUUID(columnDTO.getParentProjectUUID());
+                        observableColumn.columnTitleProperty().setValue(columnDTO.getTitle());
+                        observableColumn.columnPositionProperty().setValue(columnDTO.getPosition());
+                        observableColumn.finalColumnProperty().setValue(columnDTO.isFinalColumn());
+                        observableColumn.creationTimestampProperty().setValue(columnDTO.getCreatedOnTimeStamp().toString());
+                        observableColumn.lastChangedTimestampProperty().setValue(columnDTO.getLastChangedOnTimeStamp().toString());
+                    }
+                }
+            }
+        }
     }
 
     public void deleteColumn(ObservableColumn column) throws SQLException, IOException {

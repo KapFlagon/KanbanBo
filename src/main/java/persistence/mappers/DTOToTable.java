@@ -48,10 +48,10 @@ public class DTOToTable {
         columnTable.setColumn_title(columnDTO.getTitle());
         columnTable.setColumn_position(columnDTO.getPosition());
         columnTable.setFinal_column(columnDTO.isFinalColumn());
-        if(columnTable.getCreation_timestamp() != null) {
+        if(columnDTO.getCreatedOnTimeStamp() != null) {
             columnTable.setCreation_timestamp(columnDTO.getCreatedOnTimeStamp().toString());
         }
-        if(columnTable.getLast_changed_timestamp() != null) {
+        if(columnDTO.getLastChangedOnTimeStamp() != null) {
             columnTable.setLast_changed_timestamp(columnDTO.getLastChangedOnTimeStamp().toString());
         }
         return columnTable;
@@ -64,10 +64,10 @@ public class DTOToTable {
         cardTable.setCard_title(cardDTO.getTitle());
         cardTable.setCard_description_text(cardDTO.getDescription());
         cardTable.setCard_position(cardDTO.getPosition());
-        if(cardTable.getCreation_timestamp() != null) {
+        if(cardDTO.getCreatedOnTimeStamp() != null) {
             cardTable.setCreation_timestamp(cardDTO.getCreatedOnTimeStamp().toString());
         }
-        if(cardTable.getLast_changed_timestamp() != null) {
+        if(cardDTO.getLastChangedOnTimeStamp() != null) {
             cardTable.setLast_changed_timestamp(cardDTO.getLastChangedOnTimeStamp().toString());
         }
         if(cardDTO.getDueOnDate() != null) {
