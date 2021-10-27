@@ -25,9 +25,13 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, 
     // Constructors
     public AbstractObservableColumnBase(T columnDTO, ObservableList<U> cardsList) {
         super();
+        initAllProperties();
+        this.columnTitle.setValue(columnDTO.getTitle());
         this.parentProjectUUID = columnDTO.getParentProjectUUID();
         this.columnUUID = columnDTO.getUuid();
-        initAllProperties();
+        this.finalColumn.set(columnDTO.isFinalColumn());
+        this.creationTimestamp.set(columnDTO.getCreatedOnTimeStamp().toString());
+        this.lastChangedTimestamp.set(columnDTO.getLastChangedOnTimeStamp().toString());
         initObservableList(cardsList);
     }
 
@@ -82,6 +86,9 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, 
     // Initialisation methods
     protected void initAllProperties() {
         this.columnTitle = new SimpleStringProperty();
+        this.finalColumn = new SimpleBooleanProperty(false);
+        this.creationTimestamp = new SimpleStringProperty();
+        this.lastChangedTimestamp = new SimpleStringProperty();
     }
 
     protected void initAllProperties(T domainObject) {
