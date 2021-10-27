@@ -87,7 +87,9 @@ public class ColumnService extends AbstractService{
         columnTable.setColumn_position(position);
         columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, columnDTO.getParentProjectUUID()).and().eq(ColumnTable.FINAL_FLAG_NAME, true);
         long countOfFinalColumns = columnTableQueryBuilder.countOf();
-        if (countOfFinalColumns > 0) {
+        if (countOfFinalColumns > 0 && columnDTO.isFinalColumn()) {
+            System.out.println("Cannot create another final column");
+            teardownDbConnection();
             return false;
         } else {
             int result = columnDao.create(columnTable);
@@ -112,6 +114,7 @@ public class ColumnService extends AbstractService{
             } else {
                 // TODO respond to a failure...
                 System.out.println("Column creation failed...");
+                teardownDbConnection();
                 return false;
             }
         }
