@@ -114,6 +114,14 @@ public class KanbanBoDataService extends AbstractService{
         columnService.updateColumns(columnDTOList, observableColumns);
     }
 
+    public List<ObservableColumn> getRelatedColumns(ObservableColumn observableColumn) throws SQLException, IOException {
+        return columnService.getRelatedColumns(observableColumn);
+    }
+
+    public void moveColumn(ColumnDTO newColumnDataDTO, ObservableColumn oldObservableColumn) throws SQLException, IOException {
+        columnService.moveColumn(newColumnDataDTO, oldObservableColumn);
+    }
+
     public void deleteColumn(ObservableColumn column) throws SQLException, IOException {
         columnService.deleteColumn(column);
     }
