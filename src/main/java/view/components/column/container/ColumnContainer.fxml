@@ -45,7 +45,7 @@
                               <Button fx:id="editColumnDetailsBtn" mnemonicParsing="false" onAction="#editColumnDetails" text="%button.column.details" />
                         <Button fx:id="createCardBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#createCard" text="%button.card.create" />
                         <Button fx:id="copyColumnBtn" mnemonicParsing="false" text="%button.column.copy" />
-                        <Button fx:id="moveColumnBtn" mnemonicParsing="false" text="%button.column.move" />
+                        <Button fx:id="moveColumnBtn" mnemonicParsing="false" onAction="#moveColumn" text="%button.column.move" />
                         <Button fx:id="deleteColumnBtn" mnemonicParsing="false" onAction="#deleteColumn" text="%button.column.delete" />
                      </items>
                   </ToolBar>
