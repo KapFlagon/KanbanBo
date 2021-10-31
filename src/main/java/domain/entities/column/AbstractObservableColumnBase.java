@@ -25,13 +25,13 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, 
     // Constructors
     public AbstractObservableColumnBase(T columnDTO, ObservableList<U> cardsList) {
         super();
-        initAllProperties();
-        this.columnTitle.setValue(columnDTO.getTitle());
+        initAllProperties(columnDTO);
+        //this.columnTitle.setValue(columnDTO.getTitle());
         this.parentProjectUUID = columnDTO.getParentProjectUUID();
         this.columnUUID = columnDTO.getUuid();
-        this.finalColumn.set(columnDTO.isFinalColumn());
-        this.creationTimestamp.set(columnDTO.getCreatedOnTimeStamp().toString());
-        this.lastChangedTimestamp.set(columnDTO.getLastChangedOnTimeStamp().toString());
+        //this.finalColumn.set(columnDTO.isFinalColumn());
+        //this.creationTimestamp.set(columnDTO.getCreatedOnTimeStamp().toString());
+        //this.lastChangedTimestamp.set(columnDTO.getLastChangedOnTimeStamp().toString());
         initObservableList(cardsList);
     }
 
@@ -93,6 +93,9 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, 
 
     protected void initAllProperties(T domainObject) {
         this.columnTitle = new SimpleStringProperty(domainObject.getTitle());
+        this.finalColumn = new SimpleBooleanProperty(domainObject.isFinalColumn());
+        this.creationTimestamp = new SimpleStringProperty(domainObject.getCreatedOnTimeStamp().toString());
+        this.lastChangedTimestamp = new SimpleStringProperty(domainObject.getLastChangedOnTimeStamp().toString());
     }
 
     protected void initObservableList() {
