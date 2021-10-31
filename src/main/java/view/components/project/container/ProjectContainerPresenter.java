@@ -4,7 +4,11 @@ import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableProject;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -16,7 +20,7 @@ import utils.StageUtils;
 import utils.view.ScrollPaneFixer;
 import view.components.column.container.ColumnContainerPresenter;
 import view.components.column.container.ColumnContainerView;
-import view.sharedviewcomponents.DetailsPopupInitialDataMode;
+import view.sharedviewcomponents.popups.DetailsPopupInitialDataMode;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowView;
 import view.sharedviewcomponents.popups.finalcolumnselection.FinalColumnSelectionPresenter;
@@ -30,6 +34,9 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ProjectContainerPresenter implements Initializable {
@@ -119,16 +126,7 @@ public class ProjectContainerPresenter implements Initializable {
             selectFinalColumnBtn.setDisable(true);
         }
         for (ObservableColumn columnViewModel : projectViewModel.getColumns()) {
-            ColumnContainerView columnContainerView = new ColumnContainerView();
-            ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) columnContainerView.getPresenter();
-            columnContainerPresenter.setColumnViewModel(columnViewModel);
-            columnContainerPresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
-                if(newVal) {
-                    columnContainerView.getViewAsync(columnHBox.getChildren()::remove);
-                }
-            });
-            columnContainerView.getViewAsync(columnHBox.getChildren()::add);
-            //columnHBox.getChildren().add(columnContainerView.getView());
+            generateAndAddColumnView(columnViewModel);
         }
         projectViewModel.getColumns().addListener(new ListChangeListener<ObservableColumn>() {
             @Override
@@ -142,17 +140,20 @@ public class ProjectContainerPresenter implements Initializable {
                         }
                     });
                     if (c.wasAdded()) {
-                        for (ObservableColumn observableColumn : c.getAddedSubList()) {
-                            columnContainerPresenter.setColumnViewModel(observableColumn);
+                        for (ObservableColumn addedObservableColumn : c.getAddedSubList()) {
+                            columnContainerPresenter.setColumnViewModel(addedObservableColumn);
                             columnContainerView.getViewAsync(columnHBox.getChildren()::add);
                         }
                         if(projectViewModel.getColumns().size() > 0) {
                             selectFinalColumnBtn.setDisable(false);
                         }
                     }
-                    if (c.wasUpdated()) {
-                        // TODO Check if this needs to be implemented...
-                        System.out.println("column list was updated");
+                    if (c.wasPermutated()) {
+                        System.out.println("Permutation detected");
+                        columnHBox.getChildren().clear();
+                        for(ObservableColumn permutedObservableColumn : projectViewModel.getColumns()) {
+                            generateAndAddColumnView(permutedObservableColumn);
+                        }
                     }
                     if (c.wasRemoved()) {
                         if(projectViewModel.getColumns().size() < 1) {
@@ -238,7 +239,19 @@ public class ProjectContainerPresenter implements Initializable {
         StageUtils.createChildStage("Select Final Column", finalColumnSelectionView.getView());
         StageUtils.showAndWaitOnSubStage();
     }
+
     // Other methods
+    private void generateAndAddColumnView(ObservableColumn observableColumn) {
+        ColumnContainerView columnContainerView = new ColumnContainerView();
+        ColumnContainerPresenter columnContainerPresenter = (ColumnContainerPresenter) columnContainerView.getPresenter();
+        columnContainerPresenter.setColumnViewModel(observableColumn);
+        columnContainerPresenter.forRemovalProperty().addListener((observable, oldVal, newVal) -> {
+            if(newVal) {
+                columnContainerView.getViewAsync(columnHBox.getChildren()::remove);
+            }
+        });
+        columnContainerView.getViewAsync(columnHBox.getChildren()::add);
+    }
 
 
 }
