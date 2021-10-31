@@ -10,7 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
-import view.sharedviewcomponents.DetailsPopupInitialDataMode;
+import view.sharedviewcomponents.popups.DetailsPopupInitialDataMode;
 
 import javax.inject.Inject;
 import java.io.IOException;
