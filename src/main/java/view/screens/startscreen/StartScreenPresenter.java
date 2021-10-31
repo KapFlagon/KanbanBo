@@ -24,7 +24,7 @@ import utils.StageUtils;
 import view.screens.mainscreen.MainScreenView;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListView;
-import view.sharedviewcomponents.ScrimRectangle;
+import view.sharedviewcomponents.popups.ScrimRectangle;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressView;
 
