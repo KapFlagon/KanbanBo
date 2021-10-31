@@ -1,4 +1,4 @@
-package view.sharedviewcomponents;
+package view.sharedviewcomponents.popups;
 
 public enum DetailsPopupInitialDataMode {
     CREATE,
