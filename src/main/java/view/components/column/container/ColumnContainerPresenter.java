@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 import utils.view.ScrollPaneFixer;
@@ -20,6 +21,8 @@ import view.sharedviewcomponents.popups.carddetails.CardDetailsWindowPresenter;
 import view.sharedviewcomponents.popups.carddetails.CardDetailsWindowView;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowView;
+import view.sharedviewcomponents.popups.movecolumndialog.MoveColumnDialogPresenter;
+import view.sharedviewcomponents.popups.movecolumndialog.MoveColumnDialogView;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -243,6 +246,15 @@ public class ColumnContainerPresenter implements Initializable {
                         // TODO Need to cause some kind of display if this error is encountered
                     }
                 });
+    }
+
+    @FXML
+    private void moveColumn() throws SQLException, IOException {
+        MoveColumnDialogView moveColumnDialogView = new MoveColumnDialogView();
+        MoveColumnDialogPresenter moveColumnDialogPresenter = (MoveColumnDialogPresenter) moveColumnDialogView.getPresenter();
+        moveColumnDialogPresenter.setColumnToMove(columnViewModel);
+        StageUtils.createChildStage("Move Column", moveColumnDialogView.getView());
+        StageUtils.showAndWaitOnSubStage();
     }
 
     // Other methods
