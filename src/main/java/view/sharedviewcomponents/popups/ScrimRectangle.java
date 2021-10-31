@@ -1,4 +1,4 @@
-package view.sharedviewcomponents;
+package view.sharedviewcomponents.popups;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.property.SimpleBooleanProperty;
