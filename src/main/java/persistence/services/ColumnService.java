@@ -13,6 +13,7 @@ import domain.entities.project.ObservableProject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.mappers.DTOToTable;
+import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
@@ -83,7 +84,7 @@ public class ColumnService extends AbstractService{
 
         columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, columnDTO.getParentProjectUUID());
         long columnCount = columnTableQueryBuilder.countOf();
-        int position = (int) (columnCount + 1);
+        int position = (int) (columnCount);
         columnTable.setColumn_position(position);
         columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, columnDTO.getParentProjectUUID()).and().eq(ColumnTable.FINAL_FLAG_NAME, true);
         long countOfFinalColumns = columnTableQueryBuilder.countOf();
@@ -176,6 +177,7 @@ public class ColumnService extends AbstractService{
         });
         teardownDbConnection();
         if (result[0] > 1) {
+
             for(ObservableColumn observableColumn : observableColumns) {
                 for(ColumnDTO columnDTO : columnDTOList) {
                     if(observableColumn.getColumnUUID().equals(columnDTO.getUuid())) {
@@ -188,6 +190,12 @@ public class ColumnService extends AbstractService{
                     }
                 }
             }
+            observableColumns.sort(new Comparator<ObservableColumn>() {
+                @Override
+                public int compare(ObservableColumn o1, ObservableColumn o2) {
+                    return o1.columnPositionProperty().getValue().compareTo(o2.columnPositionProperty().getValue());
+                }
+            });
         }
     }
 
@@ -250,6 +258,68 @@ public class ColumnService extends AbstractService{
 
     public void copyColumn(ObservableColumn observableColumn) {
         // TODO Implement This
+    }
+
+    public void moveColumn(ColumnDTO newColumnDataDTO, ObservableColumn oldObservableColumn) throws SQLException, IOException {
+        int newPosition = newColumnDataDTO.getPosition();
+        int oldPosition = oldObservableColumn.columnPositionProperty().getValue();
+        if(newPosition == oldPosition) {
+
+        } else {
+            setupDbConnection();
+            columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
+            columnTableQueryBuilder = columnDao.queryBuilder();
+            columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, oldObservableColumn.getParentProjectUUID());
+            List<ColumnTable> columnTableList = columnTableQueryBuilder.query();
+            teardownDbConnection();
+            List<ColumnDTO> columnDTOList = new ArrayList<>();
+            for(ColumnTable columnTable : columnTableList) {
+                ColumnDTO columnDTO = TableToDTO.mapColumnTableToColumnDTO(columnTable);
+                if(!newColumnDataDTO.getUuid().equals(columnDTO.getUuid())){
+                    columnDTOList.add(columnDTO);
+                }
+            }
+            if(newPosition < oldPosition) {
+                for(ColumnDTO columnDTO : columnDTOList) {
+                    if(columnDTO.getPosition() < oldPosition) {
+                        columnDTO.setPosition(columnDTO.getPosition() + 1);
+                    }
+                }
+            } else if(newPosition > oldPosition) {
+                for(ColumnDTO columnDTO : columnDTOList) {
+                    if(columnDTO.getPosition() > oldPosition) {
+                        columnDTO.setPosition(columnDTO.getPosition() - 1);
+                    }
+                }
+            }
+            columnDTOList.add(newColumnDataDTO);
+            ObservableList<ObservableColumn> observableColumnObservableList = FXCollections.observableArrayList();
+            for(ObservableProject observableProject : workspaceProjectsList) {
+                if(observableProject.getProjectUUID().equals(oldObservableColumn.getParentProjectUUID())){
+                    observableColumnObservableList = observableProject.getColumns();
+                }
+            }
+            updateColumns(columnDTOList, observableColumnObservableList);
+        }
+
+    }
+
+    public List<ObservableColumn> getRelatedColumns(ObservableColumn observableColumn) throws SQLException, IOException {
+        List<ObservableColumn> observableColumnList = new ArrayList<>();
+
+        setupDbConnection();
+        columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
+        columnTableQueryBuilder = columnDao.queryBuilder();
+        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, observableColumn.getParentProjectUUID());
+        List<ColumnTable> columnTableList = columnTableQueryBuilder.query();
+        teardownDbConnection();
+        List<ColumnDTO> columnDTOList = new ArrayList<>();
+        for(ColumnTable columnTable : columnTableList) {
+            ColumnDTO columnDTO = TableToDTO.mapColumnTableToColumnDTO(columnTable);
+            ObservableColumn mappedObservableColumn = new ObservableColumn(columnDTO, FXCollections.observableArrayList());
+            observableColumnList.add(mappedObservableColumn);
+        }
+        return observableColumnList;
     }
 
 
