@@ -10,7 +10,7 @@ import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTablePresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTableView;
-import view.sharedviewcomponents.DetailsPopupInitialDataMode;
+import view.sharedviewcomponents.popups.DetailsPopupInitialDataMode;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogPresenter;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogView;
 import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
