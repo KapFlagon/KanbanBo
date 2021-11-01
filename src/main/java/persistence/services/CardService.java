@@ -81,7 +81,7 @@ public class CardService extends AbstractService{
         cardTableQueryBuilder = cardDao.queryBuilder();
         cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, cardDTO.getParentColumnUUID());
         long cardCount = cardTableQueryBuilder.countOf();
-        int position = (int) (cardCount + 1);
+        int position = (int) (cardCount);
         card.setCard_position(position);
 
         ColumnTable column = columnDao.queryForId(cardDTO.getParentColumnUUID());
@@ -93,7 +93,7 @@ public class CardService extends AbstractService{
                 cardDao.create(card);
                 cardDTO.setUuid(card.getID());
                 projectDao.update(project);
-                return null;
+                return 1;
             }
         });
         teardownDbConnection();
@@ -167,7 +167,7 @@ public class CardService extends AbstractService{
                     resourceItemDao.delete(resourceItemTable);
                 }
                 projectDao.update(project);
-                return null;
+                return 1;
             }
         });
         observableCard.setCardTitle(cardDTO.getTitle());
@@ -204,7 +204,7 @@ public class CardService extends AbstractService{
                 }
                 cardDao.deleteById(card.getCardUUID());
                 projectDao.update(project);
-                return null;
+                return 1;
             }
         });
         teardownDbConnection();
@@ -225,6 +225,26 @@ public class CardService extends AbstractService{
 
     public void copyCard(ObservableCard observableCard) {
         // TODO Implement this
+    }
+
+    public void moveCard(CardDTO newCardDataDTO, ObservableCard oldObservableCard) {
+        boolean stillInOriginalColumn = newCardDataDTO.getParentColumnUUID().equals(oldObservableCard.getParentColumnUUID());
+
+        if(stillInOriginalColumn) {
+            // TODO Only has to shift cards within same column
+            int newPosition = newCardDataDTO.getPosition();
+            int oldPosition = oldObservableCard.positionProperty().getValue();
+            if(newPosition != oldPosition) {
+
+            }
+        } else {
+            // TODO Has to shift cards within both target column and source column, to account for the departure.
+
+
+            // TODO Sort, then change values of positions, and finally sort cards remaining in source column
+
+
+        }
     }
 
 
