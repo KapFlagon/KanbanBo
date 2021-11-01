@@ -43,6 +43,6 @@ public class ProjectStatusTable implements TableObject<Integer> {
     // Other methods
     @Override
     public Integer getID() {
-        return null;
+        return project_status_id;
     }
 }
