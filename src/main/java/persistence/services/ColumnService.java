@@ -138,7 +138,7 @@ public class ColumnService extends AbstractService{
                 result[0] += columnDao.update(columnTableData);
                 result[0] += projectDao.update(parentProject);
                 System.out.println("Column and project updated successfully");
-                return null;
+                return 1;
             }
         });
         if (result[0] > 1) {
@@ -172,7 +172,7 @@ public class ColumnService extends AbstractService{
                 }
                 result[0] += projectDao.update(parentProject);
                 System.out.println("Column and project updated successfully");
-                return null;
+                return 1;
             }
         });
         teardownDbConnection();
@@ -304,22 +304,15 @@ public class ColumnService extends AbstractService{
 
     }
 
-    public List<ObservableColumn> getRelatedColumns(ObservableColumn observableColumn) throws SQLException, IOException {
-        List<ObservableColumn> observableColumnList = new ArrayList<>();
-
-        setupDbConnection();
-        columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
-        columnTableQueryBuilder = columnDao.queryBuilder();
-        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, observableColumn.getParentProjectUUID());
-        List<ColumnTable> columnTableList = columnTableQueryBuilder.query();
-        teardownDbConnection();
-        List<ColumnDTO> columnDTOList = new ArrayList<>();
-        for(ColumnTable columnTable : columnTableList) {
-            ColumnDTO columnDTO = TableToDTO.mapColumnTableToColumnDTO(columnTable);
-            ObservableColumn mappedObservableColumn = new ObservableColumn(columnDTO, FXCollections.observableArrayList());
-            observableColumnList.add(mappedObservableColumn);
+    public ObservableList<ObservableColumn> getRelatedColumns(UUID columnUUID) {
+        for(ObservableProject observableProject : workspaceProjectsList) {
+            for(ObservableColumn observableColumn : observableProject.getColumns()) {
+                if(observableColumn.getColumnUUID().equals(columnUUID)) {
+                    return observableProject.getColumns();
+                }
+            }
         }
-        return observableColumnList;
+        return FXCollections.observableArrayList();
     }
 
 
