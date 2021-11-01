@@ -1,13 +1,11 @@
 package view.sharedviewcomponents.popups.movecolumndialog;
 
 import domain.entities.column.ObservableColumn;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.util.StringConverter;
 import persistence.dto.column.ColumnDTO;
 import persistence.mappers.ObservableObjectToDTO;
 import persistence.services.KanbanBoDataService;
@@ -17,7 +15,6 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class MoveColumnDialogPresenter implements Initializable {
@@ -25,8 +22,6 @@ public class MoveColumnDialogPresenter implements Initializable {
     // JavaFX injected node variables
     @FXML
     private Label columnTitleLbl;
-    @FXML
-    private Label finalColumnLbl;
     @FXML
     private ChoiceBox<Integer> columnPositionChoiceBox;
 
@@ -41,10 +36,11 @@ public class MoveColumnDialogPresenter implements Initializable {
     public void setColumnToMove(ObservableColumn columnToMove) throws SQLException, IOException {
         this.columnToMove = columnToMove;
         columnTitleLbl.setText(columnToMove.columnTitleProperty().getValue());
-        int size = kanbanBoDataService.getRelatedColumns(columnToMove).size();
+        int size = kanbanBoDataService.getRelatedColumns(columnToMove.getColumnUUID()).size();
         for(int iterator = 0; iterator < size; iterator++) {
             columnPositionChoiceBox.getItems().add(iterator + 1);
         }
+        // Using Integer.valueOf here to avoid the select method interpreting the value as an index.
         columnPositionChoiceBox.getSelectionModel().select(Integer.valueOf(this.columnToMove.columnPositionProperty().getValue() + 1));
     }
 
@@ -65,7 +61,7 @@ public class MoveColumnDialogPresenter implements Initializable {
 
     @FXML
     private void saveSelection(ActionEvent event) {
-        ColumnDTO columnDTO = ObservableObjectToDTO.mapColumnTableToColumnDTO(columnToMove);
+        ColumnDTO columnDTO = ObservableObjectToDTO.mapObservableColumnToColumnDTO(columnToMove);
         columnDTO.setPosition(columnPositionChoiceBox.getSelectionModel().getSelectedItem() - 1);
         try {
             kanbanBoDataService.moveColumn(columnDTO, columnToMove);
