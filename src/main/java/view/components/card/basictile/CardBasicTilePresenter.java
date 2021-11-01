@@ -17,6 +17,8 @@ import utils.StageUtils;
 import view.components.card.editor.CardEditorPresenter;
 import view.components.card.editor.CardEditorView;
 import view.components.ui.datapanes.card.details.CardDetailsView;
+import view.sharedviewcomponents.popups.movecarddialog.MoveCardDialogPresenter;
+import view.sharedviewcomponents.popups.movecarddialog.MoveCardDialogView;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -195,6 +197,12 @@ public class CardBasicTilePresenter implements Initializable {
     void moveCard(ActionEvent event) {
         // TODO Implement this
         System.out.println("Move Card dialog");
+        MoveCardDialogView moveCardDialogView = new MoveCardDialogView();
+        MoveCardDialogPresenter moveCardDialogPresenter = (MoveCardDialogPresenter) moveCardDialogView.getPresenter();
+        moveCardDialogPresenter.setCardToMove(cardViewModel);
+        StageUtils.createChildStage("Move Card", moveCardDialogView.getView());
+        StageUtils.showAndWaitOnSubStage();
+        event.consume();
     }
 
     @FXML
