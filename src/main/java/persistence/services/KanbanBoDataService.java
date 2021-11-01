@@ -114,8 +114,8 @@ public class KanbanBoDataService extends AbstractService{
         columnService.updateColumns(columnDTOList, observableColumns);
     }
 
-    public List<ObservableColumn> getRelatedColumns(ObservableColumn observableColumn) throws SQLException, IOException {
-        return columnService.getRelatedColumns(observableColumn);
+    public ObservableList<ObservableColumn> getRelatedColumns(UUID columnUUID) {
+        return columnService.getRelatedColumns(columnUUID);
     }
 
     public void moveColumn(ColumnDTO newColumnDataDTO, ObservableColumn oldObservableColumn) throws SQLException, IOException {
@@ -133,6 +133,10 @@ public class KanbanBoDataService extends AbstractService{
 
     public void updateCard(CardDTO cardDTO, ObservableCard observableCard) throws SQLException, IOException {
         cardService.updateCard(cardDTO, observableCard);
+    }
+
+    public void moveCard(CardDTO newCardDataDTO, ObservableCard oldObservableCard) throws SQLException, IOException {
+        cardService.moveCard(newCardDataDTO, oldObservableCard);
     }
 
     public void deleteCard(ObservableCard card) throws SQLException, IOException {
@@ -153,7 +157,7 @@ public class KanbanBoDataService extends AbstractService{
             public Object call() throws Exception {
                 resourceItemDao.create(resourceItemTable);
                 projectDao.update(projectTable);
-                return null;
+                return 1;
             }
         });
 
@@ -174,7 +178,7 @@ public class KanbanBoDataService extends AbstractService{
             public Object call() throws Exception {
                 resourceItemDao.update(resourceItemTable);
                 projectDao.update(projectTable);
-                return null;
+                return 1;
             }
         });
 
@@ -194,7 +198,7 @@ public class KanbanBoDataService extends AbstractService{
             public Object call() throws Exception {
                 resourceItemDao.delete(resourceItemTable);
                 projectDao.update(projectTable);
-                return null;
+                return 1;
             }
         });
 
