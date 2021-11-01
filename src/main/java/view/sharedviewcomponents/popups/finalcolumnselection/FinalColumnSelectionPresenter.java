@@ -16,7 +16,6 @@ import utils.StageUtils;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +69,7 @@ public class FinalColumnSelectionPresenter implements Initializable {
         System.out.println("saving, selected: " + columnChoiceBox.getSelectionModel().getSelectedItem().columnTitleProperty());
         List<ColumnDTO> columnDTOList = new ArrayList<>();
         for(ObservableColumn observableColumn : availableColumns) {
-            ColumnDTO columnDTO = ObservableObjectToDTO.mapColumnTableToColumnDTO(observableColumn);
+            ColumnDTO columnDTO = ObservableObjectToDTO.mapObservableColumnToColumnDTO(observableColumn);
             if(observableColumn.getColumnUUID().equals(columnChoiceBox.getSelectionModel().getSelectedItem().getColumnUUID())) {
                 columnDTO.setFinalColumn(true);
             } else {
