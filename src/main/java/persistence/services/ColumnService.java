@@ -263,9 +263,7 @@ public class ColumnService extends AbstractService{
     public void moveColumn(ColumnDTO newColumnDataDTO, ObservableColumn oldObservableColumn) throws SQLException, IOException {
         int newPosition = newColumnDataDTO.getPosition();
         int oldPosition = oldObservableColumn.columnPositionProperty().getValue();
-        if(newPosition == oldPosition) {
-
-        } else {
+        if(newPosition != oldPosition) {
             setupDbConnection();
             columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
             columnTableQueryBuilder = columnDao.queryBuilder();
@@ -280,17 +278,9 @@ public class ColumnService extends AbstractService{
                 }
             }
             if(newPosition < oldPosition) {
-                for(ColumnDTO columnDTO : columnDTOList) {
-                    if(columnDTO.getPosition() < oldPosition) {
-                        columnDTO.setPosition(columnDTO.getPosition() + 1);
-                    }
-                }
+                shiftSurroundingColumnsRight(columnDTOList, oldPosition);
             } else if(newPosition > oldPosition) {
-                for(ColumnDTO columnDTO : columnDTOList) {
-                    if(columnDTO.getPosition() > oldPosition) {
-                        columnDTO.setPosition(columnDTO.getPosition() - 1);
-                    }
-                }
+                shiftSurroundingColumnsLeft(columnDTOList, oldPosition);
             }
             columnDTOList.add(newColumnDataDTO);
             ObservableList<ObservableColumn> observableColumnObservableList = FXCollections.observableArrayList();
@@ -313,6 +303,22 @@ public class ColumnService extends AbstractService{
             }
         }
         return FXCollections.observableArrayList();
+    }
+
+    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int oldPositionThreshold) {
+        for(ColumnDTO columnDTO : columnDTOList) {
+            if(columnDTO.getPosition() < oldPositionThreshold) {
+                columnDTO.setPosition(columnDTO.getPosition() + 1);
+            }
+        }
+    }
+
+    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int oldPositionThreshold) {
+        for(ColumnDTO columnDTO : columnDTOList) {
+            if(columnDTO.getPosition() > oldPositionThreshold) {
+                columnDTO.setPosition(columnDTO.getPosition() - 1);
+            }
+        }
     }
 
 
