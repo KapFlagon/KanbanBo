@@ -14,6 +14,7 @@ import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.mappers.DTOToTable;
+import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
@@ -227,7 +228,7 @@ public class CardService extends AbstractService{
         // TODO Implement this
     }
 
-    public void moveCard(CardDTO newCardDataDTO, ObservableCard oldObservableCard) {
+    public void moveCard(CardDTO newCardDataDTO, ObservableCard oldObservableCard) throws SQLException, IOException {
         boolean stillInOriginalColumn = newCardDataDTO.getParentColumnUUID().equals(oldObservableCard.getParentColumnUUID());
 
         if(stillInOriginalColumn) {
@@ -235,7 +236,38 @@ public class CardService extends AbstractService{
             int newPosition = newCardDataDTO.getPosition();
             int oldPosition = oldObservableCard.positionProperty().getValue();
             if(newPosition != oldPosition) {
+                setupDbConnection();
 
+                cardDao = DaoManager.createDao(connectionSource,CardTable.class);
+                cardTableQueryBuilder = cardDao.queryBuilder();
+                cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, newCardDataDTO.getParentColumnUUID());
+                List<CardTable> cardTableList = cardTableQueryBuilder.query();
+                teardownDbConnection();
+
+                List<CardDTO> cardDTOList = new ArrayList<>();
+                for(CardTable cardTable : cardTableList) {
+                    CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
+                    if(!cardTable.getCard_uuid().equals(newCardDataDTO.getUuid())) {
+                        cardDTOList.add(cardDTO);
+                    }
+                }
+                if(newPosition < oldPosition) {
+                    shiftSurroundingCardsRight(cardDTOList, oldPosition);
+                } else if(newPosition > oldPosition) {
+                    shiftSurroundingCardsLeft(cardDTOList, oldPosition);
+                }
+                cardDTOList.add(newCardDataDTO);
+                ObservableList<ObservableCard> observableCardObservableList = FXCollections.observableArrayList();
+                for(ObservableProject observableProject : workspaceProjectsList) {
+                    for(ObservableColumn observableColumn : observableProject.getColumns()) {
+                        if(observableColumn.getColumnUUID().equals(newCardDataDTO.getParentColumnUUID())) {
+                            observableCardObservableList = observableColumn.getCards();
+                        }
+                    }
+
+                }
+                //TODO implement this
+                // updateCards(cardDTOList, observableCardObservableList);
             }
         } else {
             // TODO Has to shift cards within both target column and source column, to account for the departure.
@@ -245,6 +277,30 @@ public class CardService extends AbstractService{
 
 
         }
+    }
+
+    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int oldPositionThreshold) {
+        for(CardDTO cardDTO : cardDTOList) {
+            if(cardDTO.getPosition() < oldPositionThreshold) {
+                cardDTO.setPosition(cardDTO.getPosition() + 1);
+            }
+        }
+    }
+
+    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int oldPositionThreshold) {
+        for(CardDTO cardDTO : cardDTOList) {
+            if(cardDTO.getPosition() > oldPositionThreshold) {
+                cardDTO.setPosition(cardDTO.getPosition() - 1);
+            }
+        }
+    }
+
+    private void thing3() {
+
+    }
+
+    private void thing4() {
+
     }
 
 
