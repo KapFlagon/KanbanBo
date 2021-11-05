@@ -43,8 +43,12 @@ public class ObservableObjectToDTO {
         cardDTO.setTitle(observableCard.cardTitleProperty().getValue());
         cardDTO.setDescription(observableCard.cardDescriptionProperty().getValue());
         cardDTO.setPosition(observableCard.positionProperty().getValue());
-        cardDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(observableCard.creationTimestampProperty().getValue()));
-        cardDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(observableCard.lastChangedTimestampProperty().getValue()));
+        if(observableCard.creationTimestampProperty() != null) {
+            cardDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(observableCard.creationTimestampProperty().getValue()));
+        }
+        if(observableCard.lastChangedTimestampProperty() != null) {
+            cardDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(observableCard.lastChangedTimestampProperty().getValue()));
+        }
         //cardDTO.setDueOnDate();
         return cardDTO;
     }
