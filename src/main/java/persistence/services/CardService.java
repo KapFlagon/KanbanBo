@@ -13,6 +13,7 @@ import domain.entities.project.ObservableProject;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import persistence.dto.column.ColumnDTO;
 import persistence.mappers.DTOToTable;
 import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
@@ -264,43 +265,130 @@ public class CardService extends AbstractService{
                             observableCardObservableList = observableColumn.getCards();
                         }
                     }
-
                 }
-                //TODO implement this
-                // updateCards(cardDTOList, observableCardObservableList);
+                updateCards(cardDTOList, observableCardObservableList);
             }
         } else {
-            // TODO Has to shift cards within both target column and source column, to account for the departure.
+            setupDbConnection();
 
+            cardDao = DaoManager.createDao(connectionSource,CardTable.class);
+            cardTableQueryBuilder = cardDao.queryBuilder();
+            cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, newCardDataDTO.getParentColumnUUID());
+            List<CardTable> targetCardTableList = cardTableQueryBuilder.query();
+            cardTableQueryBuilder.reset();
+            cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, oldObservableCard.getParentColumnUUID());
+            List<CardTable> sourceCardTableList = cardTableQueryBuilder.query();
+            teardownDbConnection();
 
-            // TODO Sort, then change values of positions, and finally sort cards remaining in source column
+            List<CardDTO> targetCardDTOList = new ArrayList<>();
+            List<CardDTO> sourceCardDTOList = new ArrayList<>();
+            for(CardTable cardTable : sourceCardTableList) {
+                CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
+                if(!cardTable.getCard_uuid().equals(newCardDataDTO.getUuid())) {
+                    sourceCardDTOList.add(cardDTO);
+                }
+            }
 
+            for(CardTable cardTable : targetCardTableList) {
+                CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
+                targetCardDTOList.add(cardDTO);
+            }
 
+            shiftSurroundingCardsRight(targetCardDTOList, newCardDataDTO.getPosition());
+            targetCardDTOList.add(newCardDataDTO);
+            shiftSurroundingCardsLeft(sourceCardDTOList, oldObservableCard.positionProperty().getValue());
+
+            ObservableList<ObservableCard> sourceCardObservableList = FXCollections.observableArrayList();
+            for(ObservableProject observableProject : workspaceProjectsList) {
+                for(ObservableColumn observableColumn : observableProject.getColumns()) {
+                    if(observableColumn.getColumnUUID().equals(newCardDataDTO.getParentColumnUUID())) {
+                        sourceCardObservableList = observableColumn.getCards();
+                    }
+                }
+            }
+
+            ObservableList<ObservableCard> targetCardObservableList = FXCollections.observableArrayList();
+            for(ObservableProject observableProject : workspaceProjectsList) {
+                for(ObservableColumn observableColumn : observableProject.getColumns()) {
+                    if(observableColumn.getColumnUUID().equals(newCardDataDTO.getParentColumnUUID())) {
+                        targetCardObservableList = observableColumn.getCards();
+                    }
+                }
+            }
+
+            updateCards(sourceCardDTOList, sourceCardObservableList);
+            updateCards(targetCardDTOList, targetCardObservableList);
         }
     }
 
-    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int oldPositionThreshold) {
+    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int positionThreshold) {
         for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() < oldPositionThreshold) {
+            if(cardDTO.getPosition() < positionThreshold) {
                 cardDTO.setPosition(cardDTO.getPosition() + 1);
             }
         }
     }
 
-    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int oldPositionThreshold) {
+    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int positionThreshold) {
         for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() > oldPositionThreshold) {
+            if(cardDTO.getPosition() > positionThreshold) {
                 cardDTO.setPosition(cardDTO.getPosition() - 1);
             }
         }
     }
 
-    private void thing3() {
+    private void updateCards(List<CardDTO> cardDTOList, ObservableList<ObservableCard> observableCardObservableList) throws SQLException, IOException {
+        List<CardTable> cardTableList = new ArrayList<>();
+        for(CardDTO cardDTO : cardDTOList) {
+            CardTable cardTable = DTOToTable.mapCardDTOToCardTable(cardDTO);
+            cardTableList.add(cardTable);
+        }
+        setupDbConnection();
+        cardDao = DaoManager.createDao(connectionSource, CardTable.class);
+        columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
+        projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
+        final int[] result = new int[1];
+        TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                result[0] = 0;
+                ColumnTable parentColumnTable = columnDao.queryForId(cardTableList.get(0).getParent_column_uuid());
+                parentColumnTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
-    }
+                ProjectTable parentProjectTable = projectDao.queryForId(parentColumnTable.getParent_project_uuid());
+                parentProjectTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
-    private void thing4() {
+                for(CardTable cardTable : cardTableList) {
+                    result[0] += cardDao.update(cardTable);
+                }
+                result[0] += columnDao.update(parentColumnTable);
+                result[0] += projectDao.update(parentProjectTable);
+                System.out.println("Cards, Column, and project updated successfully");
+                return 1;
+            }
+        });
+        teardownDbConnection();
 
+        if (result[0] > 1) {
+            for(ObservableCard observableCard : observableCardObservableList) {
+                for(CardDTO cardDTO : cardDTOList) {
+                    if(observableCard.getCardUUID().equals(cardDTO.getUuid())) {
+                        observableCard.setParentColumnUUID(cardDTO.getParentColumnUUID());
+                        observableCard.setCardUUID(cardDTO.getUuid());
+                        observableCard.setCardTitle(cardDTO.getTitle());
+                        observableCard.setCardDescription(cardDTO.getDescription());
+                        observableCard.setPosition(cardDTO.getPosition());
+                        // TODO observableCard.setResourceItems(cardDTO.);
+                    }
+                }
+            }
+            observableCardObservableList.sort(new Comparator<ObservableCard>() {
+                @Override
+                public int compare(ObservableCard o1, ObservableCard o2) {
+                    return o1.positionProperty().getValue().compareTo(o2.positionProperty().getValue());
+                }
+            });
+        }
     }
 
 
