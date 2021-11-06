@@ -278,9 +278,9 @@ public class ColumnService extends AbstractService{
                 }
             }
             if(newPosition < oldPosition) {
-                shiftSurroundingColumnsRight(columnDTOList, oldPosition);
+                shiftSurroundingColumnsRight(columnDTOList, newPosition);
             } else if(newPosition > oldPosition) {
-                shiftSurroundingColumnsLeft(columnDTOList, oldPosition);
+                shiftSurroundingColumnsLeft(columnDTOList, newPosition);
             }
             columnDTOList.add(newColumnDataDTO);
             ObservableList<ObservableColumn> observableColumnObservableList = FXCollections.observableArrayList();
@@ -305,17 +305,17 @@ public class ColumnService extends AbstractService{
         return FXCollections.observableArrayList();
     }
 
-    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int oldPositionThreshold) {
+    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int positionThreshold) {
         for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() < oldPositionThreshold) {
+            if(columnDTO.getPosition() >= positionThreshold) {
                 columnDTO.setPosition(columnDTO.getPosition() + 1);
             }
         }
     }
 
-    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int oldPositionThreshold) {
+    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int positionThreshold) {
         for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() > oldPositionThreshold) {
+            if(columnDTO.getPosition() <= positionThreshold) {
                 columnDTO.setPosition(columnDTO.getPosition() - 1);
             }
         }

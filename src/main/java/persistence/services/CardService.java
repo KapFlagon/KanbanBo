@@ -253,9 +253,9 @@ public class CardService extends AbstractService{
                     }
                 }
                 if(newPosition < oldPosition) {
-                    shiftSurroundingCardsRight(cardDTOList, oldPosition);
+                    shiftSurroundingCardsRight(cardDTOList, newPosition);
                 } else if(newPosition > oldPosition) {
-                    shiftSurroundingCardsLeft(cardDTOList, oldPosition);
+                    shiftSurroundingCardsLeft(cardDTOList, newPosition);
                 }
                 cardDTOList.add(newCardDataDTO);
                 ObservableList<ObservableCard> observableCardObservableList = FXCollections.observableArrayList();
@@ -323,7 +323,7 @@ public class CardService extends AbstractService{
 
     private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int positionThreshold) {
         for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() < positionThreshold) {
+            if(cardDTO.getPosition() >= positionThreshold) {
                 cardDTO.setPosition(cardDTO.getPosition() + 1);
             }
         }
@@ -331,7 +331,7 @@ public class CardService extends AbstractService{
 
     private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int positionThreshold) {
         for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() > positionThreshold) {
+            if(cardDTO.getPosition() <= positionThreshold) {
                 cardDTO.setPosition(cardDTO.getPosition() - 1);
             }
         }
