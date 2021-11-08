@@ -72,7 +72,9 @@ public class CardService extends AbstractService{
     public void createCard(CardDTO cardDTO) throws SQLException, IOException {
         CardTable card = DTOToTable.mapCardDTOToCardTable(cardDTO);
         card.setCreation_timestamp(ZonedDateTime.now().toString());
+        cardDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(card.getCreation_timestamp()));
         card.setLast_changed_timestamp(ZonedDateTime.now().toString());
+        cardDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(card.getLast_changed_timestamp()));
 
         setupDbConnection();
 
@@ -181,6 +183,7 @@ public class CardService extends AbstractService{
     }
 
     public void deleteCard(ObservableCard card) throws SQLException, IOException {
+        // TODO need to update other card position values if a card is removed from the list...
         setupDbConnection();
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
@@ -252,9 +255,11 @@ public class CardService extends AbstractService{
                     }
                 }
                 if(newPosition < oldPosition) {
-                    shiftSurroundingCardsRight(cardDTOList, newPosition);
+                    int diffVector = oldPosition - newPosition;
+                    shiftSurroundingCardsRight(cardDTOList, newPosition, diffVector);
                 } else if(newPosition > oldPosition) {
-                    shiftSurroundingCardsLeft(cardDTOList, newPosition);
+                    int diffVector = newPosition - oldPosition;
+                    shiftSurroundingCardsLeft(cardDTOList, newPosition, diffVector);
                 }
                 cardDTOList.add(newCardDataDTO);
                 ObservableList<ObservableCard> observableCardObservableList = FXCollections.observableArrayList();
@@ -293,9 +298,12 @@ public class CardService extends AbstractService{
                 targetCardDTOList.add(cardDTO);
             }
 
-            shiftSurroundingCardsRight(targetCardDTOList, newCardDataDTO.getPosition());
+            int targetDiffVector = targetCardDTOList.size() - newCardDataDTO.getPosition();
+            shiftSurroundingCardsRight(targetCardDTOList, newCardDataDTO.getPosition(), targetDiffVector);
             targetCardDTOList.add(newCardDataDTO);
-            shiftSurroundingCardsLeft(sourceCardDTOList, oldObservableCard.positionProperty().getValue());
+            
+            int sourceDiffVector = sourceCardDTOList.size() - oldObservableCard.positionProperty().getValue();
+            shiftSurroundingCardsLeft(sourceCardDTOList, sourceCardDTOList.size() + 1, sourceDiffVector);
 
             ObservableList<ObservableCard> sourceCardObservableList = FXCollections.observableArrayList();
             for(ObservableProject observableProject : workspaceProjectsList) {
@@ -320,18 +328,26 @@ public class CardService extends AbstractService{
         }
     }
 
-    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int insertPosition) {
-        for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() >= insertPosition) {
+    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int insertPosition, int diffVector) {
+        for(int iterator = 0; iterator < cardDTOList.size(); iterator ++) {
+            CardDTO cardDTO = cardDTOList.get(iterator);
+            if(cardDTO.getPosition() >= insertPosition
+                    && cardDTO.getPosition() < cardDTOList.size()
+                    && diffVector > 0) {
                 cardDTO.setPosition(cardDTO.getPosition() + 1);
+                diffVector -= 1;
             }
         }
     }
 
-    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int insertPosition) {
-        for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() <= insertPosition) {
+    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int insertPosition, int diffVector) {
+        for(int iterator = cardDTOList.size() - 1; iterator >= 0; iterator --) {
+            CardDTO cardDTO = cardDTOList.get(iterator);
+            if(cardDTO.getPosition() > 0
+                    && cardDTO.getPosition() <= insertPosition
+                    && diffVector > 0) {
                 cardDTO.setPosition(cardDTO.getPosition() - 1);
+                diffVector -= 1;
             }
         }
     }
