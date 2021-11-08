@@ -53,7 +53,6 @@
                <children>
                   <Label text="%label.card.position" />
                   <ChoiceBox fx:id="cardPositionChoiceBox" prefWidth="150.0" />
-                  <Label fx:id="cardPositionWarningLbl" text="%label.card.null_position_warning" />
                </children>
             </VBox>
          </children>

@@ -29,10 +29,6 @@ public class MoveCardDialogPresenter implements Initializable {
     private ChoiceBox<ObservableColumn> columnChoiceBox;
     @FXML
     private ChoiceBox<Integer> cardPositionChoiceBox;
-    @FXML
-    private Label cardPositionWarningLbl;
-    @FXML
-    private Button saveBtn;
 
 
     // Other variables
@@ -59,7 +55,6 @@ public class MoveCardDialogPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cardPositionWarningLbl.setVisible(false);
         columnChoiceBox.setConverter(new StringConverter<ObservableColumn>() {
             @Override
             public String toString(ObservableColumn object) {
@@ -76,15 +71,6 @@ public class MoveCardDialogPresenter implements Initializable {
         columnChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateCardPositionChoiceBox();
         });
-        cardPositionChoiceBox.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                cardPositionWarningLbl.setVisible(true);
-                saveBtn.setDisable(true);
-            } else {
-                cardPositionWarningLbl.setVisible(false);
-                saveBtn.setDisable(false);
-            }
-        }));
     }
 
     // UI event methods
@@ -119,7 +105,7 @@ public class MoveCardDialogPresenter implements Initializable {
         }
         if(!columnChoiceBox.getSelectionModel().getSelectedItem().getColumnUUID().equals(cardToMove.getParentColumnUUID())){
             cardPositionChoiceBox.getItems().add(columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size() + 1);
-            cardPositionChoiceBox.getSelectionModel().select(null);
+            cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf((columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size() + 1)));
         } else {
             // Using Integer.valueOf here to avoid the select method interpreting the value as an index.
             cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf(cardToMove.positionProperty().getValue() + 1));
