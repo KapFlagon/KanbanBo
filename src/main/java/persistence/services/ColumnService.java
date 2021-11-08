@@ -200,6 +200,7 @@ public class ColumnService extends AbstractService{
     }
 
     public void deleteColumn(ObservableColumn column) throws SQLException, IOException {
+        // TODO need to update other column position values if a column is removed from the list...
         setupDbConnection();
 
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -278,9 +279,11 @@ public class ColumnService extends AbstractService{
                 }
             }
             if(newPosition < oldPosition) {
-                shiftSurroundingColumnsRight(columnDTOList, newPosition);
+                int diffVector = oldPosition - newPosition;
+                shiftSurroundingColumnsRight(columnDTOList, newPosition, diffVector);
             } else if(newPosition > oldPosition) {
-                shiftSurroundingColumnsLeft(columnDTOList, newPosition);
+                int diffVector = newPosition - oldPosition;
+                shiftSurroundingColumnsLeft(columnDTOList, newPosition, diffVector);
             }
             columnDTOList.add(newColumnDataDTO);
             ObservableList<ObservableColumn> observableColumnObservableList = FXCollections.observableArrayList();
@@ -305,18 +308,26 @@ public class ColumnService extends AbstractService{
         return FXCollections.observableArrayList();
     }
 
-    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int insertPosition) {
-        for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() >= insertPosition && columnDTO.getPosition() < columnDTOList.size()) {
+    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int insertPosition, int diffVector) {
+        for(int iterator = 0; iterator < columnDTOList.size(); iterator ++) {
+            ColumnDTO columnDTO = columnDTOList.get(iterator);
+            if(columnDTO.getPosition() >= insertPosition
+                    && columnDTO.getPosition() < columnDTOList.size()
+                    && diffVector > 0) {
                 columnDTO.setPosition(columnDTO.getPosition() + 1);
+                diffVector -= 1;
             }
         }
     }
 
-    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int insertPosition) {
-        for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() <= insertPosition && columnDTO.getPosition() > 0) {
+    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int insertPosition, int diffVector) {
+        for(int iterator = columnDTOList.size() - 1; iterator >= 0; iterator --) {
+            ColumnDTO columnDTO = columnDTOList.get(iterator);
+            if(columnDTO.getPosition() > 0
+                    && columnDTO.getPosition() <= insertPosition
+                    && diffVector > 0) {
                 columnDTO.setPosition(columnDTO.getPosition() - 1);
+                diffVector -= 1;
             }
         }
     }
