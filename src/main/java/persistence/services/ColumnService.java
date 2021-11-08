@@ -307,7 +307,7 @@ public class ColumnService extends AbstractService{
 
     private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int insertPosition) {
         for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() >= insertPosition) {
+            if(columnDTO.getPosition() >= insertPosition && columnDTO.getPosition() < columnDTOList.size()) {
                 columnDTO.setPosition(columnDTO.getPosition() + 1);
             }
         }
@@ -315,7 +315,7 @@ public class ColumnService extends AbstractService{
 
     private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int insertPosition) {
         for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() <= insertPosition) {
+            if(columnDTO.getPosition() <= insertPosition && columnDTO.getPosition() > 0) {
                 columnDTO.setPosition(columnDTO.getPosition() - 1);
             }
         }
