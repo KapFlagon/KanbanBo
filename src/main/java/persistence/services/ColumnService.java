@@ -305,17 +305,17 @@ public class ColumnService extends AbstractService{
         return FXCollections.observableArrayList();
     }
 
-    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int positionThreshold) {
+    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int insertPosition) {
         for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() >= positionThreshold) {
+            if(columnDTO.getPosition() >= insertPosition) {
                 columnDTO.setPosition(columnDTO.getPosition() + 1);
             }
         }
     }
 
-    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int positionThreshold) {
+    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int insertPosition) {
         for(ColumnDTO columnDTO : columnDTOList) {
-            if(columnDTO.getPosition() <= positionThreshold) {
+            if(columnDTO.getPosition() <= insertPosition) {
                 columnDTO.setPosition(columnDTO.getPosition() - 1);
             }
         }
