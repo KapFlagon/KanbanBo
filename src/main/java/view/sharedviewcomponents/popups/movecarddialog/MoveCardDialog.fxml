@@ -13,7 +13,7 @@
    <bottom>
       <ButtonBar BorderPane.alignment="CENTER">
          <buttons>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#saveSelection" text="%button.save" />
+            <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#saveSelection" text="%button.save" />
             <Button cancelButton="true" layoutX="535.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancelSelection" text="%button.cancel" />
          </buttons>
          <BorderPane.margin>
@@ -53,6 +53,7 @@
                <children>
                   <Label text="%label.card.position" />
                   <ChoiceBox fx:id="cardPositionChoiceBox" prefWidth="150.0" />
+                  <Label fx:id="cardPositionWarningLbl" text="%label.card.null_position_warning" />
                </children>
             </VBox>
          </children>
