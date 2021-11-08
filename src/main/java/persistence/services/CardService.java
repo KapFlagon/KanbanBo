@@ -233,7 +233,6 @@ public class CardService extends AbstractService{
         boolean stillInOriginalColumn = newCardDataDTO.getParentColumnUUID().equals(oldObservableCard.getParentColumnUUID());
 
         if(stillInOriginalColumn) {
-            // TODO Only has to shift cards within same column
             int newPosition = newCardDataDTO.getPosition();
             int oldPosition = oldObservableCard.positionProperty().getValue();
             if(newPosition != oldPosition) {
@@ -321,17 +320,17 @@ public class CardService extends AbstractService{
         }
     }
 
-    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int positionThreshold) {
+    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int insertPosition) {
         for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() >= positionThreshold) {
+            if(cardDTO.getPosition() >= insertPosition) {
                 cardDTO.setPosition(cardDTO.getPosition() + 1);
             }
         }
     }
 
-    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int positionThreshold) {
+    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int insertPosition) {
         for(CardDTO cardDTO : cardDTOList) {
-            if(cardDTO.getPosition() <= positionThreshold) {
+            if(cardDTO.getPosition() <= insertPosition) {
                 cardDTO.setPosition(cardDTO.getPosition() - 1);
             }
         }
