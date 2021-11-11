@@ -1,14 +1,10 @@
 package view.components.project.container;
 
 import domain.entities.column.ObservableColumn;
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -34,9 +30,6 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ProjectContainerPresenter implements Initializable {
@@ -80,7 +73,7 @@ public class ProjectContainerPresenter implements Initializable {
     // Other variables
     @Inject
     KanbanBoDataService kanbanBoDataService;
-    private ObservableProject projectViewModel;
+    private ObservableWorkspaceProject projectViewModel;
     private ColumnDetailsWindowView columnDetailsWindowView;
     private ColumnDetailsWindowPresenter columnDetailsWindowPresenter;
     private SimpleBooleanProperty forRemoval;
@@ -90,10 +83,10 @@ public class ProjectContainerPresenter implements Initializable {
 
 
     // Getters & Setters
-    public ObservableProject getProjectViewModel() {
+    public ObservableWorkspaceProject getProjectViewModel() {
         return projectViewModel;
     }
-    public void setProjectViewModel(ObservableProject projectViewModel) throws IOException, SQLException {
+    public void setProjectViewModel(ObservableWorkspaceProject projectViewModel) throws IOException, SQLException {
         this.projectViewModel = projectViewModel;
         customInit();
     }

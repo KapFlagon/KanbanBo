@@ -7,7 +7,7 @@ import com.j256.ormlite.stmt.*;
 import persistence.dto.card.CardDTO;
 import persistence.dto.column.ColumnDTO;
 import persistence.dto.project.ProjectDTO;
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import domain.entities.column.ObservableColumn;
 import domain.entities.card.ObservableCard;
 import domain.entities.resourceitem.ObservableResourceItem;
@@ -33,8 +33,8 @@ public class KanbanBoDataService extends AbstractService{
     // Variables
     private final Locale locale;
     private final ResourceBundle resourceBundle;
-    private ObservableList<ObservableProject> projectsList;
-    private ObservableList<ObservableProject> workspaceProjectsList;
+    private ObservableList<ObservableWorkspaceProject> projectsList;
+    private ObservableList<ObservableWorkspaceProject> workspaceProjectsList;
 
     private Dao<ProjectTable, UUID> projectDao;
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
@@ -72,11 +72,11 @@ public class KanbanBoDataService extends AbstractService{
 
 
     // Getters and Setters
-    public ObservableList<ObservableProject> getProjectsList() {
+    public ObservableList<ObservableWorkspaceProject> getProjectsList() {
         return projectsList;
     }
 
-    public ObservableList<ObservableProject> getWorkspaceProjectsList() {
+    public ObservableList<ObservableWorkspaceProject> getWorkspaceProjectsList() {
         return workspaceProjectsList;
     }
 
@@ -90,15 +90,15 @@ public class KanbanBoDataService extends AbstractService{
         projectService.createProject(projectDTO);
     }
 
-    public void updateProject(ProjectDTO projectDTO, ObservableProject observableProject) throws ParseException, SQLException, IOException {
-        projectService.updateProject(projectDTO, observableProject);
+    public void updateProject(ProjectDTO projectDTO, ObservableWorkspaceProject observableWorkspaceProject) throws ParseException, SQLException, IOException {
+        projectService.updateProject(projectDTO, observableWorkspaceProject);
     }
 
-    public void deleteProject(ObservableProject observableProject) throws ParseException, SQLException, IOException {
-        projectService.deleteProject(observableProject);
+    public void deleteProject(ObservableWorkspaceProject observableWorkspaceProject) throws ParseException, SQLException, IOException {
+        projectService.deleteProject(observableWorkspaceProject);
     }
 
-    private void copyProject(ObservableProject originalProject) throws SQLException, ParseException, IOException {
+    private void copyProject(ObservableWorkspaceProject originalProject) throws SQLException, ParseException, IOException {
         projectService.copyProject(originalProject);
     }
 

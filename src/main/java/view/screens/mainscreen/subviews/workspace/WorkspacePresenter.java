@@ -1,6 +1,6 @@
 package view.screens.mainscreen.subviews.workspace;
 
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -33,7 +33,7 @@ public class WorkspacePresenter implements Initializable {
     // Other variables
     @Inject
     KanbanBoDataService kanbanBoDataService;
-    private ObservableList<ObservableProject> openedProjectsViewModel;
+    private ObservableList<ObservableWorkspaceProject> openedProjectsViewModel;
     private SelectionModel tabPaneSelectionModel;
 
     // Constructors
@@ -46,9 +46,9 @@ public class WorkspacePresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.openedProjectsViewModel = kanbanBoDataService.getWorkspaceProjectsList();
         tabPaneSelectionModel = workspaceTabPane.getSelectionModel();
-        openedProjectsViewModel.addListener(new ListChangeListener<ObservableProject>() {
+        openedProjectsViewModel.addListener(new ListChangeListener<ObservableWorkspaceProject>() {
             @Override
-            public void onChanged(Change<? extends ObservableProject> c) {
+            public void onChanged(Change<? extends ObservableWorkspaceProject> c) {
                 Tab tab = new Tab();
                 ImageView projectImageView = new ImageView(getClass().getResource("/icons/topic/materialiconsoutlined/black/res/drawable-hdpi/outline_topic_black_18.png").toExternalForm());
                 tab.setGraphic(projectImageView);
@@ -57,9 +57,9 @@ public class WorkspacePresenter implements Initializable {
                         System.out.println("Change detected, new project opened");
                         ProjectContainerView projectContainerView = new ProjectContainerView();
                         ProjectContainerPresenter projectContainerPresenter = (ProjectContainerPresenter) projectContainerView.getPresenter();
-                        for (ObservableProject observableProject : c.getAddedSubList()) {
+                        for (ObservableWorkspaceProject observableWorkspaceProject : c.getAddedSubList()) {
                             try {
-                                projectContainerPresenter.setProjectViewModel(observableProject);
+                                projectContainerPresenter.setProjectViewModel(observableWorkspaceProject);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (SQLException throwables) {
@@ -68,7 +68,7 @@ public class WorkspacePresenter implements Initializable {
                             tab.setContent(projectContainerView.getView());
                             // TODO Investigate use of getViewAsync here and further down the chain
                             workspaceTabPane.getTabs().add(tab);
-                            tab.textProperty().bind(observableProject.projectTitleProperty());
+                            tab.textProperty().bind(observableWorkspaceProject.projectTitleProperty());
                             //tab.setText("Project '" + observableProject.getProjectTitle() + "'");
                             tab.setClosable(true);
                             updatePlaceholderLabel();
@@ -79,8 +79,8 @@ public class WorkspacePresenter implements Initializable {
                                     System.out.println("workspace project tab is being closed");
                                     int index = -1;
                                     for (int innerIterator = 0; innerIterator < (c.getAddedSubList().size()); innerIterator++) {
-                                        ObservableProject par2 = c.getAddedSubList().get(innerIterator);
-                                        if (observableProject.getProjectUUID().equals(par2.getProjectUUID())) {
+                                        ObservableWorkspaceProject par2 = c.getAddedSubList().get(innerIterator);
+                                        if (observableWorkspaceProject.getProjectUUID().equals(par2.getProjectUUID())) {
                                             index = innerIterator;
                                         }
                                     }

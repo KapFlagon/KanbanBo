@@ -1,7 +1,7 @@
 package view.sharedviewcomponents.popups.projectdetails;
 
 import persistence.dto.project.ProjectDTO;
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -42,7 +42,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     private SimpleBooleanProperty editing;
     private String noTitleError = "A title must be provided";
     private boolean validTitle;
-    private ObservableProject projectViewModel;
+    private ObservableWorkspaceProject projectViewModel;
 
     // Constructors
 
@@ -56,10 +56,10 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         return projectDescriptionTextArea;
     }
 
-    public ObservableProject getProjectViewModel() {
+    public ObservableWorkspaceProject getProjectViewModel() {
         return projectViewModel;
     }
-    public void setProjectViewModel(ObservableProject projectViewModel) {
+    public void setProjectViewModel(ObservableWorkspaceProject projectViewModel) {
         this.projectViewModel = projectViewModel;
         projectTitleTextField.textProperty().set(projectViewModel.projectTitleProperty().getValue());
         projectDescriptionTextArea.textProperty().set(projectViewModel.projectDescriptionProperty().getValue());

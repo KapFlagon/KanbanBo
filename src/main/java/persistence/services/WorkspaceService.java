@@ -1,7 +1,7 @@
 package persistence.services;
 
 import com.j256.ormlite.dao.Dao;
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import javafx.collections.ObservableList;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
@@ -21,7 +21,7 @@ public class WorkspaceService extends AbstractService{
     private Dao<CardTable, UUID> cardTableDao;
     private Dao<ResourceItemTable, UUID> resourceItemDao;
 
-    private ObservableList<ObservableProject> openedProjects;
+    private ObservableList<ObservableWorkspaceProject> openedProjects;
 
 
     // Constructors

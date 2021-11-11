@@ -1,6 +1,6 @@
 package view.screens.mainscreen.subviews.manage;
 
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -93,7 +93,7 @@ public class ManagePresenter implements Initializable {
 
     @FXML private void openSelectedProject() {
         System.out.println("Trying to open project in workspace");
-        ObservableProject selectedProjectRow = projectsTablePresenter.getSelectedRow();
+        ObservableWorkspaceProject selectedProjectRow = projectsTablePresenter.getSelectedRow();
 
         if (selectedProjectRow != null) {
             System.out.println("Project selected is not null");
@@ -103,8 +103,8 @@ public class ManagePresenter implements Initializable {
                 kanbanBoDataService.getWorkspaceProjectsList().add(selectedProjectRow);
             } else {
                 boolean projectCanBeFreshlyOpened = true;
-                for (ObservableProject observableProject: kanbanBoDataService.getWorkspaceProjectsList()) {
-                    if (selectedProjectRow.getProjectUUID().equals(observableProject.getProjectUUID())) {
+                for (ObservableWorkspaceProject observableWorkspaceProject : kanbanBoDataService.getWorkspaceProjectsList()) {
+                    if (selectedProjectRow.getProjectUUID().equals(observableWorkspaceProject.getProjectUUID())) {
                         projectCanBeFreshlyOpened = false;
                     }
                 }
@@ -124,11 +124,11 @@ public class ManagePresenter implements Initializable {
     @FXML private void accessProjectDetails() throws SQLException, IOException {
 
         System.out.println("Trying to open project in manager for editing.");
-        ObservableProject observableProject = projectsTablePresenter.getSelectedRow();
-        if (observableProject != null) {
+        ObservableWorkspaceProject observableWorkspaceProject = projectsTablePresenter.getSelectedRow();
+        if (observableWorkspaceProject != null) {
             System.out.println("Project selected is not null");
             initProjectDetailsUI();
-            projectDetailsWindowPresenter.setProjectViewModel(observableProject);
+            projectDetailsWindowPresenter.setProjectViewModel(observableWorkspaceProject);
             projectDetailsWindowPresenter.setInitialDataMode(DetailsPopupInitialDataMode.DISPLAY);
             showProjectDetailsWindow();
         } else {
@@ -146,7 +146,7 @@ public class ManagePresenter implements Initializable {
 
     public void deleteSelectedProject() {
         System.out.println("Deleting a project");
-        ObservableProject selectedProjectRow = projectsTablePresenter.getSelectedRow();
+        ObservableWorkspaceProject selectedProjectRow = projectsTablePresenter.getSelectedRow();
         if (selectedProjectRow != null) {
             System.out.println("Project selected is not null");
             ConfirmationDialogView confirmationDialogView = new ConfirmationDialogView();

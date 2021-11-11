@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 
 import java.util.List;
 
-public class ObservableProject extends AbstractObservableProjectBase<ProjectDTO, ObservableColumn>{
+public class ObservableWorkspaceProject extends AbstractObservableProjectBase<ProjectDTO, ObservableColumn>{
 
 
     // Variables
@@ -20,14 +20,14 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectDTO,
 
 
     // Constructors
-    public ObservableProject(ProjectDTO projectDTO, String projectStatusText) {
+    public ObservableWorkspaceProject(ProjectDTO projectDTO, String projectStatusText) {
         super(projectDTO);
         statusText = new SimpleStringProperty(projectStatusText);
         initHasFinalColumnProperty(columns);
         dueOnDate = new SimpleStringProperty();
     }
 
-    public ObservableProject(ProjectDTO projectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns, String projectStatusText) {
+    public ObservableWorkspaceProject(ProjectDTO projectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns, String projectStatusText) {
         super(projectDTO, resourceItems, columns);
         statusText = new SimpleStringProperty(projectStatusText);
         initHasFinalColumnProperty(columns);
@@ -80,6 +80,10 @@ public class ObservableProject extends AbstractObservableProjectBase<ProjectDTO,
                 hasFinalColumn.set(true);
             }
         }
+    }
+
+    public static class Builder {
+
     }
 
 }

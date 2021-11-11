@@ -1,9 +1,8 @@
 package view.screens.mainscreen;
 
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
@@ -11,7 +10,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import persistence.services.KanbanBoDataService;
-import persistence.tables.project.ProjectTable;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.ManagePresenter;
 import view.screens.mainscreen.subviews.manage.ManageView;
@@ -71,9 +69,9 @@ public class MainScreenPresenter implements Initializable {
         workspacePresenter = (WorkspacePresenter) workspaceView.getPresenter();
         workspaceTab.setContent(workspaceView.getView());
 
-        kanbanBoDataService.getWorkspaceProjectsList().addListener(new ListChangeListener<ObservableProject>() {
+        kanbanBoDataService.getWorkspaceProjectsList().addListener(new ListChangeListener<ObservableWorkspaceProject>() {
             @Override
-            public void onChanged(Change<? extends ObservableProject> c) {
+            public void onChanged(Change<? extends ObservableWorkspaceProject> c) {
                 while(c.next()) {
                     if(c.wasAdded()) {
                         mainScreenTabPane.getSelectionModel().select(workspaceTab);

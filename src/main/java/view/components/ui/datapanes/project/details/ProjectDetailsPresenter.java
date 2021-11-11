@@ -1,6 +1,6 @@
 package view.components.ui.datapanes.project.details;
 
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import domain.viewmodels.project.ProjectStatusListViewModel;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -41,7 +41,7 @@ public class ProjectDetailsPresenter implements Initializable {
     // Other variables
     //private ProjectDetailsViewModel projectDetailsViewModel;
     private KanbanBoDataService kanbanBoDataService;
-    private ObservableProject observableProject;
+    private ObservableWorkspaceProject observableWorkspaceProject;
     private ProjectStatusListViewModel projectStatusListViewModel;
     private ProjectDetailsViewModel projectDetailsViewModel;
     private SimpleBooleanProperty changesPending;
@@ -49,8 +49,8 @@ public class ProjectDetailsPresenter implements Initializable {
     // Constructors
 
     // Getters & Setters
-    public void setObservableProject(ObservableProject observableProject) {
-        this.observableProject = observableProject;
+    public void setObservableProject(ObservableWorkspaceProject observableWorkspaceProject) {
+        this.observableWorkspaceProject = observableWorkspaceProject;
         initializeTexts();
     }
 
@@ -83,11 +83,11 @@ public class ProjectDetailsPresenter implements Initializable {
     }
 
     private void initializeTexts() {
-        projectTitleTextField.textProperty().set(observableProject.projectTitleProperty().getValue());
-        projectDescriptionTextArea.textProperty().set(observableProject.projectDescriptionProperty().getValue());
-        projectCreationDateTextField.textProperty().set(observableProject.creationTimestampProperty().getValue());
-        projectLastChangedDateTextField.textProperty().set(observableProject.lastChangedTimestampProperty().getValue());
-        projectStatusTextField.textProperty().set(observableProject.statusTextProperty().getValue());
+        projectTitleTextField.textProperty().set(observableWorkspaceProject.projectTitleProperty().getValue());
+        projectDescriptionTextArea.textProperty().set(observableWorkspaceProject.projectDescriptionProperty().getValue());
+        projectCreationDateTextField.textProperty().set(observableWorkspaceProject.creationTimestampProperty().getValue());
+        projectLastChangedDateTextField.textProperty().set(observableWorkspaceProject.lastChangedTimestampProperty().getValue());
+        projectStatusTextField.textProperty().set(observableWorkspaceProject.statusTextProperty().getValue());
         projectStatusChoiceBox.getItems().addAll(projectDetailsViewModel.getProjectStatusListViewModel());
     }
 

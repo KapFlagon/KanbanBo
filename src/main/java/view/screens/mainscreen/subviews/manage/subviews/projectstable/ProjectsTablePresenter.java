@@ -1,6 +1,6 @@
 package view.screens.mainscreen.subviews.manage.subviews.projectstable;
 
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,9 +12,7 @@ import persistence.services.KanbanBoDataService;
 import utils.view.ScrollPaneFixer;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
@@ -24,22 +22,22 @@ public class ProjectsTablePresenter implements Initializable {
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private TableView<ObservableProject> activeProjectListTableView;
+    private TableView<ObservableWorkspaceProject> activeProjectListTableView;
     @FXML
-    private TableColumn<ObservableProject, String> projectTitleTableCol;
+    private TableColumn<ObservableWorkspaceProject, String> projectTitleTableCol;
     @FXML
-    private TableColumn<ObservableProject, String> projectStatusTableCol;
+    private TableColumn<ObservableWorkspaceProject, String> projectStatusTableCol;
     @FXML
-    private TableColumn<ObservableProject, String> creationDateTableCol;
+    private TableColumn<ObservableWorkspaceProject, String> creationDateTableCol;
     @FXML
-    private TableColumn<ObservableProject, String> lastChangedDateTableCol;
+    private TableColumn<ObservableWorkspaceProject, String> lastChangedDateTableCol;
 
 
     // Variables
     @Inject
     KanbanBoDataService kanbanBoDataService;
-    private ObservableList<ObservableProject> projectTableViewModel;
-    private TableView.TableViewSelectionModel<ObservableProject> selectionModel;
+    private ObservableList<ObservableWorkspaceProject> projectTableViewModel;
+    private TableView.TableViewSelectionModel<ObservableWorkspaceProject> selectionModel;
 
 
     // Constructors
@@ -79,7 +77,7 @@ public class ProjectsTablePresenter implements Initializable {
 
 
     // Other methods
-    public ObservableProject getSelectedRow() {
+    public ObservableWorkspaceProject getSelectedRow() {
         return selectionModel.getSelectedItem();
     }
 

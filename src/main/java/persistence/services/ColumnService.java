@@ -9,7 +9,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import persistence.dto.column.ColumnDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.mappers.DTOToTable;
@@ -34,7 +34,7 @@ public class ColumnService extends AbstractService{
     // Variables
     private final Locale locale;
     private final ResourceBundle resourceBundle;
-    private ObservableList<ObservableProject> workspaceProjectsList;
+    private ObservableList<ObservableWorkspaceProject> workspaceProjectsList;
 
     private Dao<ProjectTable, UUID> projectDao;
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
@@ -56,7 +56,7 @@ public class ColumnService extends AbstractService{
 
     // Constructors
 
-    public ColumnService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> workspaceProjectsList) {
+    public ColumnService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableWorkspaceProject> workspaceProjectsList) {
         this.locale = locale;
         this.resourceBundle = resourceBundle;
         this.workspaceProjectsList = workspaceProjectsList;
@@ -96,10 +96,10 @@ public class ColumnService extends AbstractService{
             int result = columnDao.create(columnTable);
             teardownDbConnection();
             if (result > 0) {
-                ObservableProject observableProject = null;
-                for (ObservableProject op : workspaceProjectsList) {
+                ObservableWorkspaceProject observableWorkspaceProject = null;
+                for (ObservableWorkspaceProject op : workspaceProjectsList) {
                     if(op.getProjectUUID().equals(columnDTO.getParentProjectUUID())){
-                        observableProject = op;
+                        observableWorkspaceProject = op;
                     }
                 }
                 columnDTO.setUuid(columnTable.getColumn_uuid());
@@ -111,7 +111,7 @@ public class ColumnService extends AbstractService{
                     // TODO implement function to change position of the Column in its list
                 });
                 // TODO finish this
-                observableProject.getColumns().add(observableColumn);
+                observableWorkspaceProject.getColumns().add(observableColumn);
                 System.out.println("Column was created successfully");
                 return true;
             } else {
@@ -245,9 +245,9 @@ public class ColumnService extends AbstractService{
             }
         });
         teardownDbConnection();
-        for(ObservableProject observableProject : workspaceProjectsList) {
-            if(observableProject.getProjectUUID().equals(column.getParentProjectUUID())){
-                for(Iterator<ObservableColumn> observableColumnIterator = observableProject.getColumns().listIterator(); observableColumnIterator.hasNext();) {
+        for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
+            if(observableWorkspaceProject.getProjectUUID().equals(column.getParentProjectUUID())){
+                for(Iterator<ObservableColumn> observableColumnIterator = observableWorkspaceProject.getColumns().listIterator(); observableColumnIterator.hasNext();) {
                     UUID tempUUID = observableColumnIterator.next().getColumnUUID();
                     if(tempUUID.equals(column.getColumnUUID())) {
                         observableColumnIterator.remove();
@@ -287,9 +287,9 @@ public class ColumnService extends AbstractService{
             }
             columnDTOList.add(newColumnDataDTO);
             ObservableList<ObservableColumn> observableColumnObservableList = FXCollections.observableArrayList();
-            for(ObservableProject observableProject : workspaceProjectsList) {
-                if(observableProject.getProjectUUID().equals(oldObservableColumn.getParentProjectUUID())){
-                    observableColumnObservableList = observableProject.getColumns();
+            for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
+                if(observableWorkspaceProject.getProjectUUID().equals(oldObservableColumn.getParentProjectUUID())){
+                    observableColumnObservableList = observableWorkspaceProject.getColumns();
                 }
             }
             updateColumns(columnDTOList, observableColumnObservableList);
@@ -298,10 +298,10 @@ public class ColumnService extends AbstractService{
     }
 
     public ObservableList<ObservableColumn> getRelatedColumns(UUID columnUUID) {
-        for(ObservableProject observableProject : workspaceProjectsList) {
-            for(ObservableColumn observableColumn : observableProject.getColumns()) {
+        for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
+            for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
                 if(observableColumn.getColumnUUID().equals(columnUUID)) {
-                    return observableProject.getColumns();
+                    return observableWorkspaceProject.getColumns();
                 }
             }
         }

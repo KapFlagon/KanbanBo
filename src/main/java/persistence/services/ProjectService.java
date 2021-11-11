@@ -11,7 +11,7 @@ import persistence.dto.column.ColumnDTO;
 import persistence.dto.project.ProjectDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
-import domain.entities.project.ObservableProject;
+import domain.entities.project.ObservableWorkspaceProject;
 import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -38,8 +38,8 @@ public class ProjectService extends AbstractService{
     // Variables
     private final Locale locale;
     private final ResourceBundle resourceBundle;
-    private ObservableList<ObservableProject> projectsList;
-    private ObservableList<ObservableProject> workspaceProjectsList;
+    private ObservableList<ObservableWorkspaceProject> projectsList;
+    private ObservableList<ObservableWorkspaceProject> workspaceProjectsList;
 
     private Dao<ProjectTable, UUID> projectDao;
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
@@ -61,20 +61,20 @@ public class ProjectService extends AbstractService{
 
 
     // Constructors
-    public ProjectService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableProject> projectsList, ObservableList<ObservableProject> workspaceProjectsList) throws SQLException, IOException {
+    public ProjectService(Locale locale, ResourceBundle resourceBundle, ObservableList<ObservableWorkspaceProject> projectsList, ObservableList<ObservableWorkspaceProject> workspaceProjectsList) throws SQLException, IOException {
         this.locale = locale;
         this.resourceBundle = resourceBundle;
         this.projectsList = projectsList;
         initProjectsList();
         this.workspaceProjectsList = workspaceProjectsList;
-        workspaceProjectsList.addListener(new ListChangeListener<ObservableProject>() {
+        workspaceProjectsList.addListener(new ListChangeListener<ObservableWorkspaceProject>() {
             @Override
-            public void onChanged(Change<? extends ObservableProject> c) {
+            public void onChanged(Change<? extends ObservableWorkspaceProject> c) {
                 while (c.next())
                     if(c.wasAdded()) {
-                        for(ObservableProject addedObservableProject : c.getAddedSubList()) {
+                        for(ObservableWorkspaceProject addedObservableWorkspaceProject : c.getAddedSubList()) {
                             try {
-                                fillProjectFromDb(addedObservableProject);
+                                fillProjectFromDb(addedObservableWorkspaceProject);
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -83,8 +83,8 @@ public class ProjectService extends AbstractService{
                         }
                     }
                 if(c.wasRemoved()) {
-                    for(ObservableProject removedObservableProject : c.getRemoved()) {
-                        purgeProjectData(removedObservableProject);
+                    for(ObservableWorkspaceProject removedObservableWorkspaceProject : c.getRemoved()) {
+                        purgeProjectData(removedObservableWorkspaceProject);
                     }
                 }
             }
@@ -92,11 +92,11 @@ public class ProjectService extends AbstractService{
     }
 
     // Getters and Setters
-    public ObservableList<ObservableProject> getProjectsList() {
+    public ObservableList<ObservableWorkspaceProject> getProjectsList() {
         return projectsList;
     }
 
-    public ObservableList<ObservableProject> getWorkspaceProjectsList() {
+    public ObservableList<ObservableWorkspaceProject> getWorkspaceProjectsList() {
         return workspaceProjectsList;
     }
 
@@ -134,13 +134,13 @@ public class ProjectService extends AbstractService{
                 }
             }
             ProjectDTO projectDTO = TableToDTO.mapProjectTableToProjectDTO(projectEntry);
-            ObservableProject projectDomainObject = new ObservableProject(projectDTO, localisedStatusText);
+            ObservableWorkspaceProject projectDomainObject = new ObservableWorkspaceProject(projectDTO, localisedStatusText);
             projectsList.add(projectDomainObject);
         }
     }
 
     // Other methods
-    private void fillProjectFromDb(ObservableProject observableProject) throws SQLException, IOException {
+    private void fillProjectFromDb(ObservableWorkspaceProject observableWorkspaceProject) throws SQLException, IOException {
         ObservableList<ObservableResourceItem> projectResourceItems = FXCollections.observableArrayList();
         ObservableList<ObservableColumn> observableColumnsList = FXCollections.observableArrayList();
 
@@ -157,9 +157,9 @@ public class ProjectService extends AbstractService{
         resourceItemTableQueryBuilder = resourceItemDao.queryBuilder();
         resourceItemTypeTableQueryBuilder = resourceItemTypeDao.queryBuilder();
 
-        columnTableQueryBuilder.orderBy(ColumnTable.POSITION_KEY_NAME, true).where().eq(ColumnTable.FOREIGN_KEY_NAME, observableProject.getProjectUUID());
+        columnTableQueryBuilder.orderBy(ColumnTable.POSITION_KEY_NAME, true).where().eq(ColumnTable.FOREIGN_KEY_NAME, observableWorkspaceProject.getProjectUUID());
 
-        resourceItemTableQueryBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, observableProject.getProjectUUID());
+        resourceItemTableQueryBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, observableWorkspaceProject.getProjectUUID());
         List<ResourceItemTable> projectResourcesTables = resourceItemTableQueryBuilder.query();
         for(ResourceItemTable projectResourceTableItem : projectResourcesTables) {
             resourceItemTypeTableQueryBuilder.reset();
@@ -209,14 +209,14 @@ public class ProjectService extends AbstractService{
         }
 
 
-        observableProject.setColumns(observableColumnsList);
-        observableProject.setResourceItems(projectResourceItems);
+        observableWorkspaceProject.setColumns(observableColumnsList);
+        observableWorkspaceProject.setResourceItems(projectResourceItems);
 
         teardownDbConnection();
     }
 
-    private void purgeProjectData(ObservableProject observableProject) {
-        for(ObservableColumn observableColumn : observableProject.getColumns()) {
+    private void purgeProjectData(ObservableWorkspaceProject observableWorkspaceProject) {
+        for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
             for(ObservableCard observableCard : observableColumn.getCards()) {
                 for(ObservableResourceItem observableCardResourceItem : observableCard.getResourceItems()) {
                     observableCardResourceItem = null;
@@ -227,7 +227,7 @@ public class ProjectService extends AbstractService{
         }
     }
 
-    public ObservableList<ObservableProject> getResourceItemProjectSubList(UUID potentialParentItemUUID) throws SQLException, IOException {
+    public ObservableList<ObservableWorkspaceProject> getResourceItemProjectSubList(UUID potentialParentItemUUID) throws SQLException, IOException {
         setupDbConnection();
 
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
@@ -254,16 +254,16 @@ public class ProjectService extends AbstractService{
         resourceItemTypeTableQueryBuilder.where().eq(ResourceItemTable.TYPE_COLUMN_NAME, 4);
         List<ResourceItemTable> resourceList = resourceItemTableQueryBuilder.query();
         buildResourceItemProjectOmissionList(projectUUIDsToOmit, startingUUID, resourceList);
-        ObservableList<ObservableProject> projectSubList = FXCollections.observableArrayList();
-        for(ObservableProject observableProject : projectsList) {
+        ObservableList<ObservableWorkspaceProject> projectSubList = FXCollections.observableArrayList();
+        for(ObservableWorkspaceProject observableWorkspaceProject : projectsList) {
             boolean additionPermitted = true;
             for(UUID ommittedProjectUUID : projectUUIDsToOmit) {
-                if (ommittedProjectUUID.equals(observableProject.getProjectUUID())) {
+                if (ommittedProjectUUID.equals(observableWorkspaceProject.getProjectUUID())) {
                     additionPermitted = false;
                 }
             }
             if(additionPermitted) {
-                projectSubList.add(observableProject);
+                projectSubList.add(observableWorkspaceProject);
             }
         }
         teardownDbConnection();
@@ -308,9 +308,9 @@ public class ProjectService extends AbstractService{
             projectDTO.setUuid(projectTable.getProject_uuid());
             projectDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(projectTable.getCreation_timestamp()));
             projectDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(projectTable.getLast_changed_timestamp()));
-            ObservableProject observableProject = new ObservableProject(projectDTO, localizedStatusText);
-            projectsList.add(observableProject);
-            workspaceProjectsList.add(observableProject);
+            ObservableWorkspaceProject observableWorkspaceProject = new ObservableWorkspaceProject(projectDTO, localizedStatusText);
+            projectsList.add(observableWorkspaceProject);
+            workspaceProjectsList.add(observableWorkspaceProject);
             System.out.println("Project created successfully");
         } else {
             // TODO respond to a failure...
@@ -318,14 +318,14 @@ public class ProjectService extends AbstractService{
         }
     }
 
-    public boolean updateProject(ProjectDTO newProjectData, ObservableProject observableProject) throws ParseException, SQLException, IOException {
+    public boolean updateProject(ProjectDTO newProjectData, ObservableWorkspaceProject observableWorkspaceProject) throws ParseException, SQLException, IOException {
         setupDbConnection();
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
-        ProjectTable projectTableData = projectDao.queryForId(observableProject.getProjectUUID());
+        ProjectTable projectTableData = projectDao.queryForId(observableWorkspaceProject.getProjectUUID());
         projectTableData.setProject_title(newProjectData.getTitle());
         projectTableData.setProject_description(newProjectData.getDescription());
-        projectTableData.setProject_status_id(observableProject.statusIDProperty().getValue());
+        projectTableData.setProject_status_id(observableWorkspaceProject.statusIDProperty().getValue());
         projectTableData.setLast_changed_timestamp(ZonedDateTime.now().toString());
         int result = projectDao.update(projectTableData);
 
@@ -333,12 +333,12 @@ public class ProjectService extends AbstractService{
         ProjectStatusTable statusKey = projectStatusDao.queryForId(newProjectData.getStatus());
         teardownDbConnection();
         if(result > 0) {
-            observableProject.projectTitleProperty().setValue(newProjectData.getTitle());
-            observableProject.projectDescriptionProperty().setValue(newProjectData.getDescription());
-            observableProject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnTimeStamp().toString());
-            observableProject.statusIDProperty().setValue(newProjectData.getStatus());
+            observableWorkspaceProject.projectTitleProperty().setValue(newProjectData.getTitle());
+            observableWorkspaceProject.projectDescriptionProperty().setValue(newProjectData.getDescription());
+            observableWorkspaceProject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnTimeStamp().toString());
+            observableWorkspaceProject.statusIDProperty().setValue(newProjectData.getStatus());
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
-            observableProject.statusTextProperty().setValue(localizedStatusText);
+            observableWorkspaceProject.statusTextProperty().setValue(localizedStatusText);
             System.out.println("Project updated successfully");
             return true;
         } else {
@@ -348,7 +348,7 @@ public class ProjectService extends AbstractService{
         }
     }
 
-    public void deleteProject(ObservableProject projectDomainObject) throws ParseException, SQLException, IOException {
+    public void deleteProject(ObservableWorkspaceProject projectDomainObject) throws ParseException, SQLException, IOException {
         setupDbConnection();
 
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -411,7 +411,7 @@ public class ProjectService extends AbstractService{
         workspaceProjectsList.remove(projectDomainObject);
     }
 
-    public void copyProject(ObservableProject originalProject) throws SQLException, ParseException, IOException {
+    public void copyProject(ObservableWorkspaceProject originalProject) throws SQLException, ParseException, IOException {
         // TODO Implement this
     }
 
