@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ObservableWorkspaceProject extends AbstractObservableProjectBase<ProjectDTO, ObservableColumn>{
 
@@ -20,6 +21,13 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
 
 
     // Constructors
+    protected ObservableWorkspaceProject(ObservableWorkspaceProjectBuilder observableWorkspaceProjectBuilder) {
+        super(observableWorkspaceProjectBuilder);
+        this.statusID = new SimpleIntegerProperty(observableWorkspaceProjectBuilder.statusIDValue);
+        this.statusText = new SimpleStringProperty(observableWorkspaceProjectBuilder.statusTextValue);
+        this.dueOnDate = new SimpleStringProperty(observableWorkspaceProjectBuilder.dueOnDateValue);
+    }
+
     public ObservableWorkspaceProject(ProjectDTO projectDTO, String projectStatusText) {
         super(projectDTO);
         statusText = new SimpleStringProperty(projectStatusText);
@@ -82,8 +90,36 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
         }
     }
 
-    public static class Builder {
+    public static class ObservableWorkspaceProjectBuilder extends AbstractProjectBuilder<ObservableColumn>{
+        private int statusIDValue;
+        private String statusTextValue;
+        private String dueOnDateValue;
 
+        private ObservableWorkspaceProjectBuilder() {
+            super();
+            this.statusIDValue = 1;
+            this.statusTextValue = "";
+            this.dueOnDateValue = "";
+        }
+
+        public static ObservableWorkspaceProjectBuilder newInstance() {
+            return new ObservableWorkspaceProjectBuilder();
+        }
+
+        public ObservableWorkspaceProjectBuilder statusID(int statusID) {
+            this.statusIDValue = statusID;
+            return this;
+        }
+
+        public ObservableWorkspaceProjectBuilder statusText(String statusText) {
+            this.statusTextValue = statusText;
+            return this;
+        }
+
+        public ObservableWorkspaceProjectBuilder dueOnDate(String dueOnDate) {
+            this.dueOnDateValue = dueOnDate;
+            return this;
+        }
     }
 
 }

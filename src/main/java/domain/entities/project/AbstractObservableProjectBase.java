@@ -28,6 +28,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
 
 
     // Constructors
+
     public AbstractObservableProjectBase(T projectObjectDTO) {
         super();
         projectUUID = projectObjectDTO.getUuid();
@@ -40,6 +41,19 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
         projectUUID = projectObjectDTO.getUuid();
         initAllProperties(projectObjectDTO);
         initAllObservableLists(resourceItems, columnsList);
+    }
+
+    protected AbstractObservableProjectBase(AbstractProjectBuilder abstractProjectBuilder) {
+        super();
+        this.projectUUID = abstractProjectBuilder.projectUUIDValue != null ? abstractProjectBuilder.projectUUIDValue : null;
+        this.projectTitle = new SimpleStringProperty(abstractProjectBuilder.projectTitleValue);
+        this.projectDescription = new SimpleStringProperty(abstractProjectBuilder.projectDescriptionValue);
+        this.creationTimestamp = new SimpleStringProperty(abstractProjectBuilder.creationTimestampValue);
+        this.lastChangedTimestamp = new SimpleStringProperty(abstractProjectBuilder.lastChangedTimestampValue);
+        this.resourceItems = abstractProjectBuilder.resourceItemsListValue;
+        this.columns = abstractProjectBuilder.columnsListValue;
+        this.hasFinalColumn = new SimpleBooleanProperty(abstractProjectBuilder.hasFinalColumnValue);
+        addListenersToObservableLists();
     }
 
     // Getters and Setters
@@ -68,6 +82,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
     }
     public void setResourceItems(ObservableList<ObservableResourceItem> resourceItems) {
         this.resourceItems = resourceItems;
+        addListenersToResourceItemsList();
     }
 
     public ObservableList<U> getColumns() {
@@ -75,6 +90,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
     }
     public void setColumns(ObservableList<U> columns) {
         this.columns = columns;
+        addListenersToColumnsList();
     }
 
     // Initialisation methods
@@ -93,15 +109,32 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
         this.hasFinalColumn = new SimpleBooleanProperty(false);
     }
 
+    protected void initAllObservableLists(ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
+        this.resourceItems = resourceItems;
+        this.columns = columnsList;
+        updateHasFinalColumn(columns);
+        this.columns.addListener((ListChangeListener<U>) c -> {
+            while(c.next()) {
+                updateHasFinalColumn(columns);
+            }
+        });
+    }
+
     protected void initAllObservableLists() {
         this.resourceItems = FXCollections.observableArrayList();
         this.columns = FXCollections.observableArrayList();
     }
 
-    protected void initAllObservableLists(ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
-        this.resourceItems = resourceItems;
-        this.columns = columnsList;
-        updateHasFinalColumn(columns);
+    protected void addListenersToObservableLists() {
+        addListenersToResourceItemsList();
+        addListenersToColumnsList();
+    }
+
+    private void addListenersToResourceItemsList() {
+
+    }
+
+    private void addListenersToColumnsList() {
         this.columns.addListener((ListChangeListener<U>) c -> {
             while(c.next()) {
                 updateHasFinalColumn(columns);
@@ -117,6 +150,72 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
             if (abstractObservableColumnBase.isFinalColumn()) {
                 this.hasFinalColumn.set(true);
             }
+        }
+    }
+
+
+    protected static class AbstractProjectBuilder<U>{
+        private UUID projectUUIDValue;
+        private String projectTitleValue;
+        private String projectDescriptionValue;
+        private String creationTimestampValue;
+        private String lastChangedTimestampValue;
+        private ObservableList<ObservableResourceItem> resourceItemsListValue;
+        private ObservableList<U> columnsListValue;
+        private Boolean hasFinalColumnValue;
+
+        protected AbstractProjectBuilder() {
+            this.projectTitleValue = "";
+            this.projectDescriptionValue = "";
+            this.creationTimestampValue = "";
+            this.lastChangedTimestampValue = "";
+            this.resourceItemsListValue = FXCollections.observableArrayList();
+            this.columnsListValue = FXCollections.observableArrayList();
+            this.hasFinalColumnValue = false;
+        }
+
+        public static AbstractProjectBuilder newInstance() {
+            return new AbstractProjectBuilder();
+        }
+
+        public AbstractProjectBuilder uuid(UUID uuid) {
+            this.projectUUIDValue = uuid;
+            return this;
+        }
+
+        public AbstractProjectBuilder title(String title) {
+            this.projectTitleValue = title;
+            return this;
+        }
+
+        public AbstractProjectBuilder description(String description) {
+            this.projectDescriptionValue = description;
+            return this;
+        }
+
+        public AbstractProjectBuilder creationTimestampString(String creationTimestampString) {
+            this.creationTimestampValue = creationTimestampString;
+            return this;
+        }
+
+        public AbstractProjectBuilder lastChangedTimestampString(String lastChangedTimestampString) {
+            this.projectDescriptionValue = lastChangedTimestampString;
+            return this;
+        }
+
+        public AbstractProjectBuilder resourceItemsList(ObservableList<ObservableResourceItem> observableResourceItems) {
+            this.resourceItemsListValue = observableResourceItems;
+            return this;
+        }
+
+        public AbstractProjectBuilder columns(ObservableList<U> columns) {
+            this.columnsListValue = columns;
+            return this;
+        }
+
+        public AbstractProjectBuilder hasFinalColumn(boolean hasFinalColumn) {
+            this.hasFinalColumnValue = hasFinalColumn;
+            return this;
         }
     }
 
