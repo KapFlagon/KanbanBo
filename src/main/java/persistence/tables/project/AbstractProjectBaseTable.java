@@ -1,27 +1,27 @@
 package persistence.tables.project;
 
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.Id;
-
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import persistence.tables.TableObject;
 
+import java.util.Date;
 import java.util.UUID;
 
-@Entity(name = "abstract_project")
+@DatabaseTable(tableName = "abstract_project")
 public abstract class AbstractProjectBaseTable implements TableObject<UUID> {
 
 
     // Variables
-    @Id
+    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, canBeNull = false, dataType = DataType.UUID, useGetSet = true)
     private UUID project_uuid;
-    @Column(nullable = false)
-    private String title;
-    @Column(nullable = true)
-    private String description;
-    @Column(nullable = false)
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String project_title;
+    @DatabaseField(canBeNull = true, useGetSet = true, dataType = DataType.STRING)
+    private String project_description;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
     private String creation_timestamp;
-    @Column(nullable = false)
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
     private String last_changed_timestamp;
 
 
@@ -38,18 +38,18 @@ public abstract class AbstractProjectBaseTable implements TableObject<UUID> {
         this.project_uuid = project_uuid;
     }
 
-    public String getTitle() {
-        return title;
+    public String getProject_title() {
+        return project_title;
     }
-    public void setTitle(String title) {
-        this.title = title;
+    public void setProject_title(String project_title) {
+        this.project_title = project_title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getProject_description() {
+        return project_description;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProject_description(String project_description) {
+        this.project_description = project_description;
     }
 
     public String getCreation_timestamp() {

@@ -1,19 +1,20 @@
 package persistence.tables.project;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import persistence.tables.TableObject;
 
-import javax.persistence.*;
 
-
-@Entity(name = "project_status")
+@DatabaseTable(tableName = "project_status")
 public class ProjectStatusTable implements TableObject<Integer> {
 
-    public static final String PRIMARY_KEY = "project_status_id";
+    public static final String PRIMARY_KEY = "status_id";
     // Variables
-    @Id
+    @DatabaseField(generatedId = true, canBeNull = false, dataType = DataType.INTEGER, useGetSet = true)
     private int project_status_id;
-    @Column(nullable = false)
-    private String status_text_key;
+    @DatabaseField(canBeNull = false, useGetSet = true, dataType = DataType.STRING)
+    private String project_status_text_key;
 
     // Constructors
     public ProjectStatusTable() {
@@ -28,11 +29,11 @@ public class ProjectStatusTable implements TableObject<Integer> {
         this.project_status_id = project_status_id;
     }
 
-    public String getStatus_text_key() {
-        return status_text_key;
+    public String getProject_status_text_key() {
+        return project_status_text_key;
     }
-    public void setStatus_text_key(String status_text_key) {
-        this.status_text_key = status_text_key;
+    public void setProject_status_text_key(String project_status_text_key) {
+        this.project_status_text_key = project_status_text_key;
     }
 
 
