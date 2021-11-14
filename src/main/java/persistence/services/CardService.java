@@ -110,6 +110,12 @@ public class CardService extends AbstractService{
                             // TODO implement function to change position of the Card in its list
                         });
                         observableColumn.getCards().add(newObservableCard);
+                        observableColumn.getCards().sort(new Comparator<ObservableCard>() {
+                            @Override
+                            public int compare(ObservableCard o1, ObservableCard o2) {
+                                return o1.positionProperty().getValue().compareTo(o2.positionProperty().getValue());
+                            }
+                        });
                     }
                 }
             }
@@ -219,6 +225,12 @@ public class CardService extends AbstractService{
                         UUID tempUUID = observableCardIterator.next().getCardUUID();
                         if(tempUUID.equals(card.getCardUUID())) {
                             observableCardIterator.remove();
+                            observableColumn.getCards().sort(new Comparator<ObservableCard>() {
+                                @Override
+                                public int compare(ObservableCard o1, ObservableCard o2) {
+                                    return o1.positionProperty().getValue().compareTo(o2.positionProperty().getValue());
+                                }
+                            });
                         }
                     }
 
@@ -307,7 +319,7 @@ public class CardService extends AbstractService{
             ObservableList<ObservableCard> sourceCardObservableList = FXCollections.observableArrayList();
             for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
                 for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
-                    if(observableColumn.getColumnUUID().equals(newCardDataDTO.getParentColumnUUID())) {
+                    if(observableColumn.getColumnUUID().equals(oldObservableCard.getParentColumnUUID())) {
                         sourceCardObservableList = observableColumn.getCards();
                     }
                 }
@@ -362,14 +374,13 @@ public class CardService extends AbstractService{
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
         final int[] result = new int[1];
+        ColumnTable parentColumnTable = columnDao.queryForId(cardTableList.get(0).getParent_column_uuid());
+        ProjectTable parentProjectTable = projectDao.queryForId(parentColumnTable.getParent_project_uuid());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 result[0] = 0;
-                ColumnTable parentColumnTable = columnDao.queryForId(cardTableList.get(0).getParent_column_uuid());
                 parentColumnTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
-
-                ProjectTable parentProjectTable = projectDao.queryForId(parentColumnTable.getParent_project_uuid());
                 parentProjectTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
                 for(CardTable cardTable : cardTableList) {
@@ -388,45 +399,66 @@ public class CardService extends AbstractService{
             if (observableCardObservableList.size() < cardDTOList.size()) {
                 CardDTO cardDTOForAddition = null;
                 boolean deltaNotFound = true;
-                while(deltaNotFound) {
-                    for(CardDTO cardDTO : cardDTOList) {
-                        int innerIterator = 0;
-                        boolean noMatchFound = true;
-                        while(noMatchFound) {
-                            ObservableCard observableCard = observableCardObservableList.get(innerIterator);
-                            if(cardDTO.getUuid().equals(observableCard.getCardUUID())) {
-                                noMatchFound = false;
-                            }
-                            innerIterator +=1;
+                int outerIterator = 0;
+                while(deltaNotFound && outerIterator < cardDTOList.size()) {
+                    CardDTO cardDTOIteration = cardDTOList.get(outerIterator);
+                    int innerIterator = 0;
+                    boolean noMatchFound = true;
+                    while(noMatchFound && innerIterator < observableCardObservableList.size()) {
+                        ObservableCard observableCard = observableCardObservableList.get(innerIterator);
+                        if(cardDTOIteration.getUuid().equals(observableCard.getCardUUID())) {
+                            noMatchFound = false;
                         }
-                        if(noMatchFound) {
-                            cardDTOForAddition = cardDTO;
-                            deltaNotFound = false;
+                        innerIterator +=1;
+                    }
+                    if(noMatchFound) {
+                        cardDTOForAddition = cardDTOIteration;
+                        deltaNotFound = false;
+                    }
+                    outerIterator += 1;
+                }
+                // TODO Create new card and add to project column card list
+                for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
+                    if(observableWorkspaceProject.getProjectUUID().equals(parentProjectTable.getProject_uuid())) {
+                        for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
+                            if(observableColumn.getColumnUUID().equals(cardDTOForAddition.getParentColumnUUID())) {
+                                ObservableCard addedObservableCard = new ObservableCard(cardDTOForAddition);
+                                observableColumn.getCards().add(addedObservableCard);
+                            }
                         }
                     }
-                    // TODO Create new card and add to project column card list
                 }
 
             } else if (observableCardObservableList.size() > cardDTOList.size()) {
                 ObservableCard observableCardForRemoval = null;
                 boolean deltaNotFound = true;
-                while(deltaNotFound) {
-                    for (ObservableCard observableCard : observableCardObservableList) {
-                        int innerIterator = 0;
-                        boolean noMatchFound = true;
-                        while (noMatchFound) {
-                            CardDTO cardDTO = cardDTOList.get(innerIterator);
-                            if (observableCard.getCardUUID().equals(cardDTO.getUuid())) {
-                                noMatchFound = false;
-                            }
-                            innerIterator += 1;
+                int outerIterator = 0;
+                while(deltaNotFound && outerIterator < observableCardObservableList.size()) {
+                    ObservableCard observableCardIteration = observableCardObservableList.get(outerIterator);
+                    int innerIterator = 0;
+                    boolean noMatchFound = true;
+                    while (noMatchFound && innerIterator < cardDTOList.size()) {
+                        CardDTO cardDTO = cardDTOList.get(innerIterator);
+                        if (observableCardIteration.getCardUUID().equals(cardDTO.getUuid())) {
+                            noMatchFound = false;
                         }
-                        if (noMatchFound) {
-                            observableCardForRemoval = observableCard;
-                            deltaNotFound = false;
+                        innerIterator += 1;
+                    }
+                    if (noMatchFound) {
+                        observableCardForRemoval = observableCardIteration;
+                        deltaNotFound = false;
+                    }
+                    outerIterator += 1;
+                }
+                // TODO Remove card from project column card list
+                for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
+                    if(observableWorkspaceProject.getProjectUUID().equals(parentProjectTable.getProject_uuid())) {
+                        for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
+                            if(observableColumn.getColumnUUID().equals(observableCardForRemoval.getParentColumnUUID())) {
+                                observableColumn.getCards().remove(observableCardForRemoval);
+                            }
                         }
                     }
-                    // TODO Remove card from project column card list
                 }
             }
 

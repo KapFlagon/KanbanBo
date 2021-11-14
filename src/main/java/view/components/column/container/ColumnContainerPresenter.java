@@ -121,6 +121,8 @@ public class ColumnContainerPresenter implements Initializable {
         columnViewModel.getCards().addListener(new ListChangeListener<ObservableCard>() {
             @Override
             public void onChanged(Change<? extends ObservableCard> c) {
+                System.out.println("A column list change has been detected");
+
                 while (c.next()) {
                     CardBasicTileView cardBasicTileView = new CardBasicTileView();
                     CardBasicTilePresenter cardBasicTilePresenter = (CardBasicTilePresenter) cardBasicTileView.getPresenter();
@@ -129,12 +131,6 @@ public class ColumnContainerPresenter implements Initializable {
                             cardBasicTileView.getViewAsync(cardVBox.getChildren()::remove);
                         }
                     });
-                    if (c.wasAdded()) {
-                        for (ObservableCard observableCard : c.getAddedSubList()) {
-                            cardBasicTilePresenter.setCardViewModel(observableCard);
-                            cardBasicTileView.getViewAsync(cardVBox.getChildren()::add);
-                        }
-                    }
                     if (c.wasPermutated()) {
                         System.out.println("Card list permutation detected");
                         cardVBox.getChildren().clear();
