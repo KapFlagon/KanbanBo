@@ -10,7 +10,7 @@ import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTablePresenter;
 import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTableView;
-import view.sharedviewcomponents.popups.DetailsPopupInitialDataMode;
+import view.sharedviewcomponents.popups.EditorDataMode;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogPresenter;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogView;
 import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
@@ -86,7 +86,7 @@ public class ManagePresenter implements Initializable {
     @FXML private void createNewProject() throws SQLException, IOException {
         System.out.println("Creating a new project");
         initProjectDetailsUI();
-        projectDetailsWindowPresenter.setInitialDataMode(DetailsPopupInitialDataMode.CREATE);
+        projectDetailsWindowPresenter.setEditorDataMode(EditorDataMode.CREATION);
         showProjectDetailsWindow();
         // TODO maybe insert error handling here to show error to user.
     }
@@ -129,7 +129,8 @@ public class ManagePresenter implements Initializable {
             System.out.println("Project selected is not null");
             initProjectDetailsUI();
             projectDetailsWindowPresenter.setProjectViewModel(observableWorkspaceProject);
-            projectDetailsWindowPresenter.setInitialDataMode(DetailsPopupInitialDataMode.DISPLAY);
+            // TODO Need to read project status, and determine "Editing" or "Display" mode based on this...
+            projectDetailsWindowPresenter.setEditorDataMode(EditorDataMode.EDITING);
             showProjectDetailsWindow();
         } else {
             System.out.println("selected project was found to be null");

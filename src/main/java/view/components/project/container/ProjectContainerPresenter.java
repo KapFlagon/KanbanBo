@@ -16,7 +16,7 @@ import utils.StageUtils;
 import utils.view.ScrollPaneFixer;
 import view.components.column.container.ColumnContainerPresenter;
 import view.components.column.container.ColumnContainerView;
-import view.sharedviewcomponents.popups.DetailsPopupInitialDataMode;
+import view.sharedviewcomponents.popups.EditorDataMode;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
 import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowView;
 import view.sharedviewcomponents.popups.finalcolumnselection.FinalColumnSelectionPresenter;
@@ -179,7 +179,7 @@ public class ProjectContainerPresenter implements Initializable {
         ProjectDetailsWindowView view = new ProjectDetailsWindowView();
         ProjectDetailsWindowPresenter presenter = (ProjectDetailsWindowPresenter) view.getPresenter();
         presenter.setProjectViewModel(projectViewModel);
-        presenter.setInitialDataMode(DetailsPopupInitialDataMode.EDIT);
+        presenter.setEditorDataMode(EditorDataMode.EDITING);
         StageUtils.createChildStage("Enter Project Details", view.getView());
         StageUtils.getSubStages().peekLast().initStyle(StageStyle.UNDECORATED);
         StageUtils.showAndWaitOnSubStage();

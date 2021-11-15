@@ -10,7 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
-import view.sharedviewcomponents.popups.DetailsPopupInitialDataMode;
+import view.sharedviewcomponents.popups.EditorDataMode;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
 
     // JavaFX injected field variables
     @FXML
-    private Button editBtn;
+    private Label popupStateLbl;
     @FXML
     private TextField projectTitleTextField;
     @FXML
@@ -31,15 +31,22 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     @FXML
     private TextArea projectDescriptionTextArea;
     @FXML
-    private Button saveButton;
+    private ComboBox statusComboBox;
     @FXML
-    private Button cancelButton;
+    private DatePicker dueOnDatePicker;
+    @FXML
+    private TextField createdOnTextField;
+    @FXML
+    private TextField lastChangedTextField;
+    @FXML
+    private Button saveBtn;
+    @FXML
+    private Button cancelBtn;
 
     // Variables
     @Inject
     KanbanBoDataService kanbanBoDataService;
-    private DetailsPopupInitialDataMode initialDataMode;
-    private SimpleBooleanProperty editing;
+    private EditorDataMode editorDataMode;
     private String noTitleError = "A title must be provided";
     private boolean validTitle;
     private ObservableWorkspaceProject projectViewModel;
@@ -63,19 +70,23 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         this.projectViewModel = projectViewModel;
         projectTitleTextField.textProperty().set(projectViewModel.projectTitleProperty().getValue());
         projectDescriptionTextArea.textProperty().set(projectViewModel.projectDescriptionProperty().getValue());
+        statusComboBox.setValue(projectViewModel.statusTextProperty().getValue());
+        //dueOnDatePicker.setValue(projectViewModel.);
+        createdOnTextField.setText(projectViewModel.creationTimestampProperty().getValue());
+        lastChangedTextField.setText(projectViewModel.lastChangedTimestampProperty().getValue());
     }
 
-    public void setInitialDataMode(DetailsPopupInitialDataMode initialDataMode) {
-        this.initialDataMode = initialDataMode;
+    public void setEditorDataMode(EditorDataMode editorDataMode) {
+        this.editorDataMode = editorDataMode;
         lateInit();
     }
 
     public double[] getDisplayDimensions() {
         double[] dimensions = new double[6];
-        dimensions[0] = 300;
-        dimensions[1] = 400;
-        dimensions[2] = 300;
-        dimensions[3] = 400;
+        dimensions[0] = 440;
+        dimensions[1] = 560;
+        dimensions[2] = 440;
+        dimensions[3] = 560;
         dimensions[4] = -1;
         dimensions[5] = -1;
         return dimensions;
@@ -84,9 +95,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initialDataMode = DetailsPopupInitialDataMode.DISPLAY;
-        editing = new SimpleBooleanProperty(true);
-        updateEditingChangeListener();
+        editorDataMode = EditorDataMode.DISPLAY;
         initTitleValidationFields();
         lateInit();
         establishTitleTextFieldValidation();
@@ -100,14 +109,14 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     }
 
     private void lateInit() {
-        switch (initialDataMode) {
-            case CREATE:
+        switch (editorDataMode) {
+            case CREATION:
                 prepareViewForProjectCreation();
                 break;
             case DISPLAY:
                 prepareViewForProjectDisplay();
                 break;
-            case EDIT:
+            case EDITING:
                 prepareViewForProjectEditing();
                 break;
         }
@@ -153,53 +162,43 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         }));
     }
 
-    public void toggleEditMode() {
-        if (editing.get()) {
-            editing.setValue(false);
-        } else {
-            editing.setValue(true);
-        }
-    }
-
     private void prepareViewForProjectCreation() {
-        editBtn.setDisable(true);
-        editBtn.setVisible(false);
-        saveButton.setDisable(false);
-        editing.setValue(true);
+        saveBtn.setDisable(false);
+        projectTitleTextField.setEditable(true);
+        projectDescriptionTextArea.setEditable(true);
+        popupStateLbl.setVisible(false);
+        projectTitleTextField.setDisable(false);
+        projectDescriptionTextArea.setDisable(false);
+        statusComboBox.setDisable(true);
+        dueOnDatePicker.setDisable(false);
+        createdOnTextField.setDisable(true);
+        lastChangedTextField.setDisable(true);
     }
 
     private void prepareViewForProjectDisplay(){
-        editBtn.setDisable(false);
-        editBtn.setVisible(true);
-        editing.setValue(false);
+        saveBtn.setDisable(true);
+        projectTitleTextField.setDisable(true);
+        projectDescriptionTextArea.setDisable(true);
+        popupStateLbl.setVisible(false);
+        projectTitleTextField.setDisable(true);
+        projectDescriptionTextArea.setDisable(true);
+        statusComboBox.setDisable(false);
+        dueOnDatePicker.setDisable(true);
+        createdOnTextField.setDisable(true);
+        lastChangedTextField.setDisable(true);
     }
 
     private void prepareViewForProjectEditing() {
-        editBtn.setDisable(false);
-        editBtn.setVisible(true);
-        editing.setValue(true);
+        saveBtn.setDisable(false);
+        projectTitleTextField.setEditable(true);
+        projectDescriptionTextArea.setEditable(true);
+        popupStateLbl.setVisible(false);
+        projectTitleTextField.setDisable(false);
+        projectDescriptionTextArea.setDisable(false);
+        statusComboBox.setDisable(false);
+        dueOnDatePicker.setDisable(false);
+        createdOnTextField.setDisable(true);
+        lastChangedTextField.setDisable(true);
     }
 
-    private void updateEditingChangeListener() {
-        editing.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                // TODO Need to examine the css file further to ensure that readonly fields are properly displayed to user
-                if (newValue) {
-                    editBtn.setText("Display");
-                    saveButton.setDisable(false);
-                    cancelButton.setText("Cancel");
-                    projectTitleTextField.setEditable(true);
-                    projectDescriptionTextArea.setEditable(true);
-                } else {
-                    editBtn.setText("Edit");
-                    saveButton.setDisable(true);
-                    cancelButton.setText("Close");
-                    projectTitleTextField.setEditable(false);
-                    projectDescriptionTextArea.setEditable(false);
-                }
-            }
-        });
-
-    }
 }
