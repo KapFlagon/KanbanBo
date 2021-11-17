@@ -30,16 +30,20 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
 
     public ObservableWorkspaceProject(ProjectDTO projectDTO, String projectStatusText) {
         super(projectDTO);
+        statusID = new SimpleIntegerProperty(projectDTO.getStatus());
         statusText = new SimpleStringProperty(projectStatusText);
         initHasFinalColumnProperty(columns);
-        dueOnDate = new SimpleStringProperty();
+        if(projectDTO.getDueOnDate() != null) {
+            dueOnDate = new SimpleStringProperty(projectDTO.getDueOnDate().toString());
+        }
     }
 
     public ObservableWorkspaceProject(ProjectDTO projectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns, String projectStatusText) {
         super(projectDTO, resourceItems, columns);
+        statusID = new SimpleIntegerProperty(projectDTO.getStatus());
         statusText = new SimpleStringProperty(projectStatusText);
         initHasFinalColumnProperty(columns);
-        dueOnDate = new SimpleStringProperty();
+        dueOnDate = new SimpleStringProperty(projectDTO.getDueOnDate().toString());
     }
 
 
@@ -52,6 +56,10 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
         return statusText;
     }
 
+    public SimpleStringProperty dueOnDateProperty() {
+        return dueOnDate;
+    }
+
 
     // Initialisation methods
     @Override
@@ -59,6 +67,7 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
         super.initAllProperties();
         statusID = new SimpleIntegerProperty();
         statusText = new SimpleStringProperty();
+        dueOnDate = new SimpleStringProperty();
     }
 
     protected void initAllProperties(ProjectDTO projectDTO, String projectStatusText){
@@ -66,6 +75,7 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
         statusID = new SimpleIntegerProperty(projectDTO.getStatus());
         statusID.addListener((observable, oldValue, newValue) -> updateEditingProperty());
         statusText = new SimpleStringProperty(projectStatusText);
+        dueOnDate = new SimpleStringProperty();
     }
 
     protected void initHasFinalColumnProperty(ObservableList<ObservableColumn> columnList) {

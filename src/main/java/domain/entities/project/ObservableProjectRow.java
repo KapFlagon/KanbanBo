@@ -25,8 +25,7 @@ public class ObservableProjectRow{
     // Constructors
     public ObservableProjectRow(ProjectDTO projectDTO, String projectStatusText) {
         projectUUID = projectDTO.getUuid();
-        statusText = new SimpleStringProperty(projectStatusText);
-        dueOnDate = new SimpleStringProperty();
+        initAllProperties(projectDTO, projectStatusText);
     }
 
 
@@ -69,6 +68,7 @@ public class ObservableProjectRow{
         this.hasFinalColumn = new SimpleBooleanProperty();
         this.statusID = new SimpleIntegerProperty();
         this.statusText = new SimpleStringProperty();
+        this.dueOnDate = new SimpleStringProperty();
     }
 
 
@@ -80,6 +80,9 @@ public class ObservableProjectRow{
         this.hasFinalColumn = new SimpleBooleanProperty(false);
         this.statusID = new SimpleIntegerProperty(projectDTO.getStatus());
         this.statusText = new SimpleStringProperty(projectStatusText);
+        if(projectDTO.getDueOnDate() != null) {
+            this.dueOnDate = new SimpleStringProperty(projectDTO.getDueOnDate().toString());
+        }
     }
 
 
