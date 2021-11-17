@@ -1,5 +1,9 @@
 package view.sharedviewcomponents.popups.projectdetails;
 
+import domain.viewmodels.project.ProjectStatusListViewModel;
+import domain.viewmodels.project.ProjectStatusViewModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import persistence.dto.project.ProjectDTO;
 import domain.entities.project.ObservableWorkspaceProject;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -17,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class ProjectDetailsWindowPresenter implements Initializable {
@@ -31,7 +36,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     @FXML
     private TextArea projectDescriptionTextArea;
     @FXML
-    private ComboBox statusComboBox;
+    private ComboBox<ProjectStatusViewModel> statusComboBox;
     @FXML
     private DatePicker dueOnDatePicker;
     @FXML
@@ -50,6 +55,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     private String noTitleError = "A title must be provided";
     private boolean validTitle;
     private ObservableWorkspaceProject projectViewModel;
+    private ProjectStatusListViewModel projectStatusListViewModel;
 
     // Constructors
 
@@ -70,8 +76,12 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         this.projectViewModel = projectViewModel;
         projectTitleTextField.textProperty().set(projectViewModel.projectTitleProperty().getValue());
         projectDescriptionTextArea.textProperty().set(projectViewModel.projectDescriptionProperty().getValue());
-        statusComboBox.setValue(projectViewModel.statusTextProperty().getValue());
-        //dueOnDatePicker.setValue(projectViewModel.);
+        for(ProjectStatusViewModel projectStatusViewModel : projectStatusListViewModel.getProjectStatusViewModels()) {
+            if(projectStatusViewModel.getStatusId() == projectViewModel.statusIDProperty().getValue()) {
+                statusComboBox.setValue(projectStatusViewModel);
+            }
+        }
+        dueOnDatePicker.setValue(LocalDate.parse(projectViewModel.dueOnDateProperty().getValue()));
         createdOnTextField.setText(projectViewModel.creationTimestampProperty().getValue());
         lastChangedTextField.setText(projectViewModel.lastChangedTimestampProperty().getValue());
     }
@@ -95,7 +105,15 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        editorDataMode = EditorDataMode.DISPLAY;
+        editorDataMode = EditorDataMode.CREATION;
+        try {
+            projectStatusListViewModel = new ProjectStatusListViewModel(kanbanBoDataService.getProjectStatusTableAsList());
+            statusComboBox.setItems(projectStatusListViewModel.getProjectStatusViewModels());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         initTitleValidationFields();
         lateInit();
         establishTitleTextFieldValidation();
@@ -126,15 +144,19 @@ public class ProjectDetailsWindowPresenter implements Initializable {
     // Other methods
     public void saveProjectDetailsChange() throws SQLException, IOException, ParseException {
         if(validTitle) {
-            if(projectViewModel == null) {
+            if(editorDataMode == EditorDataMode.CREATION) {
                 ProjectDTO newProjectData = new ProjectDTO();
                 newProjectData.setTitle(projectTitleTextField.getText());
                 newProjectData.setDescription(projectDescriptionTextArea.getText());
+                newProjectData.setStatus(statusComboBox.getSelectionModel().getSelectedItem().getStatusId());
+                newProjectData.setDueOnDate(dueOnDatePicker.getValue());
                 kanbanBoDataService.createProject(newProjectData);
-            } else {
+            } else if(editorDataMode == EditorDataMode.EDITING) {
                 ProjectDTO projectDTO = new ProjectDTO();
                 projectDTO.setTitle(getProjectTitleTextField().getText());
                 projectDTO.setDescription(getProjectDescriptionTextArea().getText());
+                //projectDTO.setStatus(statusComboBox.getSelectionModel().getSelectedItem().getStatusId());
+                projectDTO.setDueOnDate(dueOnDatePicker.getValue());
                 kanbanBoDataService.updateProject(projectDTO, projectViewModel);
             }
             StageUtils.hideSubStage();
@@ -169,6 +191,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         popupStateLbl.setVisible(false);
         projectTitleTextField.setDisable(false);
         projectDescriptionTextArea.setDisable(false);
+        statusComboBox.setValue(projectStatusListViewModel.getSelectedProjectStatus());
         statusComboBox.setDisable(true);
         dueOnDatePicker.setDisable(false);
         createdOnTextField.setDisable(true);
@@ -182,6 +205,11 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         popupStateLbl.setVisible(false);
         projectTitleTextField.setDisable(true);
         projectDescriptionTextArea.setDisable(true);
+        for(ProjectStatusViewModel projectStatusViewModel : projectStatusListViewModel.getProjectStatusViewModels()) {
+            if(projectStatusViewModel.getStatusId() == projectViewModel.statusIDProperty().getValue()) {
+                statusComboBox.getSelectionModel().select(projectStatusViewModel);
+            }
+        }
         statusComboBox.setDisable(false);
         dueOnDatePicker.setDisable(true);
         createdOnTextField.setDisable(true);
@@ -195,6 +223,11 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         popupStateLbl.setVisible(false);
         projectTitleTextField.setDisable(false);
         projectDescriptionTextArea.setDisable(false);
+        for(ProjectStatusViewModel projectStatusViewModel : projectStatusListViewModel.getProjectStatusViewModels()) {
+            if(projectStatusViewModel.getStatusId() == projectViewModel.statusIDProperty().getValue()) {
+                statusComboBox.getSelectionModel().select(projectStatusViewModel);
+            }
+        }
         statusComboBox.setDisable(false);
         dueOnDatePicker.setDisable(false);
         createdOnTextField.setDisable(true);
