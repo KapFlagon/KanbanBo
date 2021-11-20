@@ -1,52 +1,67 @@
 package persistence.dto.card;
 
-import persistence.dto.ResourceItemDTO;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
 
 public class CardDTO extends AbstractCardDTO{
 
 
     // Variables
-    private int position;
-    private LocalDate dueOnDate;
+    private final int position;
+    private final String dueOnDate;
 
 
     // Constructors
-    public CardDTO() {
-        super();
-        this.position = 1;
-        this.dueOnDate = null;
+     public CardDTO(Builder builder) {
+        super(builder);
+        this.position = builder.position;
+        this.dueOnDate = builder.dueOnDate;
     }
 
-    public CardDTO(UUID uuid, UUID parentColumnUUID, String title, String description, List<ResourceItemDTO> resourcesList, int position) {
-        super(uuid, parentColumnUUID, title, description);
-        this.position = position;
-        this.dueOnDate = null;
-    }
 
 
     // Getters and Setters
     public int getPosition() {
         return position;
     }
-    public void setPosition(int position) {
-        this.position = position;
-    }
 
-    public LocalDate getDueOnDate() {
+    public String getDueOnDate() {
         return dueOnDate;
-    }
-    public void setDueOnDate(LocalDate dueOnDate) {
-        this.dueOnDate = dueOnDate;
     }
 
     // Initialisation methods
 
 
     // Other methods
+
+    public static class Builder extends AbstractBuilder{
+
+        private int position;
+        private String dueOnDate;
+
+
+        public Builder(String uuid, String parentColumnUUID) {
+            super(uuid, parentColumnUUID);
+            this.position = 0;
+            this.dueOnDate = "";
+        }
+
+        public static Builder newInstance() {
+            return newInstance("","");
+        }
+
+        public static Builder newInstance(String uuid, String parentColumnUUID) {
+            return new Builder(uuid, parentColumnUUID);
+        }
+
+        public Builder position(int position) {
+            this.position = position;
+            return this;
+        }
+
+        public Builder dueOnDate(String dueOnDate) {
+            this.dueOnDate = dueOnDate;
+            return this;
+        }
+    }
 
 
 }

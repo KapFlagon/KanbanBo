@@ -1,45 +1,29 @@
 package persistence.dto.project;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.UUID;
 
 public class ProjectDTO extends AbstractProjectDTO{
 
 
     // Variables
-    private int status;
-    private LocalDate dueOnDate;
+    private final int statusId;
+    private final String dueOnDate;
 
 
     // Constructors
-
-
-    public ProjectDTO() {
-        super();
-        this.status = 1;
-        this.dueOnDate = null;
+    public ProjectDTO(Builder builder) {
+        super(builder);
+        this.statusId = builder.statusId;
+        this.dueOnDate = builder.dueOnDate;
     }
 
-    public ProjectDTO(UUID uuid, String title, String description, ZonedDateTime createdOnDate, ZonedDateTime lastChangedOnDate, int status, LocalDate dueOnDate) {
-        super(uuid, title, description, createdOnDate, lastChangedOnDate);
-        this.status = status;
-        this.dueOnDate = dueOnDate;
-    }
 
     // Getters and Setters
-    public int getStatus() {
-        return status;
-    }
-    public void setStatus(int status) {
-        this.status = status;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public LocalDate getDueOnDate() {
+    public String getDueOnDate() {
         return dueOnDate;
-    }
-    public void setDueOnDate(LocalDate dueOnDate) {
-        this.dueOnDate = dueOnDate;
     }
 
 
@@ -48,5 +32,34 @@ public class ProjectDTO extends AbstractProjectDTO{
 
     // Other methods
 
+    public static class Builder extends AbstractBuilder {
+
+        private int statusId;
+        private String dueOnDate;
+
+        public Builder(String uuid) {
+            super(uuid);
+            this.statusId = 1;
+            this.dueOnDate = "";
+        }
+
+        public static Builder newInstance() {
+            return newInstance("");
+        }
+
+        public static Builder newInstance(String uuid) {
+            return new Builder(uuid);
+        }
+
+        public Builder statusId(int statusId) {
+            this.statusId = statusId;
+            return this;
+        }
+
+        public Builder dueOnDate(String dueOnDate) {
+            this.dueOnDate = dueOnDate;
+            return this;
+        }
+    }
 
 }

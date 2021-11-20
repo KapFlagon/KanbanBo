@@ -1,78 +1,53 @@
 package persistence.dto.card;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public abstract class AbstractCardDTO {
 
 
     // Variables
-    private UUID uuid;
-    private UUID parentColumnUUID;
-    private String title;
-    private String description;
-    private ZonedDateTime createdOnTimeStamp;
-    private ZonedDateTime lastChangedOnTimeStamp;
+    private final String uuid;
+    private final String parentColumnUUID;
+    private final String title;
+    private final String description;
+    private final String createdOnTimeStamp;
+    private final String lastChangedOnTimeStamp;
 
 
     // Constructors
-    public AbstractCardDTO() {
-        this.uuid = null;
-        this.parentColumnUUID = null;
-        this.title = "";
-        this.description = "";
-    }
 
-    public AbstractCardDTO(UUID uuid, UUID parentColumnUUID, String title, String description) {
-        this.uuid = uuid;
-        this.parentColumnUUID = parentColumnUUID;
-        this.title = title;
-        this.description = description;
+    public AbstractCardDTO(AbstractBuilder abstractBuilder) {
+        this.uuid = abstractBuilder.uuid;
+        this.parentColumnUUID = abstractBuilder.parentColumnUUID;
+        this.title = abstractBuilder.title;
+        this.description = abstractBuilder.description;
+        this.createdOnTimeStamp = abstractBuilder.createdOnTimeStamp;
+        this.lastChangedOnTimeStamp = abstractBuilder.lastChangedOnTimeStamp;
     }
 
 
     // Getters and Setters
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
 
-    public UUID getParentColumnUUID() {
+    public String getParentColumnUUID() {
         return parentColumnUUID;
-    }
-    public void setParentColumnUUID(UUID parentColumnUUID) {
-        this.parentColumnUUID = parentColumnUUID;
     }
 
     public String getTitle() {
         return title;
     }
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getDescription() {
         return description;
     }
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    public ZonedDateTime getCreatedOnTimeStamp() {
+    public String getCreatedOnTimeStamp() {
         return createdOnTimeStamp;
     }
-    public void setCreatedOnTimeStamp(ZonedDateTime createdOnTimeStamp) {
-        this.createdOnTimeStamp = createdOnTimeStamp;
-    }
 
-    public ZonedDateTime getLastChangedOnTimeStamp() {
+    public String getLastChangedOnTimeStamp() {
         return lastChangedOnTimeStamp;
-    }
-    public void setLastChangedOnTimeStamp(ZonedDateTime lastChangedOnTimeStamp) {
-        this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
     }
 
 
@@ -80,6 +55,46 @@ public abstract class AbstractCardDTO {
 
 
     // Other methods
+
+    protected static class AbstractBuilder {
+        private String uuid;
+        private String parentColumnUUID;
+        private String title;
+        private String description;
+        private String createdOnTimeStamp;
+        private String lastChangedOnTimeStamp;
+
+
+        protected AbstractBuilder(String uuid, String parentColumnUUID) {
+            this.uuid = uuid;
+            this.parentColumnUUID = parentColumnUUID;
+            this.title = "";
+            this.description = "";
+            this.createdOnTimeStamp = "";
+            this.lastChangedOnTimeStamp = "";
+        }
+
+        public AbstractBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public AbstractBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public AbstractBuilder createdOnTimeStamp(String createdOnTimeStamp) {
+            this.createdOnTimeStamp = createdOnTimeStamp;
+            return this;
+        }
+
+        public AbstractBuilder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
+            this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
+            return this;
+        }
+
+    }
 
 
 }

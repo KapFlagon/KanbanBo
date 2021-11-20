@@ -1,83 +1,99 @@
 package persistence.dto.column;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public abstract class AbstractColumnDTO {
 
 
     // Variables
-    private UUID uuid;
-    private UUID parentProjectUUID;
-    private String title;
-    private boolean finalColumn;
-    private ZonedDateTime createdOnTimeStamp;
-    private ZonedDateTime lastChangedOnTimeStamp;
+    private final String uuid;
+    private final String parentProjectUUID;
+    private final String title;
+    private final boolean finalColumn;
+    private final String createdOnTimeStamp;
+    private final String lastChangedOnTimeStamp;
 
 
     // Constructors
-    public AbstractColumnDTO() {
-        this.uuid = null;
-        this.parentProjectUUID = null;
-        this.title = "";
-        this.finalColumn = false;
+    public AbstractColumnDTO(AbstractBuilder abstractBuilder) {
+        this.uuid = abstractBuilder.uuid;
+        this.parentProjectUUID = abstractBuilder.parentProjectUUID;
+        this.title = abstractBuilder.title;
+        this.finalColumn = abstractBuilder.finalColumn;
+        this.createdOnTimeStamp = abstractBuilder.createdOnTimeStamp;
+        this.lastChangedOnTimeStamp = abstractBuilder.lastChangedOnTimeStamp;
     }
 
-    public AbstractColumnDTO(UUID uuid, UUID parentProjectUUID, String title, boolean finalColumn) {
-        this.uuid = uuid;
-        this.parentProjectUUID = parentProjectUUID;
-        this.title = title;
-        this.finalColumn = finalColumn;
-    }
 
     // Getters and Setters
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
 
-    public UUID getParentProjectUUID() {
+    public String getParentProjectUUID() {
         return parentProjectUUID;
-    }
-    public void setParentProjectUUID(UUID parentProjectUUID) {
-        this.parentProjectUUID = parentProjectUUID;
     }
 
     public String getTitle() {
         return title;
     }
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public boolean isFinalColumn() {
         return finalColumn;
     }
-    public void setFinalColumn(boolean finalColumn) {
-        this.finalColumn = finalColumn;
-    }
 
-    public ZonedDateTime getCreatedOnTimeStamp() {
+    public String getCreatedOnTimeStamp() {
         return createdOnTimeStamp;
     }
-    public void setCreatedOnTimeStamp(ZonedDateTime createdOnTimeStamp) {
-        this.createdOnTimeStamp = createdOnTimeStamp;
-    }
 
-    public ZonedDateTime getLastChangedOnTimeStamp() {
+    public String getLastChangedOnTimeStamp() {
         return lastChangedOnTimeStamp;
-    }
-    public void setLastChangedOnTimeStamp(ZonedDateTime lastChangedOnTimeStamp) {
-        this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
     }
 
     // Initialisation methods
 
 
     // Other methods
+
+    protected static class AbstractBuilder {
+
+        private String uuid;
+        private String parentProjectUUID;
+        private String title;
+        private boolean finalColumn;
+        private String createdOnTimeStamp;
+        private String lastChangedOnTimeStamp;
+
+
+        protected AbstractBuilder(String uuid, String parentProjectUUID) {
+            this.uuid = uuid;
+            this.parentProjectUUID = parentProjectUUID;
+            this.title = "";
+            this.finalColumn = false;
+            this.createdOnTimeStamp = "";
+            this.lastChangedOnTimeStamp = "";
+        }
+
+        public AbstractBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public AbstractBuilder finalColumn(boolean finalColumn) {
+            this.finalColumn = finalColumn;
+            return this;
+        }
+
+        public AbstractBuilder createdOnTimeStamp(String createdOnTimeStamp) {
+            this.createdOnTimeStamp = createdOnTimeStamp;
+            return this;
+        }
+
+        public AbstractBuilder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
+            this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
+            return this;
+        }
+
+    }
 
 
 }

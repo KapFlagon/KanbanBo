@@ -1,28 +1,33 @@
 package persistence.dto.project;
 
-import java.time.ZonedDateTime;
-import java.util.UUID;
-
 public abstract class AbstractProjectDTO {
 
 
     // Variables
-    private UUID uuid;
-    private String title;
-    private String description;
-    private ZonedDateTime createdOnTimeStamp;
-    private ZonedDateTime lastChangedOnTimeStamp;
+    protected final String uuid;
+    protected final String title;
+    protected final String description;
+    protected final String createdOnTimeStamp;
+    protected final String lastChangedOnTimeStamp;
 
     // Constructors
     public AbstractProjectDTO() {
-        this.uuid = null;
+        this.uuid = "";
         this.title = "";
         this.description = "";
-        this.createdOnTimeStamp = null;
-        this.lastChangedOnTimeStamp = null;
+        this.createdOnTimeStamp = "";
+        this.lastChangedOnTimeStamp = "";
     }
 
-    public AbstractProjectDTO(UUID uuid, String title, String description, ZonedDateTime createdOnTimeStamp, ZonedDateTime lastChangedOnTimeStamp) {
+    public AbstractProjectDTO(AbstractBuilder abstractBuilder) {
+        this.uuid = abstractBuilder.uuid;
+        this.title = abstractBuilder.title;
+        this.description = abstractBuilder.description;
+        this.createdOnTimeStamp = abstractBuilder.createdOnTimeStamp;
+        this.lastChangedOnTimeStamp = abstractBuilder.lastChangedOnTimeStamp;
+    }
+
+    public AbstractProjectDTO(String uuid, String title, String description, String createdOnTimeStamp, String lastChangedOnTimeStamp) {
         this.uuid = uuid;
         this.title = title;
         this.description = description;
@@ -31,39 +36,24 @@ public abstract class AbstractProjectDTO {
     }
 
     // Getters and Setters
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
-    }
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 
     public String getTitle() {
         return title;
     }
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getDescription() {
         return description;
     }
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    public ZonedDateTime getCreatedOnTimeStamp() {
+    public String getCreatedOnTimeStamp() {
         return createdOnTimeStamp;
     }
-    public void setCreatedOnTimeStamp(ZonedDateTime createdOnTimeStamp) {
-        this.createdOnTimeStamp = createdOnTimeStamp;
-    }
 
-    public ZonedDateTime getLastChangedOnTimeStamp() {
+    public String getLastChangedOnTimeStamp() {
         return lastChangedOnTimeStamp;
-    }
-    public void setLastChangedOnTimeStamp(ZonedDateTime lastChangedOnTimeStamp) {
-        this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
     }
 
 
@@ -71,6 +61,44 @@ public abstract class AbstractProjectDTO {
 
 
     // Other methods
+
+    protected static class AbstractBuilder {
+
+        private String uuid;
+        private String title;
+        private String description;
+        private String createdOnTimeStamp;
+        private String lastChangedOnTimeStamp;
+
+
+        public AbstractBuilder(String uuid) {
+            this.uuid = uuid;
+            this.title = "";
+            this.description = "";
+            this.createdOnTimeStamp = "";
+            this.lastChangedOnTimeStamp = "";
+        }
+
+        public AbstractBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public AbstractBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public AbstractBuilder createdOnTimeStamp(String createdOnTimeStamp) {
+            this.createdOnTimeStamp = createdOnTimeStamp;
+            return this;
+        }
+
+        public AbstractBuilder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
+            this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
+            return this;
+        }
+    }
 
 
 }
