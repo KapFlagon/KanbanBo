@@ -30,17 +30,38 @@ public class ColumnDTO extends AbstractColumnDTO{
 
         private int position;
 
-        private Builder(String uuid, String parentProjectUUID) {
-            super(uuid, parentProjectUUID);
+        private Builder(String parentProjectUUID) {
+            super(parentProjectUUID);
             this.position = 0;
         }
 
-        public static Builder newInstance() {
-            return newInstance("", "");
+        public static Builder newInstance(String parentProjectUUID) {
+            return new Builder(parentProjectUUID);
         }
 
-        public static Builder newInstance(String uuid, String parentProjectUUID) {
-            return new Builder(uuid, parentProjectUUID);
+        public Builder uuid(String uuid) {
+            super.uuid(uuid);
+            return this;
+        }
+
+        public Builder title(String title) {
+            this.title(title);
+            return this;
+        }
+
+        public Builder finalColumn(boolean finalColumn) {
+            this.finalColumn(finalColumn);
+            return this;
+        }
+
+        public Builder createdOnTimeStamp(String createdOnTimeStamp) {
+            this.createdOnTimeStamp(createdOnTimeStamp);
+            return this;
+        }
+
+        public Builder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
+            this.lastChangedOnTimeStamp(lastChangedOnTimeStamp);
+            return this;
         }
 
         public Builder position(int position) {

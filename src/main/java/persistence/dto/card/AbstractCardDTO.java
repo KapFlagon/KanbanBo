@@ -65,13 +65,18 @@ public abstract class AbstractCardDTO {
         private String lastChangedOnTimeStamp;
 
 
-        protected AbstractBuilder(String uuid, String parentColumnUUID) {
-            this.uuid = uuid;
+        protected AbstractBuilder(String parentColumnUUID) {
+            this.uuid = "";
             this.parentColumnUUID = parentColumnUUID;
             this.title = "";
             this.description = "";
             this.createdOnTimeStamp = "";
             this.lastChangedOnTimeStamp = "";
+        }
+
+        public AbstractBuilder uuid(String uuid) {
+            this.uuid = uuid;
+            return this;
         }
 
         public AbstractBuilder title(String title) {

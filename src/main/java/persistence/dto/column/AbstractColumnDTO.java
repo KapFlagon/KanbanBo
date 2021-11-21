@@ -64,8 +64,8 @@ public abstract class AbstractColumnDTO {
         private String lastChangedOnTimeStamp;
 
 
-        protected AbstractBuilder(String uuid, String parentProjectUUID) {
-            this.uuid = uuid;
+        protected AbstractBuilder(String parentProjectUUID) {
+            this.uuid = "";
             this.parentProjectUUID = parentProjectUUID;
             this.title = "";
             this.finalColumn = false;
@@ -73,22 +73,27 @@ public abstract class AbstractColumnDTO {
             this.lastChangedOnTimeStamp = "";
         }
 
-        public AbstractBuilder title(String title) {
+        protected AbstractBuilder uuid(String uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        protected AbstractBuilder title(String title) {
             this.title = title;
             return this;
         }
 
-        public AbstractBuilder finalColumn(boolean finalColumn) {
+        protected AbstractBuilder finalColumn(boolean finalColumn) {
             this.finalColumn = finalColumn;
             return this;
         }
 
-        public AbstractBuilder createdOnTimeStamp(String createdOnTimeStamp) {
+        protected AbstractBuilder createdOnTimeStamp(String createdOnTimeStamp) {
             this.createdOnTimeStamp = createdOnTimeStamp;
             return this;
         }
 
-        public AbstractBuilder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
+        protected AbstractBuilder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
             this.lastChangedOnTimeStamp = lastChangedOnTimeStamp;
             return this;
         }

@@ -79,6 +79,11 @@ public abstract class AbstractProjectDTO {
             this.lastChangedOnTimeStamp = "";
         }
 
+        public AbstractBuilder uuid(String uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
         public AbstractBuilder title(String title) {
             this.title = title;
             return this;

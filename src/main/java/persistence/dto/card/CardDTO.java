@@ -38,18 +38,39 @@ public class CardDTO extends AbstractCardDTO{
         private String dueOnDate;
 
 
-        public Builder(String uuid, String parentColumnUUID) {
-            super(uuid, parentColumnUUID);
+        public Builder(String parentColumnUUID) {
+            super(parentColumnUUID);
             this.position = 0;
             this.dueOnDate = "";
         }
 
-        public static Builder newInstance() {
-            return newInstance("","");
+        public static Builder newInstance(String parentColumnUUID) {
+            return new Builder(parentColumnUUID);
         }
 
-        public static Builder newInstance(String uuid, String parentColumnUUID) {
-            return new Builder(uuid, parentColumnUUID);
+        public Builder uuid(String uuid) {
+            super.uuid(uuid);
+            return this;
+        }
+
+        public Builder title(String title) {
+            super.title(title);
+            return this;
+        }
+
+        public Builder description(String description) {
+            super.description(description);
+            return this;
+        }
+
+        public Builder createdOnTimeStamp(String createdOnTimeStamp) {
+            super.createdOnTimeStamp(createdOnTimeStamp);
+            return this;
+        }
+
+        public Builder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
+            super.lastChangedOnTimeStamp(lastChangedOnTimeStamp);
+            return this;
         }
 
         public Builder position(int position) {

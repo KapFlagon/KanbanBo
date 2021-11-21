@@ -51,6 +51,31 @@ public class ProjectDTO extends AbstractProjectDTO{
             return new Builder(uuid);
         }
 
+        public Builder uuid(String uuid) {
+            super.uuid(uuid);
+            return this;
+        }
+
+        public Builder title(String title) {
+            this.title(title);
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description(description);
+            return this;
+        }
+
+        public Builder createdOnTimeStamp(String createdOnTimeStamp) {
+            this.createdOnTimeStamp(createdOnTimeStamp);
+            return this;
+        }
+
+        public Builder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
+            this.lastChangedOnTimeStamp(lastChangedOnTimeStamp);
+            return this;
+        }
+
         public Builder statusId(int statusId) {
             this.statusId = statusId;
             return this;
