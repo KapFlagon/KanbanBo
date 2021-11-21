@@ -10,15 +10,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
+import view.sharedviewcomponents.popups.DetailsWindowPresenter;
+import view.sharedviewcomponents.popups.EditorDataMode;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class CardDetailsWindowPresenter implements Initializable {
+public class CardDetailsWindowPresenter extends DetailsWindowPresenter implements Initializable {
 
 
     // JavaFX injected node variables
@@ -58,6 +61,7 @@ public class CardDetailsWindowPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         validTitle = true;
+        this.editorDataMode = EditorDataMode.CREATION;
         titleErrorLbl.setText(noTitleError);
         titleErrorLbl.setVisible(false);
         titleErrorLbl.setDisable(true);
@@ -68,15 +72,21 @@ public class CardDetailsWindowPresenter implements Initializable {
     // UI event methods
     @FXML private void saveDetailsChange() throws IOException, SQLException {
         if(validTitle) {
-            if(cardViewModel == null) {
-                CardDTO cardDTO = new CardDTO();
-                cardDTO.setParentColumnUUID(parentColumnUUID);
-                cardDTO.setTitle(titleTextField.getText());
-                cardDTO.setDescription(descriptionText.getText());
+            CardDTO.Builder cardDTOBuilder = CardDTO.Builder.newInstance(cardViewModel.getParentColumnUUID().toString())
+                    .title(titleTextField.getText())
+                    .description(descriptionText.getText());
+            if(editorDataMode == EditorDataMode.CREATION) {
+                cardDTOBuilder.uuid(UUID.randomUUID().toString())
+                        .createdOnTimeStamp(LocalDateTime.now().toString())
+                        .lastChangedOnTimeStamp(LocalDateTime.now().toString());
+                CardDTO cardDTO = new CardDTO(cardDTOBuilder);
                 kanbanBoDataService.createCard(cardDTO);
-            } else {
-                cardViewModel.setCardTitle(titleTextField.getText());
-                cardViewModel.setCardDescription(descriptionText.getText());
+            } else if (editorDataMode == EditorDataMode.EDITING){
+                cardDTOBuilder.uuid(cardViewModel.getCardUUID().toString())
+                        .createdOnTimeStamp(cardViewModel.creationTimestampProperty().getValue())
+                        .lastChangedOnTimeStamp(LocalDateTime.now().toString());
+                CardDTO cardDTO = new CardDTO(cardDTOBuilder);
+                kanbanBoDataService.updateCard(cardDTO, cardViewModel);
             }
             StageUtils.hideSubStage();
         } else {
@@ -105,4 +115,18 @@ public class CardDetailsWindowPresenter implements Initializable {
         }));
     }
 
+
+    protected void prepareViewForCreation() {
+        //TODO Implement this
+    }
+
+
+    protected void prepareViewForDisplay() {
+        //TODO Implement this
+    }
+
+
+    protected void prepareViewForEditing() {
+        //TODO Implement this
+    }
 }

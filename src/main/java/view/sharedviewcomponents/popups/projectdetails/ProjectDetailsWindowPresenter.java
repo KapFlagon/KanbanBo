@@ -2,18 +2,14 @@ package view.sharedviewcomponents.popups.projectdetails;
 
 import domain.viewmodels.project.ProjectStatusListViewModel;
 import domain.viewmodels.project.ProjectStatusViewModel;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import persistence.dto.project.ProjectDTO;
 import domain.entities.project.ObservableWorkspaceProject;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
+import view.sharedviewcomponents.popups.DetailsWindowPresenter;
 import view.sharedviewcomponents.popups.EditorDataMode;
 
 import javax.inject.Inject;
@@ -22,9 +18,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
-public class ProjectDetailsWindowPresenter implements Initializable {
+public class ProjectDetailsWindowPresenter extends DetailsWindowPresenter implements Initializable {
 
     // JavaFX injected field variables
     @FXML
@@ -81,14 +79,11 @@ public class ProjectDetailsWindowPresenter implements Initializable {
                 statusComboBox.setValue(projectStatusViewModel);
             }
         }
-        dueOnDatePicker.setValue(LocalDate.parse(projectViewModel.dueOnDateProperty().getValue()));
+        if(projectViewModel.dueOnDateProperty() != null) {
+            dueOnDatePicker.setValue(LocalDate.parse(projectViewModel.dueOnDateProperty().getValue()));
+        }
         createdOnTextField.setText(projectViewModel.creationTimestampProperty().getValue());
         lastChangedTextField.setText(projectViewModel.lastChangedTimestampProperty().getValue());
-    }
-
-    public void setEditorDataMode(EditorDataMode editorDataMode) {
-        this.editorDataMode = editorDataMode;
-        lateInit();
     }
 
     public double[] getDisplayDimensions() {
@@ -115,7 +110,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
             e.printStackTrace();
         }
         initTitleValidationFields();
-        lateInit();
+        initializeEditor();
         establishTitleTextFieldValidation();
     }
 
@@ -126,37 +121,27 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         titleErrorLbl.setDisable(true);
     }
 
-    private void lateInit() {
-        switch (editorDataMode) {
-            case CREATION:
-                prepareViewForProjectCreation();
-                break;
-            case DISPLAY:
-                prepareViewForProjectDisplay();
-                break;
-            case EDITING:
-                prepareViewForProjectEditing();
-                break;
-        }
-    }
-
 
     // Other methods
     public void saveProjectDetailsChange() throws SQLException, IOException, ParseException {
         if(validTitle) {
+            ProjectDTO.Builder projectDTOBuilder = ProjectDTO.Builder.newInstance("")
+                    .title(projectTitleTextField.getText())
+                    .description(projectDescriptionTextArea.getText())
+                    .statusId(statusComboBox.getSelectionModel().getSelectedItem().getStatusId())
+                    .dueOnDate(dueOnDatePicker.getValue().toString());
             if(editorDataMode == EditorDataMode.CREATION) {
-                ProjectDTO newProjectData = new ProjectDTO();
-                newProjectData.setTitle(projectTitleTextField.getText());
-                newProjectData.setDescription(projectDescriptionTextArea.getText());
-                newProjectData.setStatus(statusComboBox.getSelectionModel().getSelectedItem().getStatusId());
-                newProjectData.setDueOnDate(dueOnDatePicker.getValue());
+                projectDTOBuilder.uuid(UUID.randomUUID().toString())
+                        .createdOnTimeStamp(LocalDateTime.now().toString())
+                        .lastChangedOnTimeStamp(LocalDateTime.now().toString());
+                ProjectDTO newProjectData = new ProjectDTO(projectDTOBuilder);
                 kanbanBoDataService.createProject(newProjectData);
             } else if(editorDataMode == EditorDataMode.EDITING) {
-                ProjectDTO projectDTO = new ProjectDTO();
-                projectDTO.setTitle(getProjectTitleTextField().getText());
-                projectDTO.setDescription(getProjectDescriptionTextArea().getText());
-                //projectDTO.setStatus(statusComboBox.getSelectionModel().getSelectedItem().getStatusId());
-                projectDTO.setDueOnDate(dueOnDatePicker.getValue());
+                projectDTOBuilder.uuid(projectViewModel.getProjectUUID().toString())
+                        .createdOnTimeStamp(projectViewModel.creationTimestampProperty().getValue())
+                        .lastChangedOnTimeStamp(LocalDateTime.now().toString());
+                ProjectDTO projectDTO = new ProjectDTO(projectDTOBuilder);
+                // TODO remove the viewmodel from the call to the service. Move the viewmodel into its own repository/list and use that to perform the view updates.
                 kanbanBoDataService.updateProject(projectDTO, projectViewModel);
             }
             StageUtils.hideSubStage();
@@ -184,7 +169,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         }));
     }
 
-    private void prepareViewForProjectCreation() {
+    protected void prepareViewForCreation() {
         saveBtn.setDisable(false);
         projectTitleTextField.setEditable(true);
         projectDescriptionTextArea.setEditable(true);
@@ -198,7 +183,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         lastChangedTextField.setDisable(true);
     }
 
-    private void prepareViewForProjectDisplay(){
+    protected void prepareViewForDisplay(){
         saveBtn.setDisable(true);
         projectTitleTextField.setDisable(true);
         projectDescriptionTextArea.setDisable(true);
@@ -216,7 +201,7 @@ public class ProjectDetailsWindowPresenter implements Initializable {
         lastChangedTextField.setDisable(true);
     }
 
-    private void prepareViewForProjectEditing() {
+    protected void prepareViewForEditing() {
         saveBtn.setDisable(false);
         projectTitleTextField.setEditable(true);
         projectDescriptionTextArea.setEditable(true);

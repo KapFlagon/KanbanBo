@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
+import view.sharedviewcomponents.popups.DetailsWindowPresenter;
+import view.sharedviewcomponents.popups.EditorDataMode;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-public class ColumnDetailsWindowPresenter implements Initializable {
+public class ColumnDetailsWindowPresenter extends DetailsWindowPresenter implements Initializable {
 
     // JavaFX injected field variables
     @FXML
@@ -39,6 +41,7 @@ public class ColumnDetailsWindowPresenter implements Initializable {
 
     private UUID parentProjectUUID;
     private ObservableColumn columnViewModel;
+    private EditorDataMode editorDataMode;
 
     // Constructors
 
@@ -69,19 +72,22 @@ public class ColumnDetailsWindowPresenter implements Initializable {
     // UI event methods
     @FXML private void saveDetailsChange() throws IOException, SQLException, ParseException {
         if(validTitle) {
-            ColumnDTO columnDTO = new ColumnDTO();
-            columnDTO.setParentProjectUUID(parentProjectUUID);
-            columnDTO.setTitle(titleTextField.getText());
-            columnDTO.setFinalColumn(finalColumnCheckBox.isSelected());
-            if(columnViewModel == null) {
+
+            ColumnDTO.Builder columnDTOBuilder = ColumnDTO.Builder.newInstance(parentProjectUUID.toString())
+                        .title(titleTextField.getText())
+                        .finalColumn(finalColumnCheckBox.isSelected());
+            if(editorDataMode == EditorDataMode.CREATION) {
+                columnDTOBuilder.uuid(UUID.randomUUID().toString())
+                        .createdOnTimeStamp(ZonedDateTime.now().toString())
+                        .lastChangedOnTimeStamp(ZonedDateTime.now().toString());
+                ColumnDTO columnDTO = new ColumnDTO(columnDTOBuilder);
                 kanbanBoDataService.createColumn(columnDTO);
-            } else {
-                columnDTO.setUuid(columnViewModel.getColumnUUID());
-                columnDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(columnViewModel.creationTimestampProperty().getValue()));
-                columnDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(columnViewModel.lastChangedTimestampProperty().getValue()));
+            } else if (editorDataMode == EditorDataMode.EDITING){
+                columnDTOBuilder.uuid(columnViewModel.getColumnUUID().toString())
+                        .createdOnTimeStamp(columnViewModel.creationTimestampProperty().getValue())
+                        .lastChangedOnTimeStamp(ZonedDateTime.now().toString());
+                ColumnDTO columnDTO = new ColumnDTO(columnDTOBuilder);
                 kanbanBoDataService.updateColumn(columnDTO, columnViewModel);
-                // TODO figure out how to manage position...
-                // columnViewModel.columnPositionProperty().set(position?);
             }
             StageUtils.hideSubStage();
         } else {
@@ -109,5 +115,18 @@ public class ColumnDetailsWindowPresenter implements Initializable {
             }
             return change;
         }));
+    }
+
+
+    protected void prepareViewForCreation() {
+
+    }
+
+    protected void prepareViewForDisplay() {
+
+    }
+
+    protected void prepareViewForEditing() {
+
     }
 }
