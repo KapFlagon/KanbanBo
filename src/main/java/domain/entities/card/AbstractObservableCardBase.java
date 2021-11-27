@@ -25,16 +25,16 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardDTO> exte
     // Constructors
     public AbstractObservableCardBase(T cardDTO) {
         super();
-        this.parentColumnUUID = cardDTO.getParentColumnUUID();
-        this.cardUUID = cardDTO.getUuid();
+        this.parentColumnUUID = UUID.fromString(cardDTO.getParentColumnUUID());
+        this.cardUUID = UUID.fromString(cardDTO.getUuid());
         this.resourceItems = FXCollections.observableArrayList();
         initAllProperties(cardDTO);
     }
 
     public AbstractObservableCardBase(T cardDTO, ObservableList<ObservableResourceItem> resourceItems) {
         super();
-        this.parentColumnUUID = cardDTO.getParentColumnUUID();
-        this.cardUUID = cardDTO.getUuid();
+        this.parentColumnUUID = UUID.fromString(cardDTO.getParentColumnUUID());
+        this.cardUUID = UUID.fromString(cardDTO.getUuid());
         this.resourceItems = resourceItems;
         initAllProperties(cardDTO);
     }

@@ -31,14 +31,14 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
 
     public AbstractObservableProjectBase(T projectObjectDTO) {
         super();
-        projectUUID = projectObjectDTO.getUuid();
+        projectUUID = UUID.fromString(projectObjectDTO.getUuid());
         initAllProperties(projectObjectDTO);
         initAllObservableLists();
     }
 
     public AbstractObservableProjectBase(T projectObjectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
         super();
-        projectUUID = projectObjectDTO.getUuid();
+        projectUUID = UUID.fromString(projectObjectDTO.getUuid());
         initAllProperties(projectObjectDTO);
         initAllObservableLists(resourceItems, columnsList);
     }

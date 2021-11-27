@@ -45,22 +45,22 @@ public class ColumnDTO extends AbstractColumnDTO{
         }
 
         public Builder title(String title) {
-            this.title(title);
+            super.title(title);
             return this;
         }
 
         public Builder finalColumn(boolean finalColumn) {
-            this.finalColumn(finalColumn);
+            super.finalColumn(finalColumn);
             return this;
         }
 
         public Builder createdOnTimeStamp(String createdOnTimeStamp) {
-            this.createdOnTimeStamp(createdOnTimeStamp);
+            super.createdOnTimeStamp(createdOnTimeStamp);
             return this;
         }
 
         public Builder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
-            this.lastChangedOnTimeStamp(lastChangedOnTimeStamp);
+            super.lastChangedOnTimeStamp(lastChangedOnTimeStamp);
             return this;
         }
 

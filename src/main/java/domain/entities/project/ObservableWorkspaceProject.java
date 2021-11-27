@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ObservableWorkspaceProject extends AbstractObservableProjectBase<ProjectDTO, ObservableColumn>{
 
@@ -30,7 +29,7 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
 
     public ObservableWorkspaceProject(ProjectDTO projectDTO, String projectStatusText) {
         super(projectDTO);
-        statusID = new SimpleIntegerProperty(projectDTO.getStatus());
+        statusID = new SimpleIntegerProperty(projectDTO.getStatusId());
         statusText = new SimpleStringProperty(projectStatusText);
         initHasFinalColumnProperty(columns);
         if(projectDTO.getDueOnDate() != null) {
@@ -40,7 +39,7 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
 
     public ObservableWorkspaceProject(ProjectDTO projectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns, String projectStatusText) {
         super(projectDTO, resourceItems, columns);
-        statusID = new SimpleIntegerProperty(projectDTO.getStatus());
+        statusID = new SimpleIntegerProperty(projectDTO.getStatusId());
         statusText = new SimpleStringProperty(projectStatusText);
         initHasFinalColumnProperty(columns);
         dueOnDate = new SimpleStringProperty(projectDTO.getDueOnDate().toString());
@@ -72,7 +71,7 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
 
     protected void initAllProperties(ProjectDTO projectDTO, String projectStatusText){
         super.initAllProperties(projectDTO);
-        statusID = new SimpleIntegerProperty(projectDTO.getStatus());
+        statusID = new SimpleIntegerProperty(projectDTO.getStatusId());
         statusID.addListener((observable, oldValue, newValue) -> updateEditingProperty());
         statusText = new SimpleStringProperty(projectStatusText);
         dueOnDate = new SimpleStringProperty();

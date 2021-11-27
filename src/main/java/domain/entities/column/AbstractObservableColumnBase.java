@@ -27,8 +27,8 @@ public abstract class AbstractObservableColumnBase<T extends AbstractColumnDTO, 
         super();
         initAllProperties(columnDTO);
         //this.columnTitle.setValue(columnDTO.getTitle());
-        this.parentProjectUUID = columnDTO.getParentProjectUUID();
-        this.columnUUID = columnDTO.getUuid();
+        this.parentProjectUUID = UUID.fromString(columnDTO.getParentProjectUUID());
+        this.columnUUID = UUID.fromString(columnDTO.getUuid());
         //this.finalColumn.set(columnDTO.isFinalColumn());
         //this.creationTimestamp.set(columnDTO.getCreatedOnTimeStamp().toString());
         //this.lastChangedTimestamp.set(columnDTO.getLastChangedOnTimeStamp().toString());

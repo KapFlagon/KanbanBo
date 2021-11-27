@@ -57,22 +57,22 @@ public class ProjectDTO extends AbstractProjectDTO{
         }
 
         public Builder title(String title) {
-            this.title(title);
+            super.title(title);
             return this;
         }
 
         public Builder description(String description) {
-            this.description(description);
+            super.description(description);
             return this;
         }
 
         public Builder createdOnTimeStamp(String createdOnTimeStamp) {
-            this.createdOnTimeStamp(createdOnTimeStamp);
+            super.createdOnTimeStamp(createdOnTimeStamp);
             return this;
         }
 
         public Builder lastChangedOnTimeStamp(String lastChangedOnTimeStamp) {
-            this.lastChangedOnTimeStamp(lastChangedOnTimeStamp);
+            super.lastChangedOnTimeStamp(lastChangedOnTimeStamp);
             return this;
         }
 
