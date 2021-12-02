@@ -14,6 +14,7 @@ import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.mappers.DTOToTable;
+import persistence.mappers.ObservableObjectToDTO;
 import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
@@ -70,10 +71,10 @@ public class CardService extends AbstractService{
     // Other methods
     public void createCard(CardDTO cardDTO) throws SQLException, IOException {
         CardTable card = DTOToTable.mapCardDTOToCardTable(cardDTO);
-        card.setCreation_timestamp(ZonedDateTime.now().toString());
-        cardDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(card.getCreation_timestamp()));
-        card.setLast_changed_timestamp(ZonedDateTime.now().toString());
-        cardDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(card.getLast_changed_timestamp()));
+        //card.setCreation_timestamp(ZonedDateTime.now().toString());
+        //cardDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(card.getCreation_timestamp()));
+        //card.setLast_changed_timestamp(ZonedDateTime.now().toString());
+        //cardDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(card.getLast_changed_timestamp()));
 
         setupDbConnection();
 
@@ -82,19 +83,22 @@ public class CardService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
         cardTableQueryBuilder = cardDao.queryBuilder();
-        cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, cardDTO.getParentColumnUUID());
+        cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, UUID.fromString(cardDTO.getParentColumnUUID()));
         long cardCount = cardTableQueryBuilder.countOf();
         int position = (int) (cardCount);
         card.setCard_position(position);
 
-        ColumnTable column = columnDao.queryForId(cardDTO.getParentColumnUUID());
+        List<CardTable> cardTableList = cardTableQueryBuilder.query();
+
+        ColumnTable column = columnDao.queryForId(UUID.fromString(cardDTO.getParentColumnUUID()));
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
         project.setLast_changed_timestamp(ZonedDateTime.now().toString());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 cardDao.create(card);
-                cardDTO.setUuid(card.getID());
+                //cardDTO.setUuid(card.getID());
+                //cardDTO.setPosition(card.getCard_position());
                 projectDao.update(project);
                 return 1;
             }
@@ -104,18 +108,9 @@ public class CardService extends AbstractService{
         for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
             if(project.getID().equals(observableWorkspaceProject.getProjectUUID())) {
                 for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
-                    if(observableColumn.getColumnUUID().equals(cardDTO.getParentColumnUUID())) {
-                        ObservableCard newObservableCard = new ObservableCard(cardDTO, FXCollections.observableArrayList());
-                        newObservableCard.positionProperty().addListener((observable, oldVal, newVal) -> {
-                            // TODO implement function to change position of the Card in its list
-                        });
-                        observableColumn.getCards().add(newObservableCard);
-                        observableColumn.getCards().sort(new Comparator<ObservableCard>() {
-                            @Override
-                            public int compare(ObservableCard o1, ObservableCard o2) {
-                                return o1.positionProperty().getValue().compareTo(o2.positionProperty().getValue());
-                            }
-                        });
+                    if(observableColumn.getColumnUUID().equals(UUID.fromString(cardDTO.getParentColumnUUID()))) {
+                        shiftSurroundingCardsRight(cardTableList, cardDTO.getPosition(), (cardTableList.size() - card.getCard_position()));
+                        updateCardTables(cardTableList, observableColumn.getCards());
                     }
                 }
             }
@@ -123,12 +118,7 @@ public class CardService extends AbstractService{
     }
 
     public void updateCard(CardDTO cardDTO, ObservableCard observableCard) throws SQLException, IOException {
-        CardTable cardTable = new CardTable();
-        cardTable.setCard_uuid(cardDTO.getUuid());
-        cardTable.setParent_column_uuid(cardDTO.getParentColumnUUID());
-        cardTable.setCard_title(cardDTO.getTitle());
-        cardTable.setCard_description_text(cardDTO.getDescription());
-        cardTable.setCard_position(cardDTO.getPosition());
+        CardTable cardTable = DTOToTable.mapCardDTOToCardTable(cardDTO);
 
         ArrayList<ResourceItemTable> newResourceData = new ArrayList<>();
         /*for(ResourceItemDTO resourceItemDTO : cardDTO.getResourcesList()) {
@@ -244,7 +234,7 @@ public class CardService extends AbstractService{
     }
 
     public void moveCard(CardDTO newCardDataDTO, ObservableCard oldObservableCard) throws SQLException, IOException {
-        boolean stillInOriginalColumn = newCardDataDTO.getParentColumnUUID().equals(oldObservableCard.getParentColumnUUID());
+        boolean stillInOriginalColumn = UUID.fromString(newCardDataDTO.getParentColumnUUID()).equals(oldObservableCard.getParentColumnUUID());
 
         if(stillInOriginalColumn) {
             int newPosition = newCardDataDTO.getPosition();
@@ -254,67 +244,67 @@ public class CardService extends AbstractService{
 
                 cardDao = DaoManager.createDao(connectionSource,CardTable.class);
                 cardTableQueryBuilder = cardDao.queryBuilder();
-                cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, newCardDataDTO.getParentColumnUUID());
+                cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, UUID.fromString(newCardDataDTO.getParentColumnUUID()));
                 List<CardTable> cardTableList = cardTableQueryBuilder.query();
                 teardownDbConnection();
 
-                List<CardDTO> cardDTOList = new ArrayList<>();
+                CardTable movedCard = null;
                 for(CardTable cardTable : cardTableList) {
-                    CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
-                    if(!cardTable.getCard_uuid().equals(newCardDataDTO.getUuid())) {
-                        cardDTOList.add(cardDTO);
+                    if(cardTable.getCard_uuid().equals(UUID.fromString(newCardDataDTO.getUuid()))) {
+                        movedCard = cardTable;
+                        movedCard.setCard_position(newCardDataDTO.getPosition());
+                        cardTableList.remove(cardTable);
                     }
                 }
                 if(newPosition < oldPosition) {
                     int diffVector = oldPosition - newPosition;
-                    shiftSurroundingCardsRight(cardDTOList, newPosition, diffVector);
+                    shiftSurroundingCardsRight(cardTableList, newPosition, diffVector);
                 } else if(newPosition > oldPosition) {
                     int diffVector = newPosition - oldPosition;
-                    shiftSurroundingCardsLeft(cardDTOList, newPosition, diffVector);
+                    shiftSurroundingCardsLeft(cardTableList, newPosition, diffVector);
                 }
-                cardDTOList.add(newCardDataDTO);
+                cardTableList.add(movedCard);
                 ObservableList<ObservableCard> observableCardObservableList = FXCollections.observableArrayList();
                 for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
                     for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
-                        if(observableColumn.getColumnUUID().equals(newCardDataDTO.getParentColumnUUID())) {
+                        if(observableColumn.getColumnUUID().equals(UUID.fromString(newCardDataDTO.getParentColumnUUID()))) {
                             observableCardObservableList = observableColumn.getCards();
                         }
                     }
                 }
-                updateCards(cardDTOList, observableCardObservableList);
+                updateCardTables(cardTableList, observableCardObservableList);
             }
         } else {
             setupDbConnection();
 
             cardDao = DaoManager.createDao(connectionSource,CardTable.class);
             cardTableQueryBuilder = cardDao.queryBuilder();
-            cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, newCardDataDTO.getParentColumnUUID());
+            cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, UUID.fromString(newCardDataDTO.getParentColumnUUID()));
             List<CardTable> targetCardTableList = cardTableQueryBuilder.query();
             cardTableQueryBuilder.reset();
             cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, oldObservableCard.getParentColumnUUID());
             List<CardTable> sourceCardTableList = cardTableQueryBuilder.query();
             teardownDbConnection();
 
-            List<CardDTO> targetCardDTOList = new ArrayList<>();
-            List<CardDTO> sourceCardDTOList = new ArrayList<>();
+
+            CardTable movedCardTable = null;
             for(CardTable cardTable : sourceCardTableList) {
-                CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
-                if(!cardTable.getCard_uuid().equals(newCardDataDTO.getUuid())) {
-                    sourceCardDTOList.add(cardDTO);
+                if(cardTable.getCard_uuid().equals(UUID.fromString(newCardDataDTO.getUuid()))) {
+                    movedCardTable = cardTable;
+                    movedCardTable.setCard_position(newCardDataDTO.getPosition());
+                    movedCardTable.setParent_column_uuid(UUID.fromString(newCardDataDTO.getParentColumnUUID()));
+                    sourceCardTableList.remove(cardTable);
+                    targetCardTableList.add(cardTable);
                 }
             }
 
-            for(CardTable cardTable : targetCardTableList) {
-                CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
-                targetCardDTOList.add(cardDTO);
-            }
 
-            int targetDiffVector = targetCardDTOList.size() - newCardDataDTO.getPosition();
-            shiftSurroundingCardsRight(targetCardDTOList, newCardDataDTO.getPosition(), targetDiffVector);
-            targetCardDTOList.add(newCardDataDTO);
+            int targetDiffVector = targetCardTableList.size() - newCardDataDTO.getPosition();
+            shiftSurroundingCardsRight(targetCardTableList, newCardDataDTO.getPosition(), targetDiffVector);
+            targetCardTableList.add(movedCardTable);
 
-            int sourceDiffVector = sourceCardDTOList.size() - oldObservableCard.positionProperty().getValue();
-            shiftSurroundingCardsLeft(sourceCardDTOList, sourceCardDTOList.size() + 1, sourceDiffVector);
+            int sourceDiffVector = sourceCardTableList.size() - oldObservableCard.positionProperty().getValue();
+            shiftSurroundingCardsLeft(sourceCardTableList, sourceCardTableList.size() + 1, sourceDiffVector);
 
             ObservableList<ObservableCard> sourceCardObservableList = FXCollections.observableArrayList();
             for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
@@ -328,36 +318,36 @@ public class CardService extends AbstractService{
             ObservableList<ObservableCard> targetCardObservableList = FXCollections.observableArrayList();
             for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
                 for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
-                    if(observableColumn.getColumnUUID().equals(newCardDataDTO.getParentColumnUUID())) {
+                    if(observableColumn.getColumnUUID().equals(UUID.fromString(newCardDataDTO.getParentColumnUUID()))) {
                         targetCardObservableList = observableColumn.getCards();
                     }
                 }
             }
 
-            updateCards(sourceCardDTOList, sourceCardObservableList);
-            updateCards(targetCardDTOList, targetCardObservableList);
+            updateCardTables(sourceCardTableList, sourceCardObservableList);
+            updateCardTables(targetCardTableList, targetCardObservableList);
         }
     }
 
-    private void shiftSurroundingCardsRight(List<CardDTO> cardDTOList, int insertPosition, int diffVector) {
-        for(int iterator = 0; iterator < cardDTOList.size(); iterator ++) {
-            CardDTO cardDTO = cardDTOList.get(iterator);
-            if(cardDTO.getPosition() >= insertPosition
-                    && cardDTO.getPosition() < cardDTOList.size()
+    private void shiftSurroundingCardsRight(List<CardTable> cardTableList, int insertPosition, int diffVector) {
+        for(int iterator = 0; iterator < cardTableList.size(); iterator ++) {
+            CardTable cardTable = cardTableList.get(iterator);
+            if(cardTable.getCard_position() >= insertPosition
+                    && cardTable.getCard_position() < cardTableList.size()
                     && diffVector > 0) {
-                cardDTO.setPosition(cardDTO.getPosition() + 1);
+                cardTable.setCard_position(cardTable.getCard_position() + 1);
                 diffVector -= 1;
             }
         }
     }
 
-    private void shiftSurroundingCardsLeft(List<CardDTO> cardDTOList, int insertPosition, int diffVector) {
-        for(int iterator = cardDTOList.size() - 1; iterator >= 0; iterator --) {
-            CardDTO cardDTO = cardDTOList.get(iterator);
-            if(cardDTO.getPosition() > 0
-                    && cardDTO.getPosition() <= insertPosition
+    private void shiftSurroundingCardsLeft(List<CardTable> cardTableList, int insertPosition, int diffVector) {
+        for(int iterator = cardTableList.size() - 1; iterator >= 0; iterator --) {
+            CardTable cardTable = cardTableList.get(iterator);
+            if(cardTable.getCard_position() > 0
+                    && cardTable.getCard_position() <= insertPosition
                     && diffVector > 0) {
-                cardDTO.setPosition(cardDTO.getPosition() - 1);
+                cardTable.setCard_position(cardTable.getCard_position() - 1);
                 diffVector -= 1;
             }
         }
@@ -369,6 +359,10 @@ public class CardService extends AbstractService{
             CardTable cardTable = DTOToTable.mapCardDTOToCardTable(cardDTO);
             cardTableList.add(cardTable);
         }
+        updateCardTables(cardTableList, observableCardObservableList);
+    }
+
+    private void updateCardTables(List<CardTable> cardTableList, ObservableList<ObservableCard> observableCardObservableList) throws SQLException, IOException {
         setupDbConnection();
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
@@ -395,24 +389,23 @@ public class CardService extends AbstractService{
         teardownDbConnection();
 
         if (result[0] > 1) {
-            // TODO need to remove an observablecard from a list if it is not in the DTO list anymore, and add one if the opposite is true.
-            if (observableCardObservableList.size() < cardDTOList.size()) {
-                CardDTO cardDTOForAddition = null;
+            if (observableCardObservableList.size() < cardTableList.size()) {
+                CardTable cardTableForAddition = null;
                 boolean deltaNotFound = true;
                 int outerIterator = 0;
-                while(deltaNotFound && outerIterator < cardDTOList.size()) {
-                    CardDTO cardDTOIteration = cardDTOList.get(outerIterator);
+                while(deltaNotFound && outerIterator < cardTableList.size()) {
+                    CardTable cardTableIteration = cardTableList.get(outerIterator);
                     int innerIterator = 0;
                     boolean noMatchFound = true;
                     while(noMatchFound && innerIterator < observableCardObservableList.size()) {
                         ObservableCard observableCard = observableCardObservableList.get(innerIterator);
-                        if(cardDTOIteration.getUuid().equals(observableCard.getCardUUID())) {
+                        if(cardTableIteration.getCard_uuid().equals(observableCard.getCardUUID())) {
                             noMatchFound = false;
                         }
                         innerIterator +=1;
                     }
                     if(noMatchFound) {
-                        cardDTOForAddition = cardDTOIteration;
+                        cardTableForAddition = cardTableIteration;
                         deltaNotFound = false;
                     }
                     outerIterator += 1;
@@ -421,15 +414,16 @@ public class CardService extends AbstractService{
                 for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
                     if(observableWorkspaceProject.getProjectUUID().equals(parentProjectTable.getProject_uuid())) {
                         for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
-                            if(observableColumn.getColumnUUID().equals(cardDTOForAddition.getParentColumnUUID())) {
-                                ObservableCard addedObservableCard = new ObservableCard(cardDTOForAddition);
+                            if(observableColumn.getColumnUUID().equals(cardTableForAddition.getParent_column_uuid())) {
+                                CardDTO innerDTO = TableToDTO.mapCardTableToCardDTO(cardTableForAddition);
+                                ObservableCard addedObservableCard = new ObservableCard(innerDTO);
                                 observableColumn.getCards().add(addedObservableCard);
                             }
                         }
                     }
                 }
 
-            } else if (observableCardObservableList.size() > cardDTOList.size()) {
+            } else if (observableCardObservableList.size() > cardTableList.size()) {
                 ObservableCard observableCardForRemoval = null;
                 boolean deltaNotFound = true;
                 int outerIterator = 0;
@@ -437,9 +431,9 @@ public class CardService extends AbstractService{
                     ObservableCard observableCardIteration = observableCardObservableList.get(outerIterator);
                     int innerIterator = 0;
                     boolean noMatchFound = true;
-                    while (noMatchFound && innerIterator < cardDTOList.size()) {
-                        CardDTO cardDTO = cardDTOList.get(innerIterator);
-                        if (observableCardIteration.getCardUUID().equals(cardDTO.getUuid())) {
+                    while (noMatchFound && innerIterator < cardTableList.size()) {
+                        CardTable cardTable = cardTableList.get(innerIterator);
+                        if (observableCardIteration.getCardUUID().equals(cardTable.getCard_uuid())) {
                             noMatchFound = false;
                         }
                         innerIterator += 1;
@@ -463,13 +457,13 @@ public class CardService extends AbstractService{
             }
 
             for (ObservableCard observableCard : observableCardObservableList) {
-                for (CardDTO cardDTO : cardDTOList) {
-                    if (observableCard.getCardUUID().equals(cardDTO.getUuid())) {
-                        observableCard.setParentColumnUUID(cardDTO.getParentColumnUUID());
-                        observableCard.setCardUUID(cardDTO.getUuid());
-                        observableCard.setCardTitle(cardDTO.getTitle());
-                        observableCard.setCardDescription(cardDTO.getDescription());
-                        observableCard.setPosition(cardDTO.getPosition());
+                for (CardTable cardTable : cardTableList) {
+                    if (observableCard.getCardUUID().equals(cardTable.getCard_uuid())) {
+                        observableCard.setParentColumnUUID(cardTable.getParent_column_uuid());
+                        observableCard.setCardUUID(cardTable.getCard_uuid());
+                        observableCard.setCardTitle(cardTable.getCard_title());
+                        observableCard.setCardDescription(cardTable.getCard_description_text());
+                        observableCard.setPosition(cardTable.getCard_position());
                         // TODO observableCard.setResourceItems(cardDTO.);
                     }
                 }

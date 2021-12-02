@@ -102,6 +102,10 @@ public class KanbanBoDataService extends AbstractService{
         projectService.copyProject(originalProject);
     }
 
+    public List getProjectStatusTableAsList() throws SQLException, IOException {
+        return projectService.getProjectStatusTableAsList();
+    }
+
     public void createColumn(ColumnDTO columnDTO) throws SQLException, IOException {
         columnService.createColumn(columnDTO);
     }

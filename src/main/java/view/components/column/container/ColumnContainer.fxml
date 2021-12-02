@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="columnBorderPane" cacheShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="360.0" style="-fx-background-color: lightgreen;" styleClass="column-borderpane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.column.container.ColumnContainerPresenter">
+<BorderPane fx:id="columnBorderPane" cacheShape="false" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="360.0" style="-fx-background-color: lightgreen;" styleClass="column-borderpane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.column.container.ColumnContainerPresenter">
     <center>
-        <ScrollPane fx:id="scrollPane" cacheShape="false" maxHeight="600.0" BorderPane.alignment="CENTER">
+        <ScrollPane fx:id="scrollPane" cacheShape="false" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
             <content>
-                <VBox fx:id="cardVBox" alignment="TOP_CENTER" cacheShape="false" spacing="8.0">
+                <VBox fx:id="cardVBox" alignment="TOP_CENTER" cacheShape="false" maxHeight="1.7976931348623157E308" spacing="8.0">
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding></VBox>

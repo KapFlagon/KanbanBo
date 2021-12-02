@@ -109,7 +109,7 @@ public class ProjectService extends AbstractService{
         return projectsList;
     }
 
-    private List<ProjectStatusTable> getProjectStatusTableAsList() throws SQLException, IOException {
+    public List<ProjectStatusTable> getProjectStatusTableAsList() throws SQLException, IOException {
         setupDbConnection();
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
         projectStatusDao.setObjectCache(true);
@@ -134,6 +134,7 @@ public class ProjectService extends AbstractService{
                 }
             }
             ProjectDTO projectDTO = TableToDTO.mapProjectTableToProjectDTO(projectEntry);
+
             ObservableWorkspaceProject projectDomainObject = new ObservableWorkspaceProject(projectDTO, localisedStatusText);
             projectsList.add(projectDomainObject);
         }
@@ -192,7 +193,7 @@ public class ProjectService extends AbstractService{
                     cardObservableResourceItemList.add(cardObservableResourceItem);
                 }
 
-                CardDTO cardDTO = TableToDTO.mapCardTableToColumnDTO(cardTable);
+                CardDTO cardDTO = TableToDTO.mapCardTableToCardDTO(cardTable);
                 ObservableCard observableCard = new ObservableCard(cardDTO);
                 observableCard.setResourceItems(cardObservableResourceItemList);
                 observableCard.positionProperty().addListener((observable, oldVal, newVal) -> {
@@ -305,9 +306,9 @@ public class ProjectService extends AbstractService{
 
         if (result > 0) {
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
-            projectDTO.setUuid(projectTable.getProject_uuid());
-            projectDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(projectTable.getCreation_timestamp()));
-            projectDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(projectTable.getLast_changed_timestamp()));
+            //projectDTO.setUuid(projectTable.getProject_uuid());
+            //projectDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(projectTable.getCreation_timestamp()));
+            //projectDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(projectTable.getLast_changed_timestamp()));
             ObservableWorkspaceProject observableWorkspaceProject = new ObservableWorkspaceProject(projectDTO, localizedStatusText);
             projectsList.add(observableWorkspaceProject);
             workspaceProjectsList.add(observableWorkspaceProject);
@@ -330,13 +331,13 @@ public class ProjectService extends AbstractService{
         int result = projectDao.update(projectTableData);
 
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
-        ProjectStatusTable statusKey = projectStatusDao.queryForId(newProjectData.getStatus());
+        ProjectStatusTable statusKey = projectStatusDao.queryForId(newProjectData.getStatusId());
         teardownDbConnection();
         if(result > 0) {
             observableWorkspaceProject.projectTitleProperty().setValue(newProjectData.getTitle());
             observableWorkspaceProject.projectDescriptionProperty().setValue(newProjectData.getDescription());
             observableWorkspaceProject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnTimeStamp().toString());
-            observableWorkspaceProject.statusIDProperty().setValue(newProjectData.getStatus());
+            observableWorkspaceProject.statusIDProperty().setValue(newProjectData.getStatusId());
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
             observableWorkspaceProject.statusTextProperty().setValue(localizedStatusText);
             System.out.println("Project updated successfully");

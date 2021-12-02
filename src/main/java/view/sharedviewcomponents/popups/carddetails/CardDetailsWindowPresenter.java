@@ -52,6 +52,7 @@ public class CardDetailsWindowPresenter extends DetailsWindowPresenter implement
 
     public void setCardViewModel(ObservableCard cardViewModel) {
         this.cardViewModel = cardViewModel;
+        this.parentColumnUUID = cardViewModel.getParentColumnUUID();
         this.titleTextField.textProperty().set(cardViewModel.cardTitleProperty().getValue());
         this.descriptionText.textProperty().set(cardViewModel.cardDescriptionProperty().getValue());
     }
@@ -72,7 +73,7 @@ public class CardDetailsWindowPresenter extends DetailsWindowPresenter implement
     // UI event methods
     @FXML private void saveDetailsChange() throws IOException, SQLException {
         if(validTitle) {
-            CardDTO.Builder cardDTOBuilder = CardDTO.Builder.newInstance(cardViewModel.getParentColumnUUID().toString())
+            CardDTO.Builder cardDTOBuilder = CardDTO.Builder.newInstance(parentColumnUUID.toString())
                     .title(titleTextField.getText())
                     .description(descriptionText.getText());
             if(editorDataMode == EditorDataMode.CREATION) {

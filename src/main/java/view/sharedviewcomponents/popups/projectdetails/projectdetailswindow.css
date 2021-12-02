@@ -1,9 +1,0 @@
-* {
-    -readonlycolour: #F5F5DC;
-}
-.text-input:readonly {
-    -fx-background-color: -readonlycolour;
-}
-.text-area:readonly {
-    -fx-control-inner-background: -readonlycolour;
-}

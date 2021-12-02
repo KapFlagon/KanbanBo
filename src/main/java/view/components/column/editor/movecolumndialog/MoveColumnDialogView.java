@@ -1,6 +1,5 @@
-package view.sharedviewcomponents.popups.movecolumndialog;
+package view.components.column.editor.movecolumndialog;
 
-import com.airhacks.afterburner.views.FXMLView;
 import framework.CustomFXMLView;
 
 public class MoveColumnDialogView extends CustomFXMLView {

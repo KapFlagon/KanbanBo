@@ -1,4 +1,4 @@
-package view.sharedviewcomponents.popups.movecolumndialog;
+package view.components.column.editor.movecolumndialog;
 
 import domain.entities.column.ObservableColumn;
 import javafx.event.ActionEvent;
@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import persistence.dto.column.ColumnDTO;
-import persistence.mappers.ObservableObjectToDTO;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 
@@ -15,6 +14,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class MoveColumnDialogPresenter implements Initializable {
@@ -61,8 +61,14 @@ public class MoveColumnDialogPresenter implements Initializable {
 
     @FXML
     private void saveSelection(ActionEvent event) {
-        ColumnDTO columnDTO = ObservableObjectToDTO.mapObservableColumnToColumnDTO(columnToMove);
-        columnDTO.setPosition(columnPositionChoiceBox.getSelectionModel().getSelectedItem() - 1);
+        ColumnDTO.Builder columnDTOBuilder = ColumnDTO.Builder.newInstance(columnToMove.getParentProjectUUID().toString())
+                .uuid(columnToMove.getColumnUUID().toString())
+                .title(columnToMove.columnTitleProperty().getValue())
+                .finalColumn(columnToMove.isFinalColumn())
+                .createdOnTimeStamp(columnToMove.creationTimestampProperty().getValue())
+                .lastChangedOnTimeStamp(LocalDateTime.now().toString())
+                .position(columnPositionChoiceBox.getSelectionModel().getSelectedItem() - 1);
+        ColumnDTO columnDTO = new ColumnDTO(columnDTOBuilder);
         try {
             kanbanBoDataService.moveColumn(columnDTO, columnToMove);
         } catch (SQLException e) {

@@ -1,4 +1,4 @@
-package view.sharedviewcomponents.popups.finalcolumnselection;
+package view.components.project.editor.finalcolumnselection;
 
 import domain.entities.column.ObservableColumn;
 import javafx.collections.ObservableList;
@@ -9,7 +9,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.util.StringConverter;
 import persistence.dto.column.ColumnDTO;
-import persistence.mappers.ObservableObjectToDTO;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 
@@ -69,12 +68,19 @@ public class FinalColumnSelectionPresenter implements Initializable {
         System.out.println("saving, selected: " + columnChoiceBox.getSelectionModel().getSelectedItem().columnTitleProperty());
         List<ColumnDTO> columnDTOList = new ArrayList<>();
         for(ObservableColumn observableColumn : availableColumns) {
-            ColumnDTO columnDTO = ObservableObjectToDTO.mapObservableColumnToColumnDTO(observableColumn);
+            ColumnDTO.Builder columnDTOBuilder = ColumnDTO.Builder.newInstance(observableColumn.getParentProjectUUID().toString())
+                    .uuid(observableColumn.getColumnUUID().toString())
+                    .title(observableColumn.columnTitleProperty().getValue())
+                    .createdOnTimeStamp(observableColumn.creationTimestampProperty().getValue())
+                    .lastChangedOnTimeStamp(observableColumn.lastChangedTimestampProperty().getValue())
+                    .position(observableColumn.columnPositionProperty().getValue());
+
             if(observableColumn.getColumnUUID().equals(columnChoiceBox.getSelectionModel().getSelectedItem().getColumnUUID())) {
-                columnDTO.setFinalColumn(true);
+                columnDTOBuilder.finalColumn(true);
             } else {
-                columnDTO.setFinalColumn(false);
+                columnDTOBuilder.finalColumn(false);
             }
+            ColumnDTO columnDTO = new ColumnDTO(columnDTOBuilder);
             columnDTOList.add(columnDTO);
         }
         try {

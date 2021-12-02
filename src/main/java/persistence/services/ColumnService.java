@@ -82,11 +82,11 @@ public class ColumnService extends AbstractService{
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         columnTableQueryBuilder = columnDao.queryBuilder();
 
-        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, columnDTO.getParentProjectUUID());
+        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, UUID.fromString(columnDTO.getParentProjectUUID()));
         long columnCount = columnTableQueryBuilder.countOf();
         int position = (int) (columnCount);
         columnTable.setColumn_position(position);
-        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, columnDTO.getParentProjectUUID()).and().eq(ColumnTable.FINAL_FLAG_NAME, true);
+        columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, UUID.fromString(columnDTO.getParentProjectUUID())).and().eq(ColumnTable.FINAL_FLAG_NAME, true);
         long countOfFinalColumns = columnTableQueryBuilder.countOf();
         if (countOfFinalColumns > 0 && columnDTO.isFinalColumn()) {
             System.out.println("Cannot create another final column");
@@ -98,13 +98,13 @@ public class ColumnService extends AbstractService{
             if (result > 0) {
                 ObservableWorkspaceProject observableWorkspaceProject = null;
                 for (ObservableWorkspaceProject op : workspaceProjectsList) {
-                    if(op.getProjectUUID().equals(columnDTO.getParentProjectUUID())){
+                    if(op.getProjectUUID().equals(UUID.fromString(columnDTO.getParentProjectUUID()))){
                         observableWorkspaceProject = op;
                     }
                 }
-                columnDTO.setUuid(columnTable.getColumn_uuid());
-                columnDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(columnTable.getCreation_timestamp()));
-                columnDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(columnTable.getLast_changed_timestamp()));
+                //columnDTO.setUuid(columnTable.getColumn_uuid());
+                //columnDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(columnTable.getCreation_timestamp()));
+                //columnDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(columnTable.getLast_changed_timestamp()));
                 ObservableList<ObservableCard> emptyCardList = FXCollections.observableArrayList();
                 ObservableColumn observableColumn = new ObservableColumn(columnDTO, emptyCardList);
                 observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
@@ -142,7 +142,7 @@ public class ColumnService extends AbstractService{
             }
         });
         if (result[0] > 1) {
-            observableColumn.setParentProjectUUID(columnDTO.getParentProjectUUID());
+            observableColumn.setParentProjectUUID(UUID.fromString(columnDTO.getParentProjectUUID()));
             observableColumn.columnTitleProperty().setValue(columnDTO.getTitle());
             observableColumn.columnPositionProperty().setValue(columnDTO.getPosition());
             observableColumn.finalColumnProperty().setValue(columnDTO.isFinalColumn());
@@ -156,6 +156,11 @@ public class ColumnService extends AbstractService{
             ColumnTable columnTable = DTOToTable.mapColumnDTOToColumnTable(columnDTO);
             columnTableList.add(columnTable);
         }
+        updateColumnTables(columnTableList, observableColumns);
+    }
+
+    public void updateColumnTables(List<ColumnTable> columnTableList, ObservableList<ObservableColumn> observableColumns) throws SQLException, IOException {
+
         setupDbConnection();
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
@@ -179,14 +184,14 @@ public class ColumnService extends AbstractService{
         if (result[0] > 1) {
 
             for(ObservableColumn observableColumn : observableColumns) {
-                for(ColumnDTO columnDTO : columnDTOList) {
-                    if(observableColumn.getColumnUUID().equals(columnDTO.getUuid())) {
-                        observableColumn.setParentProjectUUID(columnDTO.getParentProjectUUID());
-                        observableColumn.columnTitleProperty().setValue(columnDTO.getTitle());
-                        observableColumn.columnPositionProperty().setValue(columnDTO.getPosition());
-                        observableColumn.finalColumnProperty().setValue(columnDTO.isFinalColumn());
-                        observableColumn.creationTimestampProperty().setValue(columnDTO.getCreatedOnTimeStamp().toString());
-                        observableColumn.lastChangedTimestampProperty().setValue(columnDTO.getLastChangedOnTimeStamp().toString());
+                for(ColumnTable columnTable : columnTableList) {
+                    if(observableColumn.getColumnUUID().equals(columnTable.getColumn_uuid())) {
+                        observableColumn.setParentProjectUUID(columnTable.getParent_project_uuid());
+                        observableColumn.columnTitleProperty().setValue(columnTable.getColumn_title());
+                        observableColumn.columnPositionProperty().setValue(columnTable.getColumn_position());
+                        observableColumn.finalColumnProperty().setValue(columnTable.isFinal_column());
+                        observableColumn.creationTimestampProperty().setValue(columnTable.getCreation_timestamp());
+                        observableColumn.lastChangedTimestampProperty().setValue(columnTable.getLast_changed_timestamp());
                     }
                 }
             }
@@ -271,28 +276,37 @@ public class ColumnService extends AbstractService{
             columnTableQueryBuilder.where().eq(ColumnTable.FOREIGN_KEY_NAME, oldObservableColumn.getParentProjectUUID());
             List<ColumnTable> columnTableList = columnTableQueryBuilder.query();
             teardownDbConnection();
-            List<ColumnDTO> columnDTOList = new ArrayList<>();
-            for(ColumnTable columnTable : columnTableList) {
-                ColumnDTO columnDTO = TableToDTO.mapColumnTableToColumnDTO(columnTable);
-                if(!newColumnDataDTO.getUuid().equals(columnDTO.getUuid())){
-                    columnDTOList.add(columnDTO);
+            ColumnTable movedColumn = null;
+            for(Iterator<ColumnTable> iterator = columnTableList.listIterator(); iterator.hasNext();) {
+                ColumnTable innerTestTable = iterator.next();
+                if(UUID.fromString(newColumnDataDTO.getUuid()).equals(innerTestTable.getColumn_uuid())) {
+                    movedColumn = innerTestTable;
+                    movedColumn.setColumn_position(newColumnDataDTO.getPosition());
+                    iterator.remove();
                 }
             }
+            /*for(ColumnTable columnTable : columnTableList) {
+                if(UUID.fromString(newColumnDataDTO.getUuid()).equals(columnTable.getColumn_uuid())){
+                    movedColumn = columnTable;
+                    movedColumn.setColumn_position(newColumnDataDTO.getPosition());
+                    columnTableList.remove(columnTable);
+                }
+            }*/
             if(newPosition < oldPosition) {
                 int diffVector = oldPosition - newPosition;
-                shiftSurroundingColumnsRight(columnDTOList, newPosition, diffVector);
+                shiftSurroundingColumnsRight(columnTableList, newPosition, diffVector);
             } else if(newPosition > oldPosition) {
                 int diffVector = newPosition - oldPosition;
-                shiftSurroundingColumnsLeft(columnDTOList, newPosition, diffVector);
+                shiftSurroundingColumnsLeft(columnTableList, newPosition, diffVector);
             }
-            columnDTOList.add(newColumnDataDTO);
+            columnTableList.add(movedColumn);
             ObservableList<ObservableColumn> observableColumnObservableList = FXCollections.observableArrayList();
             for(ObservableWorkspaceProject observableWorkspaceProject : workspaceProjectsList) {
                 if(observableWorkspaceProject.getProjectUUID().equals(oldObservableColumn.getParentProjectUUID())){
                     observableColumnObservableList = observableWorkspaceProject.getColumns();
                 }
             }
-            updateColumns(columnDTOList, observableColumnObservableList);
+            updateColumnTables(columnTableList, observableColumnObservableList);
         }
 
     }
@@ -308,25 +322,25 @@ public class ColumnService extends AbstractService{
         return FXCollections.observableArrayList();
     }
 
-    private void shiftSurroundingColumnsRight(List<ColumnDTO> columnDTOList, int insertPosition, int diffVector) {
-        for(int iterator = 0; iterator < columnDTOList.size(); iterator ++) {
-            ColumnDTO columnDTO = columnDTOList.get(iterator);
-            if(columnDTO.getPosition() >= insertPosition
-                    && columnDTO.getPosition() < columnDTOList.size()
+    private void shiftSurroundingColumnsRight(List<ColumnTable> columnTableList, int insertPosition, int diffVector) {
+        for(int iterator = 0; iterator < columnTableList.size(); iterator ++) {
+            ColumnTable columnTable = columnTableList.get(iterator);
+            if(columnTable.getColumn_position() >= insertPosition
+                    && columnTable.getColumn_position() < columnTableList.size()
                     && diffVector > 0) {
-                columnDTO.setPosition(columnDTO.getPosition() + 1);
+                columnTable.setColumn_position(columnTable.getColumn_position() + 1);
                 diffVector -= 1;
             }
         }
     }
 
-    private void shiftSurroundingColumnsLeft(List<ColumnDTO> columnDTOList, int insertPosition, int diffVector) {
-        for(int iterator = columnDTOList.size() - 1; iterator >= 0; iterator --) {
-            ColumnDTO columnDTO = columnDTOList.get(iterator);
-            if(columnDTO.getPosition() > 0
-                    && columnDTO.getPosition() <= insertPosition
+    private void shiftSurroundingColumnsLeft(List<ColumnTable> columnTableList, int insertPosition, int diffVector) {
+        for(int iterator = columnTableList.size() - 1; iterator >= 0; iterator --) {
+            ColumnTable columnTable = columnTableList.get(iterator);
+            if(columnTable.getColumn_position() > 0
+                    && columnTable.getColumn_position() <= insertPosition
                     && diffVector > 0) {
-                columnDTO.setPosition(columnDTO.getPosition() - 1);
+                columnTable.setColumn_position(columnTable.getColumn_position() - 1);
                 diffVector -= 1;
             }
         }

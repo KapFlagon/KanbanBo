@@ -17,12 +17,12 @@ import utils.view.ScrollPaneFixer;
 import view.components.column.container.ColumnContainerPresenter;
 import view.components.column.container.ColumnContainerView;
 import view.sharedviewcomponents.popups.EditorDataMode;
-import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowPresenter;
-import view.sharedviewcomponents.popups.columndetails.ColumnDetailsWindowView;
-import view.sharedviewcomponents.popups.finalcolumnselection.FinalColumnSelectionPresenter;
-import view.sharedviewcomponents.popups.finalcolumnselection.FinalColumnSelectionView;
-import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
-import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowView;
+import view.components.column.editor.columndetails.ColumnDetailsWindowPresenter;
+import view.components.column.editor.columndetails.ColumnDetailsWindowView;
+import view.components.project.editor.finalcolumnselection.FinalColumnSelectionPresenter;
+import view.components.project.editor.finalcolumnselection.FinalColumnSelectionView;
+import view.components.project.editor.projectdetails.ProjectDetailsWindowPresenter;
+import view.components.project.editor.projectdetails.ProjectDetailsWindowView;
 import view.sharedviewcomponents.popups.resourceitemdetails.ResourceItemDetailsPresenter;
 import view.sharedviewcomponents.popups.resourceitemdetails.ResourceItemDetailsView;
 
@@ -37,6 +37,8 @@ public class ProjectContainerPresenter implements Initializable {
     // JavaFX injected node variables
     @FXML
     private Label projectTitleLbl;
+    @FXML
+    private Label projectStatusLbl;
     @FXML
     private Button editProjectDetailsBtn;
     @FXML
@@ -99,10 +101,10 @@ public class ProjectContainerPresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initButtonGraphics();
-        relatedItemTitleTableColumn.setCellValueFactory(cellData -> (cellData.getValue().titleProperty()));
-        relatedItemTypeTableColumn.setCellValueFactory(cellData -> (cellData.getValue().typeProperty()));
+        //relatedItemTitleTableColumn.setCellValueFactory(cellData -> (cellData.getValue().titleProperty()));
+        //relatedItemTypeTableColumn.setCellValueFactory(cellData -> (cellData.getValue().typeProperty()));
         //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (new Hyperlink(cellData.getValue().getRelatedItemPath())));
-        relatedItemLinkTableColumn.setCellValueFactory(cellData -> (cellData.getValue().pathProperty()));
+        //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (cellData.getValue().pathProperty()));
         forRemoval = new SimpleBooleanProperty(false);
         ScrollPaneFixer.fixBlurryScrollPan(mainScrollPane);
         ScrollPaneFixer.fixBlurryScrollPan(subScrollPane);
@@ -112,8 +114,9 @@ public class ProjectContainerPresenter implements Initializable {
     public void customInit() throws IOException, SQLException {
         projectTitleLbl.textProperty().bind(projectViewModel.projectTitleProperty());
         // TODO examine binding for the choicebox
+        projectStatusLbl.textProperty().bind(projectViewModel.statusTextProperty());
 
-        resourceItemTableView.setItems(projectViewModel.getResourceItems());
+        //resourceItemTableView.setItems(projectViewModel.getResourceItems());
         // TODO Resume here. Need to devise a strategy to handle populating old data and storing object references properly to remove them from the HBox efficiently later when deleted.
         if(projectViewModel.getColumns().size() < 1) {
             selectFinalColumnBtn.setDisable(true);
@@ -220,6 +223,7 @@ public class ProjectContainerPresenter implements Initializable {
         System.out.println("Create Column...");
         initColumnDetailsWindow();
         columnDetailsWindowPresenter.setParentProjectUUID(projectViewModel.getProjectUUID());
+        columnDetailsWindowPresenter.setEditorDataMode(EditorDataMode.CREATION);
         StageUtils.createChildStage("Enter Column Details", columnDetailsWindowView.getView());
         // TODO Need to respond and feedback scenario where a final column already exists...
         StageUtils.showAndWaitOnSubStage();

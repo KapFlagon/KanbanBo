@@ -1,4 +1,4 @@
-package view.sharedviewcomponents.popups.columndetails;
+package view.components.column.editor.columndetails;
 
 import persistence.dto.column.ColumnDTO;
 import domain.entities.column.ObservableColumn;
@@ -41,7 +41,6 @@ public class ColumnDetailsWindowPresenter extends DetailsWindowPresenter impleme
 
     private UUID parentProjectUUID;
     private ObservableColumn columnViewModel;
-    private EditorDataMode editorDataMode;
 
     // Constructors
 

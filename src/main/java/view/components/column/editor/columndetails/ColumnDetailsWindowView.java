@@ -1,4 +1,4 @@
-package view.sharedviewcomponents.popups.columndetails;
+package view.components.column.editor.columndetails;
 
 import framework.CustomFXMLView;
 

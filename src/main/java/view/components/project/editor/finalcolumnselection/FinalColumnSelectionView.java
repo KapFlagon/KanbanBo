@@ -1,6 +1,5 @@
-package view.sharedviewcomponents.popups.finalcolumnselection;
+package view.components.project.editor.finalcolumnselection;
 
-import com.airhacks.afterburner.views.FXMLView;
 import framework.CustomFXMLView;
 
 public class FinalColumnSelectionView extends CustomFXMLView {

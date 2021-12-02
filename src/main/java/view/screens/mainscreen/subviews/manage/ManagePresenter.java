@@ -13,8 +13,8 @@ import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTa
 import view.sharedviewcomponents.popups.EditorDataMode;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogPresenter;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogView;
-import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowPresenter;
-import view.sharedviewcomponents.popups.projectdetails.ProjectDetailsWindowView;
+import view.components.project.editor.projectdetails.ProjectDetailsWindowPresenter;
+import view.components.project.editor.projectdetails.ProjectDetailsWindowView;
 
 import javax.inject.Inject;
 import java.io.IOException;

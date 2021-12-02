@@ -1,16 +1,14 @@
-package view.sharedviewcomponents.popups.movecarddialog;
+package view.components.card.editor.movecarddialog;
 
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.util.StringConverter;
 import persistence.dto.card.CardDTO;
-import persistence.mappers.ObservableObjectToDTO;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
 
@@ -83,9 +81,15 @@ public class MoveCardDialogPresenter implements Initializable {
 
     @FXML
     private void saveSelection(ActionEvent event) {
-        CardDTO cardDTO = ObservableObjectToDTO.mapObservableCardToCardDTO(cardToMove);
-        cardDTO.setParentColumnUUID(columnChoiceBox.getSelectionModel().getSelectedItem().getColumnUUID());
-        cardDTO.setPosition(cardPositionChoiceBox.getSelectionModel().getSelectedItem() - 1);
+        CardDTO.Builder cardDTOBuilder = CardDTO.Builder.newInstance(columnChoiceBox.getSelectionModel().getSelectedItem().getColumnUUID().toString())
+                .uuid(cardToMove.getCardUUID().toString())
+                .title(cardToMove.cardTitleProperty().getValue()).position(cardPositionChoiceBox.getSelectionModel().getSelectedItem() - 1)
+                .description(cardToMove.cardDescriptionProperty().getValue())
+                .createdOnTimeStamp(cardToMove.creationTimestampProperty().getValue())
+                .lastChangedOnTimeStamp(cardToMove.lastChangedTimestampProperty().getValue())
+                //.dueOnDate(cardToMove.dueOnDateProperty().getValue())
+                .position(cardPositionChoiceBox.getSelectionModel().getSelectedItem() - 1);
+        CardDTO cardDTO = new CardDTO(cardDTOBuilder);
         try {
             kanbanBoDataService.moveCard(cardDTO, cardToMove);
         } catch (SQLException e) {
