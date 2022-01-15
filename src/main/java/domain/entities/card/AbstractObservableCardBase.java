@@ -2,7 +2,7 @@ package domain.entities.card;
 
 import persistence.dto.card.AbstractCardDTO;
 import domain.entities.AbstractObservableEntity;
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +20,7 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardDTO> exte
     protected SimpleStringProperty creationTimestamp;
     protected SimpleStringProperty lastChangedTimestamp;
 
-    protected ObservableList<ObservableResourceItem> resourceItems;
+    protected ObservableList<ObservableRelatedItem> resourceItems;
 
     // Constructors
     public AbstractObservableCardBase(T cardDTO) {
@@ -31,7 +31,7 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardDTO> exte
         initAllProperties(cardDTO);
     }
 
-    public AbstractObservableCardBase(T cardDTO, ObservableList<ObservableResourceItem> resourceItems) {
+    public AbstractObservableCardBase(T cardDTO, ObservableList<ObservableRelatedItem> resourceItems) {
         super();
         this.parentColumnUUID = UUID.fromString(cardDTO.getParentColumnUUID());
         this.cardUUID = UUID.fromString(cardDTO.getUuid());
@@ -85,10 +85,10 @@ public abstract class AbstractObservableCardBase<T extends AbstractCardDTO> exte
         return lastChangedTimestamp;
     }
 
-    public ObservableList<ObservableResourceItem> getResourceItems() {
+    public ObservableList<ObservableRelatedItem> getResourceItems() {
         return resourceItems;
     }
-    public void setResourceItems(ObservableList<ObservableResourceItem> resourceItems) {
+    public void setResourceItems(ObservableList<ObservableRelatedItem> resourceItems) {
         this.resourceItems = resourceItems;
     }
 

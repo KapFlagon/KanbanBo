@@ -5,12 +5,12 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import persistence.tables.data.LabelTable;
 import persistence.tables.project.ProjectStatusTable;
-import persistence.tables.resourceitems.ResourceItemTypeTable;
+import persistence.tables.relateditems.RelatedItemTypeTable;
+import utils.enums.ProjectStatusEnum;
+import utils.enums.RelatedItemTypeEnum;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class DefaultDataGenerator {
@@ -69,16 +69,10 @@ public class DefaultDataGenerator {
         JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
         Dao<ProjectStatusTable, Integer> statusModelDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
         ProjectStatusTable projectStatusTable;
-        String[] projectStatusDescriptionResourceBundleKeys = {
-                "project.status.description.active",
-                "project.status.description.completed",
-                "project.status.description.hiatus",
-                "project.status.description.cancelled"
-        };
-        for (int iterator = 0; iterator < projectStatusDescriptionResourceBundleKeys.length; iterator++) {
+        for(ProjectStatusEnum projectStatusEnum : ProjectStatusEnum.values()) {
             projectStatusTable = new ProjectStatusTable();
-            //projectStatusTable.setProject_status_id(iterator + 1);
-            projectStatusTable.setProject_status_text_key(projectStatusDescriptionResourceBundleKeys[iterator]);
+            projectStatusTable.setProject_status_id(projectStatusEnum.getId());
+            projectStatusTable.setProject_status_text_key(projectStatusEnum.getTranslationKey());
             statusModelDao.createOrUpdate(projectStatusTable);
         }
         connectionSource.close();
@@ -86,20 +80,13 @@ public class DefaultDataGenerator {
 
     public void generateResourceItemTypeDefaultData() throws SQLException, IOException {
         JdbcConnectionSource connectionSource = DatabaseUtils.getConnectionSource();
-        Dao<ResourceItemTypeTable, Integer> statusModelDao = DaoManager.createDao(connectionSource, ResourceItemTypeTable.class);
-        ResourceItemTypeTable resourceItemTypeTable;
-        String[] resourceItemDescriptionResourceBundleKeys = {
-                "resource_item.type.description.directory",
-                "resource_item.type.description.file",
-                "resource_item.type.description.url",
-                "resource_item.type.description.child_project",
-                "resource_item.type.description.parent_card"
-        };
-        for (int iterator = 0; iterator < resourceItemDescriptionResourceBundleKeys.length; iterator++) {
-            resourceItemTypeTable = new ResourceItemTypeTable();
-            //resourceItemTypeTable.setResource_item_type_id(iterator + 1);
-            resourceItemTypeTable.setResource_item_type_text_key(resourceItemDescriptionResourceBundleKeys[iterator]);
-            statusModelDao.createOrUpdate(resourceItemTypeTable);
+        Dao<RelatedItemTypeTable, Integer> statusModelDao = DaoManager.createDao(connectionSource, RelatedItemTypeTable.class);
+        RelatedItemTypeTable relatedItemTypeTable;
+        for(RelatedItemTypeEnum relatedItemTypeEnum : RelatedItemTypeEnum.values()) {
+            relatedItemTypeTable = new RelatedItemTypeTable();
+            relatedItemTypeTable.setRelated_item_type_id(relatedItemTypeEnum.getId());
+            relatedItemTypeTable.setRelated_item_type_text_key(relatedItemTypeEnum.getTranslationKey());
+            statusModelDao.createOrUpdate(relatedItemTypeTable);
         }
         connectionSource.close();
     }

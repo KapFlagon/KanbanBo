@@ -18,12 +18,14 @@
                <tabs>
                    <Tab fx:id="manageTab" closable="false" text="%tab.title.manage" />
                    <Tab fx:id="workspaceTab" closable="false" text="%tab.title.workspace" />
+                   <!--
                    <Tab fx:id="templatesTab" closable="false" text="%tab.title.templates" />
                    <Tab fx:id="analyticsTab" closable="false" text="%tab.title.analytics">
                        <content>
                            <TabPane fx:id="analyticsSubTabPane" tabClosingPolicy="UNAVAILABLE" />
                        </content>
                   </Tab>
+                   -->
                </tabs>
             </TabPane>
          </center>

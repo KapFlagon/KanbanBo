@@ -7,7 +7,7 @@ import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectTable;
 import persistence.tables.project.ProjectStatusTable;
-import persistence.tables.resourceitems.ResourceItemTable;
+import persistence.tables.relateditems.RelatedItemTable;
 
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ public class WorkspaceService extends AbstractService{
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
     private Dao<ColumnTable, UUID> columnTableDao;
     private Dao<CardTable, UUID> cardTableDao;
-    private Dao<ResourceItemTable, UUID> resourceItemDao;
+    private Dao<RelatedItemTable, UUID> resourceItemDao;
 
     private ObservableList<ObservableWorkspaceProject> openedProjects;
 

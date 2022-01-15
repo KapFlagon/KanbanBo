@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" minViewportHeight="400.0" minViewportWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane fitToWidth="true" minViewportHeight="400.0" minViewportWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedviewcomponents.creationprocedures.relateditemdetails.RelatedItemDetailsPresenter">
    <content>
       <VBox minWidth="400.0" spacing="5.0">
          <padding>
@@ -18,29 +18,40 @@
          </padding>
          <children>
             <Label text="Related Item details" VBox.vgrow="ALWAYS" />
-            <Button mnemonicParsing="false" text="Edit/Display">
-               <VBox.margin>
-                  <Insets bottom="15.0" />
-               </VBox.margin></Button>
-            <Label text="Title:" />
-            <TextField />
-            <Label text="Type:" />
-            <ChoiceBox />
-            <Label layoutX="15.0" layoutY="130.0" text="Path:" />
-            <HBox spacing="20.0">
+            <VBox>
                <children>
-                  <TextField editable="false" prefHeight="26.0" prefWidth="317.0" />
-                  <Button mnemonicParsing="false" text="Select" />
+                  <Label text="Title:" />
+                  <TextField fx:id="titleTextField" />
+                  <Label fx:id="titleErrorLbl" text="Error" />
                </children>
-            </HBox>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label text="Type:" />
+                  <ChoiceBox fx:id="typeChoiceBox" />
+                  <Label fx:id="typeErrorLbl" text="Error" />
+               </children>
+            </VBox>
+            <Label layoutX="15.0" layoutY="130.0" text="Path:" />
+            <VBox>
+               <children>
+                  <HBox spacing="5.0">
+                     <children>
+                        <Button fx:id="inputPathBtn" mnemonicParsing="false" onAction="#inputPath" text="Input Path" />
+                        <TextField fx:id="pathTextField" editable="false" prefWidth="317.0" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="pathErrorLbl" text="Error" />
+               </children>
+            </VBox>
             <Label text="Created on: " />
-            <TextField editable="false" />
+            <TextField fx:id="createdOnTextField" editable="false" />
             <Label text="Last Changed on: " />
-            <TextField editable="false" />
+            <TextField fx:id="lastChangedTextField" editable="false" />
             <ButtonBar buttonOrder="" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <buttons>
-                  <Button mnemonicParsing="false" text="Save" />
-                  <Button layoutX="339.0" layoutY="17.0" mnemonicParsing="false" text="Cancel/Close" />
+                  <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#save" text="Save" />
+                  <Button fx:id="cancelBtn" cancelButton="true" layoutX="339.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel" text="Cancel/Close" />
                </buttons>
             </ButtonBar>
          </children>

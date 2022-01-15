@@ -2,25 +2,27 @@ package domain.entities.project;
 
 import persistence.dto.project.ProjectDTO;
 import domain.entities.column.ObservableColumn;
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ObservableWorkspaceProject extends AbstractObservableProjectBase<ProjectDTO, ObservableColumn>{
 
 
     // Variables
+    protected AbstractProjectBuilder<AbstractObservableProjectBase<ProjectDTO, ObservableColumn>> test;
     protected SimpleIntegerProperty statusID;
     protected SimpleStringProperty statusText;
     protected SimpleStringProperty dueOnDate;
 
 
     // Constructors
-    protected ObservableWorkspaceProject(ObservableWorkspaceProjectBuilder observableWorkspaceProjectBuilder) {
+    public ObservableWorkspaceProject(ObservableWorkspaceProjectBuilder observableWorkspaceProjectBuilder) {
         super(observableWorkspaceProjectBuilder);
         this.statusID = new SimpleIntegerProperty(observableWorkspaceProjectBuilder.statusIDValue);
         this.statusText = new SimpleStringProperty(observableWorkspaceProjectBuilder.statusTextValue);
@@ -37,7 +39,7 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
         }
     }
 
-    public ObservableWorkspaceProject(ProjectDTO projectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<ObservableColumn> columns, String projectStatusText) {
+    public ObservableWorkspaceProject(ProjectDTO projectDTO, ObservableList<ObservableRelatedItem> resourceItems, ObservableList<ObservableColumn> columns, String projectStatusText) {
         super(projectDTO, resourceItems, columns);
         statusID = new SimpleIntegerProperty(projectDTO.getStatusId());
         statusText = new SimpleStringProperty(projectStatusText);
@@ -104,7 +106,7 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
         private String statusTextValue;
         private String dueOnDateValue;
 
-        private ObservableWorkspaceProjectBuilder() {
+        public ObservableWorkspaceProjectBuilder() {
             super();
             this.statusIDValue = 1;
             this.statusTextValue = "";
@@ -128,6 +130,43 @@ public class ObservableWorkspaceProject extends AbstractObservableProjectBase<Pr
         public ObservableWorkspaceProjectBuilder dueOnDate(String dueOnDate) {
             this.dueOnDateValue = dueOnDate;
             return this;
+        }
+
+        public ObservableWorkspaceProjectBuilder uuid(UUID uuid) {
+            return this.uuid(uuid);
+        }
+
+
+        public ObservableWorkspaceProjectBuilder title(String title) {
+            return this.title(title);
+        }
+
+
+        public ObservableWorkspaceProjectBuilder description(String description) {
+            return this.description(description);
+        }
+
+        public ObservableWorkspaceProjectBuilder creationTimestampString(String creationTimestampString) {
+            return this.creationTimestampString(creationTimestampString);
+        }
+
+        public ObservableWorkspaceProjectBuilder lastChangedTimestampString(String lastChangedTimestampString) {
+            return this.lastChangedTimestampString(lastChangedTimestampString);
+        }
+
+
+        public ObservableWorkspaceProjectBuilder resourceItemsList(ObservableList<ObservableRelatedItem> observableRelatedItems) {
+            return this.resourceItemsList(observableRelatedItems);
+        }
+
+
+        public ObservableWorkspaceProjectBuilder columns(ObservableList<ObservableColumn> columns) {
+            return this.columns(columns);
+        }
+
+
+        public ObservableWorkspaceProjectBuilder hasFinalColumn(boolean hasFinalColumn) {
+            return this.hasFinalColumn(hasFinalColumn);
         }
     }
 

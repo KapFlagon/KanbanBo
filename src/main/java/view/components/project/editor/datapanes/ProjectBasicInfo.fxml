@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.project.editor.datapanes.ProjectBasicInfoPresenter">
+   <children>
+      <VBox>
+         <children>
+            <Label alignment="CENTER" text="Title:" />
+            <TextField fx:id="projectTitleTextField">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </TextField>
+            <Label fx:id="titleErrorLbl" text="TitleError" textFill="#ff4b4b" underline="true">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <Label alignment="CENTER" text="Description:" />
+            <TextArea fx:id="projectDescriptionTextArea" minHeight="100.0" prefHeight="100.0" wrapText="true">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </TextArea>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <Label text="Status" />
+            <ChoiceBox fx:id="statusChoiceBox" prefWidth="150.0" />
+            <Label text="Status explanations?" />
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</VBox>

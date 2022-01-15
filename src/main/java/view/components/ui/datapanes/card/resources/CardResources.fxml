@@ -10,15 +10,15 @@
 
 <Accordion xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.ui.datapanes.card.resources.CardResourcesPresenter">
    <panes>
-      <TitledPane expanded="false" text="%label.resource_items">
+      <TitledPane expanded="false" text="%label.related_items">
          <content>
             <VBox>
                <children>
                   <ToolBar>
                     <items>
-                      <Button fx:id="addResourceBtn" mnemonicParsing="false" onAction="#addResource" text="%button.resource.add" />
-                        <Button fx:id="editResourceBtn" mnemonicParsing="false" onAction="#editResourceDetails" text="%button.resource.edit" />
-                        <Button fx:id="deleteResourceBtn" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#deleteResource" text="%button.resource.delete" />
+                      <Button fx:id="addResourceBtn" mnemonicParsing="false" onAction="#addResource" text="%button.related_item.add" />
+                        <Button fx:id="editResourceBtn" mnemonicParsing="false" onAction="#editResourceDetails" text="%button.related_item.edit" />
+                        <Button fx:id="deleteResourceBtn" layoutX="66.0" layoutY="12.0" mnemonicParsing="false" onAction="#deleteResource" text="%button.related_item.delete" />
                     </items>
                   </ToolBar>
                   <TableView fx:id="resourceTableView">

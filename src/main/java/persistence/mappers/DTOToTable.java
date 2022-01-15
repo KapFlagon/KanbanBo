@@ -1,11 +1,13 @@
 package persistence.mappers;
 
+import persistence.dto.RelatedItemDTO;
 import persistence.dto.card.CardDTO;
 import persistence.dto.column.ColumnDTO;
 import persistence.dto.project.ProjectDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectTable;
+import persistence.tables.relateditems.RelatedItemTable;
 
 import java.util.UUID;
 
@@ -63,4 +65,13 @@ public class DTOToTable {
     }
 
 
+    public static RelatedItemTable mapRelatedItemDTOToRelatedItemTable(RelatedItemDTO relatedItemDTO) {
+        RelatedItemTable relatedItemTable = new RelatedItemTable();
+        relatedItemTable.setParent_item_uuid(relatedItemDTO.getParentUUID());
+        relatedItemTable.setRelated_item_uuid(relatedItemDTO.getRelatedItemUUID());
+        relatedItemTable.setRelated_item_title(relatedItemDTO.getTitle());
+        relatedItemTable.setRelated_item_type(relatedItemDTO.getType());
+        relatedItemTable.setRelated_item_path(relatedItemDTO.getPath());
+        return relatedItemTable;
+    }
 }

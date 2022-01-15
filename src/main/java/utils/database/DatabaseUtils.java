@@ -14,10 +14,9 @@ import persistence.tables.data.LabelTable;
 import persistence.tables.project.ProjectTable;
 import persistence.tables.project.ProjectStatusTable;
 import persistence.tables.project.TemplateProjectTable;
-import persistence.tables.resourceitems.ResourceItemTable;
-import persistence.tables.resourceitems.ResourceItemTypeTable;
+import persistence.tables.relateditems.RelatedItemTable;
+import persistence.tables.relateditems.RelatedItemTypeTable;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -109,12 +108,12 @@ public class DatabaseUtils {
     }
 
     public static void createResourceItemTable(JdbcConnectionSource connectionSource) throws SQLException{
-        Dao<ResourceItemTable, UUID> linkedItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
+        Dao<RelatedItemTable, UUID> linkedItemDao = DaoManager.createDao(connectionSource, RelatedItemTable.class);
         TableUtils.createTable(linkedItemDao);
     }
 
     public static void createResourceItemTypeTable(JdbcConnectionSource connectionSource) throws SQLException, IOException {
-        Dao<ResourceItemTypeTable, Integer> resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTypeTable.class);
+        Dao<RelatedItemTypeTable, Integer> resourceItemDao = DaoManager.createDao(connectionSource, RelatedItemTypeTable.class);
         TableUtils.createTable(resourceItemDao);
     }
 

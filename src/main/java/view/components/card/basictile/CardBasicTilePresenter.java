@@ -1,7 +1,7 @@
 package view.components.card.basictile;
 
 import domain.entities.card.ObservableCard;
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,10 +13,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
+import utils.enums.RelatedItemParentTypeEnum;
 import view.components.card.editor.CardEditorPresenter;
 import view.components.card.editor.CardEditorView;
 import view.components.card.editor.movecarddialog.MoveCardDialogPresenter;
 import view.components.card.editor.movecarddialog.MoveCardDialogView;
+import view.components.ui.datapanes.relateditemstable.RelatedItemsTablePresenter;
+import view.components.ui.datapanes.relateditemstable.RelatedItemsTableView;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -50,6 +53,9 @@ public class CardBasicTilePresenter implements Initializable {
 
     @FXML
     private MenuItem deleteCardBtn;
+
+    @FXML
+    private Button accessProjectRelatedItems;
 
     @FXML
     private FlowPane tagFlowPane;
@@ -123,8 +129,8 @@ public class CardBasicTilePresenter implements Initializable {
         } else{
             resourcesMenuBtn.setDisable(false);
             resourcesLbl.setText(String.valueOf(cardViewModel.getResourceItems().size()));
-            for(ObservableResourceItem resourceItem : cardViewModel.getResourceItems()) {
-                MenuItem resourceMenuItem = new MenuItem(resourceItem.typeTextProperty().getValue());
+            for(ObservableRelatedItem resourceItem : cardViewModel.getResourceItems()) {
+                MenuItem resourceMenuItem = new MenuItem(resourceItem.typeProperty().getValue().toString());
                 resourceMenuItem.setOnAction(event -> {
                     switch(resourceItem.typeProperty().get()) {
                         // TODO Designate "run" behaviour for button click, based on resource type
@@ -213,6 +219,20 @@ public class CardBasicTilePresenter implements Initializable {
         StageUtils.createChildStage("Card details", cardEditorView.getView());
         StageUtils.showAndWaitOnSubStage();
         StageUtils.closeSubStage();
+    }
+
+    @FXML
+    private void accessProjectRelatedItems() {
+        // TODO Implement this
+
+        RelatedItemsTableView view = new RelatedItemsTableView();
+        RelatedItemsTablePresenter presenter = (RelatedItemsTablePresenter) view.getPresenter();
+        // TODO need to set parent UUID
+        presenter.setResourceItemList(cardViewModel.getResourceItems());
+        presenter.setParentUUID(cardViewModel.getCardUUID());
+        presenter.setRelatedItemParentType(RelatedItemParentTypeEnum.CARD);
+        StageUtils.createChildStage("Related Items", view.getView());
+        StageUtils.showAndWaitOnSubStage();
     }
 
     // Other methods

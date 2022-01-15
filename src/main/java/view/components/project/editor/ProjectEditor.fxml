@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.project.editor.ProjectEditorPresenter">
+   <center>
+      <ScrollPane fx:id="contentScrollPane" fitToWidth="true" minViewportHeight="400.0" minViewportWidth="400.0" />
+   </center>
+   <bottom>
+      <ButtonBar fx:id="buttonBar" buttonOrder="" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <buttons>
+            <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#save" text="%button.save" />
+            <Button fx:id="cancelBtn" cancelButton="true" layoutX="339.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel" text="%button.cancel" />
+         </buttons>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets right="5.0" />
+         </padding>
+      </ButtonBar>
+   </bottom>
+   <left>
+      <VBox fx:id="navigationLabelsVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" spacing="4.0" style="-fx-background-color: skyblue;" BorderPane.alignment="CENTER" />
+   </left>
+   <top>
+      <Label fx:id="editorHeaderLbl" text="header" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>

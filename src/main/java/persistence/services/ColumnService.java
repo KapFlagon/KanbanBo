@@ -13,13 +13,12 @@ import domain.entities.project.ObservableWorkspaceProject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.mappers.DTOToTable;
-import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
 import persistence.tables.project.ProjectTable;
-import persistence.tables.resourceitems.ResourceItemTable;
-import persistence.tables.resourceitems.ResourceItemTypeTable;
+import persistence.tables.relateditems.RelatedItemTable;
+import persistence.tables.relateditems.RelatedItemTypeTable;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -40,17 +39,17 @@ public class ColumnService extends AbstractService{
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
     private Dao<ColumnTable, UUID> columnDao;
     private Dao<CardTable, UUID> cardDao;
-    private Dao<ResourceItemTable, UUID> resourceItemDao;
-    private Dao<ResourceItemTypeTable, Integer> resourceItemTypeDao;
+    private Dao<RelatedItemTable, UUID> resourceItemDao;
+    private Dao<RelatedItemTypeTable, Integer> resourceItemTypeDao;
 
     private QueryBuilder<ColumnTable, UUID> columnTableQueryBuilder;
     private QueryBuilder<CardTable, UUID> cardTableQueryBuilder;
-    private QueryBuilder<ResourceItemTable, UUID> resourceItemTableQueryBuilder;
-    private QueryBuilder<ResourceItemTypeTable, Integer> resourceItemTypeTableQueryBuilder;
+    private QueryBuilder<RelatedItemTable, UUID> resourceItemTableQueryBuilder;
+    private QueryBuilder<RelatedItemTypeTable, Integer> resourceItemTypeTableQueryBuilder;
 
     private DeleteBuilder<ColumnTable, UUID> columnTableDeleteBuilder;
     private DeleteBuilder<CardTable, UUID> cardTableDeleteBuilder;
-    private DeleteBuilder<ResourceItemTable, UUID> resourceItemTableDeleteBuilder;
+    private DeleteBuilder<RelatedItemTable, UUID> resourceItemTableDeleteBuilder;
 
 
 
@@ -72,9 +71,6 @@ public class ColumnService extends AbstractService{
     // Other methods
     public boolean createColumn(ColumnDTO columnDTO) throws SQLException, IOException {
         ColumnTable columnTable = DTOToTable.mapColumnDTOToColumnTable(columnDTO);
-        //columnTable.setParent_project_uuid(columnDTO.getParentProjectUUID());
-        //columnTable.setColumn_title(columnDTO.getTitle());
-        //columnTable.setFinal_column(columnDTO.isFinalColumn());
         columnTable.setCreation_timestamp(ZonedDateTime.now().toString());
         columnTable.setLast_changed_timestamp(ZonedDateTime.now().toString());
         setupDbConnection();
@@ -102,9 +98,6 @@ public class ColumnService extends AbstractService{
                         observableWorkspaceProject = op;
                     }
                 }
-                //columnDTO.setUuid(columnTable.getColumn_uuid());
-                //columnDTO.setCreatedOnTimeStamp(ZonedDateTime.parse(columnTable.getCreation_timestamp()));
-                //columnDTO.setLastChangedOnTimeStamp(ZonedDateTime.parse(columnTable.getLast_changed_timestamp()));
                 ObservableList<ObservableCard> emptyCardList = FXCollections.observableArrayList();
                 ObservableColumn observableColumn = new ObservableColumn(columnDTO, emptyCardList);
                 observableColumn.columnPositionProperty().addListener((observable, oldVal, newVal) -> {
@@ -209,7 +202,7 @@ public class ColumnService extends AbstractService{
         setupDbConnection();
 
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
+        resourceItemDao = DaoManager.createDao(connectionSource, RelatedItemTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
 
@@ -220,7 +213,7 @@ public class ColumnService extends AbstractService{
         cardTableDeleteBuilder = cardDao.deleteBuilder();
         List<PreparedDelete<CardTable>> cardPreparedDeleteList = new ArrayList<PreparedDelete<CardTable>>();
         resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
-        List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
+        List<PreparedDelete<RelatedItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<RelatedItemTable>>();
 
         cardTableQueryBuilder.where().eq(CardTable.FOREIGN_KEY_NAME, column.getColumnUUID());
         List<CardTable> allCards = cardTableQueryBuilder.query();
@@ -230,15 +223,15 @@ public class ColumnService extends AbstractService{
 
         for(CardTable card : allCards) {
             resourceItemTableDeleteBuilder.reset();
-            resourceItemTableDeleteBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, card.getID());
-            PreparedDelete<ResourceItemTable> preparedDelete = resourceItemTableDeleteBuilder.prepare();
+            resourceItemTableDeleteBuilder.where().eq(RelatedItemTable.FOREIGN_KEY_NAME, card.getID());
+            PreparedDelete<RelatedItemTable> preparedDelete = resourceItemTableDeleteBuilder.prepare();
             resourceItemPreparedDeleteList.add(preparedDelete);
         }
 
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                for(PreparedDelete<ResourceItemTable> resourceDelete: resourceItemPreparedDeleteList) {
+                for(PreparedDelete<RelatedItemTable> resourceDelete: resourceItemPreparedDeleteList) {
                     resourceItemDao.delete(resourceDelete);
                 }
                 for(PreparedDelete<CardTable> cardDelete : cardPreparedDeleteList) {

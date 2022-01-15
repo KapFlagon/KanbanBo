@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.net.URI;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainScreenPresenter implements Initializable {
@@ -30,16 +31,12 @@ public class MainScreenPresenter implements Initializable {
     private TabPane mainScreenTabPane;
     @FXML
     private Tab manageTab;
-    @FXML
-    private Tab manageProjectsSubTab;
-    @FXML
-    private Tab manageTemplatesSubTab;
-    @FXML
-    private Tab templatesTab;
-    @FXML
-    private Tab analyticsTab;
-    @FXML
-    private TabPane analyticsSubTabPane;
+    //@FXML
+    //private Tab templatesTab;
+    //@FXML
+    //private Tab analyticsTab;
+    //@FXML
+    //private TabPane analyticsSubTabPane;
     @FXML
     private Tab workspaceTab;
     @FXML
@@ -69,16 +66,10 @@ public class MainScreenPresenter implements Initializable {
         workspacePresenter = (WorkspacePresenter) workspaceView.getPresenter();
         workspaceTab.setContent(workspaceView.getView());
 
-        kanbanBoDataService.getWorkspaceProjectsList().addListener(new ListChangeListener<ObservableWorkspaceProject>() {
-            @Override
-            public void onChanged(Change<? extends ObservableWorkspaceProject> c) {
-                while(c.next()) {
-                    if(c.wasAdded()) {
-                        mainScreenTabPane.getSelectionModel().select(workspaceTab);
-                    }
-                    if(c.wasRemoved()) {
-                        // TODO Do I need this?
-                    }
+        kanbanBoDataService.getWorkspaceProjectsList().addListener((ListChangeListener<ObservableWorkspaceProject>) c -> {
+            while(c.next()) {
+                if(c.wasAdded()) {
+                    mainScreenTabPane.getSelectionModel().select(workspaceTab);
                 }
             }
         });
@@ -109,13 +100,13 @@ public class MainScreenPresenter implements Initializable {
 
     // Other methods
     private void initTabIcons() {
-        ImageView manageImageView = new ImageView(getClass().getResource("/icons/topic/materialicons/black/res/drawable-mdpi/baseline_topic_black_18.png").toExternalForm());
-        ImageView workspaceImageView = new ImageView(getClass().getResource("/icons/handyman/materialicons/black/res/drawable-mdpi/baseline_handyman_black_18.png").toExternalForm());
-        ImageView templatesImageView = new ImageView(getClass().getResource("/icons/square_foot/materialicons/black/res/drawable-mdpi/baseline_square_foot_black_18.png").toExternalForm());
-        ImageView analyticsImageView = new ImageView(getClass().getResource("/icons/assessment/materialicons/black/res/drawable-mdpi/baseline_assessment_black_18.png").toExternalForm());
+        ImageView manageImageView = new ImageView(Objects.requireNonNull(getClass().getResource("/icons/topic/materialicons/black/res/drawable-mdpi/baseline_topic_black_18.png")).toExternalForm());
+        ImageView workspaceImageView = new ImageView(Objects.requireNonNull(getClass().getResource("/icons/handyman/materialicons/black/res/drawable-mdpi/baseline_handyman_black_18.png")).toExternalForm());
+        //ImageView templatesImageView = new ImageView(Objects.requireNonNull(getClass().getResource("/icons/square_foot/materialicons/black/res/drawable-mdpi/baseline_square_foot_black_18.png")).toExternalForm());
+        //ImageView analyticsImageView = new ImageView(Objects.requireNonNull(getClass().getResource("/icons/assessment/materialicons/black/res/drawable-mdpi/baseline_assessment_black_18.png")).toExternalForm());
         manageTab.setGraphic(manageImageView);
         workspaceTab.setGraphic(workspaceImageView);
-        templatesTab.setGraphic(templatesImageView);
-        analyticsTab.setGraphic(analyticsImageView);
+        //templatesTab.setGraphic(templatesImageView);
+        //analyticsTab.setGraphic(analyticsImageView);
     }
 }

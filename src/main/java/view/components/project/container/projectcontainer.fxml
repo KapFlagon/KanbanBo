@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="mainScrollPane" cacheShape="false" fitToWidth="true" maxHeight="1.7976931348623157E308" style="-fx-border-color: khaki;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.project.container.ProjectContainerPresenter">
+<ScrollPane fx:id="mainScrollPane" cacheShape="false" fitToWidth="true" maxHeight="1.7976931348623157E308" style="-fx-border-color: khaki;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.project.container.ProjectContainerPresenter">
    <content>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: khaki;">
          <top>
@@ -20,7 +20,8 @@
                         <Label fx:id="projectTitleHeaderLbl" layoutX="10.0" layoutY="10.0" text="%project.header" />
                         <Label layoutX="10.0" layoutY="10.0" text=": " />
                         <Label fx:id="projectTitleLbl" layoutX="10.0" layoutY="10.0" text="projectTitleLbl" />
-                        <Button fx:id="editProjectDetailsBtn" mnemonicParsing="false" text="%button.project.details" />
+                        <Button fx:id="editProjectDetailsBtn" mnemonicParsing="false" onAction="#editProjectDetails" text="%button.project.details" />
+                        <Button fx:id="accessProjectRelatedItemsBtn" mnemonicParsing="false" onAction="#accessProjectRelatedItems" text="%label.related_items" />
                      </children>
                   </HBox>
                   <HBox spacing="3.0">

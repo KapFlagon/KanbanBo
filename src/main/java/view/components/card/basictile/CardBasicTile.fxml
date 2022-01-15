@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="rootContainer" maxHeight="210.0" maxWidth="300.0" minWidth="300.0" spacing="6.0" style="-fx-background-color: yellow; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.card.basictile.CardBasicTilePresenter">
+<VBox fx:id="rootContainer" maxHeight="210.0" maxWidth="300.0" minWidth="300.0" spacing="6.0" style="-fx-background-color: yellow; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.card.basictile.CardBasicTilePresenter">
    <children>
       <Label fx:id="cardTypeLbl" text="Card Type (card/template)">
          <VBox.margin>
@@ -28,6 +29,7 @@
                   <MenuItem fx:id="deleteCardBtn" mnemonicParsing="false" onAction="#deleteCard" text="%button.card.delete" />
               </items>
             </MenuButton>
+            <Button fx:id="accessProjectRelatedItemsBtn" mnemonicParsing="false" onAction="#accessProjectRelatedItems" text="%label.related_items" />
          </children>
          <VBox.margin>
             <Insets left="5.0" right="5.0" />

@@ -78,7 +78,7 @@ public class ProjectDetailsWindowPresenter extends DetailsWindowPresenter implem
                 statusChoiceBox.setValue(projectStatusViewModel);
             }
         }
-        if(projectViewModel.dueOnDateProperty() != null) {
+        if(projectViewModel.dueOnDateProperty() != null && !projectViewModel.dueOnDateProperty().getValue().equals("")) {
             dueOnDatePicker.setValue(LocalDate.parse(projectViewModel.dueOnDateProperty().getValue()));
         }
         createdOnTextField.setText(projectViewModel.creationTimestampProperty().getValue());
@@ -111,6 +111,7 @@ public class ProjectDetailsWindowPresenter extends DetailsWindowPresenter implem
         initTitleValidationFields();
         initializeEditor();
         establishTitleTextFieldValidation();
+        establishDueDateFieldValidation();
     }
 
     private void initTitleValidationFields() {
@@ -121,20 +122,25 @@ public class ProjectDetailsWindowPresenter extends DetailsWindowPresenter implem
     }
 
 
-    // Other methods
-    public void saveProjectDetailsChange() throws SQLException, IOException, ParseException {
+    // FXML UI action methods
+    @FXML
+    private void saveProjectDetailsChange() throws SQLException, IOException, ParseException {
         if(validTitle) {
             ProjectDTO.Builder projectDTOBuilder = ProjectDTO.Builder.newInstance("")
                     .title(projectTitleTextField.getText())
                     .description(projectDescriptionTextArea.getText())
                     .statusId(statusChoiceBox.getSelectionModel().getSelectedItem().getStatusId())
-                    .dueOnDate(dueOnDatePicker.getValue().toString());
+                    .dueOnDate(dueOnDatePicker.getValue() != null ? dueOnDatePicker.getValue().toString(): "");
             if(editorDataMode == EditorDataMode.CREATION) {
                 projectDTOBuilder.uuid(UUID.randomUUID().toString())
                         .createdOnTimeStamp(LocalDateTime.now().toString())
                         .lastChangedOnTimeStamp(LocalDateTime.now().toString());
                 ProjectDTO newProjectData = new ProjectDTO(projectDTOBuilder);
                 kanbanBoDataService.createProject(newProjectData);
+                ObservableWorkspaceProject.ObservableWorkspaceProjectBuilder builder = ObservableWorkspaceProject.ObservableWorkspaceProjectBuilder.newInstance()
+                        .uuid(UUID.fromString(newProjectData.getUuid()))
+                        .title(projectTitleTextField.getText());
+                projectViewModel = new ObservableWorkspaceProject(builder);
             } else if(editorDataMode == EditorDataMode.EDITING) {
                 projectDTOBuilder.uuid(projectViewModel.getProjectUUID().toString())
                         .createdOnTimeStamp(projectViewModel.creationTimestampProperty().getValue())
@@ -151,11 +157,14 @@ public class ProjectDetailsWindowPresenter extends DetailsWindowPresenter implem
     }
 
 
-    public void cancelProjectDetailsChange() {
+    @FXML
+    private void cancelProjectDetailsChange() {
         // Close the window, do nothing.
         StageUtils.hideSubStage();
     }
 
+
+    // Other methods
     private void establishTitleTextFieldValidation() {
         projectTitleTextField.setTextFormatter(new TextFormatter<Object>(change -> {
             change = change.getControlNewText().matches(".{0,50}") ? change : null;
@@ -166,6 +175,16 @@ public class ProjectDetailsWindowPresenter extends DetailsWindowPresenter implem
             }
             return change;
         }));
+    }
+
+    private void establishDueDateFieldValidation() {
+        dueOnDatePicker.getEditor().textProperty().addListener((observableValue, oldTextValue, newTextValue) -> {
+            if(newTextValue.equals("")) {
+                dueOnDatePicker.setValue(null);
+            } else {
+                // TODO Perform some kind of text field validation here
+            }
+        });
     }
 
     protected void prepareViewForCreation() {

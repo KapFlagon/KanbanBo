@@ -1,7 +1,7 @@
 package domain.entities.card;
 
 import persistence.dto.card.CardDTO;
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -25,7 +25,7 @@ public class ObservableCard extends AbstractObservableCardBase<CardDTO> {
             this.dueOnDate = new SimpleStringProperty(cardDTO.getDueOnDate().toString());
         }
     }
-    public ObservableCard(CardDTO cardDTO, ObservableList<ObservableResourceItem> resourceItems) {
+    public ObservableCard(CardDTO cardDTO, ObservableList<ObservableRelatedItem> resourceItems) {
         super(cardDTO, resourceItems);
         this.position = new SimpleIntegerProperty(cardDTO.getPosition());
         this.creationTimestamp = new SimpleStringProperty(cardDTO.getCreatedOnTimeStamp().toString());

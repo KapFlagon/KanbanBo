@@ -108,11 +108,14 @@ public class MoveCardDialogPresenter implements Initializable {
             cardPositionChoiceBox.getItems().add(iterator + 1);
         }
         if(!columnChoiceBox.getSelectionModel().getSelectedItem().getColumnUUID().equals(cardToMove.getParentColumnUUID())){
-            cardPositionChoiceBox.getItems().add(columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size() + 1);
-            cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf((columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size() + 1)));
+            //cardPositionChoiceBox.getItems().add(columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size() + 1);
+            //cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf((columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size() + 1)));
+            cardPositionChoiceBox.getItems().add(columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size());
+            cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf((columnChoiceBox.getSelectionModel().getSelectedItem().getCards().size() )));
         } else {
             // Using Integer.valueOf here to avoid the select method interpreting the value as an index.
-            cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf(cardToMove.positionProperty().getValue() + 1));
+            //cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf(cardToMove.positionProperty().getValue() + 1));
+            cardPositionChoiceBox.getSelectionModel().select(Integer.valueOf(cardToMove.positionProperty().getValue() ));
         }
     }
 

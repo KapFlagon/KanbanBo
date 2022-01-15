@@ -2,7 +2,7 @@ package domain.entities.project;
 
 import persistence.dto.project.AbstractProjectDTO;
 import domain.entities.column.AbstractObservableColumnBase;
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -22,7 +22,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
     protected SimpleStringProperty projectDescription;
     protected SimpleStringProperty creationTimestamp;
     protected SimpleStringProperty lastChangedTimestamp;
-    protected ObservableList<ObservableResourceItem> resourceItems;
+    protected ObservableList<ObservableRelatedItem> resourceItems;
     protected ObservableList<U> columns;
     protected SimpleBooleanProperty hasFinalColumn;
 
@@ -36,7 +36,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
         initAllObservableLists();
     }
 
-    public AbstractObservableProjectBase(T projectObjectDTO, ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
+    public AbstractObservableProjectBase(T projectObjectDTO, ObservableList<ObservableRelatedItem> resourceItems, ObservableList<U> columnsList) {
         super();
         projectUUID = UUID.fromString(projectObjectDTO.getUuid());
         initAllProperties(projectObjectDTO);
@@ -77,10 +77,10 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
         return lastChangedTimestamp;
     }
 
-    public ObservableList<ObservableResourceItem> getResourceItems() {
+    public ObservableList<ObservableRelatedItem> getResourceItems() {
         return resourceItems;
     }
-    public void setResourceItems(ObservableList<ObservableResourceItem> resourceItems) {
+    public void setResourceItems(ObservableList<ObservableRelatedItem> resourceItems) {
         this.resourceItems = resourceItems;
         addListenersToResourceItemsList();
     }
@@ -109,7 +109,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
         this.hasFinalColumn = new SimpleBooleanProperty(false);
     }
 
-    protected void initAllObservableLists(ObservableList<ObservableResourceItem> resourceItems, ObservableList<U> columnsList) {
+    protected void initAllObservableLists(ObservableList<ObservableRelatedItem> resourceItems, ObservableList<U> columnsList) {
         this.resourceItems = resourceItems;
         this.columns = columnsList;
         updateHasFinalColumn(columns);
@@ -160,7 +160,7 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
         private String projectDescriptionValue;
         private String creationTimestampValue;
         private String lastChangedTimestampValue;
-        private ObservableList<ObservableResourceItem> resourceItemsListValue;
+        private ObservableList<ObservableRelatedItem> resourceItemsListValue;
         private ObservableList<U> columnsListValue;
         private Boolean hasFinalColumnValue;
 
@@ -174,16 +174,16 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
             this.hasFinalColumnValue = false;
         }
 
-        public static AbstractProjectBuilder newInstance() {
+        protected static AbstractProjectBuilder newInstance() {
             return new AbstractProjectBuilder();
         }
 
-        public AbstractProjectBuilder uuid(UUID uuid) {
+        protected AbstractProjectBuilder uuid(UUID uuid) {
             this.projectUUIDValue = uuid;
             return this;
         }
 
-        public AbstractProjectBuilder title(String title) {
+        protected AbstractProjectBuilder title(String title) {
             this.projectTitleValue = title;
             return this;
         }
@@ -193,30 +193,31 @@ public class AbstractObservableProjectBase<T extends AbstractProjectDTO, U exten
             return this;
         }
 
-        public AbstractProjectBuilder creationTimestampString(String creationTimestampString) {
+        protected AbstractProjectBuilder creationTimestampString(String creationTimestampString) {
             this.creationTimestampValue = creationTimestampString;
             return this;
         }
 
-        public AbstractProjectBuilder lastChangedTimestampString(String lastChangedTimestampString) {
+        protected AbstractProjectBuilder lastChangedTimestampString(String lastChangedTimestampString) {
             this.projectDescriptionValue = lastChangedTimestampString;
             return this;
         }
 
-        public AbstractProjectBuilder resourceItemsList(ObservableList<ObservableResourceItem> observableResourceItems) {
-            this.resourceItemsListValue = observableResourceItems;
+        protected AbstractProjectBuilder resourceItemsList(ObservableList<ObservableRelatedItem> observableRelatedItems) {
+            this.resourceItemsListValue = observableRelatedItems;
             return this;
         }
 
-        public AbstractProjectBuilder columns(ObservableList<U> columns) {
+        protected AbstractProjectBuilder columns(ObservableList<U> columns) {
             this.columnsListValue = columns;
             return this;
         }
 
-        public AbstractProjectBuilder hasFinalColumn(boolean hasFinalColumn) {
+        protected AbstractProjectBuilder hasFinalColumn(boolean hasFinalColumn) {
             this.hasFinalColumnValue = hasFinalColumn;
             return this;
         }
+
     }
 
 

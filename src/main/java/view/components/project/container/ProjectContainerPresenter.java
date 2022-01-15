@@ -2,7 +2,6 @@ package view.components.project.container;
 
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableWorkspaceProject;
-import domain.entities.resourceitem.ObservableResourceItem;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -13,9 +12,12 @@ import javafx.scene.layout.HBox;
 import javafx.stage.StageStyle;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
+import utils.enums.RelatedItemParentTypeEnum;
 import utils.view.ScrollPaneFixer;
 import view.components.column.container.ColumnContainerPresenter;
 import view.components.column.container.ColumnContainerView;
+import view.components.ui.datapanes.relateditemstable.RelatedItemsTablePresenter;
+import view.components.ui.datapanes.relateditemstable.RelatedItemsTableView;
 import view.sharedviewcomponents.popups.EditorDataMode;
 import view.components.column.editor.columndetails.ColumnDetailsWindowPresenter;
 import view.components.column.editor.columndetails.ColumnDetailsWindowView;
@@ -23,8 +25,6 @@ import view.components.project.editor.finalcolumnselection.FinalColumnSelectionP
 import view.components.project.editor.finalcolumnselection.FinalColumnSelectionView;
 import view.components.project.editor.projectdetails.ProjectDetailsWindowPresenter;
 import view.components.project.editor.projectdetails.ProjectDetailsWindowView;
-import view.sharedviewcomponents.popups.resourceitemdetails.ResourceItemDetailsPresenter;
-import view.sharedviewcomponents.popups.resourceitemdetails.ResourceItemDetailsView;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -42,29 +42,11 @@ public class ProjectContainerPresenter implements Initializable {
     @FXML
     private Button editProjectDetailsBtn;
     @FXML
-    private Button saveProjectDetailsBtn;
+    private Button accessProjectRelatedItemsBtn;
     @FXML
     private Button createColumnBtn;
     @FXML
     private Button selectFinalColumnBtn;
-    @FXML
-    private TextField projectStatusTextField; // TODO Used to display the text in a copyable way, but replaced by choicebox in "edit" mode.
-    @FXML
-    private ChoiceBox projectStatusChoiceBox; // TODO Used to select status in "edit" mode, but replaced by non-editable TextField in "display" mode.
-    @FXML
-    private TextArea projectDescriptionTextArea;
-    @FXML
-    private TextField projectCreationDateTextField;
-    @FXML
-    private TextField projectLastChangedDateTextField;
-    @FXML
-    private TableView<ObservableResourceItem> resourceItemTableView;
-    @FXML
-    private TableColumn<ObservableResourceItem, String> relatedItemTitleTableColumn;
-    @FXML
-    private TableColumn<ObservableResourceItem, Number> relatedItemTypeTableColumn;
-    @FXML
-    private TableColumn<ObservableResourceItem, String> relatedItemLinkTableColumn;
     @FXML
     private HBox columnHBox;
     @FXML
@@ -188,35 +170,21 @@ public class ProjectContainerPresenter implements Initializable {
         StageUtils.showAndWaitOnSubStage();
     }
 
-    @FXML private void saveProjectDetails() {
+    @FXML
+    private void accessProjectRelatedItems() {
         // TODO Implement this
-    }
-
-    @FXML private void addResourceItem() {
-        // TODO Implement this
-        ResourceItemDetailsView resourceItemDetailsView = new ResourceItemDetailsView();
-        ResourceItemDetailsPresenter resourceItemDetailsPresenter = (ResourceItemDetailsPresenter) resourceItemDetailsView.getPresenter();
-        resourceItemDetailsPresenter.setParentUUID(projectViewModel.getProjectUUID());
-        resourceItemDetailsPresenter.setRelatedItemTypes(projectViewModel.getResourceItems());
-        StageUtils.createChildStage("Add Related Item", resourceItemDetailsView.getView());
+        //RelatedItemDetailsView relatedItemDetailsView = new RelatedItemDetailsView();
+        //RelatedItemDetailsPresenter relatedItemDetailsPresenter = (RelatedItemDetailsPresenter) relatedItemDetailsView.getPresenter();
+        //relatedItemDetailsPresenter.setParentUUID(projectViewModel.getProjectUUID());
+        //relatedItemDetailsPresenter.setRelatedItems(projectViewModel.getResourceItems());
+        //StageUtils.createChildStage("Add Related Item", relatedItemDetailsView.getView());
+        RelatedItemsTableView view = new RelatedItemsTableView();
+        RelatedItemsTablePresenter presenter = (RelatedItemsTablePresenter) view.getPresenter();
+        presenter.setParentUUID(projectViewModel.getProjectUUID());
+        presenter.setResourceItemList(projectViewModel.getResourceItems());
+        presenter.setRelatedItemParentType(RelatedItemParentTypeEnum.PROJECT);
+        StageUtils.createChildStage("Related Items", view.getView());
         StageUtils.showAndWaitOnSubStage();
-    }
-
-    @FXML private void openResourceItem() {
-        // TODO implement this
-    }
-
-    @FXML private void editResourceItem() {
-        // TODO Implement this
-    }
-
-    @FXML private void removeProjectResourceItem() {
-        // TODO Implement this
-    }
-
-    public void addProjectResourceItem() {
-        // TODO Implement this
-        System.out.println("Adding project resource");
     }
 
     @FXML private void createColumn() throws IOException, SQLException {

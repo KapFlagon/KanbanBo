@@ -12,7 +12,7 @@ import persistence.dto.project.ProjectDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableWorkspaceProject;
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -22,8 +22,9 @@ import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
 import persistence.tables.project.ProjectTable;
-import persistence.tables.resourceitems.ResourceItemTable;
-import persistence.tables.resourceitems.ResourceItemTypeTable;
+import persistence.tables.relateditems.RelatedItemTable;
+import persistence.tables.relateditems.RelatedItemTypeTable;
+import utils.enums.RelatedItemTypeEnum;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -45,17 +46,17 @@ public class ProjectService extends AbstractService{
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
     private Dao<ColumnTable, UUID> columnDao;
     private Dao<CardTable, UUID> cardDao;
-    private Dao<ResourceItemTable, UUID> resourceItemDao;
-    private Dao<ResourceItemTypeTable, Integer> resourceItemTypeDao;
+    private Dao<RelatedItemTable, UUID> relatedItemDao;
+    private Dao<RelatedItemTypeTable, Integer> relatedItemTypeDao;
 
     private QueryBuilder<ColumnTable, UUID> columnTableQueryBuilder;
     private QueryBuilder<CardTable, UUID> cardTableQueryBuilder;
-    private QueryBuilder<ResourceItemTable, UUID> resourceItemTableQueryBuilder;
-    private QueryBuilder<ResourceItemTypeTable, Integer> resourceItemTypeTableQueryBuilder;
+    private QueryBuilder<RelatedItemTable, UUID> relatedItemTableQueryBuilder;
+    private QueryBuilder<RelatedItemTypeTable, Integer> relatedItemTypeTableQueryBuilder;
 
     private DeleteBuilder<ColumnTable, UUID> columnTableDeleteBuilder;
     private DeleteBuilder<CardTable, UUID> cardTableDeleteBuilder;
-    private DeleteBuilder<ResourceItemTable, UUID> resourceItemTableDeleteBuilder;
+    private DeleteBuilder<RelatedItemTable, UUID> resourceItemTableDeleteBuilder;
 
 
 
@@ -125,24 +126,14 @@ public class ProjectService extends AbstractService{
         List<ProjectTable> projects = getProjectsTableAsList();
         List<ProjectStatusTable> projectStatuses = getProjectStatusTableAsList();
         for(ProjectTable projectEntry : projects) {
-            int statusId = projectEntry.getProject_status_id();
-            String localisedStatusText = "";
-            for(ProjectStatusTable projectStatus : projectStatuses) {
-                if (projectStatus.getProject_status_id() == statusId) {
-                    String statusTextKey = projectStatus.getProject_status_text_key();
-                    localisedStatusText = resourceBundle.getString(statusTextKey);
-                }
-            }
-            ProjectDTO projectDTO = TableToDTO.mapProjectTableToProjectDTO(projectEntry);
-
-            ObservableWorkspaceProject projectDomainObject = new ObservableWorkspaceProject(projectDTO, localisedStatusText);
-            projectsList.add(projectDomainObject);
+            ObservableWorkspaceProject observableWorkspaceProject = getProjectHeader(projectEntry, projectStatuses);
+            projectsList.add(observableWorkspaceProject);
         }
     }
 
     // Other methods
     private void fillProjectFromDb(ObservableWorkspaceProject observableWorkspaceProject) throws SQLException, IOException {
-        ObservableList<ObservableResourceItem> projectResourceItems = FXCollections.observableArrayList();
+        ObservableList<ObservableRelatedItem> projectResourceItems = FXCollections.observableArrayList();
         ObservableList<ObservableColumn> observableColumnsList = FXCollections.observableArrayList();
 
         setupDbConnection();
@@ -150,25 +141,37 @@ public class ProjectService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
-        resourceItemTypeDao = DaoManager.createDao(connectionSource, ResourceItemTypeTable.class);
+        relatedItemDao = DaoManager.createDao(connectionSource, RelatedItemTable.class);
+        relatedItemTypeDao = DaoManager.createDao(connectionSource, RelatedItemTypeTable.class);
 
         columnTableQueryBuilder = columnDao.queryBuilder();
         cardTableQueryBuilder = cardDao.queryBuilder();
-        resourceItemTableQueryBuilder = resourceItemDao.queryBuilder();
-        resourceItemTypeTableQueryBuilder = resourceItemTypeDao.queryBuilder();
+        relatedItemTableQueryBuilder = relatedItemDao.queryBuilder();
+        relatedItemTypeTableQueryBuilder = relatedItemTypeDao.queryBuilder();
 
         columnTableQueryBuilder.orderBy(ColumnTable.POSITION_KEY_NAME, true).where().eq(ColumnTable.FOREIGN_KEY_NAME, observableWorkspaceProject.getProjectUUID());
 
-        resourceItemTableQueryBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, observableWorkspaceProject.getProjectUUID());
-        List<ResourceItemTable> projectResourcesTables = resourceItemTableQueryBuilder.query();
-        for(ResourceItemTable projectResourceTableItem : projectResourcesTables) {
-            resourceItemTypeTableQueryBuilder.reset();
-            resourceItemTypeTableQueryBuilder.where().eq(ResourceItemTypeTable.TYPE_KEY_NAME, projectResourceTableItem.getResource_item_type());
-            ResourceItemTypeTable resourceItemTypeTable = resourceItemTypeTableQueryBuilder.queryForFirst();
-            String typeText = resourceBundle.getString(resourceItemTypeTable.getResource_item_type_text_key());
-            ObservableResourceItem observableResourceItem = new ObservableResourceItem(projectResourceTableItem, typeText);
-            projectResourceItems.add(observableResourceItem);
+        relatedItemTableQueryBuilder.where().eq(RelatedItemTable.PATH_COLUMN_NAME, observableWorkspaceProject.getProjectUUID());
+        List<RelatedItemTable> projectCardRelatedItemTables = relatedItemTableQueryBuilder.query();
+        for(RelatedItemTable projectCardRelatedItemTable : projectCardRelatedItemTables) {
+            if(projectCardRelatedItemTable.getRelated_item_type() == RelatedItemTypeEnum.CHILD_PROJECT.getId()) {
+                projectCardRelatedItemTable.setRelated_item_type(RelatedItemTypeEnum.PARENT_CARD.getId());
+            }
+        }
+
+        relatedItemTableQueryBuilder.where().eq(RelatedItemTable.FOREIGN_KEY_NAME, observableWorkspaceProject.getProjectUUID());
+        List<RelatedItemTable> projectSpecificRelatedItemTables = relatedItemTableQueryBuilder.query();
+
+        List<RelatedItemTable> allProjectRelatedItems = new ArrayList<>(projectCardRelatedItemTables);
+        allProjectRelatedItems.addAll(projectSpecificRelatedItemTables);
+
+        for(RelatedItemTable projectResourceTableItem : allProjectRelatedItems) {
+            relatedItemTypeTableQueryBuilder.reset();
+            relatedItemTypeTableQueryBuilder.where().eq(RelatedItemTypeTable.TYPE_KEY_NAME, projectResourceTableItem.getRelated_item_type());
+            RelatedItemTypeTable relatedItemTypeTable = relatedItemTypeTableQueryBuilder.queryForFirst();
+            String typeText = resourceBundle.getString(relatedItemTypeTable.getRelated_item_type_text_key());
+            ObservableRelatedItem observableRelatedItem = new ObservableRelatedItem(projectResourceTableItem, typeText);
+            projectResourceItems.add(observableRelatedItem);
         }
         List<ColumnTable> columnTables = columnTableQueryBuilder.query();
 
@@ -180,22 +183,22 @@ public class ProjectService extends AbstractService{
 
             ObservableList<ObservableCard> observableCardsList = FXCollections.observableArrayList();
             for (CardTable cardTable : columnCardsTableList) {
-                ObservableList<ObservableResourceItem> cardObservableResourceItemList = FXCollections.observableArrayList();
-                resourceItemTableQueryBuilder.reset();
-                resourceItemTableQueryBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, cardTable.getID());
-                List<ResourceItemTable> cardResourceItemsList = resourceItemTableQueryBuilder.query();
-                for(ResourceItemTable resourceItemTableItem : cardResourceItemsList) {
-                    resourceItemTypeTableQueryBuilder.reset();
-                    resourceItemTypeTableQueryBuilder.where().eq(ResourceItemTypeTable.TYPE_KEY_NAME, resourceItemTableItem.getResource_item_type());
-                    ResourceItemTypeTable resourceItemTypeTable = resourceItemTypeTableQueryBuilder.queryForFirst();
-                    String typeText = resourceBundle.getString(resourceItemTypeTable.getResource_item_type_text_key());
-                    ObservableResourceItem cardObservableResourceItem = new ObservableResourceItem(resourceItemTableItem, typeText);
-                    cardObservableResourceItemList.add(cardObservableResourceItem);
+                ObservableList<ObservableRelatedItem> cardObservableRelatedItemList = FXCollections.observableArrayList();
+                relatedItemTableQueryBuilder.reset();
+                relatedItemTableQueryBuilder.where().eq(RelatedItemTable.FOREIGN_KEY_NAME, cardTable.getID());
+                List<RelatedItemTable> cardResourceItemsList = relatedItemTableQueryBuilder.query();
+                for(RelatedItemTable relatedItemTableItem : cardResourceItemsList) {
+                    relatedItemTypeTableQueryBuilder.reset();
+                    relatedItemTypeTableQueryBuilder.where().eq(RelatedItemTypeTable.TYPE_KEY_NAME, relatedItemTableItem.getRelated_item_type());
+                    RelatedItemTypeTable relatedItemTypeTable = relatedItemTypeTableQueryBuilder.queryForFirst();
+                    String typeText = resourceBundle.getString(relatedItemTypeTable.getRelated_item_type_text_key());
+                    ObservableRelatedItem cardObservableRelatedItem = new ObservableRelatedItem(relatedItemTableItem, typeText);
+                    cardObservableRelatedItemList.add(cardObservableRelatedItem);
                 }
 
                 CardDTO cardDTO = TableToDTO.mapCardTableToCardDTO(cardTable);
                 ObservableCard observableCard = new ObservableCard(cardDTO);
-                observableCard.setResourceItems(cardObservableResourceItemList);
+                observableCard.setResourceItems(cardObservableRelatedItemList);
                 observableCard.positionProperty().addListener((observable, oldVal, newVal) -> {
                     // TODO implement function to change position of the Card in its list
                 });
@@ -219,7 +222,7 @@ public class ProjectService extends AbstractService{
     private void purgeProjectData(ObservableWorkspaceProject observableWorkspaceProject) {
         for(ObservableColumn observableColumn : observableWorkspaceProject.getColumns()) {
             for(ObservableCard observableCard : observableColumn.getCards()) {
-                for(ObservableResourceItem observableCardResourceItem : observableCard.getResourceItems()) {
+                for(ObservableRelatedItem observableCardResourceItem : observableCard.getResourceItems()) {
                     observableCardResourceItem = null;
                 }
                 observableCard = null;
@@ -228,14 +231,14 @@ public class ProjectService extends AbstractService{
         }
     }
 
-    public ObservableList<ObservableWorkspaceProject> getResourceItemProjectSubList(UUID potentialParentItemUUID) throws SQLException, IOException {
+    public ObservableList<ObservableWorkspaceProject> getRelatedItemProjectSubList(UUID potentialParentItemUUID) throws SQLException, IOException {
         setupDbConnection();
 
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
-        resourceItemTypeDao = DaoManager.createDao(connectionSource, ResourceItemTypeTable.class);
+        relatedItemDao = DaoManager.createDao(connectionSource, RelatedItemTable.class);
+        relatedItemTypeDao = DaoManager.createDao(connectionSource, RelatedItemTypeTable.class);
 
         ArrayList<UUID> projectUUIDsToOmit = new ArrayList<>();
         boolean isCard = cardDao.idExists(potentialParentItemUUID);
@@ -251,9 +254,9 @@ public class ProjectService extends AbstractService{
             projectUUIDsToOmit.add(potentialParentItemUUID);
         }
 
-        resourceItemTableQueryBuilder = resourceItemDao.queryBuilder();
-        resourceItemTypeTableQueryBuilder.where().eq(ResourceItemTable.TYPE_COLUMN_NAME, 4);
-        List<ResourceItemTable> resourceList = resourceItemTableQueryBuilder.query();
+        relatedItemTableQueryBuilder = relatedItemDao.queryBuilder();
+        relatedItemTypeTableQueryBuilder.where().eq(RelatedItemTypeTable.TYPE_KEY_NAME, 4);
+        List<RelatedItemTable> resourceList = relatedItemTableQueryBuilder.query();
         buildResourceItemProjectOmissionList(projectUUIDsToOmit, startingUUID, resourceList);
         ObservableList<ObservableWorkspaceProject> projectSubList = FXCollections.observableArrayList();
         for(ObservableWorkspaceProject observableWorkspaceProject : projectsList) {
@@ -271,10 +274,10 @@ public class ProjectService extends AbstractService{
         return projectSubList;
     }
 
-    private void buildResourceItemProjectOmissionList(ArrayList<UUID> omissionList, UUID startingUUID, List<ResourceItemTable> resourceList) throws SQLException {
-        for(ResourceItemTable resourceItemTable : resourceList) {
-            if (startingUUID.toString().equals(resourceItemTable.getResource_item_path())) {
-                UUID cardUUID = resourceItemTable.getParent_item_uuid();
+    private void buildResourceItemProjectOmissionList(ArrayList<UUID> omissionList, UUID startingUUID, List<RelatedItemTable> resourceList) throws SQLException {
+        for(RelatedItemTable relatedItemTable : resourceList) {
+            if (startingUUID.toString().equals(relatedItemTable.getRelated_item_path())) {
+                UUID cardUUID = relatedItemTable.getParent_item_uuid();
                 CardTable cardTable = cardDao.queryForId(cardUUID);
                 ColumnTable columnTable = columnDao.queryForId(cardTable.getParent_column_uuid());
                 omissionList.add(columnTable.getParent_project_uuid());
@@ -328,6 +331,7 @@ public class ProjectService extends AbstractService{
         projectTableData.setProject_description(newProjectData.getDescription());
         projectTableData.setProject_status_id(observableWorkspaceProject.statusIDProperty().getValue());
         projectTableData.setLast_changed_timestamp(ZonedDateTime.now().toString());
+        projectTableData.setDue_on_date(newProjectData.getDueOnDate());
         int result = projectDao.update(projectTableData);
 
         projectStatusDao = DaoManager.createDao(connectionSource, ProjectStatusTable.class);
@@ -337,6 +341,7 @@ public class ProjectService extends AbstractService{
             observableWorkspaceProject.projectTitleProperty().setValue(newProjectData.getTitle());
             observableWorkspaceProject.projectDescriptionProperty().setValue(newProjectData.getDescription());
             observableWorkspaceProject.lastChangedTimestampProperty().setValue(newProjectData.getLastChangedOnTimeStamp().toString());
+            observableWorkspaceProject.dueOnDateProperty().set(newProjectData.getDueOnDate());
             observableWorkspaceProject.statusIDProperty().setValue(newProjectData.getStatusId());
             String localizedStatusText = resourceBundle.getString(statusKey.getProject_status_text_key());
             observableWorkspaceProject.statusTextProperty().setValue(localizedStatusText);
@@ -353,13 +358,13 @@ public class ProjectService extends AbstractService{
         setupDbConnection();
 
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
+        relatedItemDao = DaoManager.createDao(connectionSource, RelatedItemTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
 
-        resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
-        resourceItemTableDeleteBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, projectDomainObject.getProjectUUID());
-        List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
+        resourceItemTableDeleteBuilder = relatedItemDao.deleteBuilder();
+        resourceItemTableDeleteBuilder.where().eq(RelatedItemTable.FOREIGN_KEY_NAME, projectDomainObject.getProjectUUID());
+        List<PreparedDelete<RelatedItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<RelatedItemTable>>();
         resourceItemPreparedDeleteList.add(resourceItemTableDeleteBuilder.prepare());
 
         columnTableQueryBuilder = columnDao.queryBuilder();
@@ -386,8 +391,8 @@ public class ProjectService extends AbstractService{
         for(List<CardTable> cardSubList : allCards) {
             for(CardTable card : cardSubList) {
                 resourceItemTableDeleteBuilder.reset();
-                resourceItemTableDeleteBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, card.getID());
-                PreparedDelete<ResourceItemTable> preparedDelete = resourceItemTableDeleteBuilder.prepare();
+                resourceItemTableDeleteBuilder.where().eq(RelatedItemTable.FOREIGN_KEY_NAME, card.getID());
+                PreparedDelete<RelatedItemTable> preparedDelete = resourceItemTableDeleteBuilder.prepare();
                 resourceItemPreparedDeleteList.add(preparedDelete);
             }
         }
@@ -395,8 +400,8 @@ public class ProjectService extends AbstractService{
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                for(PreparedDelete<ResourceItemTable> resourceDelete: resourceItemPreparedDeleteList) {
-                    resourceItemDao.delete(resourceDelete);
+                for(PreparedDelete<RelatedItemTable> resourceDelete: resourceItemPreparedDeleteList) {
+                    relatedItemDao.delete(resourceDelete);
                 }
                 for(PreparedDelete<CardTable> cardDelete : cardPreparedDeleteList) {
                     cardDao.delete(cardDelete);
@@ -415,5 +420,62 @@ public class ProjectService extends AbstractService{
     public void copyProject(ObservableWorkspaceProject originalProject) throws SQLException, ParseException, IOException {
         // TODO Implement this
     }
+
+    public void openProjectInWorkspace(UUID projectUUID) throws SQLException, IOException {
+        setupDbConnection();
+        projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
+        ProjectTable projectTable = projectDao.queryForId(projectUUID);
+        List<ProjectStatusTable> projectStatuses = getProjectStatusTableAsList();
+        teardownDbConnection();
+
+        ObservableWorkspaceProject observableWorkspaceProject = getProjectHeader(projectTable, projectStatuses);
+        if (getWorkspaceProjectsList().size() == 0) {
+            //System.out.println("No projects opened yet in workspace");
+            getWorkspaceProjectsList().add(observableWorkspaceProject);
+        } else {
+            boolean projectCanBeFreshlyOpened = true;
+            for (ObservableWorkspaceProject innerObservableWorkspaceProject : getWorkspaceProjectsList()) {
+                if (observableWorkspaceProject.getProjectUUID().equals(innerObservableWorkspaceProject.getProjectUUID())) {
+                    projectCanBeFreshlyOpened = false;
+                }
+            }
+            if(projectCanBeFreshlyOpened) {
+                getWorkspaceProjectsList().add(observableWorkspaceProject);
+                System.out.println("Project opened");
+            } else {
+                // TODO Need some mechanism here to open the existing project in the view...
+                System.out.println("Project already open");
+            }
+        }
+    }
+
+    public void openCardParentProjectInWorkspace(UUID parentItemUUID) throws SQLException, IOException {
+        setupDbConnection();
+
+        cardDao = DaoManager.createDao(connectionSource, CardTable.class);
+        columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
+
+        CardTable cardtable = cardDao.queryForId(parentItemUUID);
+        ColumnTable columnTable = columnDao.queryForId(cardtable.getParent_column_uuid());
+        teardownDbConnection();
+
+        openProjectInWorkspace(columnTable.getParent_project_uuid());
+    }
+
+    private ObservableWorkspaceProject getProjectHeader(ProjectTable projectTableEntry, List<ProjectStatusTable> projectStatuses) {
+        int statusId = projectTableEntry.getProject_status_id();
+        String localisedStatusText = "";
+        for(ProjectStatusTable projectStatus : projectStatuses) {
+            if (projectStatus.getProject_status_id() == statusId) {
+                String statusTextKey = projectStatus.getProject_status_text_key();
+                localisedStatusText = resourceBundle.getString(statusTextKey);
+            }
+        }
+        ProjectDTO projectDTO = TableToDTO.mapProjectTableToProjectDTO(projectTableEntry);
+
+        ObservableWorkspaceProject observableWorkspaceProject = new ObservableWorkspaceProject(projectDTO, localisedStatusText);
+        return observableWorkspaceProject;
+    }
+
 
 }

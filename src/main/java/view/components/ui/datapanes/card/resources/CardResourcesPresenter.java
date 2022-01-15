@@ -1,12 +1,11 @@
 package view.components.ui.datapanes.card.resources;
 
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -18,26 +17,26 @@ public class CardResourcesPresenter implements Initializable {
 
     // JavaFX injected node variables
     @FXML
-    private TableView<ObservableResourceItem> resourceTableView;
+    private TableView<ObservableRelatedItem> resourceTableView;
     @FXML
-    private TableColumn<ObservableResourceItem, String> resourceTitleTableColumn;
+    private TableColumn<ObservableRelatedItem, String> resourceTitleTableColumn;
     @FXML
-    private TableColumn<ObservableResourceItem, String> resourceTypeTableColumn;
+    private TableColumn<ObservableRelatedItem, String> resourceTypeTableColumn;
     @FXML
-    private TableColumn<ObservableResourceItem, String> resourcePathTableColumn;
+    private TableColumn<ObservableRelatedItem, String> resourcePathTableColumn;
 
 
     // Other variables
-    private ObservableList<ObservableResourceItem> cardResourceItemsViewModel;
+    private ObservableList<ObservableRelatedItem> cardResourceItemsViewModel;
 
     // Constructors
 
     // Getters & Setters
-    public ObservableList<ObservableResourceItem> getCardResourceItemsViewModel() {
+    public ObservableList<ObservableRelatedItem> getCardResourceItemsViewModel() {
         return cardResourceItemsViewModel;
     }
 
-    public void setCardResourceItemsViewModel(ObservableList<ObservableResourceItem> cardResourceItemsViewModel) {
+    public void setCardResourceItemsViewModel(ObservableList<ObservableRelatedItem> cardResourceItemsViewModel) {
         this.cardResourceItemsViewModel = FXCollections.observableArrayList(cardResourceItemsViewModel);
         resourceTableView.setItems(this.cardResourceItemsViewModel);
     }
@@ -48,7 +47,7 @@ public class CardResourcesPresenter implements Initializable {
         cardResourceItemsViewModel = FXCollections.observableArrayList();
         resourceTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         resourceTitleTableColumn.setCellValueFactory(cellData -> (cellData.getValue().titleProperty()));
-        resourceTypeTableColumn.setCellValueFactory(cellData -> (cellData.getValue().typeTextProperty()));
+        //resourceTypeTableColumn.setCellValueFactory(cellData -> (cellData.getValue().typeTextProperty()));
         resourcePathTableColumn.setCellValueFactory(cellData -> (cellData.getValue().pathProperty()));
     }
 
@@ -61,7 +60,7 @@ public class CardResourcesPresenter implements Initializable {
 
     @FXML
     void deleteResource(ActionEvent event) {
-        ObservableResourceItem selectedItem = resourceTableView.getSelectionModel().getSelectedItem();
+        ObservableRelatedItem selectedItem = resourceTableView.getSelectionModel().getSelectedItem();
         if(selectedItem != null) {
             cardResourceItemsViewModel.remove(selectedItem);
         }

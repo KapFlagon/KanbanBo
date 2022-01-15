@@ -10,18 +10,18 @@ import persistence.dto.card.CardDTO;
 import domain.entities.card.ObservableCard;
 import domain.entities.column.ObservableColumn;
 import domain.entities.project.ObservableWorkspaceProject;
-import domain.entities.resourceitem.ObservableResourceItem;
+import domain.entities.relateditem.ObservableRelatedItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistence.mappers.DTOToTable;
-import persistence.mappers.ObservableObjectToDTO;
 import persistence.mappers.TableToDTO;
 import persistence.tables.card.CardTable;
 import persistence.tables.column.ColumnTable;
 import persistence.tables.project.ProjectStatusTable;
 import persistence.tables.project.ProjectTable;
-import persistence.tables.resourceitems.ResourceItemTable;
-import persistence.tables.resourceitems.ResourceItemTypeTable;
+import persistence.tables.relateditems.RelatedItemTable;
+import persistence.tables.relateditems.RelatedItemTypeTable;
+import view.sharedviewcomponents.editor.navigationlabel.NavigationLabelView;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -41,17 +41,17 @@ public class CardService extends AbstractService{
     private Dao<ProjectStatusTable, Integer> projectStatusDao;
     private Dao<ColumnTable, UUID> columnDao;
     private Dao<CardTable, UUID> cardDao;
-    private Dao<ResourceItemTable, UUID> resourceItemDao;
-    private Dao<ResourceItemTypeTable, Integer> resourceItemTypeDao;
+    private Dao<RelatedItemTable, UUID> resourceItemDao;
+    private Dao<RelatedItemTypeTable, Integer> resourceItemTypeDao;
 
     private QueryBuilder<ColumnTable, UUID> columnTableQueryBuilder;
     private QueryBuilder<CardTable, UUID> cardTableQueryBuilder;
-    private QueryBuilder<ResourceItemTable, UUID> resourceItemTableQueryBuilder;
-    private QueryBuilder<ResourceItemTypeTable, Integer> resourceItemTypeTableQueryBuilder;
+    private QueryBuilder<RelatedItemTable, UUID> resourceItemTableQueryBuilder;
+    private QueryBuilder<RelatedItemTypeTable, Integer> resourceItemTypeTableQueryBuilder;
 
     private DeleteBuilder<ColumnTable, UUID> columnTableDeleteBuilder;
     private DeleteBuilder<CardTable, UUID> cardTableDeleteBuilder;
-    private DeleteBuilder<ResourceItemTable, UUID> resourceItemTableDeleteBuilder;
+    private DeleteBuilder<RelatedItemTable, UUID> resourceItemTableDeleteBuilder;
 
 
 
@@ -120,7 +120,7 @@ public class CardService extends AbstractService{
     public void updateCard(CardDTO cardDTO, ObservableCard observableCard) throws SQLException, IOException {
         CardTable cardTable = DTOToTable.mapCardDTOToCardTable(cardDTO);
 
-        ArrayList<ResourceItemTable> newResourceData = new ArrayList<>();
+        ArrayList<RelatedItemTable> newResourceData = new ArrayList<>();
         /*for(ResourceItemDTO resourceItemDTO : cardDTO.getResourcesList()) {
             ResourceItemTable resourceItemTable = new ResourceItemTable();
             resourceItemTable.setResource_item_uuid(resourceItemDTO.getUuid());
@@ -132,23 +132,23 @@ public class CardService extends AbstractService{
 
         setupDbConnection();
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
+        resourceItemDao = DaoManager.createDao(connectionSource, RelatedItemTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
 
-        ArrayList<ResourceItemTable> resourcesForDeletion = new ArrayList<>();
+        ArrayList<RelatedItemTable> resourcesForDeletion = new ArrayList<>();
 
-        for(ObservableResourceItem observableResourceItem : observableCard.getResourceItems()) {
+        for(ObservableRelatedItem observableRelatedItem : observableCard.getResourceItems()) {
             boolean resourceMarkedForDeletion = true;
-            for(ResourceItemTable resourceItemTable : newResourceData) {
-                if(observableResourceItem.getResourceItemUUID().equals(resourceItemTable.getResource_item_uuid())) {
+            for(RelatedItemTable relatedItemTable : newResourceData) {
+                if(observableRelatedItem.getRelatedItemUUID().equals(relatedItemTable.getRelated_item_uuid())) {
                     resourceMarkedForDeletion = false;
                 }
             }
             if (resourceMarkedForDeletion) {
-                ResourceItemTable resourceItemTableForDeletion = new ResourceItemTable();
-                resourceItemTableForDeletion.setResource_item_uuid(observableResourceItem.getResourceItemUUID());
-                resourceItemTableForDeletion.setParent_item_uuid(observableResourceItem.getParentItemUUID());
+                RelatedItemTable relatedItemTableForDeletion = new RelatedItemTable();
+                relatedItemTableForDeletion.setRelated_item_uuid(observableRelatedItem.getRelatedItemUUID());
+                relatedItemTableForDeletion.setParent_item_uuid(observableRelatedItem.getParentItemUUID());
             }
         }
 
@@ -159,11 +159,11 @@ public class CardService extends AbstractService{
             @Override
             public Object call() throws Exception {
                 cardDao.update(cardTable);
-                for(ResourceItemTable resourceItemTable : newResourceData) {
-                    resourceItemDao.createOrUpdate(resourceItemTable);
+                for(RelatedItemTable relatedItemTable : newResourceData) {
+                    resourceItemDao.createOrUpdate(relatedItemTable);
                 }
-                for(ResourceItemTable resourceItemTable : resourcesForDeletion) {
-                    resourceItemDao.delete(resourceItemTable);
+                for(RelatedItemTable relatedItemTable : resourcesForDeletion) {
+                    resourceItemDao.delete(relatedItemTable);
                 }
                 projectDao.update(project);
                 return 1;
@@ -183,23 +183,23 @@ public class CardService extends AbstractService{
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         cardDao = DaoManager.createDao(connectionSource, CardTable.class);
-        resourceItemDao = DaoManager.createDao(connectionSource, ResourceItemTable.class);
+        resourceItemDao = DaoManager.createDao(connectionSource, RelatedItemTable.class);
         resourceItemTableDeleteBuilder = resourceItemDao.deleteBuilder();
         ColumnTable column = columnDao.queryForId(card.getParentColumnUUID());
         ProjectTable project = projectDao.queryForId(column.getParent_project_uuid());
         project.setLast_changed_timestamp(ZonedDateTime.now().toString());
 
-        List<PreparedDelete<ResourceItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<ResourceItemTable>>();
+        List<PreparedDelete<RelatedItemTable>> resourceItemPreparedDeleteList = new ArrayList<PreparedDelete<RelatedItemTable>>();
 
-        for (ObservableResourceItem observableResourceItem : card.getResourceItems()) {
+        for (ObservableRelatedItem observableRelatedItem : card.getResourceItems()) {
             resourceItemTableDeleteBuilder.reset();
-            resourceItemTableDeleteBuilder.where().eq(ResourceItemTable.FOREIGN_KEY_NAME, card.getCardUUID());
+            resourceItemTableDeleteBuilder.where().eq(RelatedItemTable.FOREIGN_KEY_NAME, card.getCardUUID());
             resourceItemPreparedDeleteList.add(resourceItemTableDeleteBuilder.prepare());
         }
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                for(PreparedDelete<ResourceItemTable> resourceItemPreparedDelete : resourceItemPreparedDeleteList) {
+                for(PreparedDelete<RelatedItemTable> resourceItemPreparedDelete : resourceItemPreparedDeleteList) {
                     resourceItemDao.delete(resourceItemPreparedDelete);
                 }
                 cardDao.deleteById(card.getCardUUID());
@@ -288,13 +288,14 @@ public class CardService extends AbstractService{
 
 
             CardTable movedCardTable = null;
-            for(CardTable cardTable : sourceCardTableList) {
-                if(cardTable.getCard_uuid().equals(UUID.fromString(newCardDataDTO.getUuid()))) {
-                    movedCardTable = cardTable;
+            for(ListIterator<CardTable> iterator = sourceCardTableList.listIterator(); iterator.hasNext();) {
+                CardTable innerCardTable = iterator.next();
+                if(innerCardTable.getCard_uuid().equals(UUID.fromString(newCardDataDTO.getUuid()))) {
+                    movedCardTable = innerCardTable;
                     movedCardTable.setCard_position(newCardDataDTO.getPosition());
                     movedCardTable.setParent_column_uuid(UUID.fromString(newCardDataDTO.getParentColumnUUID()));
-                    sourceCardTableList.remove(cardTable);
-                    targetCardTableList.add(cardTable);
+                    iterator.remove();
+                    targetCardTableList.add(innerCardTable);
                 }
             }
 
@@ -368,7 +369,16 @@ public class CardService extends AbstractService{
         columnDao = DaoManager.createDao(connectionSource, ColumnTable.class);
         projectDao = DaoManager.createDao(connectionSource, ProjectTable.class);
         final int[] result = new int[1];
-        ColumnTable parentColumnTable = columnDao.queryForId(cardTableList.get(0).getParent_column_uuid());
+        if(cardTableList.size() < 1 && observableCardObservableList.size() < 1) {
+            return;     // fail fast
+        }
+        UUID parentColumnUuid = null;
+        if (cardTableList.size() > 0) {
+            parentColumnUuid = cardTableList.get(0).getParent_column_uuid();
+        } else if (observableCardObservableList.size() > 0) {
+            parentColumnUuid = observableCardObservableList.get(0).getParentColumnUUID();
+        }
+        ColumnTable parentColumnTable = columnDao.queryForId(parentColumnUuid);
         ProjectTable parentProjectTable = projectDao.queryForId(parentColumnTable.getParent_project_uuid());
         TransactionManager.callInTransaction(connectionSource, new Callable<Object>() {
             @Override

@@ -8,8 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import persistence.services.KanbanBoDataService;
 import utils.StageUtils;
-import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTablePresenter;
-import view.screens.mainscreen.subviews.manage.subviews.projectstable.ProjectsTableView;
+import view.components.project.table.body.ProjectsTableBodyPresenter;
+import view.components.project.table.body.ProjectsTableBodyView;
 import view.sharedviewcomponents.popups.EditorDataMode;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogPresenter;
 import view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogView;
@@ -43,8 +43,8 @@ public class ManagePresenter implements Initializable {
     // Other variables
     @Inject
     KanbanBoDataService kanbanBoDataService;
-    private ProjectsTableView projectsTableView;
-    private ProjectsTablePresenter projectsTablePresenter;
+    private ProjectsTableBodyView projectsTableBodyView;
+    private ProjectsTableBodyPresenter projectsTableBodyPresenter;
     private ProjectDetailsWindowView projectDetailsWindowView;
     private ProjectDetailsWindowPresenter projectDetailsWindowPresenter;
 
@@ -58,9 +58,10 @@ public class ManagePresenter implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initButtonImages();
-        projectsTableView = new ProjectsTableView();
-        projectsTablePresenter = (ProjectsTablePresenter) projectsTableView.getPresenter();
-        mainContainer.setCenter(projectsTableView.getView());
+        projectsTableBodyView = new ProjectsTableBodyView();
+        projectsTableBodyPresenter = (ProjectsTableBodyPresenter) projectsTableBodyView.getPresenter();
+        projectsTableBodyPresenter.setProjectTableViewModel(kanbanBoDataService.getProjectsList());
+        mainContainer.setCenter(projectsTableBodyView.getView());
     }
 
     private void initProjectDetailsUI() {
@@ -91,40 +92,20 @@ public class ManagePresenter implements Initializable {
         // TODO maybe insert error handling here to show error to user.
     }
 
-    @FXML private void openSelectedProject() {
+    @FXML private void openSelectedProject() throws SQLException, IOException {
         System.out.println("Trying to open project in workspace");
-        ObservableWorkspaceProject selectedProjectRow = projectsTablePresenter.getSelectedRow();
+        ObservableWorkspaceProject selectedProjectRow = projectsTableBodyPresenter.getSelectedRow();
 
         if (selectedProjectRow != null) {
             System.out.println("Project selected is not null");
-            // TODO check if the project is already open in the tab list.
-            if (kanbanBoDataService.getWorkspaceProjectsList().size() == 0) {
-                System.out.println("No projects opened yet in workspace");
-                kanbanBoDataService.getWorkspaceProjectsList().add(selectedProjectRow);
-            } else {
-                boolean projectCanBeFreshlyOpened = true;
-                for (ObservableWorkspaceProject observableWorkspaceProject : kanbanBoDataService.getWorkspaceProjectsList()) {
-                    if (selectedProjectRow.getProjectUUID().equals(observableWorkspaceProject.getProjectUUID())) {
-                        projectCanBeFreshlyOpened = false;
-                    }
-                }
-                if(projectCanBeFreshlyOpened) {
-                    kanbanBoDataService.getWorkspaceProjectsList().add(selectedProjectRow);
-                    System.out.println("Project opened");
-                } else {
-                    // TODO Need some mechanism here to open the project...
-                    System.out.println("Project already open");
-
-                }
-            }
+            kanbanBoDataService.openProjectInWorkspace(selectedProjectRow.getProjectUUID());
         }
     }
 
 
     @FXML private void accessProjectDetails() throws SQLException, IOException {
-
         System.out.println("Trying to open project in manager for editing.");
-        ObservableWorkspaceProject observableWorkspaceProject = projectsTablePresenter.getSelectedRow();
+        ObservableWorkspaceProject observableWorkspaceProject = projectsTableBodyPresenter.getSelectedRow();
         if (observableWorkspaceProject != null) {
             System.out.println("Project selected is not null");
             initProjectDetailsUI();
@@ -135,8 +116,6 @@ public class ManagePresenter implements Initializable {
         } else {
             System.out.println("selected project was found to be null");
         }
-
-
     }
 
 
@@ -147,7 +126,7 @@ public class ManagePresenter implements Initializable {
 
     public void deleteSelectedProject() {
         System.out.println("Deleting a project");
-        ObservableWorkspaceProject selectedProjectRow = projectsTablePresenter.getSelectedRow();
+        ObservableWorkspaceProject selectedProjectRow = projectsTableBodyPresenter.getSelectedRow();
         if (selectedProjectRow != null) {
             System.out.println("Project selected is not null");
             ConfirmationDialogView confirmationDialogView = new ConfirmationDialogView();
