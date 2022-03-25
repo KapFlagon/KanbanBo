@@ -49,8 +49,8 @@ public class ProjectContainerPresenter implements Initializable {
     private Button selectFinalColumnBtn;
     @FXML
     private HBox columnHBox;
-    @FXML
-    private ScrollPane mainScrollPane;
+    //@FXML
+    //private ScrollPane mainScrollPane;
     @FXML
     private ScrollPane subScrollPane;
 
@@ -88,7 +88,7 @@ public class ProjectContainerPresenter implements Initializable {
         //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (new Hyperlink(cellData.getValue().getRelatedItemPath())));
         //relatedItemLinkTableColumn.setCellValueFactory(cellData -> (cellData.getValue().pathProperty()));
         forRemoval = new SimpleBooleanProperty(false);
-        ScrollPaneFixer.fixBlurryScrollPan(mainScrollPane);
+        //ScrollPaneFixer.fixBlurryScrollPan(mainScrollPane);
         ScrollPaneFixer.fixBlurryScrollPan(subScrollPane);
     }
 

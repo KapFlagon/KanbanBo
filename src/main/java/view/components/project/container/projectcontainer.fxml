@@ -9,55 +9,49 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="mainScrollPane" cacheShape="false" fitToWidth="true" maxHeight="1.7976931348623157E308" style="-fx-border-color: khaki;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.project.container.ProjectContainerPresenter">
-   <content>
-      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: khaki;">
-         <top>
-            <VBox BorderPane.alignment="CENTER">
+
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: khaki;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.project.container.ProjectContainerPresenter">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="3.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" spacing="3.0">
-                     <children>
-                        <Label fx:id="projectTitleHeaderLbl" layoutX="10.0" layoutY="10.0" text="%project.header" />
-                        <Label layoutX="10.0" layoutY="10.0" text=": " />
-                        <Label fx:id="projectTitleLbl" layoutX="10.0" layoutY="10.0" text="projectTitleLbl" />
-                        <Button fx:id="editProjectDetailsBtn" mnemonicParsing="false" onAction="#editProjectDetails" text="%button.project.details" />
-                        <Button fx:id="accessProjectRelatedItemsBtn" mnemonicParsing="false" onAction="#accessProjectRelatedItems" text="%label.related_items" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="3.0">
-                     <children>
-                        <Label text="%label.status" />
-                        <Label text=":" />
-                        <Label fx:id="projectStatusLbl" text="projectStatusLbl" />
-                     </children>
-                  </HBox>
+                  <Label fx:id="projectTitleHeaderLbl" layoutX="10.0" layoutY="10.0" text="%project.header" />
+                  <Label layoutX="10.0" layoutY="10.0" text=": " />
+                  <Label fx:id="projectTitleLbl" layoutX="10.0" layoutY="10.0" text="projectTitleLbl" />
+                  <Button fx:id="editProjectDetailsBtn" mnemonicParsing="false" onAction="#editProjectDetails" text="%button.project.details" />
+                  <Button fx:id="accessProjectRelatedItemsBtn" mnemonicParsing="false" onAction="#accessProjectRelatedItems" text="%label.related_items" />
                </children>
-            </VBox>
-         </top>
-         <center>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: khaki;">
+            </HBox>
+            <HBox spacing="3.0">
                <children>
-                  <ToolBar>
-                     <items>
-                      <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn" text="%button.project.create_column" />
-                        <Button fx:id="selectFinalColumnBtn" mnemonicParsing="false" onAction="#selectFinalColumn" text="%button.project.select_final_column" />
-                     </items>
-                  </ToolBar>
-                  <ScrollPane fx:id="subScrollPane" cacheShape="false" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="400.0">
-                     <content>
-                        <HBox fx:id="columnHBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" spacing="5.0">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </HBox>
-                     </content>
-                  </ScrollPane>
+                  <Label text="%label.status" />
+                  <Label text=":" />
+                  <Label fx:id="projectStatusLbl" text="projectStatusLbl" />
                </children>
-            </VBox>
-         </center>
-      </BorderPane>
-   </content>
-   <padding>
-      <Insets top="5.0" />
-   </padding>
-</ScrollPane>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: khaki;">
+         <children>
+            <ToolBar>
+               <items>
+                <Button fx:id="createColumnBtn" mnemonicParsing="false" onAction="#createColumn" text="%button.project.create_column" />
+                  <Button fx:id="selectFinalColumnBtn" mnemonicParsing="false" onAction="#selectFinalColumn" text="%button.project.select_final_column" />
+               </items>
+            </ToolBar>
+            <ScrollPane fx:id="subScrollPane" cacheShape="false" fitToWidth="true" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+               <content>
+                  <HBox fx:id="columnHBox" alignment="CENTER_LEFT" fillHeight="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </content>
+            </ScrollPane>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

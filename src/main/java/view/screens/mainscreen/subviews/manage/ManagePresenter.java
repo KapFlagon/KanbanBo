@@ -148,7 +148,8 @@ public class ManagePresenter implements Initializable {
             confirmationDialogPresenter.setCancelAction(actionEvent ->  {
                 StageUtils.closeSubStage();
             });
-            StageUtils.createChildStage("Confirm deletion", confirmationDialogView.getView(), confirmationDialogPresenter.getDisplayDimensions());
+            //StageUtils.createChildStage("Confirm deletion", confirmationDialogView.getView(), confirmationDialogPresenter.getDisplayDimensions());
+            StageUtils.createChildStage("Confirm deletion", confirmationDialogView.getView());
             StageUtils.showAndWaitOnSubStage();
         } else {
             System.out.println("selected project was found to be null");
@@ -156,7 +157,8 @@ public class ManagePresenter implements Initializable {
     }
 
     private void showProjectDetailsWindow() throws SQLException, IOException {
-        StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView(), projectDetailsWindowPresenter.getDisplayDimensions());
+        //StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView(), projectDetailsWindowPresenter.getDisplayDimensions());
+        StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
         StageUtils.closeSubStage();
     }

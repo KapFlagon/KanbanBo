@@ -68,7 +68,8 @@ public class StageUtils {
         StageUtils.createChildStage(title, childStageContent, dummyDimensions);
     }
 
-    public static void createChildStage(String title, Parent childStageContent, double[] displayDimensions) {
+
+    private static void createChildStage(String title, Parent childStageContent, double[] displayDimensions) {
         if (StageUtils.getSubStages() == null) {
             StageUtils.setSubStages(new ArrayDeque<Stage>());
         }

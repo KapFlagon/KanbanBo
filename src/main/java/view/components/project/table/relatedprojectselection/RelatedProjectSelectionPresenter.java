@@ -137,7 +137,8 @@ public class RelatedProjectSelectionPresenter implements Initializable {
 
 
     private void showProjectDetailsWindow() throws SQLException, IOException {
-        StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView(), projectDetailsWindowPresenter.getDisplayDimensions());
+        //StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView(), projectDetailsWindowPresenter.getDisplayDimensions());
+        StageUtils.createChildStage("Enter Project Details", projectDetailsWindowView.getView());
         StageUtils.showAndWaitOnSubStage();
         StageUtils.closeSubStage();
     }
