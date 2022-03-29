@@ -1,41 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="itemVBox" fillWidth="false" onMouseClicked="#itemSelected" onMouseEntered="#mouseEnter" onMouseExited="#mouseExit" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter">
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
+<AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@RecentFileEntry.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter">
    <children>
-      <Label fx:id="titleLabel" text="Title" wrapText="true">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </Label>
-      <Label fx:id="pathLabel" text="%label.path_status" wrapText="true">
-         <padding>
-            <Insets bottom="5.0" left="10.0" right="5.0" />
-         </padding>
-      </Label>
-      <HBox alignment="CENTER_LEFT" spacing="10.0">
-         <VBox.margin>
-            <Insets bottom="5.0" left="10.0" right="5.0" />
-         </VBox.margin>
+      <VBox fx:id="itemVBox" onMouseClicked="#itemSelected" prefWidth="300.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
-            <MenuButton mnemonicParsing="false" popupSide="RIGHT">
-              <items>
-                <MenuItem fx:id="openItemMenuItem" mnemonicParsing="false" onAction="#openItem" text="%button.open" />
-                <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="%button.remove" />
-                  <MenuItem fx:id="deleteFileMenuItem" mnemonicParsing="false" onAction="#deleteFile" text="%button.delete" />
-              </items>
-            </MenuButton>
+            <Label fx:id="titleLabel" text="Title" wrapText="true" />
+            <Label fx:id="pathLabel" text="%label.path_status" wrapText="true" />
+            <HBox>
+               <children>
+                  <Label fx:id="pathLabel1" text="Created on: " wrapText="true" />
+                  <Label text="Label" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label fx:id="pathLabel11" text="Last Changed: " wrapText="true" />
+                  <Label text="Label" />
+               </children>
+            </HBox>
             <Label fx:id="pathStatusLbl" text="%label.database.not_found" />
          </children>
-      </HBox>
+      </VBox>
+      <MenuButton mnemonicParsing="false" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <items>
+          <MenuItem fx:id="openItemMenuItem" mnemonicParsing="false" onAction="#openItem" text="%button.open" />
+          <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="%button.remove" />
+            <MenuItem fx:id="deleteFileMenuItem" mnemonicParsing="false" onAction="#deleteFile" text="%button.delete" />
+            <MenuItem fx:id="findMissingFileBtn" mnemonicParsing="false" onAction="#findFile" text="Find lost file" />
+        </items>
+      </MenuButton>
    </children>
-</VBox>
+   <styleClass>
+      <String fx:value="recent-item" />
+      <String fx:value="anchor-pane" />
+   </styleClass>
+</AnchorPane>

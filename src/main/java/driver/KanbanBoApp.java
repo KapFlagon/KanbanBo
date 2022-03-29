@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import userpreferences.UserPreferences;
 import utils.StageUtils;
 import utils.database.DatabaseUtils;
@@ -32,6 +33,8 @@ public class KanbanBoApp extends Application {
         Platform.setImplicitExit(false);
         StageUtils.setMainStage(primaryStage);
         setStageSizes(primaryStage);
+        //Window window = primaryStage.getOwner();
+        //window.sizeToScene();
         determineScene();
     }
 

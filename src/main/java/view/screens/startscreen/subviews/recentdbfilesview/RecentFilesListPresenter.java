@@ -124,7 +124,7 @@ public class RecentFilesListPresenter implements Initializable {
                                     // https://stackoverflow.com/questions/38760878/javafx-endless-exception-in-thread-javafx-application-thread-java-lang-nullp
                                     Platform.runLater(() -> recentFilesVBox.getChildren().remove(view.getView()));
                                     recentFilesVBox.getChildren().add(noDatabasesFileLbl);
-                                    // TODO fix bug where deleting files does not properly remove them from the view on reload.
+                                    // BUG fix bug where deleting files does not properly remove them from the view on reload.
                                 }
                             }
                         }

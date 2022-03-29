@@ -4,6 +4,7 @@ import com.airhacks.afterburner.views.FXMLView;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.ArrayDeque;
@@ -38,11 +39,17 @@ public class StageUtils {
 
     // Other methods
     public static void changeMainScene(String newTitle, FXMLView newView) {
-        generateNewStage();
+        //generateNewStage();
         Scene newViewScene = new Scene(newView.getView());
-        StageUtils.getMainStage().setTitle(newTitle);
-        StageUtils.getMainStage().setScene(newViewScene);
-        StageUtils.getMainStage().show();
+        newViewScene.setFill(Color.BLACK);
+        getMainStage().hide();
+        getMainStage().setTitle(newTitle);
+        getMainStage().setScene(newViewScene);
+        getMainStage().setMinHeight(500);
+        getMainStage().setHeight(500);
+        getMainStage().setMinWidth(700);
+        getMainStage().setWidth(700);
+        getMainStage().show();
     }
 
     private static void generateNewStage() {

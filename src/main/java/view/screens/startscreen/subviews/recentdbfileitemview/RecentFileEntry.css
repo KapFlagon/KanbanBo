@@ -1,20 +1,21 @@
-.recent-item {
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
+.anchor-pane {
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
     -fx-border-color: black;
 }
-
-.recent-item-highlight {
-    -fx-background-color: #99CCFF;
+.recent-item {
+    -fx-background-color: -secondary-colour;
 }
 
-.recent-item-missing-highlight {
+.recent-item:hover {
+    -fx-background-color: -secondary-colour-light;
+}
+
+
+.recent-item-missing:hover {
     -fx-background-color: #F5C869;
 }
 
-.recent-item-missing .label{
-    -fx-text-fill: #383838;
-}
 .recent-item-missing {
     -fx-background-color: #C9C9C9;
 }

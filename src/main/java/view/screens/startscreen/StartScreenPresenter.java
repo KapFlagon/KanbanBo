@@ -9,22 +9,22 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 import userpreferences.UserPreferences;
 import utils.database.DatabaseUtils;
 import utils.FileChooserUtils;
 import utils.FileCreationUtils;
 import utils.StageUtils;
+import view.animation.ScrimFadeTransitions;
 import view.screens.mainscreen.MainScreenView;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListView;
-import view.sharedviewcomponents.popups.ScrimRectangle;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressView;
 
@@ -40,9 +40,6 @@ import java.util.prefs.BackingStoreException;
 public class StartScreenPresenter implements Initializable {
 
     // FXML injected variables
-    // TODO Add option to delete a db from the recent items list also. (make sure to give confirmation prompt).
-    @FXML
-    private StackPane baseStackPane;
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -51,21 +48,9 @@ public class StartScreenPresenter implements Initializable {
     private Button browseForDbButton;
     @FXML
     private CheckBox autoLoadCheckBox;
-    @FXML
-    private MenuItem newDbMenuItem;
-    @FXML
-    private MenuItem browseForDbMenuItem;
-    @FXML
-    private CheckMenuItem autoLoadCheckMenuItem;
-    @FXML
-    private MenuItem exitMenuItem;
-    @FXML
-    private MenuItem aboutMenuItem;
-    @FXML
-    private MenuItem sourceCodeRepoMenuItem;
 
     // Other variables
-    private ScrimRectangle scrimRectangle;
+    private ScrimFadeTransitions scrimFadeTransitions;
 
 
 
@@ -97,46 +82,6 @@ public class StartScreenPresenter implements Initializable {
         this.browseForDbButton = browseForDbButton;
     }
 
-    public MenuItem getNewDbMenuItem() {
-        return newDbMenuItem;
-    }
-
-    public void setNewDbMenuItem(MenuItem newDbMenuItem) {
-        this.newDbMenuItem = newDbMenuItem;
-    }
-
-    public MenuItem getBrowseForDbMenuItem() {
-        return browseForDbMenuItem;
-    }
-
-    public void setBrowseForDbMenuItem(MenuItem browseForDbMenuItem) {
-        this.browseForDbMenuItem = browseForDbMenuItem;
-    }
-
-    public MenuItem getExitMenuItem() {
-        return exitMenuItem;
-    }
-
-    public void setExitMenuItem(MenuItem exitMenuItem) {
-        this.exitMenuItem = exitMenuItem;
-    }
-
-    public MenuItem getAboutMenuItem() {
-        return aboutMenuItem;
-    }
-
-    public void setAboutMenuItem(MenuItem aboutMenuItem) {
-        this.aboutMenuItem = aboutMenuItem;
-    }
-
-    public MenuItem getSourceCodeRepoMenuItem() {
-        return sourceCodeRepoMenuItem;
-    }
-
-    public void setSourceCodeRepoMenuItem(MenuItem sourceCodeRepoMenuItem) {
-        this.sourceCodeRepoMenuItem = sourceCodeRepoMenuItem;
-    }
-
 
     // Initialisation methods
     @Override
@@ -145,7 +90,7 @@ public class StartScreenPresenter implements Initializable {
         initButtonImages();
         System.out.println("Start screen loaded");
         autoLoadCheckBox.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
-        autoLoadCheckMenuItem.setSelected(UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically());
+
         RecentFilesListView rflv = new RecentFilesListView();
         RecentFilesListPresenter rflp = (RecentFilesListPresenter) rflv.getPresenter();
         rflp.itemBeingOpenedProperty().addListener(new ChangeListener<Boolean>() {
@@ -183,9 +128,9 @@ public class StartScreenPresenter implements Initializable {
         });
         rflp.setRecentFilePathList(UserPreferences.getSingletonInstance().getRecentFilePaths());
         borderPane.setCenter(rflv.getView());
-        BorderPane.setMargin(rflv.getView(), new Insets(5,5,5,5));
-        scrimRectangle = new ScrimRectangle(baseStackPane);
-        baseStackPane.getChildren().add(scrimRectangle);
+        //BorderPane.setMargin(rflv.getView(), new Insets(5,5,5,5));
+
+        scrimFadeTransitions = new ScrimFadeTransitions(Duration.millis(350), borderPane, 0.4, 1.0);
     }
 
     private void initButtonImages() {
@@ -201,7 +146,7 @@ public class StartScreenPresenter implements Initializable {
     private void createDbFile() throws IOException, SQLException, BackingStoreException {
         System.out.println("creating");
 
-        scrimRectangle.showScrim();
+        scrimFadeTransitions.fadeOut();
         File newFile = FileChooserUtils.createFilePopup();
         if(newFile != null) {
             createFile(newFile);
@@ -210,7 +155,7 @@ public class StartScreenPresenter implements Initializable {
             // Accounting for scenario where user cancels file creation.
             System.out.println("File creation cancelled");
         }
-        scrimRectangle.hideScrim();
+        scrimFadeTransitions.fadeIn();
         // TODO Insert some kind of logging here.
     }
 
@@ -225,7 +170,7 @@ public class StartScreenPresenter implements Initializable {
     @FXML
     private void browseForDbFile() throws BackingStoreException {
         System.out.println("browsing for database file");
-        scrimRectangle.showScrim();
+        scrimFadeTransitions.fadeOut();
         File selectedFile = FileChooserUtils.openFilePopup();
         if (selectedFile != null && isValidDbFile(selectedFile.toString())) {
             // Accounting for scenario where user cancels opening file.
@@ -233,7 +178,7 @@ public class StartScreenPresenter implements Initializable {
         } else {
             System.out.println("File opening cancelled");
         }
-        scrimRectangle.hideScrim();
+        scrimFadeTransitions.fadeIn();
         // TODO Insert some kind of logging for selected file here.
     }
 
@@ -272,15 +217,8 @@ public class StartScreenPresenter implements Initializable {
     }
 
     @FXML
-    private void autoLoadCheckMenuItemClicked() throws BackingStoreException {
-        updateAutoLoad(autoLoadCheckMenuItem.isSelected());
-        autoLoadCheckBox.setSelected(autoLoadCheckMenuItem.isSelected());
-    }
-
-    @FXML
     private void autoLoadCheckBoxClicked() throws BackingStoreException {
         updateAutoLoad(autoLoadCheckBox.isSelected());
-        autoLoadCheckMenuItem.setSelected(autoLoadCheckBox.isSelected());
     }
 
     @FXML

@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.io.File;
@@ -15,6 +16,8 @@ import java.util.prefs.BackingStoreException;
 public class RecentFileEntryPresenter implements Initializable {
 
     // JavaFX injected node variables
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private VBox itemVBox;
     @FXML
@@ -29,6 +32,8 @@ public class RecentFileEntryPresenter implements Initializable {
     private MenuItem removeItemMenuItem;
     @FXML
     private MenuItem deleteFileMenuItem;
+    @FXML
+    private MenuItem findMissingFileBtn;
 
     // Other variables
     private Path itemPath;
@@ -54,6 +59,8 @@ public class RecentFileEntryPresenter implements Initializable {
             openItemMenuItem.setDisable(false);
             deleteFileMenuItem.setVisible(true);
             deleteFileMenuItem.setDisable(false);
+            findMissingFileBtn.setVisible(false);
+            findMissingFileBtn.setDisable(true);
         } else {
             pathStatusLbl.setText("File does not exist!");
             pathStatusLbl.setVisible(true);
@@ -62,13 +69,16 @@ public class RecentFileEntryPresenter implements Initializable {
             openItemMenuItem.setDisable(true);
             deleteFileMenuItem.setVisible(false);
             deleteFileMenuItem.setDisable(true);
-            this.itemVBox.getStyleClass().add("recent-item-missing");
+            findMissingFileBtn.setVisible(true);
+            findMissingFileBtn.setDisable(false);
+            this.anchorPane.getStyleClass().remove("recent-item");
+            this.anchorPane.getStyleClass().add("recent-item-missing");
         }
         this.pathLabel.setText(itemPath.toString());
         this.pathLabel.setTooltip((new Tooltip(itemPath.toString())));
         this.titleLabel.setText(getFileNameWithoutExtension());
         this.titleLabel.setTooltip(new Tooltip(getFileNameWithoutExtension()));
-        this.itemVBox.getStyleClass().add("recent-item");
+        //this.itemVBox.getStyleClass().add("recent-item");
     }
 
     public boolean isBeingDeleted() {
@@ -142,24 +152,6 @@ public class RecentFileEntryPresenter implements Initializable {
         });
     }
 
-    @FXML private void mouseEnter() {
-        if(fileExists) {
-            itemVBox.getStyleClass().add("recent-item-highlight");
-        } else {
-            itemVBox.getStyleClass().remove("recent-item-missing");
-            itemVBox.getStyleClass().add("recent-item-missing-highlight");
-        }
-    }
-
-    @FXML private void mouseExit() {
-
-        if(fileExists) {
-            itemVBox.getStyleClass().remove("recent-item-highlight");
-        } else {
-            itemVBox.getStyleClass().remove("recent-item-missing-highlight");
-            itemVBox.getStyleClass().add("recent-item-missing");
-        }
-    }
 
     // Other methods
     private void validatePathAsFile(){
@@ -175,6 +167,10 @@ public class RecentFileEntryPresenter implements Initializable {
         String fileNamePath = itemPath.getFileName().toString();
         int charIndex = fileNamePath.indexOf('.');
         return fileNamePath.substring(0, charIndex);
+    }
+
+    @FXML private void findFile() {
+
     }
 
 }

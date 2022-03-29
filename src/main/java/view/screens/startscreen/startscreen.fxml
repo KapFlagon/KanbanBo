@@ -3,79 +3,56 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="baseStackPane" minHeight="300.0" minWidth="500.0" onDragDropped="#onDragDropped" onDragOver="#onDragoOver" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
-   <children>
-      <BorderPane id="thing" fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="500.0" prefHeight="300.0" prefWidth="500.0">
-         <left>
-            <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" style="-fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </BorderPane.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
+
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="500.0" prefHeight="300.0" prefWidth="500.0" stylesheets="@startscreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
+   <left>
+      <AnchorPane styleClass="primary-nav-bar" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="3.0" styleClass="primary-nav-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <Label text="%label.kanbanbo_file_options" />
-                  <Button fx:id="newDbButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#createDbFile" text="%button.create">
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="primary-nav-bar" text="%label.kanbanbo_file_options" />
+                  <Button fx:id="newDbButton" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#createDbFile" text="%button.create">
                      <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </Button>
-                  <Button fx:id="browseForDbButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#browseForDbFile" text="%button.open">
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets />
                      </VBox.margin>
                   </Button>
-                  <CheckBox fx:id="autoLoadCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#autoLoadCheckBoxClicked" text="%checkbox.auto_load_database" wrapText="true">
+                  <Button fx:id="browseForDbButton" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#browseForDbFile" text="%button.open">
                      <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets />
+                     </VBox.margin>
+                  </Button>
+                  <CheckBox fx:id="autoLoadCheckBox" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#autoLoadCheckBoxClicked" text="%checkbox.auto_load_database" wrapText="true">
+                     <VBox.margin>
+                        <Insets />
                      </VBox.margin>
                      <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets bottom="5.0" left="8.0" top="5.0" />
                      </padding>
                   </CheckBox>
                </children>
             </VBox>
-         </left>
-         <opaqueInsets>
-            <Insets right="5.0" />
-         </opaqueInsets>
-         <top>
-            <MenuBar BorderPane.alignment="CENTER">
-              <menus>
-                <Menu mnemonicParsing="false" text="%menu.header.file">
-                  <items>
-                        <MenuItem fx:id="newDbMenuItem" mnemonicParsing="false" onAction="#createDbFile" text="%menu.file.sub.new_database" />
-                        <MenuItem fx:id="browseForDbMenuItem" mnemonicParsing="false" onAction="#browseForDbFile" text="%menu.file.sub.browse_database_files" />
-                    <MenuItem mnemonicParsing="false" text="%menu.file.sub.preferences" />
-                        <CheckMenuItem fx:id="autoLoadCheckMenuItem" mnemonicParsing="false" onAction="#autoLoadCheckMenuItemClicked" text="%checkbox.auto_load_database" />
-                        <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#exitApplication" text="%menu.file.sub.exit" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="%menu.header.help">
-                  <items>
-                    <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#displayApplicationInfo" text="%menu.help.sub.about" />
-                        <MenuItem fx:id="sourceCodeRepoMenuItem" mnemonicParsing="false" onAction="#openOnlineSourceCodeRepo" text="%menu.help.sub.source" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </top>
-      </BorderPane>
-   </children>
-</StackPane>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0" styleClass="primary-nav-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Button alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="About" />
+                  <Button alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Accessibility" />
+                  <Button alignment="TOP_LEFT" layoutX="10.0" layoutY="36.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Options" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </AnchorPane>
+   </left>
+   <opaqueInsets>
+      <Insets right="5.0" />
+   </opaqueInsets>
+</BorderPane>
