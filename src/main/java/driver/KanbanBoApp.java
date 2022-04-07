@@ -2,24 +2,19 @@ package driver;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import userpreferences.UserPreferences;
-import utils.StageUtils;
-import utils.database.DatabaseUtils;
-import view.screens.mainscreen.MainScreenView;
-import view.screens.startscreen.StartScreenView;
+import view.mainstage.MainStagePresenter;
+import view.mainstage.MainStageView;
 
-import java.io.File;
-import java.nio.file.Path;
+import java.awt.*;
+import java.util.Arrays;
 
 
 public class KanbanBoApp extends Application {
 
     private int appMinHeight = 400;
     private int appMinWidth = 600;
-    private Scene currentScene;
 
     // TODO See this strategy for Afterburner bundles and internationalization: https://stackoverflow.com/questions/38082417/set-and-change-resource-bundle-with-afterburner-fx
     // Perform internationalization in a single file.
@@ -31,11 +26,14 @@ public class KanbanBoApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Platform.setImplicitExit(false);
-        StageUtils.setMainStage(primaryStage);
-        setStageSizes(primaryStage);
-        //Window window = primaryStage.getOwner();
-        //window.sizeToScene();
-        determineScene();
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
+        MainStageView mainStageView = new MainStageView();
+        MainStagePresenter mainStagePresenter = (MainStagePresenter) mainStageView.getPresenter();
+        mainStagePresenter.setMainStage(primaryStage);
+        mainStagePresenter.setStageSizes(appMinWidth, appMinHeight);
     }
 
     public void setStageSizes(Stage primaryStage) {
@@ -43,29 +41,6 @@ public class KanbanBoApp extends Application {
         primaryStage.setMinWidth(appMinWidth);
         primaryStage.setHeight(appMinHeight);
         primaryStage.setMinHeight(appMinHeight);
-    }
-
-    public void determineScene () {
-        boolean autoLoadOn = UserPreferences.getSingletonInstance().isOpeningMostRecentAutomatically();
-        Path mostRecentPath = UserPreferences.getSingletonInstance().getMostRecentPath();
-        if (mostRecentPath != null) {
-            File mostRecentFile = mostRecentPath.toFile();
-            if(autoLoadOn && mostRecentFile.exists()) {
-                // Get latest path from preferences, check if it is valid, update to main screen
-                DatabaseUtils.setActiveDatabaseFile(mostRecentFile);
-                MainScreenView mainScreenView = new MainScreenView();
-                //StageUtils.changeMainScene("KanbanBo - Project manager", view);
-                StageUtils.changeMainScene("KanbanBo - Project manager", mainScreenView);
-                //currentScene = new Scene((mainScreenView.getView()));
-            } else {
-                StartScreenView startScreenView = new StartScreenView();
-                StageUtils.changeMainScene("KanbanBo - Database file selection", startScreenView);
-            }
-        } else {
-            StartScreenView startScreenView = new StartScreenView();
-            StageUtils.changeMainScene("KanbanBo - Database file selection", startScreenView);
-            //currentScene = new Scene(startScreenView.getView());
-        }
     }
 
 }

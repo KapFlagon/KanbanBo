@@ -2,6 +2,8 @@ package view.screens.mainscreen;
 
 import domain.entities.project.ObservableWorkspaceProject;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -50,9 +52,14 @@ public class MainScreenPresenter implements Initializable {
     private ManagePresenter managePresenter;
     private WorkspaceView workspaceView;
     private WorkspacePresenter workspacePresenter;
+    private SimpleBooleanProperty closingFile;
 
     // Constructors
 
+    // Getters & Setters
+    public SimpleBooleanProperty closingFileProperty() {
+        return closingFile;
+    }
 
     // Initialisation methods
     @Override
@@ -73,12 +80,15 @@ public class MainScreenPresenter implements Initializable {
                 }
             }
         });
+        closingFile = new SimpleBooleanProperty(false);
     }
 
 
     // UI events
     @FXML private void closeDb() {
-        StageUtils.changeMainScene("KanbanBo - Database file selection", new StartScreenView());
+        //StageUtils.changeMainScene("KanbanBo - Database file selection", new StartScreenView());
+        closingFile.set(true);
+        closingFile.set(false);
     }
 
     @FXML private void exitProgram() {

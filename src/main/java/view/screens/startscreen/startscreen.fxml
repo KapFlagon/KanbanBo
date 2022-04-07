@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="500.0" prefHeight="300.0" prefWidth="500.0" stylesheets="@startscreen.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.StartScreenPresenter">
    <left>
       <AnchorPane styleClass="primary-nav-bar" BorderPane.alignment="CENTER">
@@ -37,6 +36,8 @@
                         <Insets bottom="5.0" left="8.0" top="5.0" />
                      </padding>
                   </CheckBox>
+                  <Button mnemonicParsing="false" text="%my_outer_test_button" />
+                  <Button layoutX="10.0" layoutY="119.0" mnemonicParsing="false" text="%my_inner_test_button" />
                </children>
             </VBox>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0" styleClass="primary-nav-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
