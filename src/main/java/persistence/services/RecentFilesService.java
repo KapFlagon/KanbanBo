@@ -15,7 +15,7 @@ public class RecentFilesService {
     // Variables
     @Inject
     private RecentFilesRepository recentFilesRepository;
-    private final ObservableList<Path> recentFilePaths;
+    private ObservableList<Path> recentFilePaths;
 
 
     // Constructors
@@ -25,8 +25,8 @@ public class RecentFilesService {
 
 
     // Getters and Setters
-    public List<Path> getRecentFilePaths() {
-        return recentFilesRepository.loadRecentFilePaths();
+    public ObservableList<Path> getRecentFilePaths() {
+        return this.recentFilePaths = FXCollections.observableArrayList(recentFilesRepository.loadRecentFilePaths());
     }
 
 

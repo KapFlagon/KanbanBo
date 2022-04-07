@@ -2,6 +2,7 @@ package persistence.repositories;
 
 import preferences.KanbanBoPreferences;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -11,7 +12,7 @@ public class UserPreferencesRepository {
 
     // Variables
     @Inject
-    private KanbanBoPreferences kanbanBoPreferences;
+    KanbanBoPreferences kanbanBoPreferences;
     private Preferences userPreferences;
     private final String KEY_openingMostRecentFileAutomatically = "auto_opening_most_recent_file";
     private boolean autoOpeningMostRecentFile;
@@ -19,9 +20,15 @@ public class UserPreferencesRepository {
 
 
     // Constructors
+    //public UserPreferencesRepository(KanbanBoPreferences kanbanBoPreferences) {
     public UserPreferencesRepository() {
-        userPreferences = kanbanBoPreferences.kanbanboPreferencesChildNode("user_preferences");
+        //this.kanbanBoPreferences = kanbanBoPreferences;
         autoOpeningMostRecentFile = false;
+    }
+
+    @PostConstruct
+    private void postConstructTasks() {
+        userPreferences = kanbanBoPreferences.kanbanboPreferencesChildNode("user_preferences");
         loadAllPreferences();
     }
 

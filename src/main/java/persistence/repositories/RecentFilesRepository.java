@@ -3,6 +3,7 @@ package persistence.repositories;
 import javafx.collections.FXCollections;
 import preferences.KanbanBoPreferences;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.nio.file.Path;
 import java.util.List;
@@ -14,14 +15,19 @@ public class RecentFilesRepository {
 
     // Variables
     @Inject
-    private KanbanBoPreferences kanbanBoPreferences;
+    KanbanBoPreferences kanbanBoPreferences;
     private Preferences recentItemsPreferences;
     public static final int MAX_SAVED_PATHS = 5;
     private final String KEY_recentFilePaths = "recent_item_";
 
 
     // Constructors
-    private RecentFilesRepository() {
+    public RecentFilesRepository() {
+
+    }
+
+    @PostConstruct
+    private void postConstructTasks() {
         recentItemsPreferences = kanbanBoPreferences.kanbanboPreferencesChildNode("kanbanbo");
     }
 
