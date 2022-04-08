@@ -8,7 +8,7 @@
    <content>
       <VBox fx:id="recentFilesVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" styleClass="hbox">
          <children>
-            <Label fx:id="noDatabasesFileLbl" text="%label.database.no_databases" />
+            <Label fx:id="noDatabasesFileLbl" text="%label.no_recent_files" />
          </children>
       </VBox>
    </content>

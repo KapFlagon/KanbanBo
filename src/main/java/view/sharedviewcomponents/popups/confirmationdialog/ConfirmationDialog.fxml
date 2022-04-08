@@ -6,15 +6,15 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="contentBorderPane" minHeight="100" minWidth="200" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogPresenter">
+<BorderPane fx:id="contentBorderPane" minHeight="100" minWidth="200" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedviewcomponents.popups.confirmationdialog.ConfirmationDialogPresenter">
    <bottom>
       <HBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <children>
-            <Button fx:id="confirmBtn" mnemonicParsing="false" text="Confirm" />
-            <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="confirmBtn" mnemonicParsing="false" text="%button.confirm" />
+            <Button fx:id="cancelBtn" mnemonicParsing="false" text="%button.cancel" />
          </children>
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -22,7 +22,7 @@
       </HBox>
    </bottom>
    <center>
-      <Label fx:id="promptTextLbl" text="Prompt Text" BorderPane.alignment="CENTER">
+      <Label fx:id="promptTextLbl" text="promptTextLbl" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin>

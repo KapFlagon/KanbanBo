@@ -1,8 +1,7 @@
 package view.screens.mainscreen.subviews.workspace;
 
 import com.airhacks.afterburner.views.FXMLView;
-import framework.CustomFXMLView;
 
-public class WorkspaceView extends CustomFXMLView {
+public class WorkspaceView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

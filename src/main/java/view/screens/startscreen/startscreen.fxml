@@ -36,15 +36,12 @@
                         <Insets bottom="5.0" left="8.0" top="5.0" />
                      </padding>
                   </CheckBox>
-                  <Button mnemonicParsing="false" text="%my_outer_test_button" />
-                  <Button layoutX="10.0" layoutY="119.0" mnemonicParsing="false" text="%my_inner_test_button" />
                </children>
             </VBox>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0" styleClass="primary-nav-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <Button alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="About" />
-                  <Button alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Accessibility" />
-                  <Button alignment="TOP_LEFT" layoutX="10.0" layoutY="36.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Options" />
+                  <Button alignment="TOP_LEFT" layoutX="10.0" layoutY="36.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%button.options" />
+                  <Button alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%button.about" />
                </children>
             </VBox>
          </children>

@@ -1,7 +1,7 @@
 package view.sharedviewcomponents.popups.carddetails;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public class CardDetailsWindowView extends CustomFXMLView {
+public class CardDetailsWindowView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

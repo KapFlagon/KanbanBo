@@ -34,7 +34,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="%menu.header.file">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#closeDb" text="%menu.file.sub.close_database" />
+                        <MenuItem mnemonicParsing="false" onAction="#closeDb" text="%menu.file.sub.close_file" />
                         <MenuItem mnemonicParsing="false" onAction="#exitProgram" text="%menu.file.sub.exit" />
                      </items>
                   </Menu>

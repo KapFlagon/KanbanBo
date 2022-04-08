@@ -1,7 +1,7 @@
 package view.sharedviewcomponents.creationprocedures.relateditemdetails;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public class RelatedItemDetailsView extends CustomFXMLView {
+public class RelatedItemDetailsView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

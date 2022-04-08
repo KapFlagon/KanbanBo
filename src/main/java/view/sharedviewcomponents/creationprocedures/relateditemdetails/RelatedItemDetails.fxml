@@ -17,41 +17,41 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <children>
-            <Label text="Related Item details" VBox.vgrow="ALWAYS" />
+            <Label text="%label.related_item.prompt" VBox.vgrow="ALWAYS" />
             <VBox>
                <children>
-                  <Label text="Title:" />
+                  <Label text="%label.title" />
                   <TextField fx:id="titleTextField" />
-                  <Label fx:id="titleErrorLbl" text="Error" />
+                  <Label fx:id="titleErrorLbl" text="%label.title.error" />
                </children>
             </VBox>
             <VBox>
                <children>
-                  <Label text="Type:" />
+                  <Label text="%label.type" />
                   <ChoiceBox fx:id="typeChoiceBox" />
-                  <Label fx:id="typeErrorLbl" text="Error" />
+                  <Label fx:id="typeErrorLbl" text="%label.type.error" />
                </children>
             </VBox>
-            <Label layoutX="15.0" layoutY="130.0" text="Path:" />
+            <Label layoutX="15.0" layoutY="130.0" text="%label.path" />
             <VBox>
                <children>
                   <HBox spacing="5.0">
                      <children>
-                        <Button fx:id="inputPathBtn" mnemonicParsing="false" onAction="#inputPath" text="Input Path" />
+                        <Button fx:id="inputPathBtn" mnemonicParsing="false" onAction="#inputPath" text="%button.path_input" />
                         <TextField fx:id="pathTextField" editable="false" prefWidth="317.0" />
                      </children>
                   </HBox>
-                  <Label fx:id="pathErrorLbl" text="Error" />
+                  <Label fx:id="pathErrorLbl" text="%label.path.error" />
                </children>
             </VBox>
-            <Label text="Created on: " />
+            <Label text="%label.created_on" />
             <TextField fx:id="createdOnTextField" editable="false" />
-            <Label text="Last Changed on: " />
+            <Label text="%label.last_changed_on" />
             <TextField fx:id="lastChangedTextField" editable="false" />
             <ButtonBar buttonOrder="" prefHeight="40.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <buttons>
-                  <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#save" text="Save" />
-                  <Button fx:id="cancelBtn" cancelButton="true" layoutX="339.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel" text="Cancel/Close" />
+                  <Button fx:id="saveBtn" defaultButton="true" mnemonicParsing="false" onAction="#save" text="%button.save" />
+                  <Button fx:id="cancelBtn" cancelButton="true" layoutX="339.0" layoutY="17.0" mnemonicParsing="false" onAction="#cancel" text="%button.cancel" />
                </buttons>
             </ButtonBar>
          </children>

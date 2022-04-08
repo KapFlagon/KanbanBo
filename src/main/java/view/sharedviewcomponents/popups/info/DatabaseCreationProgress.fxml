@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter">
    <children>
-      <Label text="The database structure is being generated...">
+      <Label text="%label.file_generation.start">
          <VBox.margin>
             <Insets />
          </VBox.margin>

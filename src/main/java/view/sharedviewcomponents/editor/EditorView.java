@@ -1,7 +1,7 @@
 package view.sharedviewcomponents.editor;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public abstract class EditorView extends CustomFXMLView {
+public abstract class EditorView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

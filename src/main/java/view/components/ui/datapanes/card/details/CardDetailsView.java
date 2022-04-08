@@ -1,8 +1,7 @@
 package view.components.ui.datapanes.card.details;
 
 import com.airhacks.afterburner.views.FXMLView;
-import framework.CustomFXMLView;
 
-public class CardDetailsView extends CustomFXMLView {
+public class CardDetailsView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

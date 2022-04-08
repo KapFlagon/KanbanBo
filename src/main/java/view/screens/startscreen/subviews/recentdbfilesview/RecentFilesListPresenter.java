@@ -2,8 +2,6 @@ package view.screens.startscreen.subviews.recentdbfilesview;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import userpreferences.UserPreferences;
 import utils.view.ScrollPaneFixer;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryView;
@@ -40,9 +37,9 @@ public class RecentFilesListPresenter implements Initializable {
     // Constructors
 
     // Getters & Setters
-    public List<Path> getRecentFilePathList() {
+    /*public List<Path> getRecentFilePathList() {
         return recentFilePathList;
-    }
+    }*/
     public void setRecentFilePathList(ObservableList<Path> recentFilePathList) {
         this.recentFilePathList = recentFilePathList;
         createFileEntriesInView();
@@ -87,6 +84,7 @@ public class RecentFilesListPresenter implements Initializable {
 
     // Other methods
     private void createFileEntriesInView() {
+        recentFilesVBox.getChildren().clear();
         if (recentFilePathList.size() > 0) {
             for (Path pathEntry : recentFilePathList) {
                 RecentFileEntryView view = new RecentFileEntryView();
@@ -104,7 +102,6 @@ public class RecentFilesListPresenter implements Initializable {
                     // TODO Add logging here
                     System.out.println("change detected in boolean");
                     if (newValue) {
-                        UserPreferences.getSingletonInstance().removeRecentFilePath(presenter.getItemPath());
                         recentFilePathList.remove(presenter.getItemPath());
                     }
                 });

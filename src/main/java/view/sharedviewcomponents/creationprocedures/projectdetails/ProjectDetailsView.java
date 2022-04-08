@@ -1,7 +1,7 @@
 package view.sharedviewcomponents.creationprocedures.projectdetails;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public class ProjectDetailsView extends CustomFXMLView {
+public class ProjectDetailsView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

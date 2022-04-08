@@ -1,8 +1,7 @@
 package view.sharedviewcomponents.editor.navigationlabel;
 
 import com.airhacks.afterburner.views.FXMLView;
-import framework.CustomFXMLView;
 
-public class NavigationLabelView extends CustomFXMLView {
+public class NavigationLabelView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

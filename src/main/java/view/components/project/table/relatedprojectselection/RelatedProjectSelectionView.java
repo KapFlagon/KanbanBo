@@ -1,7 +1,7 @@
 package view.components.project.table.relatedprojectselection;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public class RelatedProjectSelectionView extends CustomFXMLView {
+public class RelatedProjectSelectionView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

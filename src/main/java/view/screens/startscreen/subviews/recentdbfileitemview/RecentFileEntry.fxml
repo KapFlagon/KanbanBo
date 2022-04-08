@@ -12,29 +12,29 @@
    <children>
       <VBox fx:id="itemVBox" onMouseClicked="#itemSelected" prefWidth="300.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
-            <Label fx:id="titleLabel" text="Title" wrapText="true" />
+            <Label fx:id="titleLabel" text="titleLabel" wrapText="true" />
             <Label fx:id="pathLabel" text="%label.path_status" wrapText="true" />
             <HBox>
                <children>
-                  <Label fx:id="pathLabel1" text="Created on: " wrapText="true" />
-                  <Label text="Label" />
+                  <Label text="%label.created_on" wrapText="true" />
+                  <Label fx:id="createdOnValue" text="CreatedOnValue" />
                </children>
             </HBox>
             <HBox>
                <children>
-                  <Label fx:id="pathLabel11" text="Last Changed: " wrapText="true" />
-                  <Label text="Label" />
+                  <Label text="%label.last_changed" wrapText="true" />
+                  <Label fx:id="lastChangedOnValue" text="lastChangedOnValue" />
                </children>
             </HBox>
-            <Label fx:id="pathStatusLbl" text="%label.database.not_found" />
+            <Label fx:id="pathStatusLbl" text="%label.file_not_found" />
          </children>
       </VBox>
       <MenuButton mnemonicParsing="false" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
         <items>
           <MenuItem fx:id="openItemMenuItem" mnemonicParsing="false" onAction="#openItem" text="%button.open" />
-          <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="%button.remove" />
+          <MenuItem fx:id="removeItemMenuItem" mnemonicParsing="false" onAction="#removeItem" text="%button.remove_from_list" />
             <MenuItem fx:id="deleteFileMenuItem" mnemonicParsing="false" onAction="#deleteFile" text="%button.delete" />
-            <MenuItem fx:id="findMissingFileBtn" mnemonicParsing="false" onAction="#findFile" text="Find lost file" />
+            <MenuItem fx:id="findMissingFileBtn" mnemonicParsing="false" onAction="#findFile" text="%button.find_lost_file" />
         </items>
       </MenuButton>
    </children>

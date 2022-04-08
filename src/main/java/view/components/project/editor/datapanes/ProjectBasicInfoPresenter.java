@@ -35,7 +35,7 @@ public class ProjectBasicInfoPresenter extends DataPanePresenter {
 
     // Other variables
     KanbanBoDataService kanbanBoDataService;
-    private String noTitleError = "A title must be provided";
+    //private String noTitleError = "A title must be provided";
     private boolean validTitle;
     private ObservableWorkspaceProject projectViewModel;
     private ProjectStatusListViewModel projectStatusListViewModel;
@@ -82,7 +82,7 @@ public class ProjectBasicInfoPresenter extends DataPanePresenter {
 
     private void initTitleValidationFields() {
         validTitle = true;
-        titleErrorLbl.setText(noTitleError);
+        //titleErrorLbl.setText(noTitleError);
         titleErrorLbl.setVisible(false);
         titleErrorLbl.setDisable(true);
     }

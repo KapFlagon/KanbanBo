@@ -1,7 +1,7 @@
 package view.components.project.editor.projectdetails;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public class ProjectDetailsWindowView extends CustomFXMLView {
+public class ProjectDetailsWindowView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

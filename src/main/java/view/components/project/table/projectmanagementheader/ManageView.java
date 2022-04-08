@@ -1,7 +1,7 @@
 package view.components.project.table.projectmanagementheader;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public class ManageView extends CustomFXMLView {
+public class ManageView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }

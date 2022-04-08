@@ -1,7 +1,7 @@
 package view.sharedviewcomponents.popups.confirmationdialog;
 
-import framework.CustomFXMLView;
+import com.airhacks.afterburner.views.FXMLView;
 
-public class ConfirmationDialogView extends CustomFXMLView {
+public class ConfirmationDialogView extends FXMLView {
     // Keep empty for afterburner.fx default implementation
 }
