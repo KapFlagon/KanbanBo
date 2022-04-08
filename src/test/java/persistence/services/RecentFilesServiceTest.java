@@ -1,6 +1,5 @@
 package persistence.services;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +51,7 @@ class RecentFilesServiceTest {
 
     @Test
     void getRecentFilePaths() {
-        ObservableList<Path> recentFilesListCopy = FXCollections.observableArrayList(recentFilesService.getRecentFilePaths());
+        ObservableList<Path> recentFilesListCopy = recentFilesService.getRecentFilePaths();
 
         assertAll(
                 () -> assertNotNull(recentFilesService),
