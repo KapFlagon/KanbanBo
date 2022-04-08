@@ -3,7 +3,11 @@ package framework;
 
 import com.airhacks.afterburner.views.FXMLView;
 
+import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+
+import static java.util.ResourceBundle.getBundle;
 
 
 public abstract class CustomFXMLView extends FXMLView {
@@ -22,7 +26,7 @@ public abstract class CustomFXMLView extends FXMLView {
 
     public CustomFXMLView(ResourceBundle bundle) {
         super();
-        this.bundle = bundle;
+        this.bundle = RESOURCE_BUNDLE;
     }
 
 
