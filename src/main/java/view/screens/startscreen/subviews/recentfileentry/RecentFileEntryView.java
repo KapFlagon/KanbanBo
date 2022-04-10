@@ -1,4 +1,4 @@
-package view.screens.startscreen.subviews.recentdbfileitemview;
+package view.screens.startscreen.subviews.recentfileentry;
 
 import com.airhacks.afterburner.views.FXMLView;
 

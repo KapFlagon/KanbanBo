@@ -1,4 +1,4 @@
-package view.screens.startscreen.subviews.recentdbfilesview;
+package view.screens.startscreen.subviews.recentfileslist;
 
 import utils.images.BufferedImageSVGTranscoder;
 import javafx.application.Platform;
@@ -11,8 +11,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import utils.view.ScrollPaneFixer;
-import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryPresenter;
-import view.screens.startscreen.subviews.recentdbfileitemview.RecentFileEntryView;
+import view.screens.startscreen.subviews.recentfileentry.RecentFileEntryPresenter;
+import view.screens.startscreen.subviews.recentfileentry.RecentFileEntryView;
 
 import java.net.MalformedURLException;
 import java.net.URI;

@@ -1,4 +1,4 @@
-package view.screens.startscreen.subviews.recentdbfileitemview;
+package view.screens.startscreen.subviews.recentfileentry;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
