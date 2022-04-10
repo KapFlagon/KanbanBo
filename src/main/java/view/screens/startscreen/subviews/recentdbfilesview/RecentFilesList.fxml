@@ -2,14 +2,23 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter">
    <content>
-      <VBox fx:id="recentFilesVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" styleClass="hbox">
+      <StackPane>
          <children>
-            <Label fx:id="noDatabasesFileLbl" text="%label.no_recent_files" />
+            <VBox fx:id="promptVbox" alignment="CENTER">
+               <children>
+                  <Label fx:id="noDatabasesFileLbl" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.no_recent_files" />
+                  <Label fx:id="noDatabasesFileLbl1" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.create_file_prompt" />
+                  <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </VBox>
+            <VBox fx:id="recentFilesVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" styleClass="hbox" />
          </children>
-      </VBox>
+      </StackPane>
    </content>
 </ScrollPane>

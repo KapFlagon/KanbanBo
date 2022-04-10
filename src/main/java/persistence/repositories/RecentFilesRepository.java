@@ -28,7 +28,7 @@ public class RecentFilesRepository {
 
     @PostConstruct
     private void postConstructTasks() {
-        recentItemsPreferences = kanbanBoPreferences.kanbanboPreferencesChildNode("kanbanbo");
+        recentItemsPreferences = kanbanBoPreferences.kanbanboPreferencesChildNode("recent_files");
     }
 
 
@@ -40,6 +40,7 @@ public class RecentFilesRepository {
 
     // Other methods
     public void saveRecentFilePaths(List<Path> recentFilePaths) throws BackingStoreException {
+        recentItemsPreferences.clear();
         for (int pathIterator = 0; pathIterator < recentFilePaths.size(); pathIterator++) {
             String key = KEY_recentFilePaths+pathIterator;
             String path = recentFilePaths.get(pathIterator).toString();

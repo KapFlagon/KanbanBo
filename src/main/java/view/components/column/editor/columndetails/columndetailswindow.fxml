@@ -10,19 +10,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.column.editor.columndetails.ColumnDetailsWindowPresenter">
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.components.column.editor.columndetails.ColumnDetailsWindowPresenter">
    <content>
       <BorderPane>
          <center>
             <VBox>
                <children>
-                        <Label alignment="CENTER" text="Column Title:" />
+                        <Label alignment="CENTER" text="%label.title" />
                         <TextField fx:id="titleTextField" alignment="CENTER">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                   </TextField>
-                  <Label fx:id="titleErrorLbl" text="TitleError">
+                  <Label fx:id="titleErrorLbl" text="%label.title.error">
                      <VBox.margin>
                         <Insets left="15.0" />
                      </VBox.margin>
@@ -35,7 +35,7 @@
             </VBox>
          </center>
          <top>
-                <Label text="Enter Column Details" BorderPane.alignment="CENTER">
+                <Label text="%label.column.prompt" BorderPane.alignment="CENTER">
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
@@ -44,8 +44,8 @@
          <bottom>
                 <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveDetailsChange" text="Save" />
-                        <Button fx:id="cancelButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#cancelDetailsChange" text="Cancel" />
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveDetailsChange" text="%button.save" />
+                        <Button fx:id="cancelButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#cancelDetailsChange" text="%button.cancel" />
                     </children>
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

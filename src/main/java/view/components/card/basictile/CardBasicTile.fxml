@@ -20,7 +20,7 @@
       </Label>
       <HBox alignment="CENTER_LEFT" maxHeight="50.0" maxWidth="300.0" spacing="10.0">
          <children>
-            <Label fx:id="cardTitleLbl" text="Title Text" wrapText="true" />
+            <Label fx:id="cardTitleLbl" text="cardTitleLbl" wrapText="true" />
             <MenuButton fx:id="cardMenuBtn" mnemonicParsing="false" popupSide="RIGHT">
               <items>
                 <MenuItem fx:id="cardDetailsBtn" mnemonicParsing="false" onAction="#showCardDetailsPopup" text="%button.card.details" />

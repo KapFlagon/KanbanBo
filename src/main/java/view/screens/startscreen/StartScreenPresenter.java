@@ -2,9 +2,11 @@ package view.screens.startscreen;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,7 +26,6 @@ import utils.FileChooserUtils;
 import utils.FileCreationUtils;
 import utils.StageUtils;
 import view.animation.ScrimFadeTransitions;
-import view.screens.mainscreen.MainScreenView;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListPresenter;
 import view.screens.startscreen.subviews.recentdbfilesview.RecentFilesListView;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter;
@@ -62,7 +63,7 @@ public class StartScreenPresenter implements Initializable {
 
     // Other variables
     private SimpleBooleanProperty fileSelected;
-    private Path selectedPath;
+    private SimpleStringProperty selectedPathString;
     private ScrimFadeTransitions scrimFadeTransitions;
 
 
@@ -95,8 +96,8 @@ public class StartScreenPresenter implements Initializable {
         this.browseForDbButton = browseForDbButton;
     }
 
-    public Path getSelectedPath() {
-        return selectedPath;
+    public SimpleStringProperty selectedPathStringProperty() {
+        return selectedPathString;
     }
 
     public SimpleBooleanProperty fileSelectedProperty() {
@@ -106,12 +107,15 @@ public class StartScreenPresenter implements Initializable {
     // Initialisation methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        selectedPathString = new SimpleStringProperty("");
         initButtonImages();
         System.out.println("Start screen loaded");
         autoLoadCheckBox.setSelected(userPreferencesService.getAutoOpenMostRecentFileValue());
 
         RecentFilesListView rflv = new RecentFilesListView();
         RecentFilesListPresenter rflp = (RecentFilesListPresenter) rflv.getPresenter();
+
+
         rflp.itemBeingOpenedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -130,6 +134,7 @@ public class StartScreenPresenter implements Initializable {
                 }
             }
         });
+
         rflp.itemBeingDeletedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -147,8 +152,21 @@ public class StartScreenPresenter implements Initializable {
                 }
             }
         });
+
         //TODO may need to update the RecentFilesService to return an ObservableList.
         rflp.setRecentFilePathList(recentFilesService.getRecentFilePaths());
+        rflp.getRecentFilePathList().addListener((ListChangeListener<Path>) c -> {
+            while(c.next()) {
+                for (Path path : c.getRemoved()) {
+                    try {
+                        recentFilesService.removeRecentFilePath(path);
+                    } catch (BackingStoreException e) {
+                        // TODO Replace this with a pop-up and logging.
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
         borderPane.setCenter(rflv.getView());
 
         fileSelected = new SimpleBooleanProperty(false);
@@ -280,9 +298,8 @@ public class StartScreenPresenter implements Initializable {
     }
 
     private void openFile(File fileToOpen) throws BackingStoreException {
+        selectedPathString.set(fileToOpen.toString());
         fileSelected.set(true);
-        selectedPath = fileToOpen.toPath();
-        fileSelected.set(false);
     }
 
 }

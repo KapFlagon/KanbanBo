@@ -20,8 +20,8 @@
          <top>
             <VBox spacing="2.0">
                <children>
-                  <Label text="Project Details" />
-                  <Label fx:id="popupStateLbl" layoutX="10.0" layoutY="10.0" />
+                  <Label text="%label.project_details" />
+                  <Label fx:id="popupStateLbl" layoutX="10.0" layoutY="10.0" text="popupStateLbl" />
                   <Separator prefWidth="200.0" />
                </children>
                <BorderPane.margin>
@@ -37,13 +37,13 @@
                <children>
                   <VBox>
                      <children>
-                        <Label alignment="CENTER" text="Title:" />
+                        <Label alignment="CENTER" text="%label.title" />
                         <TextField fx:id="projectTitleTextField">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </TextField>
-                        <Label fx:id="titleErrorLbl" text="TitleError" textFill="#ff4b4b" underline="true">
+                        <Label fx:id="titleErrorLbl" text="%label.title_error" textFill="#ff4b4b" underline="true">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
@@ -52,7 +52,7 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <Label alignment="CENTER" text="Description:" />
+                        <Label alignment="CENTER" text="%label.description" />
                         <TextArea fx:id="projectDescriptionTextArea" minHeight="100.0" prefHeight="100.0" wrapText="true">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -62,27 +62,27 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <Label text="Status" />
+                        <Label text="%label.status" />
                         <ChoiceBox fx:id="statusChoiceBox" prefWidth="150.0" />
-                        <Label text="Status explanations?" />
+                        <Label text="%label.status.explanations" />
                      </children>
                   </VBox>
                   <VBox>
                      <children>
-                        <Label text="Due on" />
+                        <Label text="%label.due_on" />
                         <DatePicker fx:id="dueOnDatePicker" />
-                        <Label text="ERRORS" />
+                        <Label text="%label.due_on_errors" />
                      </children>
                   </VBox>
                   <VBox layoutX="15.0" layoutY="287.0">
                      <children>
-                        <Label text="Created on" />
+                        <Label text="%label.created_on" />
                         <TextField fx:id="createdOnTextField" editable="false" />
                      </children>
                   </VBox>
                   <VBox layoutX="15.0" layoutY="358.0">
                      <children>
-                        <Label text="Last Changed" />
+                        <Label text="%label.last_changed" />
                         <TextField fx:id="lastChangedTextField" editable="false" />
                      </children>
                   </VBox>

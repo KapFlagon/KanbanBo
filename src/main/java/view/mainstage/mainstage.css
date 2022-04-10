@@ -1,0 +1,17 @@
+* {
+    -primary-colour: #5CD6C8;
+    -primary-colour-dark: #29A395;
+    -primary-colour-light: #ADEBE3;
+    -secondary-colour: #8B5CD6;
+    -secondary-colour-dark: #5829A3;
+    -secondary-colour-light: #C5ADEB;
+    -ternary-colour: #D65C6A;
+    -ternary-colour-dark: #A32937;
+    -ternary-colour-light: #EBADB5;
+    -quarternary-colour: #A7D65C;
+    -quarternary-colour-dark: #74A329;
+    -quarternary-colour-light: #D3EBAD;
+    -body-colour-1: #C2C2C2;
+    -body-colour-2: #E0E0E0;
+    -body-colour-3: #FFFFFF;
+}

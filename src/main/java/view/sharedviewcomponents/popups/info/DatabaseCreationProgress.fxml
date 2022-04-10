@@ -14,7 +14,7 @@
             <Insets />
          </VBox.margin>
       </Label>
-      <Label fx:id="generatedContentLbl" text="Label" />
+      <Label fx:id="generatedContentLbl" text="generatedContentLbl" />
       <HBox>
          <children>
             <ProgressBar fx:id="progressBar" prefWidth="180.0" progress="0.0">

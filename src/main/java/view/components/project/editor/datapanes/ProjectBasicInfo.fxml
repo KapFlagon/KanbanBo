@@ -12,13 +12,13 @@
    <children>
       <VBox>
          <children>
-            <Label alignment="CENTER" text="Title:" />
+            <Label alignment="CENTER" text="%label.title" />
             <TextField fx:id="projectTitleTextField">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </TextField>
-            <Label fx:id="titleErrorLbl" text="TitleError" textFill="#ff4b4b" underline="true">
+            <Label fx:id="titleErrorLbl" text="%label.title.error" textFill="#ff4b4b" underline="true">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -27,7 +27,7 @@
       </VBox>
       <VBox>
          <children>
-            <Label alignment="CENTER" text="Description:" />
+            <Label alignment="CENTER" text="%label.description" />
             <TextArea fx:id="projectDescriptionTextArea" minHeight="100.0" prefHeight="100.0" wrapText="true">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -37,9 +37,9 @@
       </VBox>
       <VBox>
          <children>
-            <Label text="Status" />
+            <Label text="%label.status" />
             <ChoiceBox fx:id="statusChoiceBox" prefWidth="150.0" />
-            <Label text="Status explanations?" />
+            <Label text="%label.status.explanations" />
          </children>
       </VBox>
    </children>

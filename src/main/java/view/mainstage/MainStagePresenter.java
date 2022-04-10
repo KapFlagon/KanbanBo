@@ -1,6 +1,7 @@
 package view.mainstage;
 
 import com.airhacks.afterburner.views.FXMLView;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,8 +31,6 @@ public class MainStagePresenter implements Initializable {
     // JavaFX injected node variables
     @FXML
     private Stage mainStage;
-    @FXML
-    private Button myButton;
 
     // Other variables
     @Inject
@@ -57,9 +56,6 @@ public class MainStagePresenter implements Initializable {
         determineScene();
     }
 
-    /*public void setResourceBundle(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-    }*/
 
     // Initialization methods
     @Override
@@ -108,7 +104,7 @@ public class MainStagePresenter implements Initializable {
     private void navigateToStartScreen() {
         StartScreenView startScreenView = new StartScreenView();
         StartScreenPresenter startScreenPresenter = (StartScreenPresenter) startScreenView.getPresenter();
-        startScreenPresenter.fileSelectedProperty().addListener(generatePathSelectedChangeListener(startScreenPresenter.getSelectedPath()));
+        startScreenPresenter.fileSelectedProperty().addListener(generatePathSelectedChangeListener(startScreenPresenter.selectedPathStringProperty()));
         Scene scene = generateScene(startScreenView);
         updateMainStageWithScene(startScreenTitle, scene);
     }
@@ -127,17 +123,14 @@ public class MainStagePresenter implements Initializable {
         mainStage.hide();
         mainStage.setTitle(stageTitle);
         mainStage.setScene(scene);
-        //mainStage.setMinHeight(500);
-        //mainStage.setHeight(500);
-        //mainStage.setMinWidth(700);
-        //mainStage.setWidth(700);
         mainStage.show();
     }
 
-    private ChangeListener<Boolean> generatePathSelectedChangeListener(Path selectedPath) {
+    private ChangeListener<Boolean> generatePathSelectedChangeListener(SimpleStringProperty pathString) {
         return (observable, oldValue, newValue) -> {
             if(newValue) {
                 try {
+                    Path selectedPath = Path.of(pathString.getValue());
                     recentFilesService.addRecentFilePath(selectedPath);
                     File selectedFile = selectedPath.toFile();
                     navigateToMainScreen(selectedFile);
