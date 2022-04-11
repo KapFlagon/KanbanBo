@@ -7,12 +7,12 @@
     -fx-background-color: -secondary-colour;
 }
 
-.recent-item:hover {
+.recent-item:hover, .recent-item:focused {
     -fx-background-color: -secondary-colour-light;
 }
 
 
-.recent-item-missing:hover {
+.recent-item-missing:hover, .recent-item-missing:focused {
     -fx-background-color: #F5C869;
 }
 

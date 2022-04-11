@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -8,9 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@RecentFileEntry.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.subviews.recentfileentry.RecentFileEntryPresenter">
+<AnchorPane fx:id="anchorPane" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="anchor-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.startscreen.subviews.recentfileentry.RecentFileEntryPresenter">
    <children>
-      <VBox fx:id="itemVBox" onMouseClicked="#itemSelected" prefWidth="300.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <VBox fx:id="itemVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#itemSelected" prefWidth="300.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <Label fx:id="titleLabel" text="titleLabel" wrapText="true" />
             <Label fx:id="pathLabel" text="%label.path_status" wrapText="true" />
@@ -38,8 +37,4 @@
         </items>
       </MenuButton>
    </children>
-   <styleClass>
-      <String fx:value="recent-item" />
-      <String fx:value="anchor-pane" />
-   </styleClass>
 </AnchorPane>

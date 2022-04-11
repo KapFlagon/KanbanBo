@@ -62,6 +62,7 @@ public class StartScreenPresenter implements Initializable {
     // Other variables
     private SimpleBooleanProperty fileSelected;
     private SimpleStringProperty selectedPathString;
+    private SimpleBooleanProperty modalDialogShowing;
     private ScrimFadeTransitions scrimFadeTransitions;
 
 
@@ -121,7 +122,6 @@ public class StartScreenPresenter implements Initializable {
                     File selectedRecentFile = rflp.getSelectedPath().toFile();
                     if(selectedRecentFile.exists()) {
                         try {
-                            System.out.println("DatabaseUtils updated to: " + DatabaseUtils.getActiveDatabaseFile().toString());
                             openFile(selectedRecentFile);
                         } catch (BackingStoreException e) {
                             e.printStackTrace();
@@ -151,6 +151,24 @@ public class StartScreenPresenter implements Initializable {
             }
         });
 
+        rflp.itemBeingLocatedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    Path oldPath = rflp.getSelectedPath();
+                    try {
+                        File foundFile = browseFile();
+                        if(foundFile != null) {
+                            recentFilesService.removeRecentFilePath(oldPath);
+                            openFile(foundFile);
+                        }
+                    } catch (BackingStoreException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         //TODO may need to update the RecentFilesService to return an ObservableList.
         rflp.setRecentFilePathList(recentFilesService.getRecentFilePaths());
         rflp.getRecentFilePathList().addListener((ListChangeListener<Path>) c -> {
@@ -168,7 +186,16 @@ public class StartScreenPresenter implements Initializable {
         borderPane.setCenter(rflv.getView());
 
         fileSelected = new SimpleBooleanProperty(false);
+        modalDialogShowing = new SimpleBooleanProperty(false);
+        modalDialogShowing.bind(rflp.modalDialogShowingProperty());
         scrimFadeTransitions = new ScrimFadeTransitions(Duration.millis(350), borderPane, 0.4, 1.0);
+        modalDialogShowing.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                scrimFadeTransitions.fadeOut();
+            } else {
+                scrimFadeTransitions.fadeIn();
+            }
+        });
     }
 
     private void initButtonImages() {
@@ -207,14 +234,10 @@ public class StartScreenPresenter implements Initializable {
 
     @FXML
     private void browseForDbFile() throws BackingStoreException {
-        System.out.println("browsing for database file");
         scrimFadeTransitions.fadeOut();
-        File selectedFile = FileChooserUtils.openFilePopup();
-        if (selectedFile != null && isValidDbFile(selectedFile.toString())) {
-            // Accounting for scenario where user cancels opening file.
+        File selectedFile = browseFile();
+        if(selectedFile != null) {
             openFile(selectedFile);
-        } else {
-            System.out.println("File opening cancelled");
         }
         scrimFadeTransitions.fadeIn();
         // TODO Insert some kind of logging for selected file here.
@@ -298,6 +321,21 @@ public class StartScreenPresenter implements Initializable {
     private void openFile(File fileToOpen) throws BackingStoreException {
         selectedPathString.set(fileToOpen.toString());
         fileSelected.set(true);
+    }
+
+    private File browseFile() {
+        System.out.println("browsing for database file");
+        //scrimFadeTransitions.fadeOut();
+        File selectedFile = FileChooserUtils.openFilePopup();
+        if (selectedFile != null && isValidDbFile(selectedFile.toString())) {
+            // Accounting for scenario where user cancels opening file.
+            // TODO Insert some kind of logging for selected file here.
+            return selectedFile;
+        } else {
+            System.out.println("File opening cancelled");
+            return null;
+        }
+        //scrimFadeTransitions.fadeIn();
     }
 
 }

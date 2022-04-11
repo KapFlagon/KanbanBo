@@ -38,3 +38,9 @@
 .check-box:selected .mark {
     -fx-background-color: black;
 }
+
+
+.button, .check-box{
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}

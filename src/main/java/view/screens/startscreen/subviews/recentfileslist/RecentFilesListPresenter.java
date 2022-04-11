@@ -41,6 +41,8 @@ public class RecentFilesListPresenter implements Initializable {
     private SimpleBooleanProperty itemBeingOpened;
     private SimpleBooleanProperty itemBeingRemoved;
     private SimpleBooleanProperty itemBeingDeleted;
+    private SimpleBooleanProperty itemBeingLocated;
+    private SimpleBooleanProperty modalDialogShowing;
 
     // Constructors
 
@@ -84,12 +86,22 @@ public class RecentFilesListPresenter implements Initializable {
         this.itemBeingDeleted.set(itemBeingDeleted);
     }
 
+    public SimpleBooleanProperty itemBeingLocatedProperty() {
+        return itemBeingLocated;
+    }
+
+    public SimpleBooleanProperty modalDialogShowingProperty() {
+        return modalDialogShowing;
+    }
+
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         itemBeingOpened = new SimpleBooleanProperty(false);
         itemBeingRemoved = new SimpleBooleanProperty(false);
         itemBeingDeleted = new SimpleBooleanProperty(false);
+        itemBeingLocated = new SimpleBooleanProperty(false);
+        modalDialogShowing = new SimpleBooleanProperty(false);
         ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
         try {
             parseSvgFile();
@@ -131,6 +143,12 @@ public class RecentFilesListPresenter implements Initializable {
                         setItemBeingOpened(true);
                     }
                 });
+                presenter.beingLocatedProperty().addListener(((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        selectedPath = presenter.getItemPath();
+                        itemBeingLocated.set(true);
+                    }
+                }));
                 recentFilesVBox.getChildren().add(view.getView());
                 recentFilePathList.addListener((ListChangeListener<Path>) c -> {
                     while(c.next()) {
@@ -150,6 +168,7 @@ public class RecentFilesListPresenter implements Initializable {
                         promptVbox.setVisible(false);
                     }
                 });
+                modalDialogShowing.bind(presenter.modalDialogShowingProperty());
             }
         } else {
             promptVbox.setVisible(true);
