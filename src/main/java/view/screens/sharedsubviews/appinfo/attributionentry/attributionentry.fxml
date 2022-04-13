@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<TitledPane fx:id="entryTitledPane" expanded="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="entryTitledPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="4.0">
+         <children>
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+               <children>
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.title" />
+                  <Label fx:id="entryTitleLbl" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="entryTitleLbl" />
+               </children>
+            </HBox>
+            <HBox layoutX="20.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+               <children>
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.website" />
+                  <Label fx:id="entryWebsiteLbl" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="entryWebsiteLbl" />
+               </children>
+            </HBox>
+            <HBox layoutX="20.0" layoutY="37.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+               <children>
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.sourcecode" />
+                  <Label fx:id="entrySourceCodeRepoLbl" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="entrySourceCodeRepoLbl" />
+               </children>
+            </HBox>
+            <HBox layoutX="20.0" layoutY="55.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+               <children>
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.license.type" />
+                  <Label fx:id="licenseTypeLbl" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="licenseTypeLbl" />
+               </children>
+            </HBox>
+            <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <panes>
+                  <TitledPane expanded="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.license.fulltext">
+                     <content>
+                        <TextArea fx:id="licenseTextArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" wrapText="true" />
+                     </content>
+                  </TitledPane>
+               </panes>
+            </Accordion>
+         </children>
+      </VBox>
+   </content>
+</TitledPane>

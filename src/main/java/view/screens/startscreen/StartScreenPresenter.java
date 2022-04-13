@@ -24,6 +24,8 @@ import utils.FileChooserUtils;
 import utils.FileCreationUtils;
 import utils.StageUtils;
 import view.animation.ScrimFadeTransitions;
+import view.screens.sharedsubviews.appinfo.AppInfoPresenter;
+import view.screens.sharedsubviews.appinfo.AppInfoView;
 import view.screens.startscreen.subviews.recentfileslist.RecentFilesListPresenter;
 import view.screens.startscreen.subviews.recentfileslist.RecentFilesListView;
 import view.sharedviewcomponents.popups.info.DatabaseCreationProgressPresenter;
@@ -292,6 +294,13 @@ public class StartScreenPresenter implements Initializable {
                 openFile(selectedFile);
             }
         }
+    }
+
+    @FXML
+    private void launchAppInfo() {
+        System.out.println("here");
+        AppInfoView appInfoView = new AppInfoView();
+        AppInfoPresenter appInfoPresenter = (AppInfoPresenter) appInfoView.getPresenter();
     }
 
     public void updateAutoLoad(boolean value) throws BackingStoreException {
