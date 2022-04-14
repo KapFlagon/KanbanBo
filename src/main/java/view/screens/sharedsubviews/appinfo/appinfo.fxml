@@ -10,102 +10,80 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.sharedsubviews.appinfo.AppInfoPresenter">
+<ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.screens.sharedsubviews.appinfo.AppInfoPresenter">
    <content>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0">
          <children>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0">
                <children>
-                  <Label text="KanbanBo" />
-                  <Label layoutX="10.0" layoutY="10.0" text="Personal Project Management software" />
-                  <HBox>
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%app.details.name" />
+                  <Label layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%app.details.description" />
+                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0">
                      <children>
-                        <Label text="Version: " />
-                        <Label text="0.1" />
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.version" />
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%app.details.version" />
                      </children>
                   </HBox>
-                  <Hyperlink text="Repo" />
-                  <Label layoutX="10.0" layoutY="10.0" text="Attributiones:" />
+                  <Hyperlink fx:id="sourceCodeHyperlink" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#openSourceCodeLink" text="%hyperlink.sourcecode.label" />
+                  <HBox layoutX="10.0" layoutY="52.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0">
+                     <children>
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.license" />
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.licensetype" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
               <panes>
-                <TitledPane animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Icons">
+                  <TitledPane expanded="false" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%titledpane.app.license">
                      <content>
-                        <Accordion>
-                          <panes>
-                            <TitledPane animated="false" text="untitled 1" />
-                            <TitledPane animated="false" text="untitled 2" />
-                          </panes>
-                           <padding>
-                              <Insets left="15.0" />
-                           </padding>
-                        </Accordion>
-                     </content>
-                </TitledPane>
-                  <TitledPane animated="false" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Images &amp; Illustrations">
-                     <content>
-                        <Accordion>
-                          <panes>
-                            <TitledPane animated="false" text="untitled 1" />
-                            <TitledPane animated="false" text="untitled 2" />
-                          </panes>
-                           <padding>
-                              <Insets left="15.0" />
-                           </padding>
-                        </Accordion>
+                        <TextArea fx:id="appFullLicenseTextArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                      </content>
                   </TitledPane>
-                  <TitledPane animated="false" layoutX="10.0" layoutY="37.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Technology">
+                  <TitledPane expanded="false" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%titledpane.attributions">
                      <content>
-                        <Accordion>
-                          <panes>
-                            <TitledPane animated="false" text="Afterburner.fx">
-                                 <content>
-                                    <VBox prefHeight="200.0" prefWidth="100.0">
-                                       <children>
-                                          <HBox>
-                                             <children>
-                                                <Label text="Title: " />
-                                                <Label layoutX="10.0" layoutY="10.0" text="Afterburner.fx" />
-                                             </children>
-                                          </HBox>
-                                          <HBox layoutX="20.0" layoutY="20.0">
-                                             <children>
-                                                <Label text="Site: " />
-                                                <Label layoutX="10.0" layoutY="10.0" text="Title: " />
-                                             </children>
-                                          </HBox>
-                                          <HBox layoutX="20.0" layoutY="37.0">
-                                             <children>
-                                                <Label text="Repo" />
-                                                <Label layoutX="10.0" layoutY="10.0" text="Title: " />
-                                             </children>
-                                          </HBox>
-                                          <HBox layoutX="20.0" layoutY="55.0">
-                                             <children>
-                                                <Label text="License" />
-                                                <Label layoutX="10.0" layoutY="10.0" text="Title: " />
-                                             </children>
-                                          </HBox>
-                                          <Accordion>
-                                            <panes>
-                                              <TitledPane animated="false" text="Full license">
-                                                   <content>
-                                                      <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
-                                                   </content>
-                                                </TitledPane>
-                                            </panes>
-                                          </Accordion>
-                                       </children>
-                                    </VBox>
-                                 </content>
-                              </TitledPane>
-                            <TitledPane animated="false" text="untitled 2" />
-                          </panes>
+                        <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                            <padding>
                               <Insets left="15.0" />
                            </padding>
+                           <panes>
+                              <TitledPane expanded="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%attributions.fonts">
+                                 <content>
+                                    <Accordion fx:id="fontsAccordion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                       <padding>
+                                          <Insets left="15.0" />
+                                       </padding>
+                                    </Accordion>
+                                 </content>
+                              </TitledPane>
+                            <TitledPane expanded="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%attributions.icons">
+                                 <content>
+                                    <Accordion fx:id="iconsAccordion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                       <padding>
+                                          <Insets left="15.0" />
+                                       </padding>
+                                    </Accordion>
+                                 </content>
+                            </TitledPane>
+                              <TitledPane expanded="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%attributions.imagesandillustrations">
+                                 <content>
+                                    <Accordion fx:id="imagesAndIllustrationsAccordion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                       <padding>
+                                          <Insets left="15.0" />
+                                       </padding>
+                                    </Accordion>
+                                 </content>
+                              </TitledPane>
+                              <TitledPane expanded="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%attributions.technology">
+                                 <content>
+                                    <Accordion fx:id="technologyAccordion" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                       <padding>
+                                          <Insets left="15.0" />
+                                       </padding>
+                                    </Accordion>
+                                 </content>
+                              </TitledPane>
+                           </panes>
                         </Accordion>
                      </content>
                   </TitledPane>
