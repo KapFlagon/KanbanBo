@@ -44,45 +44,7 @@ public class BufferedImageSVGTranscoder extends ImageTranscoder {
     }
 
     public ImageView parseSvgFileWithNewColours(ImageView imageView, URL svgFileUrl, Map<String, String> colours) {
-        try {
-            String parser = XMLResourceDescriptor.getXMLParserClassName();
-            SAXSVGDocumentFactory f = new SAXSVGDocumentFactory(parser);
-            URI uri = svgFileUrl.toURI();
-            Document doc = f.createDocument(uri.toString());
-
-            UserAgent userAgent = new UserAgentAdapter();
-            DocumentLoader loader = new DocumentLoader(userAgent);
-            BridgeContext ctx = new BridgeContext(userAgent, loader);
-            ctx.setDynamicState(BridgeContext.DYNAMIC);
-            GVTBuilder builder = new GVTBuilder();
-            GraphicsNode rootGN = builder.build(ctx, doc);
-
-            SVGOMSVGElement myRootSVGElement = (SVGOMSVGElement) doc.getDocumentElement();
-
-            NodeList nl = myRootSVGElement.getElementsByTagName("path");
-
-            for(int i=0;i<nl.getLength();++i){
-                Element elt = (Element)nl.item(i);
-                String originalFillValue = elt.getAttribute("fill");
-                if(Color.web(originalFillValue).equals(Color.web(colours.get("baseColour")))) {
-                    elt.setAttribute("fill", colours.get("newColour"));
-                }
-            }
-
-            TranscoderInput transIn = new TranscoderInput(doc);
-            try {
-                transcode(transIn, null);
-                Image image = SwingFXUtils.toFXImage(getBufferedImage(), null);
-                imageView.setImage(image);
-            } catch (TranscoderException exception) {
-                exception.printStackTrace();
-            }
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return imageView;
+        return parseSvgFileWithNewColours(imageView, svgFileUrl, null, colours);
     }
 
     public ImageView parseSvg(ImageView imageView, InputStream svgInputStream) {
@@ -95,5 +57,68 @@ public class BufferedImageSVGTranscoder extends ImageTranscoder {
             exception.printStackTrace();
         }
         return imageView;
+    }
+
+    public ImageView parseSvgFileWithNewColours(ImageView imageView, URL svgFileUrl, InputStream svgInputStream, Map<String, String> colours) {
+        try {
+            Document document = getDocumentPathNodes(svgFileUrl, svgInputStream);
+            NodeList nodeList = getNodeList(document);
+
+            updateColoursInNodes(nodeList, colours);
+
+            try {
+                pushUpdateToImageView(imageView, document);
+            } catch (TranscoderException exception) {
+                exception.printStackTrace();
+            }
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return imageView;
+    }
+
+    private Document getDocumentPathNodes(URL svgFileUrl, InputStream svgFileInputStream) throws URISyntaxException, IOException {
+        String parser = XMLResourceDescriptor.getXMLParserClassName();
+        SAXSVGDocumentFactory documentFactory = new SAXSVGDocumentFactory(parser);
+        URI uri = svgFileUrl.toURI();
+        Document document;
+        if(svgFileInputStream != null) {
+            document = documentFactory.createDocument(uri.toString(), svgFileInputStream);
+        } else {
+            document = documentFactory.createDocument(uri.toString());
+        }
+
+        UserAgent userAgent = new UserAgentAdapter();
+        DocumentLoader loader = new DocumentLoader(userAgent);
+        BridgeContext ctx = new BridgeContext(userAgent, loader);
+        ctx.setDynamicState(BridgeContext.DYNAMIC);
+        GVTBuilder builder = new GVTBuilder();
+        GraphicsNode rootGN = builder.build(ctx, document);
+
+        return document;
+    }
+
+    private NodeList getNodeList(Document document) {
+        SVGOMSVGElement myRootSVGElement = (SVGOMSVGElement) document.getDocumentElement();
+        return myRootSVGElement.getElementsByTagName("path");
+    }
+
+    private void updateColoursInNodes(NodeList nodeList, Map<String, String> colours) {
+        for(int iterator=0; iterator < nodeList.getLength(); ++iterator){
+            Element elt = (Element)nodeList.item(iterator);
+            String originalFillValue = elt.getAttribute("fill");
+            if(Color.web(originalFillValue).equals(Color.web(colours.get("baseColour")))) {
+                elt.setAttribute("fill", colours.get("newColour"));
+            }
+        }
+    }
+
+    private void pushUpdateToImageView(ImageView imageView, Document document) throws TranscoderException {
+        TranscoderInput transIn = new TranscoderInput(document);
+        transcode(transIn, null);
+        Image image = SwingFXUtils.toFXImage(getBufferedImage(), null);
+        imageView.setImage(image);
     }
 }
