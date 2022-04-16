@@ -83,6 +83,7 @@ public class RelatedProjectSelectionPresenter implements Initializable {
     }
 
     private void initButtonImages() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView newProjectImageView = new ImageView(getClass().getResource("/icons/create_new_folder/materialicons/black/res/drawable-mdpi/baseline_create_new_folder_black_18.png").toExternalForm());
         ImageView openProjectImageView = new ImageView(getClass().getResource("/icons/open_in_new/materialicons/black/res/drawable-mdpi/baseline_open_in_new_black_18.png").toExternalForm());
         ImageView duplicateProjectImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-mdpi/baseline_content_copy_black_18.png").toExternalForm());

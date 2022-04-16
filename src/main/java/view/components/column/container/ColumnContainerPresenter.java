@@ -155,11 +155,13 @@ public class ColumnContainerPresenter implements Initializable {
     }
 
     private void initLabelGraphics() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView finalColumnImageView = new ImageView(getClass().getResource("/icons/sports_score/materialicons/black/res/drawable-mdpi/baseline_sports_score_black_18.png").toExternalForm());
         finalLbl.setGraphic(finalColumnImageView);
     }
 
     private void initButtonGraphics() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView editColumnDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
         ImageView addCardImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialicons/black/res/drawable-mdpi/baseline_add_circle_outline_black_18.png").toExternalForm());
         ImageView copyColumnImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-mdpi/baseline_content_copy_black_18.png").toExternalForm());

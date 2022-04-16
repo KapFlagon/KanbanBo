@@ -143,6 +143,7 @@ public class CardBasicTilePresenter implements Initializable {
     }
 
     private void initButtonGraphics() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView editCardDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
         ImageView copyCardImageView = new ImageView(getClass().getResource("/icons/content_copy/materialicons/black/res/drawable-mdpi/baseline_content_copy_black_18.png").toExternalForm());
         ImageView moveCardImageView = new ImageView(getClass().getResource("/icons/chevron_right/materialicons/black/res/drawable-mdpi/baseline_chevron_right_black_18.png").toExternalForm());
@@ -155,6 +156,7 @@ public class CardBasicTilePresenter implements Initializable {
     }
 
     private void initDataGraphics() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView dueDateImageView = new ImageView(getClass().getResource("/icons/event/materialicons/black/res/drawable-mdpi/baseline_event_black_18.png").toExternalForm());
         dueDateLbl.setGraphic(dueDateImageView);
 

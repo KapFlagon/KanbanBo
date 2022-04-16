@@ -110,6 +110,7 @@ public class MainScreenPresenter implements Initializable {
 
     // Other methods
     private void initTabIcons() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView manageImageView = new ImageView(Objects.requireNonNull(getClass().getResource("/icons/topic/materialicons/black/res/drawable-mdpi/baseline_topic_black_18.png")).toExternalForm());
         ImageView workspaceImageView = new ImageView(Objects.requireNonNull(getClass().getResource("/icons/handyman/materialicons/black/res/drawable-mdpi/baseline_handyman_black_18.png")).toExternalForm());
         //ImageView templatesImageView = new ImageView(Objects.requireNonNull(getClass().getResource("/icons/square_foot/materialicons/black/res/drawable-mdpi/baseline_square_foot_black_18.png")).toExternalForm());

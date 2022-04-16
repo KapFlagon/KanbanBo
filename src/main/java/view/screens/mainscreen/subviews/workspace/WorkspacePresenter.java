@@ -50,6 +50,7 @@ public class WorkspacePresenter implements Initializable {
             @Override
             public void onChanged(Change<? extends ObservableWorkspaceProject> c) {
                 Tab tab = new Tab();
+                //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
                 ImageView projectImageView = new ImageView(getClass().getResource("/icons/topic/materialiconsoutlined/black/res/drawable-hdpi/outline_topic_black_18.png").toExternalForm());
                 tab.setGraphic(projectImageView);
                 while(c.next()) {

@@ -201,6 +201,7 @@ public class StartScreenPresenter implements Initializable {
     }
 
     private void initButtonImages() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView newDbImageView = new ImageView(getClass().getResource("/icons/add/materialicons/black/res/drawable-mdpi/baseline_add_black_18.png").toExternalForm());
         ImageView searchDbImageView = new ImageView(getClass().getResource("/icons/search/materialicons/black/res/drawable-mdpi/baseline_search_black_18.png").toExternalForm());
         newDbButton.setGraphic(newDbImageView);

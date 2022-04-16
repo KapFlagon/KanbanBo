@@ -149,6 +149,7 @@ public class ProjectContainerPresenter implements Initializable {
     }
 
     private void initButtonGraphics() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
         ImageView editProjectDetailsImageView = new ImageView(getClass().getResource("/icons/edit_note/materialicons/black/res/drawable-mdpi/baseline_edit_note_black_18.png").toExternalForm());
         ImageView createColumnImageView = new ImageView(getClass().getResource("/icons/add_circle_outline/materialicons/black/res/drawable-mdpi/baseline_add_circle_outline_black_18.png").toExternalForm());
         ImageView finalColumnSelectionImageView = new ImageView(getClass().getResource("/icons/sports_score/materialicons/black/res/drawable-mdpi/baseline_sports_score_black_18.png").toExternalForm());
