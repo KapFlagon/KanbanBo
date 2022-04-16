@@ -14,6 +14,7 @@ import utils.view.ScrollPaneFixer;
 import view.screens.startscreen.subviews.recentfileentry.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentfileentry.RecentFileEntryView;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -178,10 +179,11 @@ public class RecentFilesListPresenter implements Initializable {
     public void parseSvgFile() throws URISyntaxException, MalformedURLException {
         BufferedImageSVGTranscoder transcoder = new BufferedImageSVGTranscoder();
         URI uri = getClass().getResource("/svgs/illustrations/undraw_blank_canvas_re_2hwy.svg").toURI();
+        InputStream inputStream = getClass().getResourceAsStream("/svgs/illustrations/undraw_blank_canvas_re_2hwy.svg");
         Map<String, String> colourMap = new HashMap<>();
         colourMap.put("baseColour", "#6C63FF");
         colourMap.put("newColour", "#5CD6C8");
-        transcoder.parseSvgFileWithNewColours(imageView, uri.toURL(), colourMap);
+        transcoder.parseSvgFileWithNewColours(imageView, uri.toURL(), inputStream, colourMap);
     }
 
 }
