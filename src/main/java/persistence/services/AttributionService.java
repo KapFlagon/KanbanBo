@@ -56,36 +56,31 @@ public class AttributionService {
 
     private Attribution parseMapToAttribution(Map<String, String> attributionStringDataMap) {
         Attribution attribution = new Attribution();
-        String title = attributionStringDataMap.keySet()
+        Optional<String> titleKey = attributionStringDataMap.keySet()
                 .stream()
                 .filter(key -> key.contains("title"))
-                .collect(Collectors.toList())
-                .get(0);
-        attribution.setTitle(title);
-        String website = attributionStringDataMap.keySet()
+                .findFirst();
+        titleKey.ifPresent(key -> attribution.setTitle(attributionStringDataMap.get(key)));
+        Optional<String> websiteKey = attributionStringDataMap.keySet()
                 .stream()
                 .filter(key -> key.contains("website"))
-                .collect(Collectors.toList())
-                .get(0);
-        attribution.setWebsite(website);
-        String sourceCodeAddress = attributionStringDataMap.keySet()
+                .findFirst();
+        websiteKey.ifPresent(key -> attribution.setWebsite(attributionStringDataMap.get(key)));
+        Optional<String> sourceCodeAddressKey = attributionStringDataMap.keySet()
                 .stream()
                 .filter(key -> key.contains("sourcecode"))
-                .collect(Collectors.toList())
-                .get(0);
-        attribution.setSourceCodeAddress(sourceCodeAddress);
-        String licenseType = attributionStringDataMap.keySet()
+                .findFirst();
+        sourceCodeAddressKey.ifPresent(key -> attribution.setSourceCodeAddress(attributionStringDataMap.get(key)));
+        Optional<String> licenseTypeKey = attributionStringDataMap.keySet()
                 .stream()
                 .filter(key -> key.contains("licensetype"))
-                .collect(Collectors.toList())
-                .get(0);
-        attribution.setLicenseType(licenseType);
-        String licenseLocation = attributionStringDataMap.keySet()
+                .findFirst();
+        licenseTypeKey.ifPresent(key -> attribution.setLicenseType(attributionStringDataMap.get(key)));
+        Optional<String> licenseLocationKey = attributionStringDataMap.keySet()
                 .stream()
                 .filter(key -> key.contains("licenselocation"))
-                .collect(Collectors.toList())
-                .get(0);
-        attribution.setLicenseFileLocation(licenseLocation);
+                .findFirst();
+        licenseLocationKey.ifPresent(key -> attribution.setLicenseFileLocation(attributionStringDataMap.get(key)));
         return attribution;
     }
 
