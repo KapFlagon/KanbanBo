@@ -1,54 +1,93 @@
 package domain;
 
-import java.util.Map;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Attribution {
 
 
     // Variables
-    private String title;
-    private String website;
-    private String sourceCodeAddress;
-    private String licenseType;
-    private String licenseFileLocation;
+    private SimpleStringProperty title;
+    private SimpleStringProperty website;
+    private SimpleStringProperty sourceCodeAddress;
+    private AttributionLicense attributionLicense;
 
     // Constructors
 
 
+    public Attribution() {
+        title = new SimpleStringProperty("");
+        website = new SimpleStringProperty("");
+        sourceCodeAddress = new SimpleStringProperty("");
+        attributionLicense = new AttributionLicense("","","");
+    }
+
+    public Attribution(String title, String website, String sourceCodeAddress, AttributionLicense attributionLicense) {
+        this.title = new SimpleStringProperty(title);
+        this.website = new SimpleStringProperty(website);
+        this.sourceCodeAddress = new SimpleStringProperty(sourceCodeAddress);
+        this.attributionLicense = attributionLicense;
+    }
+
+
     // Getters and Setters
     public String getTitle() {
+        return title.get();
+    }
+
+    public SimpleStringProperty titleProperty() {
         return title;
     }
+
     public void setTitle(String title) {
-        this.title = title;
+        this.title.set(title);
     }
 
     public String getWebsite() {
+        return website.get();
+    }
+
+    public SimpleStringProperty websiteProperty() {
         return website;
     }
+
     public void setWebsite(String website) {
-        this.website = website;
+        this.website.set(website);
     }
 
     public String getSourceCodeAddress() {
+        return sourceCodeAddress.get();
+    }
+
+    public SimpleStringProperty sourceCodeAddressProperty() {
         return sourceCodeAddress;
     }
+
     public void setSourceCodeAddress(String sourceCodeAddress) {
-        this.sourceCodeAddress = sourceCodeAddress;
+        this.sourceCodeAddress.set(sourceCodeAddress);
     }
 
     public String getLicenseType() {
-        return licenseType;
+        return this.attributionLicense.getLicenseType();
     }
+
     public void setLicenseType(String licenseType) {
-        this.licenseType = licenseType;
+        this.attributionLicense.setLicenseType(licenseType);
     }
 
     public String getLicenseFileLocation() {
-        return licenseFileLocation;
+        return this.attributionLicense.getLicenseFileLocation();
     }
+
     public void setLicenseFileLocation(String licenseFileLocation) {
-        this.licenseFileLocation = licenseFileLocation;
+        this.attributionLicense.setLicenseFileLocation(licenseFileLocation);
+    }
+
+    public String getLicenseData() {
+        return attributionLicense.getLicenseData();
+    }
+
+    public void setLicenseData(String licenseData) {
+        this.attributionLicense.setLicenseData(licenseData);
     }
 
 
