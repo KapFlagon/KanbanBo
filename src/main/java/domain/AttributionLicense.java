@@ -8,14 +8,14 @@ public class AttributionLicense {
     // Variables
     private SimpleStringProperty licenseType;
     private SimpleStringProperty licenseFileLocation;
-    private SimpleStringProperty licenseData;
+    private SimpleStringProperty licenseContent;
 
     // Constructors
 
-    public AttributionLicense(String licenseType, String licenseFileLocation, String licenseData) {
+    public AttributionLicense(String licenseType, String licenseFileLocation, String licenseContent) {
         this.licenseType = new SimpleStringProperty(licenseType);
         this.licenseFileLocation = new SimpleStringProperty(licenseFileLocation);
-        this.licenseData = new SimpleStringProperty(licenseData);
+        this.licenseContent = new SimpleStringProperty(licenseContent);
     }
 
 
@@ -44,16 +44,16 @@ public class AttributionLicense {
         this.licenseFileLocation.set(licenseFileLocation);
     }
 
-    public String getLicenseData() {
-        return licenseData.get();
+    public String getLicenseContent() {
+        return licenseContent.get();
     }
 
-    public SimpleStringProperty licenseDataProperty() {
-        return licenseData;
+    public SimpleStringProperty licenseContentProperty() {
+        return licenseContent;
     }
 
-    public void setLicenseData(String licenseData) {
-        this.licenseData.set(licenseData);
+    public void setLicenseContent(String licenseContent) {
+        this.licenseContent.set(licenseContent);
     }
 
 

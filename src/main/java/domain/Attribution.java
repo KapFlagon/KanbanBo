@@ -70,6 +70,10 @@ public class Attribution {
         return this.attributionLicense.getLicenseType();
     }
 
+    public SimpleStringProperty licenseTypeProperty() {
+        return attributionLicense.licenseTypeProperty();
+    }
+
     public void setLicenseType(String licenseType) {
         this.attributionLicense.setLicenseType(licenseType);
     }
@@ -78,16 +82,24 @@ public class Attribution {
         return this.attributionLicense.getLicenseFileLocation();
     }
 
+    public SimpleStringProperty licenseFileLocationProperty() {
+        return attributionLicense.licenseFileLocationProperty();
+    }
+
     public void setLicenseFileLocation(String licenseFileLocation) {
         this.attributionLicense.setLicenseFileLocation(licenseFileLocation);
     }
 
-    public String getLicenseData() {
-        return attributionLicense.getLicenseData();
+    public String getLicenseContent() {
+        return attributionLicense.getLicenseContent();
     }
 
-    public void setLicenseData(String licenseData) {
-        this.attributionLicense.setLicenseData(licenseData);
+    public SimpleStringProperty licenseContentProperty() {
+        return attributionLicense.licenseContentProperty();
+    }
+
+    public void setLicenseContent(String licenseData) {
+        this.attributionLicense.setLicenseContent(licenseData);
     }
 
 
