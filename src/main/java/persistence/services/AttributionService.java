@@ -1,7 +1,14 @@
 package persistence.services;
 
 import domain.Attribution;
+import utils.LicenseFileReader;
 
+import javax.inject.Inject;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,11 +17,13 @@ public class AttributionService {
 
     // Variables
     private ResourceBundle resourceBundle;
+    private LicenseFileReader licenseFileReader;
 
 
     // Constructors
-    public AttributionService(ResourceBundle resourceBundle) {
+    public AttributionService(ResourceBundle resourceBundle, LicenseFileReader licenseFileReader) {
         this.resourceBundle = resourceBundle;
+        this.licenseFileReader = licenseFileReader;
     }
 
 
@@ -25,7 +34,7 @@ public class AttributionService {
 
 
     // Other methods
-    public List<Attribution> getAttributions(String attributionPrefix) {
+    public List<Attribution> getAttributions(String attributionPrefix) throws FileNotFoundException {
         List< Map<String, String>> attributionEntryTextMapsList = new ArrayList<>();
         List<String> allKeys = resourceBundle.keySet()
                 .stream()
@@ -54,7 +63,7 @@ public class AttributionService {
         return attributionList;
     }
 
-    private Attribution parseMapToAttribution(Map<String, String> attributionStringDataMap) {
+    private Attribution parseMapToAttribution(Map<String, String> attributionStringDataMap) throws FileNotFoundException{
         Attribution attribution = new Attribution();
         Optional<String> titleKey = attributionStringDataMap.keySet()
                 .stream()
@@ -80,7 +89,14 @@ public class AttributionService {
                 .stream()
                 .filter(key -> key.contains("licenselocation"))
                 .findFirst();
-        licenseLocationKey.ifPresent(key -> attribution.setLicenseFileLocation(attributionStringDataMap.get(key)));
+        String licenseContent = "";
+        if (licenseLocationKey.isPresent()) {
+            attribution.setLicenseFileLocation(attributionStringDataMap.get(licenseLocationKey.get()));
+            if(!attribution.getLicenseFileLocation().equals("") && !attribution.getLicenseFileLocation().toLowerCase().equals("none")) {
+                licenseContent = licenseFileReader.readLicenseFileContent(attribution.getLicenseFileLocation());
+            }
+            attribution.setLicenseContent(licenseContent);
+        }
         return attribution;
     }
 
