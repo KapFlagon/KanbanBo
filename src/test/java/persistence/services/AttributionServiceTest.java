@@ -2,16 +2,25 @@ package persistence.services;
 
 import domain.Attribution;
 import org.junit.jupiter.api.Test;
+import utils.LicenseFileReader;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AttributionServiceTest {
 
+    private LicenseFileReader licenseFileReader = new LicenseFileReader();
+
     @Test
-    public void resourceBundleParsesCorrectly() {
+    public void resourceBundleParsesCorrectly() throws FileNotFoundException {
         Map<String, String> dummyDataMap = Map.ofEntries(
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.title", "First attribution title"),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.website", "http://www.firstattribution.com/"),
@@ -20,7 +29,7 @@ class AttributionServiceTest {
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.licenselocation", "none")
         );
         ResourceBundle dummyResourceBundle = createDummyResourceBundle(dummyDataMap);
-        AttributionService attributionService = new AttributionService(dummyResourceBundle);
+        AttributionService attributionService = new AttributionService(dummyResourceBundle, licenseFileReader);
 
         List<Attribution> attributionList = attributionService.getAttributions("attributions.technology.");
 
@@ -34,7 +43,7 @@ class AttributionServiceTest {
     }
 
     @Test
-    public void correctNumberOfEntriesParsedFromBundle() {
+    public void correctNumberOfEntriesParsedFromBundle() throws FileNotFoundException {
         Map<String, String> dummyDataMap = Map.ofEntries(
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.title", "First attribution title"),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.website", "http://www.firstattribution.com/"),
@@ -44,7 +53,7 @@ class AttributionServiceTest {
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.2.title", "Second attribution title"),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.2.website", "http://www.secondattribution.com/"),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.2.sourcecode", "http://www.secondattribution.com/source"),
-                new AbstractMap.SimpleEntry<String, String>("attributions.technology.2.licensetype", "ISC"),
+                new AbstractMap.SimpleEntry<String, String>("attributions.technology.2.licensetype", "ISC.txt"),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.2.licenselocation", "none"),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.3.title", ""),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.3.website", "http://www.thirdattribution.com/"),
@@ -75,20 +84,20 @@ class AttributionServiceTest {
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.9.title", "Ninth attribution title")
         );
         ResourceBundle dummyResourceBundle = createDummyResourceBundle(dummyDataMap);
-        AttributionService attributionService = new AttributionService(dummyResourceBundle);
+        AttributionService attributionService = new AttributionService(dummyResourceBundle, licenseFileReader);
 
         List<Attribution> attributionList = attributionService.getAttributions("attributions.technology.");
         assertEquals(9, attributionList.size());
     }
 
     @Test
-    public void correctlyParsesIncompleteData() {
+    public void correctlyParsesIncompleteData() throws FileNotFoundException {
         Map<String, String> dummyDataMap = Map.ofEntries(
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.title", "First attribution title"),
                 new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.website", "http://www.firstattribution.com/")
         );
         ResourceBundle dummyResourceBundle = createDummyResourceBundle(dummyDataMap);
-        AttributionService attributionService = new AttributionService(dummyResourceBundle);
+        AttributionService attributionService = new AttributionService(dummyResourceBundle, licenseFileReader);
 
         List<Attribution> attributionList = attributionService.getAttributions("attributions.technology.");
 
@@ -99,6 +108,39 @@ class AttributionServiceTest {
                 () -> assertEquals("", attributionList.get(0).getLicenseType()),
                 () -> assertEquals("", attributionList.get(0).getLicenseFileLocation())
         );
+    }
+
+    @Test
+    public void correctlyParsesLicenseFile() throws FileNotFoundException {
+        Map<String, String> dummyDataMap = Map.ofEntries(
+                new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.licenselocation", "/otherlicenses/testattribution/GNU GPL V3.txt")
+        );
+        ResourceBundle dummyResourceBundle = createDummyResourceBundle(dummyDataMap);
+        AttributionService attributionService = new AttributionService(dummyResourceBundle, licenseFileReader);
+
+        List<Attribution> attributionList = attributionService.getAttributions("attributions.technology.");
+
+        InputStream inputStream = getClass().getResourceAsStream(dummyDataMap.get("attributions.technology.1.licenselocation"));
+        String dummyLicenseContent;
+        if (inputStream != null) {
+            dummyLicenseContent = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.joining(System.lineSeparator()));
+        } else {
+            dummyLicenseContent = "";
+            System.out.println("Error getting resource, inputStream is null...");
+        }
+
+        assertEquals(dummyLicenseContent, attributionList.get(0).getLicenseContent());
+    }
+
+    @Test
+    public void throwsExceptionIfFailsToParseLicenseFile() throws FileNotFoundException {
+        Map<String, String> dummyDataMap = Map.ofEntries(
+                new AbstractMap.SimpleEntry<String, String>("attributions.technology.1.licenselocation", "/otherlicenses/testattribution/none.txt")
+        );
+        ResourceBundle dummyResourceBundle = createDummyResourceBundle(dummyDataMap);
+        AttributionService attributionService = new AttributionService(dummyResourceBundle, licenseFileReader);
+
+        assertThrows(FileNotFoundException.class, () -> attributionService.getAttributions("attributions.technology."));
     }
 
     private ResourceBundle createDummyResourceBundle(Map<String, String> dummyData) {
