@@ -24,11 +24,11 @@
                         <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%app.details.version" />
                      </children>
                   </HBox>
-                  <Hyperlink fx:id="sourceCodeHyperlink" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#openSourceCodeLink" text="%hyperlink.sourcecode.label" />
+                  <Hyperlink fx:id="sourceCodeHyperlink" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#openSourceCodeLink" text="%app.sourcecode.hyperlink.label" />
                   <HBox layoutX="10.0" layoutY="52.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="3.0">
                      <children>
                         <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.license" />
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%label.licensetype" />
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%app.licensetype" />
                      </children>
                   </HBox>
                </children>

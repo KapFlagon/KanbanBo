@@ -16,6 +16,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Popup;
 import javafx.util.Duration;
 import persistence.services.RecentFilesService;
 import persistence.services.UserPreferencesService;
@@ -302,6 +303,7 @@ public class StartScreenPresenter implements Initializable {
         System.out.println("here");
         AppInfoView appInfoView = new AppInfoView();
         AppInfoPresenter appInfoPresenter = (AppInfoPresenter) appInfoView.getPresenter();
+        this.borderPane.setRight(appInfoView.getView());
     }
 
     public void updateAutoLoad(boolean value) throws BackingStoreException {
