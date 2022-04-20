@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 public class KanbanBoApp extends Application {
 
-    private int appMinHeight = 400;
+    private int appMinHeight = 500;
     private int appMinWidth = 600;
 
     // TODO See this strategy for Afterburner bundles and internationalization: https://stackoverflow.com/questions/38082417/set-and-change-resource-bundle-with-afterburner-fx

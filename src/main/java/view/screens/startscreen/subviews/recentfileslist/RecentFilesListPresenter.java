@@ -1,5 +1,9 @@
 package view.screens.startscreen.subviews.recentfileslist;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import utils.images.BufferedImageSVGTranscoder;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -14,7 +18,6 @@ import utils.view.ScrollPaneFixer;
 import view.screens.startscreen.subviews.recentfileentry.RecentFileEntryPresenter;
 import view.screens.startscreen.subviews.recentfileentry.RecentFileEntryView;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -36,6 +39,10 @@ public class RecentFilesListPresenter implements Initializable {
     private ScrollPane scrollPane;
     @FXML
     private ImageView imageView;
+    @FXML
+    private Button createBtn;
+    @FXML
+    private Button openBtn;
 
     // Other variables
     private ObservableList<Path> recentFilePathList;
@@ -112,6 +119,7 @@ public class RecentFilesListPresenter implements Initializable {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        initButtonImages();
     }
 
     // UI event methods
@@ -186,6 +194,22 @@ public class RecentFilesListPresenter implements Initializable {
         colourMap.put("newColour", "#5CD6C8");
         // TODO this may still not work from JAR...
         transcoder.parseSvgFileWithNewColours(imageView, uri.toURL(), inputStream, colourMap);
+    }
+
+    private void initButtonImages() {
+        //TODO need to replace all "getResource()" calls with "getResourceAsStream()" to avoid JAR file issues for reading resources.
+        ImageView newDbImageView = new ImageView(getClass().getResource("/icons/add/materialicons/black/res/drawable-mdpi/baseline_add_black_18.png").toExternalForm());
+        ImageView searchDbImageView = new ImageView(getClass().getResource("/icons/search/materialicons/black/res/drawable-mdpi/baseline_search_black_18.png").toExternalForm());
+        createBtn.setGraphic(newDbImageView);
+        openBtn.setGraphic(searchDbImageView);
+    }
+
+    public void setCreateBtnAction(EventHandler<ActionEvent> action) {
+        createBtn.setOnAction(action);
+    }
+
+    public void setOpenBtnAction(EventHandler<ActionEvent> action) {
+        openBtn.setOnAction(action);
     }
 
 }

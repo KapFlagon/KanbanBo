@@ -40,7 +40,6 @@ public class AttributionEntryPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("Initializing the attribution entry + " + attribution.getLicenseType());
         bindNodesToModel();
     }
 

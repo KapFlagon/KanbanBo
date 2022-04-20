@@ -186,8 +186,29 @@ public class StartScreenPresenter implements Initializable {
                 }
             }
         });
-        borderPane.setCenter(rflv.getView());
 
+        // TODO Add buttons to the "RecentFilesListPresenter" file as "call to action" buttons.
+        // TODO Migrate create and browse buttons "onClick" to actions, then pass them through the program.
+        rflp.setCreateBtnAction(event -> {
+            try {
+                createDbFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (BackingStoreException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        rflp.setOpenBtnAction(event -> {
+            try {
+                browseForDbFile();
+            } catch (BackingStoreException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        borderPane.setCenter(rflv.getView());
         fileSelected = new SimpleBooleanProperty(false);
         modalDialogShowing = new SimpleBooleanProperty(false);
         modalDialogShowing.bind(rflp.modalDialogShowingProperty());
