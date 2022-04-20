@@ -6,10 +6,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import persistence.services.AttributionService;
 import utils.LicenseFileReader;
+import utils.view.ScrollPaneFixer;
 import view.screens.sharedsubviews.appinfo.attributionentry.AttributionEntryPresenter;
 import view.screens.sharedsubviews.appinfo.attributionentry.AttributionEntryView;
 
@@ -26,6 +28,8 @@ public class AppInfoPresenter implements Initializable {
 
     // JavaFX injected node variables
     @FXML
+    private ScrollPane scrollPane;
+    @FXML
     private TextArea appFullLicenseTextArea;
     @FXML
     private Accordion fontsAccordion;
@@ -41,8 +45,8 @@ public class AppInfoPresenter implements Initializable {
     private AttributionService attributionService;
     @Inject
     private LicenseFileReader licenseFileReader;
+    private String windowTitle;
     private String sourceCodeAddress;
-    private String appLicenseLocation;
     private List<Attribution> fontAttributions;
     private List<Attribution> imageAttributions;
     private List<Attribution> iconAttributions;
@@ -55,13 +59,18 @@ public class AppInfoPresenter implements Initializable {
     // Constructors
 
     // Getters & Setters
+    public String getWindowTitle() {
+        return windowTitle;
+    }
+
 
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("initializing app info presenter");
+        windowTitle = resources.getString("app.info.title");
+        ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
         sourceCodeAddress = resources.getString("app.sourcecode.hyperlink.target");
-        appLicenseLocation = resources.getString("app.license.location");
+        String appLicenseLocation = resources.getString("app.license.location");
         try {
             String appLicenseContent = licenseFileReader.readLicenseFileContent(appLicenseLocation);
             appFullLicenseTextArea.textProperty().set(appLicenseContent);

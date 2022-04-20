@@ -300,10 +300,12 @@ public class StartScreenPresenter implements Initializable {
 
     @FXML
     private void launchAppInfo() {
-        System.out.println("here");
+        scrimFadeTransitions.fadeOut();
         AppInfoView appInfoView = new AppInfoView();
         AppInfoPresenter appInfoPresenter = (AppInfoPresenter) appInfoView.getPresenter();
-        this.borderPane.setRight(appInfoView.getView());
+        StageUtils.createChildStage(appInfoPresenter.getWindowTitle(), appInfoView.getView());
+        StageUtils.showAndWaitOnSubStage();
+        scrimFadeTransitions.fadeIn();
     }
 
     public void updateAutoLoad(boolean value) throws BackingStoreException {

@@ -4,7 +4,7 @@ plugins {
     id 'org.beryx.runtime' version '1.12.5'
     // https://github.com/johnrengelman/shadow
     id "com.github.johnrengelman.shadow" version "7.0.0"
-    id 'org.openjfx.javafxplugin' version '0.0.10'
+    id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'application'
     id 'jacoco'
 }
@@ -17,7 +17,7 @@ repositories {
 }
 
 javafx {
-    version = '15.0.1'
+    version = '18'
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing' ]
     //configuration = 'compileOnly'
 }
@@ -29,6 +29,15 @@ jacoco {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
+    //implementation group: 'org.openjfx', name: 'javafx-controls', version: '18'
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-fxml
+    //implementation group: 'org.openjfx', name: 'javafx-fxml', version: '18'
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-swing
+    //implementation group: 'org.openjfx', name: 'javafx-swing', version: '18'
+
+
 
     // https://mvnrepository.com/artifact/org.mockito/mockito-core
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
