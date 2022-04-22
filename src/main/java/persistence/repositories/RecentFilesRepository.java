@@ -51,12 +51,11 @@ public class RecentFilesRepository {
 
     public List<Path> loadRecentFilePaths() {
         List<Path> recentFilePaths = FXCollections.observableArrayList();
+        //TODO Should the service layer be able to set the max number of saved paths?
         for (int pathKeyIterator = 0; pathKeyIterator < MAX_SAVED_PATHS; pathKeyIterator++) {
             String key = KEY_recentFilePaths + pathKeyIterator;
             String pathStringValue = recentItemsPreferences.get(key, "");
             if (!pathStringValue.equals("")) {
-                //System.out.println("Path is not empty");
-                //URI uri = URI.create(pathStringValue);
                 Path path = Path.of(pathStringValue);
                 recentFilePaths.add(path);
             } else {
