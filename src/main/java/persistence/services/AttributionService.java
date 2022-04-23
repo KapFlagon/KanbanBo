@@ -18,6 +18,8 @@ public class AttributionService {
     // Variables
     private ResourceBundle resourceBundle;
     private LicenseFileReader licenseFileReader;
+    public static final String attributionPrefix = "attributions";
+    public static final char keyDelimiter = '.';
 
 
     // Constructors
@@ -34,7 +36,20 @@ public class AttributionService {
 
 
     // Other methods
-    public List<Attribution> getAttributions(String attributionPrefix) throws FileNotFoundException {
+    public Map<String, List<Attribution>> getAttributionCategoriesMap() throws FileNotFoundException {
+        Map<String, List<Attribution>> categoriesMap = new HashMap<>();
+
+        for (String key : resourceBundle.keySet()) {
+            String category = parseCategoryFromParameterKey(key);
+            String categoryAttributionPrefix = attributionPrefix + keyDelimiter + category + keyDelimiter;
+            List<Attribution> categoryAttributionList = getAttributions(categoryAttributionPrefix);
+            categoriesMap.put(category, categoryAttributionList);
+        }
+
+        return categoriesMap;
+    }
+
+    private List<Attribution> getAttributions(String attributionPrefix) throws FileNotFoundException {
         List< Map<String, String>> attributionEntryTextMapsList = new ArrayList<>();
         List<String> allKeys = resourceBundle.keySet()
                 .stream()
@@ -98,6 +113,12 @@ public class AttributionService {
             attribution.setLicenseContent(licenseContent);
         }
         return attribution;
+    }
+
+    private String parseCategoryFromParameterKey(String key) {
+
+        String keyWithoutAttributionPrefix = key.substring(attributionPrefix.toCharArray().length + 1);
+        return keyWithoutAttributionPrefix.substring(0, keyWithoutAttributionPrefix.indexOf(keyDelimiter));
     }
 
 
