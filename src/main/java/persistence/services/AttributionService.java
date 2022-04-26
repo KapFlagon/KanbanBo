@@ -40,10 +40,12 @@ public class AttributionService {
         Map<String, List<Attribution>> categoriesMap = new HashMap<>();
 
         for (String key : resourceBundle.keySet()) {
-            String category = parseCategoryFromParameterKey(key);
-            String categoryAttributionPrefix = attributionPrefix + keyDelimiter + category + keyDelimiter;
-            List<Attribution> categoryAttributionList = getAttributions(categoryAttributionPrefix);
-            categoriesMap.put(category, categoryAttributionList);
+            if(key.startsWith(attributionPrefix)) {
+                String category = parseCategoryFromParameterKey(key);
+                String categoryAttributionPrefix = attributionPrefix + keyDelimiter + category + keyDelimiter;
+                List<Attribution> categoryAttributionList = getAttributions(categoryAttributionPrefix);
+                categoriesMap.put(category, categoryAttributionList);
+            }
         }
 
         return categoriesMap;

@@ -37,6 +37,12 @@ public class AttributionEntryPresenter implements Initializable {
 
     // Getters & Setters
 
+
+    public void setAttribution(Attribution attribution) {
+        this.attribution = attribution;
+        bindNodesToModel();
+    }
+
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
