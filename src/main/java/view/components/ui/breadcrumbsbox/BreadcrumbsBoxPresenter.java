@@ -27,8 +27,7 @@ public class BreadcrumbsBoxPresenter implements Initializable {
 
     // Other variables
     private String separatorCharacter;
-    private ObservableList<Hyperlink> crumbs;
-    private ObservableList<StackPane> visuals;
+    private ObservableList<Crumb> crumbs;
 
     // Constructors
 
@@ -39,24 +38,15 @@ public class BreadcrumbsBoxPresenter implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         separatorCharacter = Character.toString(resources.getString("separator.character").charAt(0));
         crumbs = FXCollections.observableArrayList();
-        visuals = FXCollections.observableArrayList();
-        Bindings.bindContent(hBox.getChildren(), visuals);
-        crumbs.addListener((ListChangeListener<Hyperlink>) c -> {
-            if(c.next()) {
-                if(c.wasAdded()) {
-                    for(Hyperlink link : c.getAddedSubList()) {
-                        createNewCrumb(link);
+        Bindings.bindContent(hBox.getChildren(), crumbs);
+        crumbs.addListener((ListChangeListener<Crumb>) c -> {
+            if (c.next()) {
+                for (Crumb crumb : c.getAddedSubList()) {
+                    int position = crumbs.indexOf(crumb);
+                    while (position > 0) {
+                        crumbs.get(position - 1).displayCrumbAsLink();
+                        position--;
                     }
-                } else if (c.wasRemoved()) {
-                    for(Hyperlink link : c.getRemoved()) {
-                        System.out.println(crumbs.indexOf(link));
-                        int removalStart = crumbs.indexOf(link);
-                        int removalEnd = (crumbs.size() - 1);
-                        crumbs.remove(removalStart, removalEnd);
-                        visuals.remove(removalStart, removalEnd);
-                    }
-                } else if (c.wasPermutated()) {
-
                 }
             }
         });
@@ -66,22 +56,87 @@ public class BreadcrumbsBoxPresenter implements Initializable {
 
 
     // Other methods
-    public void addHyperlink(Hyperlink hyperlink) {
+    public void addCrumb(Hyperlink hyperlink) {
         // TODO need to add some kind of boolean property that enables hiding/showing the hyperlink/label depending on the position in the list.
-        crumbs.add(hyperlink);
-        hyperlink.onActionProperty().addListener(f -> {
-            crumbs.remove(hyperlink);
-        });
+        boolean crumbAlreadyExists = false;
+        for(Crumb crumb : crumbs) {
+            if(crumb.getLink().equals(hyperlink)) {
+                crumbAlreadyExists = true;
+            }
+        }
+        if(!crumbAlreadyExists) {
+            crumbs.add(new Crumb(hyperlink, separatorCharacter));
+            if(crumbs.size() > 0) {
+                for(Crumb crumb : crumbs) {
+                    if (crumbs.indexOf(crumb) < (crumbs.size() - 1)) {
+                        crumb.showSeparator();
+                    }
+                }
+            }
+            hyperlink.onActionProperty().addListener(observable -> {
+                // TODO need to verify when this is being called...
+                for (Crumb crumb : crumbs) {
+                    if(crumb.getLink().equals(hyperlink)) {
+                        crumb.displayCrumbAsLabel();
+                        int position = crumbs.indexOf(crumb);
+                        while (position < (crumbs.size() - 1)) {
+                            crumbs.remove(position);
+                            position++;
+                        }
+                    }
+                }
+            });
+        }
     }
 
-    private void createNewCrumb(Hyperlink hyperlink) {
-        HBox crumbItem = new HBox();
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(hyperlink);
-        Label label = new Label(hyperlink.getText());
-        stackPane.getChildren().add(label);
-        crumbItem.getChildren().add(stackPane);
-        crumbItem.getChildren().add(new Label(separatorCharacter));
+
+        private class Crumb extends HBox{
+
+        private StackPane stack;
+        private Hyperlink link;
+        private Label linkLbl;
+        private Label separatorLbl;
+
+        public Crumb(Hyperlink link, String separatorCharacter) {
+            stack = new StackPane();
+            this.link = link;
+            this.linkLbl = new Label(link.getText());
+            separatorLbl = new Label(separatorCharacter);
+            hideSeparator();
+            stack.getChildren().add(link);
+            stack.getChildren().add(linkLbl);
+            this.getChildren().add(stack);
+            this.getChildren().add(separatorLbl);
+            displayCrumbAsLabel();
+        }
+
+        public Hyperlink getLink() {
+            return link;
+        }
+
+        public void displayCrumbAsLink() {
+            this.link.setVisible(true);
+            this.link.setDisable(false);
+            this.linkLbl.setVisible(false);
+            this.linkLbl.setDisable(true);
+        }
+
+        public void displayCrumbAsLabel() {
+            this.link.setVisible(false);
+            this.link.setDisable(true);
+            this.linkLbl.setVisible(true);
+            this.linkLbl.setDisable(false);
+        }
+
+        public void hideSeparator() {
+            separatorLbl.setVisible(false);
+            separatorLbl.setDisable(true);
+        }
+
+        public void showSeparator() {
+            separatorLbl.setVisible(true);
+            separatorLbl.setDisable(false);
+        }
     }
 
 

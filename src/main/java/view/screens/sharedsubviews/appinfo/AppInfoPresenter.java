@@ -1,15 +1,16 @@
 package view.screens.sharedsubviews.appinfo;
 
 import domain.Attribution;
-import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import org.w3c.dom.Attr;
 import persistence.services.AttributionService;
 import utils.LicenseFileReader;
 import utils.view.ScrollPaneFixer;
@@ -25,7 +26,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AppInfoPresenter implements Initializable {
 
@@ -81,16 +81,24 @@ public class AppInfoPresenter implements Initializable {
 
             AttributionEntryView attributionEntryView = new AttributionEntryView();
             AttributionEntryPresenter attributionEntryPresenter = (AttributionEntryPresenter) attributionEntryView.getPresenter();
+            Hyperlink categorySelectionLink = new Hyperlink("Categories");
+            categorySelectionLink.setOnAction(event -> attributionsBorderPane.setCenter(categoryListView));
+
+            Hyperlink entrySelectionLink = new Hyperlink("Entries");
+            entrySelectionLink.setOnAction(event -> attributionsBorderPane.setCenter(categoryChildEntryListView));
+            Hyperlink entryLink = new Hyperlink("Actual entry");
 
             for(String categoryKey : categoryAttributionListMap.keySet()) {
                 categoryListView.getItems().add(replaceUnderscoresWithSpaces(categoryKey));
             }
             categoryListView.getSelectionModel().selectedItemProperty().addListener(item -> {
                 String keyValue = replaceSpacesWithUnderscores(categoryListView.getSelectionModel().getSelectedItem());
+                categoryChildEntryListView.getItems().clear();
                 for(Attribution attribution : categoryAttributionListMap.get(keyValue)) {
                     categoryChildEntryListView.getItems().add(attribution.getTitle());
                 }
                 attributionsBorderPane.setCenter(categoryChildEntryListView);
+                breadcrumbsBoxPresenter.addCrumb(entrySelectionLink);
             });
             categoryChildEntryListView.getSelectionModel().selectedItemProperty().addListener((item -> {
                 // TODO will need to be refactored, has to dive too deep
@@ -99,11 +107,13 @@ public class AppInfoPresenter implements Initializable {
                         if (attribution.getTitle().equals(categoryChildEntryListView.getSelectionModel().getSelectedItem())){
                             attributionEntryPresenter.setAttribution(attribution);
                             attributionsBorderPane.setCenter(attributionEntryView.getView());
+                            breadcrumbsBoxPresenter.addCrumb(entryLink);
                         }
                     }
                 }
             }));
             attributionsBorderPane.setCenter(categoryListView);
+            breadcrumbsBoxPresenter.addCrumb(categorySelectionLink);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
             // TODO insert better error handling here
