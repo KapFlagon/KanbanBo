@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import persistence.services.AttributionService;
 import utils.LicenseFileReader;
 import utils.view.ScrollPaneFixer;
@@ -81,12 +82,12 @@ public class AppInfoPresenter implements Initializable {
 
             AttributionEntryView attributionEntryView = new AttributionEntryView();
             AttributionEntryPresenter attributionEntryPresenter = (AttributionEntryPresenter) attributionEntryView.getPresenter();
-            Hyperlink categorySelectionLink = new Hyperlink("Categories");
+            Hyperlink categorySelectionLink = new Hyperlink(resources.getString("tab.attributions.categories"));
             categorySelectionLink.setOnAction(event -> attributionsBorderPane.setCenter(categoryListView));
 
-            Hyperlink entrySelectionLink = new Hyperlink("Entries");
+            Hyperlink entrySelectionLink = new Hyperlink();
             entrySelectionLink.setOnAction(event -> attributionsBorderPane.setCenter(categoryChildEntryListView));
-            Hyperlink entryLink = new Hyperlink("Actual entry");
+            Hyperlink entryLink = new Hyperlink();
 
             for(String categoryKey : categoryAttributionListMap.keySet()) {
                 categoryListView.getItems().add(replaceUnderscoresWithSpaces(categoryKey));
@@ -98,6 +99,7 @@ public class AppInfoPresenter implements Initializable {
                     categoryChildEntryListView.getItems().add(attribution.getTitle());
                 }
                 attributionsBorderPane.setCenter(categoryChildEntryListView);
+                entrySelectionLink.setText(categoryListView.getSelectionModel().getSelectedItem());
                 breadcrumbsBoxPresenter.addCrumb(entrySelectionLink);
             });
             categoryChildEntryListView.getSelectionModel().selectedItemProperty().addListener((item -> {
@@ -107,6 +109,7 @@ public class AppInfoPresenter implements Initializable {
                         if (attribution.getTitle().equals(categoryChildEntryListView.getSelectionModel().getSelectedItem())){
                             attributionEntryPresenter.setAttribution(attribution);
                             attributionsBorderPane.setCenter(attributionEntryView.getView());
+                            entryLink.setText(categoryChildEntryListView.getSelectionModel().getSelectedItem());
                             breadcrumbsBoxPresenter.addCrumb(entryLink);
                         }
                     }

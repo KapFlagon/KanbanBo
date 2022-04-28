@@ -1,5 +1,6 @@
 package view.components.ui.breadcrumbsbox;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -73,16 +74,16 @@ public class BreadcrumbsBoxPresenter implements Initializable {
                     }
                 }
             }
-            hyperlink.onActionProperty().addListener(observable -> {
-                // TODO need to verify when this is being called...
+            hyperlink.visitedProperty().addListener((observable, oldValue, newValue) -> {
+                if(newValue) {
+                    hyperlink.setVisited(false);
+                }
                 for (Crumb crumb : crumbs) {
                     if(crumb.getLink().equals(hyperlink)) {
                         crumb.displayCrumbAsLabel();
                         int position = crumbs.indexOf(crumb);
-                        while (position < (crumbs.size() - 1)) {
-                            crumbs.remove(position);
-                            position++;
-                        }
+                        crumbs.get(position).hideSeparator();
+                        Platform.runLater(() -> crumbs.remove((position + 1), crumbs.size()));
                     }
                 }
             });
@@ -102,6 +103,8 @@ public class BreadcrumbsBoxPresenter implements Initializable {
             this.link = link;
             this.linkLbl = new Label(link.getText());
             separatorLbl = new Label(separatorCharacter);
+            separatorLbl.setMaxHeight(Double.MAX_VALUE);
+            separatorLbl.setMaxWidth(Double.MAX_VALUE);
             hideSeparator();
             stack.getChildren().add(link);
             stack.getChildren().add(linkLbl);
