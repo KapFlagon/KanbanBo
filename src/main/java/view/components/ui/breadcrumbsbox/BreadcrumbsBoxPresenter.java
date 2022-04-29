@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import utils.view.ScrollPaneFixer;
 
 import java.net.URL;
 import java.util.*;
@@ -37,6 +38,7 @@ public class BreadcrumbsBoxPresenter implements Initializable {
     // Initialization methods
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ScrollPaneFixer.fixBlurryScrollPan(scrollPane);
         separatorCharacter = Character.toString(resources.getString("separator.character").charAt(0));
         crumbs = FXCollections.observableArrayList();
         Bindings.bindContent(hBox.getChildren(), crumbs);
@@ -102,9 +104,12 @@ public class BreadcrumbsBoxPresenter implements Initializable {
             stack = new StackPane();
             this.link = link;
             this.linkLbl = new Label(link.getText());
+            this.link.getStyleClass().add("footer");
+            linkLbl.getStyleClass().add("footer");
             separatorLbl = new Label(separatorCharacter);
             separatorLbl.setMaxHeight(Double.MAX_VALUE);
             separatorLbl.setMaxWidth(Double.MAX_VALUE);
+            separatorLbl.getStyleClass().add("footer");
             hideSeparator();
             stack.getChildren().add(link);
             stack.getChildren().add(linkLbl);

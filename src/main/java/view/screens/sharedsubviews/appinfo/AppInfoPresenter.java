@@ -8,10 +8,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import persistence.services.AttributionService;
 import utils.LicenseFileReader;
 import utils.view.ScrollPaneFixer;
@@ -77,45 +79,67 @@ public class AppInfoPresenter implements Initializable {
             Map<String, List<Attribution>> categoryAttributionListMap = attributionService.getAttributionCategoriesMap();
             // TODO need to put a Hyperlink into the breadcrumbs bar, and link it to both the list view and the actual views to be put in the borderpane.
 
+            VBox categoryBox = new VBox();
+            Label categoryLbl = new Label(resources.getString("label.category.prompt"));
+            categoryLbl.getStyleClass().add("h5");
             ListView<String> categoryListView = new ListView<>();
-            ListView<String> categoryChildEntryListView = new ListView<>();
+            categoryListView.getStyleClass().add("body");
+            categoryBox.getChildren().add(categoryLbl);
+            categoryBox.getChildren().add(categoryListView);
+
+            VBox subCategoryBox = new VBox();
+            Label subCategoryLbl = new Label(resources.getString("label.category_entry.prompt"));
+            subCategoryLbl.getStyleClass().add("h5");
+            ListView<String> subCategoryListView = new ListView<>();
+            subCategoryListView.getStyleClass().add("body");
+            subCategoryBox.getChildren().add(subCategoryLbl);
+            subCategoryBox.getChildren().add(subCategoryListView);
 
             AttributionEntryView attributionEntryView = new AttributionEntryView();
             AttributionEntryPresenter attributionEntryPresenter = (AttributionEntryPresenter) attributionEntryView.getPresenter();
             Hyperlink categorySelectionLink = new Hyperlink(resources.getString("tab.attributions.categories"));
-            categorySelectionLink.setOnAction(event -> attributionsBorderPane.setCenter(categoryListView));
+            categorySelectionLink.setOnAction(event -> {
+                categoryListView.getSelectionModel().clearSelection();
+                attributionsBorderPane.setCenter(categoryBox);
+            });
 
-            Hyperlink entrySelectionLink = new Hyperlink();
-            entrySelectionLink.setOnAction(event -> attributionsBorderPane.setCenter(categoryChildEntryListView));
+            Hyperlink subCategorySelectionLink = new Hyperlink();
+            subCategorySelectionLink.setOnAction(event -> {
+                attributionsBorderPane.setCenter(subCategoryBox);
+                subCategoryListView.getSelectionModel().clearSelection();
+            });
             Hyperlink entryLink = new Hyperlink();
 
             for(String categoryKey : categoryAttributionListMap.keySet()) {
                 categoryListView.getItems().add(replaceUnderscoresWithSpaces(categoryKey));
             }
-            categoryListView.getSelectionModel().selectedItemProperty().addListener(item -> {
-                String keyValue = replaceSpacesWithUnderscores(categoryListView.getSelectionModel().getSelectedItem());
-                categoryChildEntryListView.getItems().clear();
-                for(Attribution attribution : categoryAttributionListMap.get(keyValue)) {
-                    categoryChildEntryListView.getItems().add(attribution.getTitle());
+
+            categoryListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) { // Accounts for scenario where selection has being cleared, which also triggers the listener
+                    String keyValue = replaceSpacesWithUnderscores(categoryListView.getSelectionModel().getSelectedItem());
+                    subCategoryListView.getItems().clear();
+                    for (Attribution attribution : categoryAttributionListMap.get(keyValue)) {
+                        subCategoryListView.getItems().add(attribution.getTitle());
+                    }
+                    attributionsBorderPane.setCenter(subCategoryBox);
+                    subCategorySelectionLink.setText(categoryListView.getSelectionModel().getSelectedItem());
+                    breadcrumbsBoxPresenter.addCrumb(subCategorySelectionLink);
                 }
-                attributionsBorderPane.setCenter(categoryChildEntryListView);
-                entrySelectionLink.setText(categoryListView.getSelectionModel().getSelectedItem());
-                breadcrumbsBoxPresenter.addCrumb(entrySelectionLink);
             });
-            categoryChildEntryListView.getSelectionModel().selectedItemProperty().addListener((item -> {
-                // TODO will need to be refactored, has to dive too deep
-                for(List<Attribution> attributionList : categoryAttributionListMap.values()) {
-                    for(Attribution attribution : attributionList) {
-                        if (attribution.getTitle().equals(categoryChildEntryListView.getSelectionModel().getSelectedItem())){
-                            attributionEntryPresenter.setAttribution(attribution);
-                            attributionsBorderPane.setCenter(attributionEntryView.getView());
-                            entryLink.setText(categoryChildEntryListView.getSelectionModel().getSelectedItem());
-                            breadcrumbsBoxPresenter.addCrumb(entryLink);
-                        }
+
+            subCategoryListView.getSelectionModel().selectedItemProperty().addListener((item -> {
+                String key = replaceSpacesWithUnderscores(categoryListView.getSelectionModel().getSelectedItem());
+                List<Attribution> attributionList = categoryAttributionListMap.get(key);
+                for(Attribution attribution : attributionList) {
+                    if (attribution.getTitle().equals(subCategoryListView.getSelectionModel().getSelectedItem())){
+                        attributionEntryPresenter.setAttribution(attribution);
+                        attributionsBorderPane.setCenter(attributionEntryView.getView());
+                        entryLink.setText(subCategoryListView.getSelectionModel().getSelectedItem());
+                        breadcrumbsBoxPresenter.addCrumb(entryLink);
                     }
                 }
             }));
-            attributionsBorderPane.setCenter(categoryListView);
+            attributionsBorderPane.setCenter(categoryBox);
             breadcrumbsBoxPresenter.addCrumb(categorySelectionLink);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
