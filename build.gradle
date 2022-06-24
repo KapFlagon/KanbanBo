@@ -1,12 +1,12 @@
 plugins {
-    id 'java'
-    // https://badass-runtime-plugin.beryx.org/releases/latest/
-    id 'org.beryx.runtime' version '1.12.5'
-    // https://github.com/johnrengelman/shadow
-    id "com.github.johnrengelman.shadow" version "7.0.0"
-    id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'application'
+    id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.12'
     id 'jacoco'
+    // https://badass-runtime-plugin.beryx.org/releases/latest/
+    id 'org.beryx.runtime' version '1.12.7'
+    // https://github.com/johnrengelman/shadow
+    //id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 processResources.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 group 'com.kapflagon'
@@ -85,58 +85,66 @@ test {
 jar {
     duplicatesStrategy = 'include'
     manifest {
-        //attributes 'Main-Class': 'driver.Main'
-        attributes 'Main-Class': 'driver.KanbanBoApp'
+        attributes 'Main-Class': 'driver.Main'
     }
-    /*from {
+    from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }*/
+    }
+}
+
+application {
+    mainClassName = "driver.Main"
+    applicationName = 'KanbanBo'
 }
 
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
-}
+    modules = ['java.sql', 'java.desktop', 'java.naming', 'java.scripting', 'java.logging', 'jdk.unsupported.desktop', 'java.management', 'java.sql.rowset', 'jdk.jfr', 'jdk.unsupported', 'java.datatransfer', 'java.xml']
 
-application {
-    //mainClassName = "java/driver/Main"
-    //mainModule = "KanbanBo.main"
-    //mainModule.set("KanbanBo.main")
-    mainClass.set("driver.Main")
-    applicationName = 'KanbanBo'
-}
-
-task runSnapshotJar(type: JavaExec) {
-    main = "-jar";
-    args jar.archiveFile.get()
-}
-
-task buildAndRunSnapshotJar() {
-    group 'custom tasks'
-    dependsOn('build')
-    dependsOn('runSnapshotJar')
-    tasks.findByName('runSnapshotJar').mustRunAfter('build')
-}
-
-jpackage {
-    // Uncomment and adjust the following line if your runtime task is configured to generate images for multiple platforms
-    // targetPlatformName = "mac"
-
-    def currentOs = org.gradle.internal.os.OperatingSystem.current()
-    def appVersion = "1.0.0"
-    //def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
-    //imageOptions += ['--icon', "src/main/resources/hellofx.$imgType"]
-    //skipInstaller = true
-    //installerOptions += ['--resource-dir', "src/main/resources"]
-    //installerOptions += ['--vendor', 'Acme Corporation']
-
-    /*
-    if(currentOs.windows) {
-        installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut']
+    // Uncomment and adjust the code below if you want to generate images for multiple platforms.
+    // (You need to also uncomment the line 'targetPlatformName = ...' in the jpackage block.)
+/*
+    targetPlatform("lin") {
+        //jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_linux_hotspot_15.0.2_7.tar.gz")
+        jdkHome = jdkDownload("https://github.com/adoptium/temurin18-binaries/releases/download/jdk-18.0.1%2B10/OpenJDK18U-jdk_x64_linux_hotspot_18.0.1_10.tar.gz")
     }
-    else if (currentOs.linux) {
-        installerOptions += ['--linux-package-name', 'MurderMysteryHelper','--linux-shortcut']
+
+    targetPlatform("mac") {
+        //jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_mac_hotspot_15.0.2_7.tar.gz") {
+        jdkHome = jdkDownload("https://github.com/adoptium/temurin18-binaries/releases/download/jdk-18.0.1%2B10/OpenJDK18U-jdk_x64_mac_hotspot_18.0.1_10.tar.gz") {
+            downloadDir = "$buildDir/myMac"
+            archiveName = "my-mac-jdk"
+            archiveExtension = "tar.gz"
+            pathToHome = "jdk-15.0.2+7/Contents/Home"
+            overwrite = true
+        }
     }
-    else if (currentOs.macOsX) {
-        installerOptions += ['--mac-package-name', 'MurderMysteryHelper']
-    }*/
+*/
+    targetPlatform("win") {
+        //jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_windows_hotspot_15.0.2_7.zip")
+        jdkHome = jdkDownload("https://github.com/adoptium/temurin18-binaries/releases/download/jdk-18.0.1%2B10/OpenJDK18U-jdk_x64_windows_hotspot_18.0.1_10.zip")
+    }
+
+
+    jpackage {
+        // Uncomment and adjust the following line if your runtime task is configured to generate images for multiple platforms
+        //targetPlatformName = "mac"
+
+        def currentOs = org.gradle.internal.os.OperatingSystem.current()
+        //def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
+        //imageOptions += ['--icon', "src/main/resources/hellofx.$imgType"]
+        installerOptions += ['--resource-dir', "src/main/resources"]
+        installerOptions += ['--vendor', 'Acme Corporation']
+
+        if(currentOs.windows) {
+            installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut', '--verbose']
+            imageOptions += ['--win-console']
+        }
+        else if (currentOs.linux) {
+            installerOptions += ['--linux-package-name', 'KanbanBo','--linux-shortcut']
+        }
+        else if (currentOs.macOsX) {
+            installerOptions += ['--mac-package-name', 'KanbanBo']
+        }
+    }
 }
